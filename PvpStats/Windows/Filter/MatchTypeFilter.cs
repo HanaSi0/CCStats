@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Types.Match;
@@ -40,7 +41,7 @@ public class MatchTypeFilter : DataFilter {
 
     internal override void Draw() {
         bool allSelected = AllSelected;
-        if(ImGui.Checkbox($"Select All##{GetHashCode()}", ref allSelected)) {
+        if(ImGui.Checkbox(ChineseText.Label($"Select All##{GetHashCode()}"), ref allSelected)) {
             Task.Run(async () => {
                 foreach(var category in FilterState) {
                     FilterState[category.Key] = allSelected;
@@ -66,7 +67,7 @@ public class MatchTypeFilter : DataFilter {
             foreach(var category in FilterState) {
                 ImGui.TableNextColumn();
                 bool filterState = category.Value;
-                if(ImGui.Checkbox($"{category.Key}##{GetHashCode()}", ref filterState)) {
+                if(ImGui.Checkbox(ChineseText.EnumLabel(category.Key, $"{category.Key}##{GetHashCode()}"), ref filterState)) {
                     //if(CurrentRefresh is null || CurrentRefresh.Result.IsCompleted) {
                     //    CurrentRefresh = Task.Run(async () => {
                     //        FilterState[category.Key] = filterState;

@@ -1,4 +1,5 @@
-﻿using PvpStats.Types.Player;
+using PvpStats.Localization;
+using PvpStats.Types.Player;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -65,7 +66,7 @@ internal static class PlayerJobHelper {
 
     internal static string GetNameFromJob(Job job) {
         if(AbbreviationNameMap.ContainsKey(job)) {
-            return AbbreviationNameMap[job];
+            return ChineseText.Text(AbbreviationNameMap[job]);
         } else {
             return "";
         }

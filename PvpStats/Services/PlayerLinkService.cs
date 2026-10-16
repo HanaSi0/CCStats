@@ -1,4 +1,4 @@
-﻿using Dalamud.Plugin.Ipc;
+using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Ipc.Exceptions;
 using Lumina.Excel.Sheets;
 using PvpStats.Types.Player;
@@ -141,23 +141,10 @@ internal class PlayerLinkService {
         Plugin.Log2.Information("Building player alias links cache from PlayerTrack IPC data...");
         //get players
         var ccMatches = _plugin.CCCache.Matches.ToList();
-        var flMatches = _plugin.FLCache.Matches.ToList();
-        var rwMatches = _plugin.RWCache.Matches.ToList();
         HashSet<PlayerAlias> allPlayers = new();
         foreach(var match in ccMatches) {
             foreach(var player in match.Players) {
                 allPlayers.Add(player.Alias);
-            }
-        }
-        foreach(var match in flMatches) {
-            foreach(var player in match.Players) {
-                allPlayers.Add(player.Name);
-            }
-        }
-        foreach(var match in rwMatches) {
-            if(match.Players is null) continue;
-            foreach(var player in match.Players) {
-                allPlayers.Add(player.Name);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -33,7 +34,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
     internal List<DataFilter> PlayerStatFilters { get; private set; } = new();
     protected List<Refreshable<T>> Tabs = [];
 
-    protected TrackerWindow(Plugin plugin, StatsManager<T> statsManager, WindowConfiguration config, string name) : base(name) {
+    protected TrackerWindow(Plugin plugin, StatsManager<T> statsManager, WindowConfiguration config, string name) : base(ChineseText.Label(name)) {
         Plugin = plugin;
         StatsEngine = statsManager;
         CollapseFilters = config.FiltersCollapsed;
@@ -167,6 +168,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
                 ImGui.TableSetupColumn("filterName", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 110f);
                 ImGui.TableSetupColumn($"filters", ImGuiTableColumnFlags.WidthStretch);
                 foreach(var filter in MatchFilters) {
+                    if(filter is MatchSearchFilter) continue;
                     ImGui.TableNextColumn();
 
                     if(filter.HelpMessage != null) {
@@ -174,7 +176,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
                         ImGuiHelper.HelpMarker(filter.HelpMessage, false);
                         ImGui.SameLine();
                     }
-                    string nameText = $"{filter.Name}:";
+                    string nameText = $"{ChineseText.Text(filter.Name)}：";
                     ImGuiHelper.RightAlignCursor2(nameText, -5f * ImGuiHelpers.GlobalScale);
                     ImGui.AlignTextToFramePadding();
                     //ImGui.SetCursorPosX(ImGui.GetCursorPosX() + float.Max(0, 16f - 4f * ImGuiHelpers.GlobalScale));
@@ -184,19 +186,13 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
                 }
             }
         }
-        //I copied this from Item Search xD
-        using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
-            using var style1 = ImRaii.PushStyle(ImGuiStyleVar.FramePadding, new Vector2(0, -5 * ImGuiHelpers.GlobalScale)).Push(ImGuiStyleVar.WindowPadding, Vector2.Zero);
-            if(ImGui.Button($"{(CollapseFilters ? (char)FontAwesomeIcon.CaretDown : (char)FontAwesomeIcon.CaretUp)}", new Vector2(-1, 10 * ImGuiHelpers.GlobalScale))) {
-                int direction = CollapseFilters ? 1 : -1;
-                CollapseFilters = !CollapseFilters;
-                WindowConfig.FiltersCollapsed = CollapseFilters;
-                if(Plugin.Configuration.AdjustWindowHeightOnFilterCollapse) {
-                    SetWindowSize(new Vector2(ImGui.GetWindowSize().X, ImGui.GetWindowSize().Y + direction * WindowConfig.FilterHeight));
-                }
-            }
+        if(ImGui.Button(CollapseFilters ? "高级筛选###ToggleAdvancedFilters" : "收起筛选###ToggleAdvancedFilters")) {
+            var direction = CollapseFilters ? 1 : -1;
+            CollapseFilters = !CollapseFilters;
+            WindowConfig.FiltersCollapsed = CollapseFilters;
+            if(Plugin.Configuration.AdjustWindowHeightOnFilterCollapse)
+                SetWindowSize(new Vector2(ImGui.GetWindowSize().X, ImGui.GetWindowSize().Y + direction * WindowConfig.FilterHeight));
         }
-        ImGuiHelper.WrappedTooltip($"{(CollapseFilters ? "Show filters" : "Hide filters")}");
     }
 
     protected Task<Task> RefreshTab(Func<Task> func) {
@@ -216,7 +212,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
         if(Plugin.Configuration.ResizeWindowLeft) {
             flags |= ImGuiTabItemFlags.Trailing;
         }
-        using var tab = ImRaii.TabItem(name);
+        using var tab = ImRaii.TabItem(ChineseText.Label(name));
         if(tab) {
             ChangeTab(name);
             try {

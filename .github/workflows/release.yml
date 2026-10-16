@@ -1,0 +1,57 @@
+name: Publish CCStats
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag (for example v0.1.0)
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.402'
+      - name: Install pinned official Dalamud SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 https://raw.githubusercontent.com/goatcorp/dalamud-distrib/904e0b30d912e68c6de1812f2f143ee496b1b55d/latest.zip -o "$RUNNER_TEMP/dalamud.zip"
+          echo "82d3efad4615d4b40fdabd458132473d6b69e341cd700293a6bb3ff2b5b77547  $RUNNER_TEMP/dalamud.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/dalamud.zip" -d "$RUNNER_TEMP/dalamud"
+          echo "DALAMUD_HOME=$RUNNER_TEMP/dalamud" >> "$GITHUB_ENV"
+      - name: Build and validate
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          python3 tools/generate_localization.py
+          git diff --exit-code -- PvpStats/Localization/ChineseText.g.cs
+          dotnet restore PvpStats.sln --locked-mode -p:EnableWindowsTargeting=true
+          dotnet build PvpStats.sln -c Release --no-restore -p:EnableWindowsTargeting=true
+          dotnet build PvpStats.sln -c Debug --no-restore -p:EnableWindowsTargeting=true
+          dotnet restore tests/LocalizationChecks --locked-mode
+          dotnet run --project tests/LocalizationChecks -c Release --no-restore
+          python3 tools/prepare_release.py --version "${RELEASE_TAG#v}" --check-index
+      - name: Publish GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          gh release create "$RELEASE_TAG" --verify-tag --title "CCStats $version" --notes-file "docs/release-notes/$version.md" "artifacts/$RELEASE_TAG/latest.zip" "artifacts/$RELEASE_TAG/repo.json" "artifacts/$RELEASE_TAG/SHA256SUMS.txt" "artifacts/$RELEASE_TAG/LICENSE.txt"

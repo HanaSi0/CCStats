@@ -5,6 +5,7 @@ namespace PvpStats.Settings;
 
 //all because configuration doesn't like polymorphism
 public class FilterConfiguration {
+    public MatchSearchFilter? MatchSearchFilter { get; set; }
     public MatchTypeFilter? MatchTypeFilter { get; set; }
     public TimeFilter? TimeFilter { get; set; }
     public LocalPlayerFilter? LocalPlayerFilter { get; set; }

@@ -1,0 +1,44 @@
+[
+  {
+    "file": "lodestone-jp.html",
+    "source_url": "https://jp.finalfantasyxiv.com/lodestone/ranking/crystallineconflict/",
+    "captured_on": "2026-10-16",
+    "excerpt": true,
+    "rows_preserved": 2
+  },
+  {
+    "file": "lodestone-na.html",
+    "source_url": "https://na.finalfantasyxiv.com/lodestone/ranking/crystallineconflict/",
+    "captured_on": "2026-10-16",
+    "excerpt": true,
+    "rows_preserved": 2
+  },
+  {
+    "file": "lodestone-eu.html",
+    "source_url": "https://eu.finalfantasyxiv.com/lodestone/ranking/crystallineconflict/",
+    "captured_on": "2026-10-16",
+    "excerpt": true,
+    "rows_preserved": 2
+  },
+  {
+    "file": "lodestone-oc.html",
+    "source_url": "https://na.finalfantasyxiv.com/lodestone/ranking/crystallineconflict/?dcgroup=Materia",
+    "captured_on": "2026-10-16",
+    "excerpt": true,
+    "rows_preserved": 2
+  },
+  {
+    "file": "lodestone-jp-page2.html",
+    "source_url": "https://jp.finalfantasyxiv.com/lodestone/ranking/crystallineconflict/?dcgroup=Elemental&page=2",
+    "captured_on": "2026-10-16",
+    "excerpt": true,
+    "rows_preserved": 2
+  },
+  {
+    "file": "lodestone-jp-page6.html",
+    "source_url": "https://jp.finalfantasyxiv.com/lodestone/ranking/crystallineconflict/?dcgroup=Elemental&page=6",
+    "captured_on": "2026-10-16",
+    "excerpt": true,
+    "rows_preserved": 2
+  }
+]

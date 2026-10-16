@@ -16,20 +16,20 @@ public class Configuration : IPluginConfiguration {
     public int Version { get; set; } = CurrentVersion;
     public string LastPluginVersion { get; set; } = "0.0.0.0";
     public bool? EnableDBCachingCC { get; set; }
-    public bool? EnableDBCachingFL { get; set; }
-    public bool? EnableDBCachingRW { get; set; }
 
     public bool? EnableTimelineCC { get; set; }
     public bool? EnableActionAnalyticsCC { get; set; }
-    public bool? EnableTimelineFL { get; set; }
-    public bool? EnableTimelineRW { get; set; }
 
-    public bool? DisableMatchGuardsRW { get; set; }
+    public int LeaderboardRegion { get; set; } = 0;
+
+    public bool ShowFloatingLauncher { get; set; } = true;
+    public Vector2 FloatingLauncherPosition { get; set; } = new(40, 200);
+    public float FloatingLauncherSize { get; set; } = 48;
+
     public bool EnablePlayerLinking { get; set; } = true;
     public bool EnableAutoPlayerLinking { get; set; } = true;
     public bool EnableManualPlayerLinking { get; set; } = true;
     public bool LeftPlayerTeam { get; set; } = false;
-    public bool? OrderFrontlineTeamsByPlacement { get; set; }
     public bool AnchorTeamNames { get; set; } = true;
     //public bool? JobIconCells { get; set; }
     public bool ResizeableMatchWindow { get; set; } = true;
@@ -47,9 +47,8 @@ public class Configuration : IPluginConfiguration {
     public float PlayerRowAlpha { get; set; } = 0.3f;
     //public float ScoreboardRowPaddingFactor { get; set; } = 1f;
     public WindowConfiguration CCWindowConfig { get; set; } = new();
-    public WindowConfiguration FLWindowConfig { get; set; } = new();
-    public WindowConfiguration RWWindowConfig { get; set; } = new();
     public ColorConfiguration Colors { get; set; } = new();
+    public ThemeConfiguration Theme { get; set; } = new();
 
     [NonSerialized]
     private Plugin? _plugin;
@@ -61,6 +60,8 @@ public class Configuration : IPluginConfiguration {
 
     public void Initialize(Plugin plugin) {
         _plugin = plugin;
+        Theme ??= new();
+        Theme.Normalize();
     }
 
     public void Save() {
@@ -84,24 +85,4 @@ public class Configuration : IPluginConfiguration {
         };
     }
 
-    public Vector4 GetFrontlineTeamColor(FrontlineTeamName? team) {
-        return team switch {
-            FrontlineTeamName.Maelstrom => Colors.Maelstrom,
-            FrontlineTeamName.Adders => Colors.Adders,
-            FrontlineTeamName.Flames => Colors.Flames,
-            _ => ImGuiColors.DalamudWhite,
-        };
-    }
-
-    public Vector4 GetRivalWingsTeamColor(RivalWingsTeamName? team) {
-        return team switch {
-            RivalWingsTeamName.Falcons => Colors.Falcons,
-            RivalWingsTeamName.Ravens => Colors.Ravens,
-            _ => ImGuiColors.DalamudWhite,
-        };
-    }
-
-    public Vector4 GetFrontlineWinRateColor(FLAggregateStats stats) {
-        return stats.FirstPlaces * 2 > stats.SecondPlaces + stats.ThirdPlaces ? Colors.Win : stats.FirstPlaces * 2 < stats.SecondPlaces + stats.ThirdPlaces ? Colors.Loss : ImGuiColors.DalamudWhite;
-    }
 }

@@ -1,0 +1,3728 @@
+{
+  "batches": {
+    "01": {
+      "topic": "资料片、职业与职能",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 1,
+          "key": "term.fe614949d14beb4a",
+          "original": "Endwalker",
+          "zh_CN": "晓月之终途"
+        },
+        {
+          "number": 2,
+          "key": "term.fcf0f07e78e74efb",
+          "original": "Dawntrail",
+          "zh_CN": "金曦之遗辉"
+        },
+        {
+          "number": 3,
+          "key": "term.0e8998ab59e3113e",
+          "original": "Paladin",
+          "zh_CN": "骑士"
+        },
+        {
+          "number": 4,
+          "key": "term.5004729bf10d9c0d",
+          "original": "Warrior",
+          "zh_CN": "战士"
+        },
+        {
+          "number": 5,
+          "key": "term.c7238f5aed4aca00",
+          "original": "Dark Knight",
+          "zh_CN": "暗黑骑士"
+        },
+        {
+          "number": 6,
+          "key": "term.3d14656c4c29157a",
+          "original": "Gunbreaker",
+          "zh_CN": "绝枪战士"
+        },
+        {
+          "number": 7,
+          "key": "term.bd5df3f7b596874c",
+          "original": "Monk",
+          "zh_CN": "武僧"
+        },
+        {
+          "number": 8,
+          "key": "term.eacdddefabd3dc85",
+          "original": "Dragoon",
+          "zh_CN": "龙骑士"
+        },
+        {
+          "number": 9,
+          "key": "term.d3a6cdf587571e05",
+          "original": "Ninja",
+          "zh_CN": "忍者"
+        },
+        {
+          "number": 10,
+          "key": "term.901afcdcfbbe0617",
+          "original": "Samurai",
+          "zh_CN": "武士"
+        },
+        {
+          "number": 11,
+          "key": "term.a068b98d5cb1e9f2",
+          "original": "Reaper",
+          "zh_CN": "钐镰客"
+        },
+        {
+          "number": 12,
+          "key": "term.915affdcdc80e3e3",
+          "original": "Viper",
+          "zh_CN": "蝰蛇剑士"
+        },
+        {
+          "number": 13,
+          "key": "term.2c9392af49d375a9",
+          "original": "White Mage",
+          "zh_CN": "白魔法师"
+        },
+        {
+          "number": 14,
+          "key": "term.3f65cf7402c57a64",
+          "original": "Scholar",
+          "zh_CN": "学者"
+        },
+        {
+          "number": 15,
+          "key": "term.62f7e9cabae25135",
+          "original": "Astrologian",
+          "zh_CN": "占星术士"
+        },
+        {
+          "number": 16,
+          "key": "term.69c6d2482a7cac61",
+          "original": "Sage",
+          "zh_CN": "贤者"
+        },
+        {
+          "number": 17,
+          "key": "term.4ca81ffa8a1cd29d",
+          "original": "Bard",
+          "zh_CN": "吟游诗人"
+        },
+        {
+          "number": 18,
+          "key": "term.2603ff13e34983a9",
+          "original": "Machinist",
+          "zh_CN": "机工士"
+        },
+        {
+          "number": 19,
+          "key": "term.2bca5502135b78db",
+          "original": "Dancer",
+          "zh_CN": "舞者"
+        },
+        {
+          "number": 20,
+          "key": "term.f061e4bea866ee1f",
+          "original": "Black Mage",
+          "zh_CN": "黑魔法师"
+        },
+        {
+          "number": 21,
+          "key": "term.6138fe30e031fef2",
+          "original": "Summoner",
+          "zh_CN": "召唤师"
+        },
+        {
+          "number": 22,
+          "key": "term.3bf6e9f603a9c571",
+          "original": "Red Mage",
+          "zh_CN": "赤魔法师"
+        },
+        {
+          "number": 23,
+          "key": "term.3fa85b9edb5278ff",
+          "original": "Pictomancer",
+          "zh_CN": "绘灵法师"
+        },
+        {
+          "number": 24,
+          "key": "term.08e3e952f5c42341",
+          "original": "Tank",
+          "zh_CN": "防护职业"
+        },
+        {
+          "number": 25,
+          "key": "term.c4356ac2621f0d47",
+          "original": "Healer",
+          "zh_CN": "治疗职业"
+        },
+        {
+          "number": 26,
+          "key": "term.46c787cc607b86c3",
+          "original": "DPS",
+          "zh_CN": "输出职业"
+        },
+        {
+          "number": 27,
+          "key": "term.361354aeecf59f9c",
+          "original": "Melee",
+          "zh_CN": "近战输出职业"
+        },
+        {
+          "number": 28,
+          "key": "term.5a9e7da4ba9d6813",
+          "original": "Ranged",
+          "zh_CN": "远程物理输出职业"
+        },
+        {
+          "number": 29,
+          "key": "term.45a8515b76ad665c",
+          "original": "Caster",
+          "zh_CN": "远程魔法输出职业"
+        }
+      ]
+    },
+    "02": {
+      "topic": "地图、队伍与段位",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 30,
+          "key": "term.7ba971929dcbe971",
+          "original": "bronze",
+          "zh_CN": "青铜"
+        },
+        {
+          "number": 31,
+          "key": "term.8dec0a03979c3ff7",
+          "original": "silver",
+          "zh_CN": "白银"
+        },
+        {
+          "number": 32,
+          "key": "term.2f94a0681ac914fb",
+          "original": "gold",
+          "zh_CN": "黄金"
+        },
+        {
+          "number": 33,
+          "key": "term.d2d86b8103d83fd8",
+          "original": "platinum",
+          "zh_CN": "白金"
+        },
+        {
+          "number": 34,
+          "key": "term.9c9669abba1c5aa5",
+          "original": "diamond",
+          "zh_CN": "钻石"
+        },
+        {
+          "number": 35,
+          "key": "term.192b391791a50520",
+          "original": "crystal",
+          "zh_CN": "水晶"
+        },
+        {
+          "number": 36,
+          "key": "term.471abfbbbeb96288",
+          "original": "The Palaistra",
+          "zh_CN": "角力学校"
+        },
+        {
+          "number": 37,
+          "key": "term.9c657cb8f5ffb94d",
+          "original": "The Volcanic Heart",
+          "zh_CN": "火山之心"
+        },
+        {
+          "number": 38,
+          "key": "term.25016cfdc194f900",
+          "original": "Cloud Nine",
+          "zh_CN": "九霄云上"
+        },
+        {
+          "number": 39,
+          "key": "term.95869574a7327c87",
+          "original": "Clockwork Castletown",
+          "zh_CN": "机关大殿"
+        },
+        {
+          "number": 40,
+          "key": "term.b6ee8b5e386ae247",
+          "original": "The Red Sands",
+          "zh_CN": "赤土红沙"
+        },
+        {
+          "number": 41,
+          "key": "term.775dd6a36a9fd8cd",
+          "original": "Bayside Battleground",
+          "zh_CN": "海岸斗场"
+        },
+        {
+          "number": 42,
+          "key": "term.6f67fd6aa1b94cdf",
+          "original": "Archeia Harmonias",
+          "zh_CN": "休兵书库"
+        },
+        {
+          "number": 43,
+          "key": "term.01c945c426d1b812",
+          "original": "Unknown",
+          "zh_CN": "未知"
+        },
+        {
+          "number": 44,
+          "key": "term.d0426ebb1c542fb8",
+          "original": "Astra",
+          "zh_CN": "星极队"
+        },
+        {
+          "number": 45,
+          "key": "term.3df5c9eec7ec2a9d",
+          "original": "Umbra",
+          "zh_CN": "灵极队"
+        },
+        {
+          "number": 46,
+          "key": "enum.ArenaTier.Omega",
+          "original": "Omega",
+          "zh_CN": "欧米茄"
+        },
+        {
+          "number": 47,
+          "key": "enum.ArenaTier.Ultima",
+          "original": "Ultima",
+          "zh_CN": "究极"
+        }
+      ]
+    },
+    "03": {
+      "topic": "水晶冲突事件、追踪设置和统计文字",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 48,
+          "key": "term.43ba4a0450195a69",
+          "original": "Crystalline Conflict",
+          "zh_CN": "水晶冲突"
+        },
+        {
+          "number": 49,
+          "key": "term.c4e68861a4ad5c43",
+          "original": "Crystalline Conflict Timeline Tracking",
+          "zh_CN": "水晶冲突时间线记录"
+        },
+        {
+          "number": 50,
+          "key": "term.ec70e1c522f7d25e",
+          "original": "Crystalline Conflict Action Tracking",
+          "zh_CN": "水晶冲突技能分析记录"
+        },
+        {
+          "number": 51,
+          "key": "term.96fe71e090bf7875",
+          "original": "Limit Breaks",
+          "zh_CN": "极限技"
+        },
+        {
+          "number": 52,
+          "key": "term.8a5165f14dff9c65",
+          "original": "Limit Break Uses",
+          "zh_CN": "极限技使用"
+        },
+        {
+          "number": 53,
+          "key": "term.0c3c640c83eda4be",
+          "original": "Limit Break Affected",
+          "zh_CN": "极限技影响"
+        },
+        {
+          "number": 54,
+          "key": "term.900502e2cebb710b",
+          "original": "The crystal has been unchained.",
+          "zh_CN": "战术水晶已解除束缚。"
+        },
+        {
+          "number": 55,
+          "key": "term.a914732914b0560c",
+          "original": "Overtime has started.",
+          "zh_CN": "加时阶段已开始。"
+        },
+        {
+          "number": 56,
+          "key": "term.b6f850f520091935",
+          "original": "Crystal Progress",
+          "zh_CN": "战术水晶推进进度"
+        },
+        {
+          "number": 57,
+          "key": "term.4c95ca9acfee19a5",
+          "original": "Overtime",
+          "zh_CN": "加时阶段"
+        },
+        {
+          "number": 58,
+          "key": "term.5bbb0256b6e4a058",
+          "original": "Crystal Position",
+          "zh_CN": "战术水晶位置"
+        },
+        {
+          "number": 59,
+          "key": "term.f838111178e27f49",
+          "original": "Astra Progress",
+          "zh_CN": "星极队推进进度"
+        },
+        {
+          "number": 60,
+          "key": "term.383352f4cd83c133",
+          "original": "Umbra Progress",
+          "zh_CN": "灵极队推进进度"
+        },
+        {
+          "number": 61,
+          "key": "term.154108e1e641b38e",
+          "original": "Astra Checkpoint",
+          "zh_CN": "星极队魔力检测点"
+        },
+        {
+          "number": 62,
+          "key": "term.6b08d021b093ece5",
+          "original": "Umbra Checkpoint",
+          "zh_CN": "灵极队魔力检测点"
+        },
+        {
+          "number": 63,
+          "key": "term.f73fadcdc45409d7",
+          "original": "Medicine Kits",
+          "zh_CN": "医疗道具包"
+        },
+        {
+          "number": 64,
+          "key": "term.6915007661af51fd",
+          "original": "Crystal Credit",
+          "zh_CN": "水晶段位积分"
+        },
+        {
+          "number": 65,
+          "key": "term.9eec43667dd37f74",
+          "original": "Time on Crystal Per Match",
+          "zh_CN": "场均运送战术水晶时间"
+        },
+        {
+          "number": 66,
+          "key": "term.f5c6f4400068d858",
+          "original": "Time on Crystal Per Min",
+          "zh_CN": "每分钟运送战术水晶时间"
+        },
+        {
+          "number": 67,
+          "key": "term.e2fccc8eb5c875e2",
+          "original": "Median Time on Crystal Contrib.",
+          "zh_CN": "运送战术水晶时间贡献中位数"
+        },
+        {
+          "number": 68,
+          "key": "term.1a325d58e51ebc69",
+          "original": "Crystalline Conflict Tracker",
+          "zh_CN": "水晶冲突记录器"
+        },
+        {
+          "number": 69,
+          "key": "term.76c3611b99ce317d",
+          "original": "Longest time on crystal per min",
+          "zh_CN": "每分钟运送战术水晶时间最高纪录"
+        }
+      ]
+    },
+    "04": {
+      "topic": "技能与组合：骑士至龙骑士",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 70,
+          "key": "term.d1e04d8dccdbb833",
+          "original": "Royal Authority Combo",
+          "job": "PLD",
+          "zh_CN": "王权剑连击"
+        },
+        {
+          "number": 71,
+          "key": "term.4ea460c4b6c71ab0",
+          "original": "Sepulchre Combo",
+          "job": "PLD",
+          "zh_CN": "葬送剑连击"
+        },
+        {
+          "number": 72,
+          "key": "term.bf255af31d2807be",
+          "original": "Blade of Valor Combo",
+          "job": "PLD",
+          "zh_CN": "英勇之剑连击"
+        },
+        {
+          "number": 73,
+          "key": "term.413bcb5c1ef99f4a",
+          "original": "Storm's Path Combo",
+          "job": "WAR",
+          "zh_CN": "动乱连击"
+        },
+        {
+          "number": 74,
+          "key": "term.5f7b870f4dec3672",
+          "original": "Souleater Combo",
+          "job": "DRK",
+          "zh_CN": "噬魂斩连击"
+        },
+        {
+          "number": 75,
+          "key": "term.a839a1d7c2f35763",
+          "original": "Shadowbringer",
+          "job": "DRK",
+          "zh_CN": "暗影使者"
+        },
+        {
+          "number": 76,
+          "key": "term.eefb8e7a48f2633e",
+          "original": "Torcleaver Combo",
+          "job": "DRK",
+          "zh_CN": "戮山连击"
+        },
+        {
+          "number": 77,
+          "key": "term.2e5d8ce62c708176",
+          "original": "Salt and Darkness",
+          "job": "DRK",
+          "zh_CN": "盐与暗"
+        },
+        {
+          "number": 78,
+          "key": "term.a7149aaa95c3b791",
+          "original": "Burst Strike Combo",
+          "job": "GNB",
+          "zh_CN": "爆发击连击"
+        },
+        {
+          "number": 79,
+          "key": "term.1cb1b49994558edb",
+          "original": "Wicked Talon Combo",
+          "job": "GNB",
+          "zh_CN": "凶禽爪连击"
+        },
+        {
+          "number": 80,
+          "key": "term.4e43363e29896db7",
+          "original": "Continuation",
+          "job": "GNB",
+          "zh_CN": "续剑"
+        },
+        {
+          "number": 81,
+          "key": "term.94987488422547e3",
+          "original": "Relentless Rush",
+          "job": "GNB",
+          "zh_CN": "连续剑"
+        },
+        {
+          "number": 82,
+          "key": "term.1d8e69b84dc09c0e",
+          "original": "Terminal Trigger",
+          "job": "GNB",
+          "zh_CN": "终结击"
+        },
+        {
+          "number": 83,
+          "key": "term.0d251eea49836c9a",
+          "original": "Fall Malefic",
+          "job": "AST",
+          "zh_CN": "煞星"
+        },
+        {
+          "number": 84,
+          "key": "term.be1186fe8ae196f9",
+          "original": "Aspected Benefic",
+          "job": "AST",
+          "zh_CN": "吉星相位"
+        },
+        {
+          "number": 85,
+          "key": "term.44285bad5307218e",
+          "original": "Gravity II",
+          "job": "AST",
+          "zh_CN": "重力II"
+        },
+        {
+          "number": 86,
+          "key": "term.09ba10891dbf0aad",
+          "original": "Pneuma",
+          "job": "SGE",
+          "zh_CN": "魂灵风息"
+        },
+        {
+          "number": 87,
+          "key": "term.d12f0f7f5f115627",
+          "original": "Pouncing Coeurl Combo",
+          "job": "MNK",
+          "zh_CN": "猛豹连击"
+        },
+        {
+          "number": 88,
+          "key": "term.300692477c8de1c6",
+          "original": "Meteodrive",
+          "job": "MNK",
+          "zh_CN": "陨石冲击"
+        },
+        {
+          "number": 89,
+          "key": "term.f16a626a91a3b37a",
+          "original": "Drakesbane Combo",
+          "job": "DRG",
+          "zh_CN": "云蒸龙变连击"
+        },
+        {
+          "number": 90,
+          "key": "term.2b564083a1930d00",
+          "original": "Sky Shatter",
+          "job": "DRG",
+          "zh_CN": "天穹破碎"
+        }
+      ]
+    },
+    "05": {
+      "topic": "其余职业的技能与组合",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 91,
+          "key": "term.0ebe7ba6b97095f3",
+          "original": "Aeolian Edge Combo",
+          "job": "NIN",
+          "zh_CN": "旋风刃连击"
+        },
+        {
+          "number": 92,
+          "key": "term.c41b5acd83e6a0b1",
+          "original": "Fuma Shuriken",
+          "job": "NIN",
+          "zh_CN": "风魔手里剑"
+        },
+        {
+          "number": 93,
+          "key": "term.c2d0b37d0187855b",
+          "original": "Assassinate",
+          "job": "NIN",
+          "zh_CN": "终击"
+        },
+        {
+          "number": 94,
+          "key": "term.02dcd1fff678cf45",
+          "original": "Zesho Meppo",
+          "job": "NIN",
+          "zh_CN": "断绝"
+        },
+        {
+          "number": 95,
+          "key": "term.d6d6171b234ec26e",
+          "original": "Fleeting Raiju Combo",
+          "job": "NIN",
+          "zh_CN": "月影雷兽牙连击"
+        },
+        {
+          "number": 96,
+          "key": "term.2d647ff7d425c2a6",
+          "original": "Seiton Tenchu",
+          "job": "NIN",
+          "zh_CN": "星遁天诛"
+        },
+        {
+          "number": 97,
+          "key": "term.b3f60d0fca018512",
+          "original": "Kasha Combo",
+          "job": "SAM",
+          "zh_CN": "花车连击"
+        },
+        {
+          "number": 98,
+          "key": "term.da53edaba5e719e4",
+          "original": "Kaiten",
+          "job": "SAM",
+          "zh_CN": "必杀剑·回天"
+        },
+        {
+          "number": 99,
+          "key": "term.7d52dfc0849fb9e1",
+          "original": "Setsugekka",
+          "job": "SAM",
+          "zh_CN": "纷乱雪月花"
+        },
+        {
+          "number": 100,
+          "key": "term.eb018ad2eac4a244",
+          "original": "Namikiri",
+          "job": "SAM",
+          "zh_CN": "奥义波切"
+        },
+        {
+          "number": 101,
+          "key": "term.7f3719daae214439",
+          "original": "Infernal Slice Combo",
+          "job": "RPR",
+          "zh_CN": "地狱切割连击"
+        },
+        {
+          "number": 102,
+          "key": "term.33ceb4b39a42b80f",
+          "original": "Cross Reaping Combo",
+          "job": "RPR",
+          "zh_CN": "交错收割连击"
+        },
+        {
+          "number": 103,
+          "key": "term.8289a14dea480939",
+          "original": "Death Warrant",
+          "job": "RPR",
+          "zh_CN": "死亡之影"
+        },
+        {
+          "number": 104,
+          "key": "term.8aa9566847954d17",
+          "original": "Ravenous Bite Combo",
+          "job": "VPR",
+          "zh_CN": "咬噬尖齿连击"
+        },
+        {
+          "number": 105,
+          "key": "term.bc091ca3d17d9d9b",
+          "original": "Sanguine Feast Combo",
+          "job": "VPR",
+          "zh_CN": "强碎灵蛇连击"
+        },
+        {
+          "number": 106,
+          "key": "term.b0f3d03c5a2f2958",
+          "original": "Fourth Generation Combo",
+          "job": "VPR",
+          "zh_CN": "侧击擦齿连击"
+        },
+        {
+          "number": 107,
+          "key": "term.80ac9fe6f2a970d2",
+          "original": "Serpent's Tail",
+          "job": "VPR",
+          "zh_CN": "蛇尾"
+        },
+        {
+          "number": 108,
+          "key": "term.571dea7bdec82a77",
+          "original": "Uncoiled Serpent's Tail",
+          "job": "VPR",
+          "zh_CN": "蛇尾闪"
+        },
+        {
+          "number": 109,
+          "key": "term.2381063b63409c43",
+          "original": "Serpent's Legacy",
+          "job": "VPR",
+          "zh_CN": "蛇尾术"
+        },
+        {
+          "number": 110,
+          "key": "term.4b58d605c49680e1",
+          "original": "Backlash",
+          "job": "VPR",
+          "zh_CN": "反噬"
+        },
+        {
+          "number": 111,
+          "key": "term.2d73e5353baa3a2e",
+          "original": "Harmonic Arrow",
+          "job": "BRD",
+          "zh_CN": "和音箭"
+        },
+        {
+          "number": 112,
+          "key": "term.df9e0c3390322dac",
+          "original": "Wildfire",
+          "job": "MCH",
+          "zh_CN": "野火"
+        },
+        {
+          "number": 113,
+          "key": "term.d64ff7167dc0e5e4",
+          "original": "Honing Ovation",
+          "job": "DNC",
+          "zh_CN": "锐利喝彩"
+        },
+        {
+          "number": 114,
+          "key": "term.cf7dbd58bbac95bd",
+          "original": "Fountainfall Combo",
+          "job": "DNC",
+          "zh_CN": "坠喷泉连击"
+        },
+        {
+          "number": 115,
+          "key": "term.53561f2154cbe57c",
+          "original": "Honing Dance",
+          "job": "DNC",
+          "zh_CN": "锐利舞步"
+        },
+        {
+          "number": 116,
+          "key": "term.a96ce8c996d60acb",
+          "original": "Saber Dance",
+          "job": "DNC",
+          "zh_CN": "剑舞"
+        },
+        {
+          "number": 117,
+          "key": "term.a463e633e4283953",
+          "original": "Starfall Dance",
+          "job": "DNC",
+          "zh_CN": "流星之舞"
+        },
+        {
+          "number": 118,
+          "key": "term.33ac760c4a48dc46",
+          "original": "Fan Dance",
+          "job": "DNC",
+          "zh_CN": "扇舞·序"
+        },
+        {
+          "number": 119,
+          "key": "term.967fb5b82c343704",
+          "original": "Dance of the Dawn",
+          "job": "DNC",
+          "zh_CN": "黎明舞步"
+        },
+        {
+          "number": 120,
+          "key": "term.1176daf3a5254828",
+          "original": "Fire IV Combo",
+          "job": "BLM",
+          "zh_CN": "火炎IV连击"
+        },
+        {
+          "number": 121,
+          "key": "term.cea41ee204b232f6",
+          "original": "Blizzard IV Combo",
+          "job": "BLM",
+          "zh_CN": "冰结IV连击"
+        },
+        {
+          "number": 122,
+          "key": "term.9852a5ad44699b69",
+          "original": "Enchanted Redoublement Combo",
+          "job": "RDM",
+          "zh_CN": "魔回刺连击"
+        },
+        {
+          "number": 123,
+          "key": "term.094996b056fe7709",
+          "original": "Water in Blue Combo",
+          "job": "PCT",
+          "zh_CN": "蓝之水彩连击"
+        },
+        {
+          "number": 124,
+          "key": "term.509ea6de4287b275",
+          "original": "Thunder in Magenta Combo",
+          "job": "PCT",
+          "zh_CN": "品红之雷连击"
+        },
+        {
+          "number": 125,
+          "key": "term.5b2dd00169adf4ea",
+          "original": "Creature Motif",
+          "job": "PCT",
+          "zh_CN": "动物意象"
+        },
+        {
+          "number": 126,
+          "key": "term.55f406fb084b13bf",
+          "original": "Living Muse",
+          "job": "PCT",
+          "zh_CN": "动物具现"
+        },
+        {
+          "number": 127,
+          "key": "term.6dadff940ab1ad67",
+          "original": "Living Portrait",
+          "job": "PCT",
+          "zh_CN": "肖像具现"
+        },
+        {
+          "number": 128,
+          "key": "term.99d3b97dd8c12daa",
+          "original": "Star Prism",
+          "job": "PCT",
+          "zh_CN": "星空构想"
+        }
+      ]
+    },
+    "06": {
+      "topic": "单独技能名称（去重）",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 129,
+          "original": "Guard",
+          "key": "Action.29054",
+          "keys": [
+            "Action.29054",
+            "Action.29735"
+          ],
+          "job": "通用",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "防御"
+        },
+        {
+          "number": 130,
+          "original": "Standard-issue Elixir",
+          "key": "Action.29055",
+          "keys": [
+            "Action.29055"
+          ],
+          "job": "通用",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "军用圣灵药"
+        },
+        {
+          "number": 131,
+          "original": "Purify",
+          "key": "Action.29056",
+          "keys": [
+            "Action.29056"
+          ],
+          "job": "通用",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "净化"
+        },
+        {
+          "number": 132,
+          "original": "Sprint",
+          "key": "Action.29057",
+          "keys": [
+            "Action.29057"
+          ],
+          "job": "通用",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "冲刺"
+        },
+        {
+          "number": 133,
+          "original": "Recuperate",
+          "key": "Action.29711",
+          "keys": [
+            "Action.29711"
+          ],
+          "job": "通用",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "奋起"
+        },
+        {
+          "number": 134,
+          "original": "Fast Blade",
+          "key": "Action.29058",
+          "keys": [
+            "Action.29058"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "先锋剑"
+        },
+        {
+          "number": 135,
+          "original": "Riot Blade",
+          "key": "Action.29059",
+          "keys": [
+            "Action.29059"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "暴乱剑"
+        },
+        {
+          "number": 136,
+          "original": "Royal Authority",
+          "key": "Action.29060",
+          "keys": [
+            "Action.29060"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "王权剑"
+        },
+        {
+          "number": 137,
+          "original": "Atonement",
+          "key": "Action.29061",
+          "keys": [
+            "Action.29061"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "赎罪剑"
+        },
+        {
+          "number": 138,
+          "original": "Guardian",
+          "key": "Action.29066",
+          "keys": [
+            "Action.29066"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "守护"
+        },
+        {
+          "number": 139,
+          "original": "Phalanx",
+          "key": "Action.29069",
+          "keys": [
+            "Action.29069"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "列阵"
+        },
+        {
+          "number": 140,
+          "original": "Blade of Faith",
+          "key": "Action.29071",
+          "keys": [
+            "Action.29071"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "信念之剑"
+        },
+        {
+          "number": 141,
+          "original": "Blade of Truth",
+          "key": "Action.29072",
+          "keys": [
+            "Action.29072"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "真理之剑"
+        },
+        {
+          "number": 142,
+          "original": "Blade of Valor",
+          "key": "Action.29073",
+          "keys": [
+            "Action.29073"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "英勇之剑"
+        },
+        {
+          "number": 143,
+          "original": "Supplication",
+          "key": "Action.41428",
+          "keys": [
+            "Action.41428"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祈求"
+        },
+        {
+          "number": 144,
+          "original": "Sepulchre",
+          "key": "Action.41429",
+          "keys": [
+            "Action.41429"
+          ],
+          "job": "骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "葬送剑"
+        },
+        {
+          "number": 145,
+          "original": "Heavy Swing",
+          "key": "Action.29074",
+          "keys": [
+            "Action.29074"
+          ],
+          "job": "战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "重劈"
+        },
+        {
+          "number": 146,
+          "original": "Maim",
+          "key": "Action.29075",
+          "keys": [
+            "Action.29075"
+          ],
+          "job": "战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "凶残劈"
+        },
+        {
+          "number": 147,
+          "original": "Storm's Path",
+          "key": "Action.29076",
+          "keys": [
+            "Action.29076"
+          ],
+          "job": "战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "动乱"
+        },
+        {
+          "number": 148,
+          "original": "Primal Scream",
+          "key": "Action.29083",
+          "keys": [
+            "Action.29083"
+          ],
+          "job": "战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "原初的怒吼"
+        },
+        {
+          "number": 149,
+          "original": "Hard Slash",
+          "key": "Action.29085",
+          "keys": [
+            "Action.29085"
+          ],
+          "job": "暗黑骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "重斩"
+        },
+        {
+          "number": 150,
+          "original": "Syphon Strike",
+          "key": "Action.29086",
+          "keys": [
+            "Action.29086"
+          ],
+          "job": "暗黑骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "吸收斩"
+        },
+        {
+          "number": 151,
+          "original": "Souleater",
+          "key": "Action.29087",
+          "keys": [
+            "Action.29087"
+          ],
+          "job": "暗黑骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "噬魂斩"
+        },
+        {
+          "number": 152,
+          "original": "Eventide",
+          "key": "Action.29097",
+          "keys": [
+            "Action.29097"
+          ],
+          "job": "暗黑骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "黄昏"
+        },
+        {
+          "number": 153,
+          "original": "Scarlet Delirium",
+          "key": "Action.41434",
+          "keys": [
+            "Action.41434"
+          ],
+          "job": "暗黑骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "绯红乱"
+        },
+        {
+          "number": 154,
+          "original": "Comeuppance",
+          "key": "Action.41435",
+          "keys": [
+            "Action.41435"
+          ],
+          "job": "暗黑骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "报应"
+        },
+        {
+          "number": 155,
+          "original": "Torcleaver",
+          "key": "Action.41436",
+          "keys": [
+            "Action.41436"
+          ],
+          "job": "暗黑骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "戮山"
+        },
+        {
+          "number": 156,
+          "original": "Keen Edge",
+          "key": "Action.29098",
+          "keys": [
+            "Action.29098"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "利刃斩"
+        },
+        {
+          "number": 157,
+          "original": "Brutal Shell",
+          "key": "Action.29099",
+          "keys": [
+            "Action.29099"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "残暴弹"
+        },
+        {
+          "number": 158,
+          "original": "Solid Barrel",
+          "key": "Action.29100",
+          "keys": [
+            "Action.29100"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "迅连斩"
+        },
+        {
+          "number": 159,
+          "original": "Burst Strike",
+          "key": "Action.29101",
+          "keys": [
+            "Action.29101"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "爆发击"
+        },
+        {
+          "number": 160,
+          "original": "Gnashing Fang",
+          "key": "Action.29102",
+          "keys": [
+            "Action.29102"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "烈牙"
+        },
+        {
+          "number": 161,
+          "original": "Savage Claw",
+          "key": "Action.29103",
+          "keys": [
+            "Action.29103"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "猛兽爪"
+        },
+        {
+          "number": 162,
+          "original": "Wicked Talon",
+          "key": "Action.29104",
+          "keys": [
+            "Action.29104"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "凶禽爪"
+        },
+        {
+          "number": 163,
+          "original": "Hypervelocity",
+          "key": "Action.29107",
+          "keys": [
+            "Action.29107"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "超高速"
+        },
+        {
+          "number": 164,
+          "original": "Jugular Rip",
+          "key": "Action.29108",
+          "keys": [
+            "Action.29108"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "噬喉"
+        },
+        {
+          "number": 165,
+          "original": "Abdomen Tear",
+          "key": "Action.29109",
+          "keys": [
+            "Action.29109"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "裂腹"
+        },
+        {
+          "number": 166,
+          "original": "Eye Gouge",
+          "key": "Action.29110",
+          "keys": [
+            "Action.29110"
+          ],
+          "job": "绝枪战士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "刺目"
+        },
+        {
+          "number": 167,
+          "original": "Afflatus Purgation",
+          "key": "Action.29230",
+          "keys": [
+            "Action.29230"
+          ],
+          "job": "白魔法师",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "狂喜之心"
+        },
+        {
+          "number": 168,
+          "original": "Seraphism",
+          "key": "Action.41502",
+          "keys": [
+            "Action.41502"
+          ],
+          "job": "学者",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "炽天附体"
+        },
+        {
+          "number": 169,
+          "original": "Celestial River",
+          "key": "Action.29255",
+          "keys": [
+            "Action.29255"
+          ],
+          "job": "占星术士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "天星河流"
+        },
+        {
+          "number": 170,
+          "original": "Mesotes",
+          "key": "Action.29266",
+          "keys": [
+            "Action.29266",
+            "Action.29267"
+          ],
+          "job": "贤者",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "中庸之道"
+        },
+        {
+          "number": 171,
+          "original": "Dragon Kick",
+          "key": "Action.29475",
+          "keys": [
+            "Action.29475"
+          ],
+          "job": "武僧",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "双龙脚"
+        },
+        {
+          "number": 172,
+          "original": "Twin Snakes",
+          "key": "Action.29476",
+          "keys": [
+            "Action.29476"
+          ],
+          "job": "武僧",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "双掌打"
+        },
+        {
+          "number": 173,
+          "original": "Demolish",
+          "key": "Action.29477",
+          "keys": [
+            "Action.29477"
+          ],
+          "job": "武僧",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "破碎拳"
+        },
+        {
+          "number": 174,
+          "original": "Leaping Opo",
+          "key": "Action.41444",
+          "keys": [
+            "Action.41444"
+          ],
+          "job": "武僧",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "豹袭"
+        },
+        {
+          "number": 175,
+          "original": "Rising Raptor",
+          "key": "Action.41445",
+          "keys": [
+            "Action.41445"
+          ],
+          "job": "武僧",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "猛豹"
+        },
+        {
+          "number": 176,
+          "original": "Pouncing Coeurl",
+          "key": "Action.41446",
+          "keys": [
+            "Action.41446"
+          ],
+          "job": "武僧",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "猛豹"
+        },
+        {
+          "number": 177,
+          "original": "Raiden Thrust",
+          "key": "Action.29486",
+          "keys": [
+            "Action.29486"
+          ],
+          "job": "龙骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "龙眼雷电"
+        },
+        {
+          "number": 178,
+          "original": "Fang and Claw",
+          "key": "Action.29487",
+          "keys": [
+            "Action.29487"
+          ],
+          "job": "龙骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "龙牙龙爪"
+        },
+        {
+          "number": 179,
+          "original": "Wheeling Thrust",
+          "key": "Action.29488",
+          "keys": [
+            "Action.29488"
+          ],
+          "job": "龙骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "龙尾大回旋"
+        },
+        {
+          "number": 180,
+          "original": "Sky High",
+          "key": "Action.29497",
+          "keys": [
+            "Action.29497"
+          ],
+          "job": "龙骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "高跳"
+        },
+        {
+          "number": 181,
+          "original": "Drakesbane",
+          "key": "Action.41449",
+          "keys": [
+            "Action.41449"
+          ],
+          "job": "龙骑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "云蒸龙变"
+        },
+        {
+          "number": 182,
+          "original": "Spinning Edge",
+          "key": "Action.29500",
+          "keys": [
+            "Action.29500",
+            "Action.29517"
+          ],
+          "job": "忍者",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "双刃旋"
+        },
+        {
+          "number": 183,
+          "original": "Gust Slash",
+          "key": "Action.29501",
+          "keys": [
+            "Action.29501",
+            "Action.29518"
+          ],
+          "job": "忍者",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "影牙"
+        },
+        {
+          "number": 184,
+          "original": "Aeolian Edge",
+          "key": "Action.29502",
+          "keys": [
+            "Action.29502",
+            "Action.29519"
+          ],
+          "job": "忍者",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "旋风刃"
+        },
+        {
+          "number": 185,
+          "original": "Forked Raiju",
+          "key": "Action.29510",
+          "keys": [
+            "Action.29510",
+            "Action.29522"
+          ],
+          "job": "忍者",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "月影雷兽爪"
+        },
+        {
+          "number": 186,
+          "original": "Fleeting Raiju",
+          "key": "Action.29707",
+          "keys": [
+            "Action.29707",
+            "Action.29708"
+          ],
+          "job": "忍者",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "月影雷兽牙"
+        },
+        {
+          "number": 187,
+          "original": "Yukikaze",
+          "key": "Action.29523",
+          "keys": [
+            "Action.29523"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "雪风"
+        },
+        {
+          "number": 188,
+          "original": "Gekko",
+          "key": "Action.29524",
+          "keys": [
+            "Action.29524"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "月光"
+        },
+        {
+          "number": 189,
+          "original": "Kasha",
+          "key": "Action.29525",
+          "keys": [
+            "Action.29525"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "花车"
+        },
+        {
+          "number": 190,
+          "original": "Hyosetsu",
+          "key": "Action.29526",
+          "keys": [
+            "Action.29526"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "冰月"
+        },
+        {
+          "number": 191,
+          "original": "Mangetsu",
+          "key": "Action.29527",
+          "keys": [
+            "Action.29527"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "满月"
+        },
+        {
+          "number": 192,
+          "original": "Oka",
+          "key": "Action.29528",
+          "keys": [
+            "Action.29528"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "樱花"
+        },
+        {
+          "number": 193,
+          "original": "Ogi Namikiri",
+          "key": "Action.29530",
+          "keys": [
+            "Action.29530"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "奥义波切"
+        },
+        {
+          "number": 194,
+          "original": "Kaeshi: Namikiri",
+          "key": "Action.29531",
+          "keys": [
+            "Action.29531"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "回返波切"
+        },
+        {
+          "number": 195,
+          "original": "Zantetsuken",
+          "key": "Action.29537",
+          "keys": [
+            "Action.29537"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "斩铁剑"
+        },
+        {
+          "number": 196,
+          "original": "Tendo Setsugekka",
+          "key": "Action.41454",
+          "keys": [
+            "Action.41454"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "天道雪月花"
+        },
+        {
+          "number": 197,
+          "original": "Tendo Kaeshi Setsugekka",
+          "key": "Action.41455",
+          "keys": [
+            "Action.41455"
+          ],
+          "job": "武士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "天道回返雪月花"
+        },
+        {
+          "number": 198,
+          "original": "Slice",
+          "key": "Action.29538",
+          "keys": [
+            "Action.29538"
+          ],
+          "job": "钐镰客",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "切割"
+        },
+        {
+          "number": 199,
+          "original": "Waxing Slice",
+          "key": "Action.29539",
+          "keys": [
+            "Action.29539"
+          ],
+          "job": "钐镰客",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "增盈切割"
+        },
+        {
+          "number": 200,
+          "original": "Infernal Slice",
+          "key": "Action.29540",
+          "keys": [
+            "Action.29540"
+          ],
+          "job": "钐镰客",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "地狱切割"
+        },
+        {
+          "number": 201,
+          "original": "Void Reaping",
+          "key": "Action.29543",
+          "keys": [
+            "Action.29543"
+          ],
+          "job": "钐镰客",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "缢杀"
+        },
+        {
+          "number": 202,
+          "original": "Cross Reaping",
+          "key": "Action.29544",
+          "keys": [
+            "Action.29544"
+          ],
+          "job": "钐镰客",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "绞决"
+        },
+        {
+          "number": 203,
+          "original": "Tenebrae Lemurum",
+          "key": "Action.29553",
+          "keys": [
+            "Action.29553"
+          ],
+          "job": "钐镰客",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "妖异之镰"
+        },
+        {
+          "number": 204,
+          "original": "Fate Sealed",
+          "key": "Action.41457",
+          "keys": [
+            "Action.41457"
+          ],
+          "job": "钐镰客",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "命定"
+        },
+        {
+          "number": 205,
+          "original": "Steel Fangs",
+          "key": "Action.39157",
+          "keys": [
+            "Action.39157"
+          ],
+          "job": "蝰蛇剑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "咬噬尖齿"
+        },
+        {
+          "number": 206,
+          "original": "Piercing Fangs",
+          "key": "Action.39158",
+          "keys": [
+            "Action.39158"
+          ],
+          "job": "蝰蛇剑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "穿裂尖齿"
+        },
+        {
+          "number": 207,
+          "original": "Hunter's Sting",
+          "key": "Action.39159",
+          "keys": [
+            "Action.39159"
+          ],
+          "job": "蝰蛇剑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "猛袭利齿"
+        },
+        {
+          "number": 208,
+          "original": "Swiftskin's Sting",
+          "key": "Action.39160",
+          "keys": [
+            "Action.39160"
+          ],
+          "job": "蝰蛇剑士",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "疾速利齿"
+        }
+      ]
+    },
+    "07": {
+      "topic": "剩余单独技能及部分状态名称",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 209,
+          "original": "Barbarous Bite",
+          "key": "Action.39161",
+          "keys": [
+            "Action.39161"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "咬击獠齿"
+        },
+        {
+          "number": 210,
+          "original": "Ravenous Bite",
+          "key": "Action.39163",
+          "keys": [
+            "Action.39163"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "咬噬獠齿"
+        },
+        {
+          "number": 211,
+          "original": "Bloodcoil",
+          "key": "Action.39166",
+          "keys": [
+            "Action.39166"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "血宴灵蛇"
+        },
+        {
+          "number": 212,
+          "original": "Sanguine Feast",
+          "key": "Action.39167",
+          "keys": [
+            "Action.39167"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "强碎灵蛇"
+        },
+        {
+          "number": 213,
+          "original": "First Generation",
+          "key": "Action.39169",
+          "keys": [
+            "Action.39169"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之牙一式"
+        },
+        {
+          "number": 214,
+          "original": "Second Generation",
+          "key": "Action.39170",
+          "keys": [
+            "Action.39170"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之牙二式"
+        },
+        {
+          "number": 215,
+          "original": "Third Generation",
+          "key": "Action.39171",
+          "keys": [
+            "Action.39171"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之牙三式"
+        },
+        {
+          "number": 216,
+          "original": "Fourth Generation",
+          "key": "Action.39172",
+          "keys": [
+            "Action.39172"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之牙四式"
+        },
+        {
+          "number": 217,
+          "original": "Death Rattle",
+          "key": "Action.39174",
+          "keys": [
+            "Action.39174"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "死亡嘶鸣"
+        },
+        {
+          "number": 218,
+          "original": "Twinfang Bite",
+          "key": "Action.39175",
+          "keys": [
+            "Action.39175"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "双牙连击"
+        },
+        {
+          "number": 219,
+          "original": "Twinblood Bite",
+          "key": "Action.39176",
+          "keys": [
+            "Action.39176"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "双牙乱击"
+        },
+        {
+          "number": 220,
+          "original": "Uncoiled Twinfang",
+          "key": "Action.39177",
+          "keys": [
+            "Action.39177"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "双牙连闪"
+        },
+        {
+          "number": 221,
+          "original": "Uncoiled Twinblood",
+          "key": "Action.39178",
+          "keys": [
+            "Action.39178"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "双牙乱闪"
+        },
+        {
+          "number": 222,
+          "original": "First Legacy",
+          "key": "Action.39179",
+          "keys": [
+            "Action.39179"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之尾一式"
+        },
+        {
+          "number": 223,
+          "original": "Second Legacy",
+          "key": "Action.39180",
+          "keys": [
+            "Action.39180"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之尾二式"
+        },
+        {
+          "number": 224,
+          "original": "Third Legacy",
+          "key": "Action.39181",
+          "keys": [
+            "Action.39181"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之尾三式"
+        },
+        {
+          "number": 225,
+          "original": "Fourth Legacy",
+          "key": "Action.39182",
+          "keys": [
+            "Action.39182"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "祖灵之尾四式"
+        },
+        {
+          "number": 226,
+          "original": "Furious Backlash",
+          "key": "Action.39188",
+          "keys": [
+            "Action.39188"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "愤怒反噬"
+        },
+        {
+          "number": 227,
+          "original": "World-swallower",
+          "key": "Action.39190",
+          "keys": [
+            "Action.39190"
+          ],
+          "job": "蝰蛇剑士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "吞世巨蛇"
+        },
+        {
+          "number": 228,
+          "original": "Final Fantasia",
+          "key": "Action.29401",
+          "keys": [
+            "Action.29401"
+          ],
+          "job": "吟游诗人",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "最终幻想"
+        },
+        {
+          "number": 229,
+          "original": "Marksman's Spite",
+          "key": "Action.29415",
+          "keys": [
+            "Action.29415"
+          ],
+          "job": "机工士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "魔弹射手"
+        },
+        {
+          "number": 230,
+          "original": "Detonator",
+          "key": "Action.41470",
+          "keys": [
+            "Action.41470"
+          ],
+          "job": "机工士",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "起爆"
+        },
+        {
+          "number": 231,
+          "original": "Cascade",
+          "key": "Action.29416",
+          "keys": [
+            "Action.29416"
+          ],
+          "job": "舞者",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "瀑泻"
+        },
+        {
+          "number": 232,
+          "original": "Fountain",
+          "key": "Action.29417",
+          "keys": [
+            "Action.29417"
+          ],
+          "job": "舞者",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "喷泉"
+        },
+        {
+          "number": 233,
+          "original": "Reverse Cascade",
+          "key": "Action.29418",
+          "keys": [
+            "Action.29418"
+          ],
+          "job": "舞者",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "逆瀑泻"
+        },
+        {
+          "number": 234,
+          "original": "Fountainfall",
+          "key": "Action.29419",
+          "keys": [
+            "Action.29419"
+          ],
+          "job": "舞者",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "坠喷泉"
+        },
+        {
+          "number": 235,
+          "original": "Contradance",
+          "key": "Action.29432",
+          "keys": [
+            "Action.29432"
+          ],
+          "job": "舞者",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "行列舞"
+        },
+        {
+          "number": 236,
+          "original": "Fire",
+          "key": "Action.29649",
+          "keys": [
+            "Action.29649"
+          ],
+          "job": "黑魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "火炎"
+        },
+        {
+          "number": 237,
+          "original": "Fire IV",
+          "key": "Action.29650",
+          "keys": [
+            "Action.29650"
+          ],
+          "job": "黑魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "火炎IV"
+        },
+        {
+          "number": 238,
+          "original": "Blizzard",
+          "key": "Action.29653",
+          "keys": [
+            "Action.29653"
+          ],
+          "job": "黑魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "冰结"
+        },
+        {
+          "number": 239,
+          "original": "Blizzard IV",
+          "key": "Action.29654",
+          "keys": [
+            "Action.29654"
+          ],
+          "job": "黑魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "冰结IV"
+        },
+        {
+          "number": 240,
+          "original": "Soul Resonance",
+          "key": "Action.29662",
+          "keys": [
+            "Action.29662"
+          ],
+          "job": "黑魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "灵魂共鸣"
+        },
+        {
+          "number": 241,
+          "original": "Fire III",
+          "key": "Action.30896",
+          "keys": [
+            "Action.30896"
+          ],
+          "job": "黑魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "火炎III"
+        },
+        {
+          "number": 242,
+          "original": "Blizzard III",
+          "key": "Action.30897",
+          "keys": [
+            "Action.30897"
+          ],
+          "job": "黑魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "冰结III"
+        },
+        {
+          "number": 243,
+          "original": "Summon Bahamut",
+          "key": "Action.29673",
+          "keys": [
+            "Action.29673"
+          ],
+          "job": "召唤师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "召唤巴哈姆特"
+        },
+        {
+          "number": 244,
+          "original": "Summon Phoenix",
+          "key": "Action.29678",
+          "keys": [
+            "Action.29678"
+          ],
+          "job": "召唤师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "召唤不死鸟"
+        },
+        {
+          "number": 245,
+          "original": "Enchanted Riposte",
+          "key": "Action.41488",
+          "keys": [
+            "Action.41488"
+          ],
+          "job": "赤魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "魔回刺"
+        },
+        {
+          "number": 246,
+          "original": "Enchanted Zwerchhau",
+          "key": "Action.41489",
+          "keys": [
+            "Action.41489"
+          ],
+          "job": "赤魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "魔交击斩"
+        },
+        {
+          "number": 247,
+          "original": "Enchanted Redoublement",
+          "key": "Action.41490",
+          "keys": [
+            "Action.41490"
+          ],
+          "job": "赤魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "魔连攻"
+        },
+        {
+          "number": 248,
+          "original": "Southern Cross",
+          "key": "Action.41498",
+          "keys": [
+            "Action.41498"
+          ],
+          "job": "赤魔法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "南十字"
+        },
+        {
+          "number": 249,
+          "original": "Fire in Red",
+          "key": "Action.39191",
+          "keys": [
+            "Action.39191"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "火炎之红"
+        },
+        {
+          "number": 250,
+          "original": "Aero in Green",
+          "key": "Action.39192",
+          "keys": [
+            "Action.39192"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "劲风之绿"
+        },
+        {
+          "number": 251,
+          "original": "Water in Blue",
+          "key": "Action.39193",
+          "keys": [
+            "Action.39193"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "流水之蓝"
+        },
+        {
+          "number": 252,
+          "original": "Blizzard in Cyan",
+          "key": "Action.39194",
+          "keys": [
+            "Action.39194"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "冰结之青"
+        },
+        {
+          "number": 253,
+          "original": "Stone in Yellow",
+          "key": "Action.39195",
+          "keys": [
+            "Action.39195"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "坚石之黄"
+        },
+        {
+          "number": 254,
+          "original": "Thunder in Magenta",
+          "key": "Action.39196",
+          "keys": [
+            "Action.39196"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "品红之雷"
+        },
+        {
+          "number": 255,
+          "original": "Pom Motif",
+          "key": "Action.39200",
+          "keys": [
+            "Action.39200"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "绒球彩绘"
+        },
+        {
+          "number": 256,
+          "original": "Wing Motif",
+          "key": "Action.39201",
+          "keys": [
+            "Action.39201"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "翅膀彩绘"
+        },
+        {
+          "number": 257,
+          "original": "Claw Motif",
+          "key": "Action.39202",
+          "keys": [
+            "Action.39202"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "利爪彩绘"
+        },
+        {
+          "number": 258,
+          "original": "Maw Motif",
+          "key": "Action.39203",
+          "keys": [
+            "Action.39203"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "尖牙彩绘"
+        },
+        {
+          "number": 259,
+          "original": "Pom Muse",
+          "key": "Action.39205",
+          "keys": [
+            "Action.39205"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "绒球具现"
+        },
+        {
+          "number": 260,
+          "original": "Winged Muse",
+          "key": "Action.39206",
+          "keys": [
+            "Action.39206"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "翅膀具现"
+        },
+        {
+          "number": 261,
+          "original": "Clawed Muse",
+          "key": "Action.39207",
+          "keys": [
+            "Action.39207"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "利爪具现"
+        },
+        {
+          "number": 262,
+          "original": "Fanged Muse",
+          "key": "Action.39208",
+          "keys": [
+            "Action.39208"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "尖牙具现"
+        },
+        {
+          "number": 263,
+          "original": "Advent of Chocobastion",
+          "key": "Action.39215",
+          "keys": [
+            "Action.39215"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "陆行鸟堡垒降临"
+        },
+        {
+          "number": 264,
+          "original": "Mog of the Ages",
+          "key": "Action.39782",
+          "keys": [
+            "Action.39782"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "莫古力永恒"
+        },
+        {
+          "number": 265,
+          "original": "Retribution of the Madeen",
+          "key": "Action.39783",
+          "keys": [
+            "Action.39783"
+          ],
+          "job": "绘灵法师",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "玛蒂恩的报应"
+        },
+        {
+          "number": 266,
+          "original": "Megaflare",
+          "key": "Action.29675",
+          "keys": [
+            "Action.29675"
+          ],
+          "job": "召唤师（召唤物）",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "百万核爆"
+        },
+        {
+          "number": 267,
+          "original": "Everlasting Flight",
+          "key": "Action.29680",
+          "keys": [
+            "Action.29680"
+          ],
+          "job": "召唤师（召唤物）",
+          "kind": "技能",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "不死鸟之翼"
+        },
+        {
+          "number": 268,
+          "original": "Invincibility",
+          "key": "Status.895",
+          "keys": [
+            "Status.895"
+          ],
+          "job": "状态 ID 895",
+          "kind": "状态",
+          "symbols": "MajorStatus.Invincible",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "无敌"
+        },
+        {
+          "number": 269,
+          "original": "Hallowed Ground",
+          "key": "Status.1302",
+          "keys": [
+            "Status.1302"
+          ],
+          "job": "状态 ID 1302",
+          "kind": "状态",
+          "symbols": "MajorStatus.HallowedGround",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "神圣领域"
+        },
+        {
+          "number": 270,
+          "original": "Inner Release",
+          "key": "Status.1303",
+          "keys": [
+            "Status.1303"
+          ],
+          "job": "状态 ID 1303",
+          "kind": "状态",
+          "symbols": "MajorStatus.InnerRelease",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "原初的解放"
+        },
+        {
+          "number": 271,
+          "original": "Sole Survivor",
+          "key": "Status.1306",
+          "keys": [
+            "Status.1306"
+          ],
+          "job": "状态 ID 1306",
+          "kind": "状态",
+          "symbols": "MajorStatus.SoleSurvivor",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "死斗"
+        },
+        {
+          "number": 272,
+          "original": "Stun",
+          "key": "Status.1343",
+          "keys": [
+            "Status.1343"
+          ],
+          "job": "状态 ID 1343",
+          "kind": "状态",
+          "symbols": "MajorStatus.Stun",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "眩晕"
+        },
+        {
+          "number": 273,
+          "original": "Heavy",
+          "key": "Status.1344",
+          "keys": [
+            "Status.1344"
+          ],
+          "job": "状态 ID 1344",
+          "kind": "状态",
+          "symbols": "MajorStatus.Heavy",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "加重"
+        },
+        {
+          "number": 274,
+          "original": "Bind",
+          "key": "Status.1345",
+          "keys": [
+            "Status.1345"
+          ],
+          "job": "状态 ID 1345",
+          "kind": "状态",
+          "symbols": "MajorStatus.Bind",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "止步"
+        },
+        {
+          "number": 275,
+          "original": "Silence",
+          "key": "Status.1347",
+          "keys": [
+            "Status.1347"
+          ],
+          "job": "状态 ID 1347",
+          "kind": "状态",
+          "symbols": "MajorStatus.Silence",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "沉默"
+        },
+        {
+          "number": 276,
+          "original": "Sleep",
+          "key": "Status.1348",
+          "keys": [
+            "Status.1348"
+          ],
+          "job": "状态 ID 1348",
+          "kind": "状态",
+          "symbols": "MajorStatus.Sleep",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "睡眠"
+        },
+        {
+          "number": 277,
+          "original": "Saber Dance",
+          "key": "Status.2022",
+          "keys": [
+            "Status.2022"
+          ],
+          "job": "状态 ID 2022",
+          "kind": "状态",
+          "symbols": "",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "剑舞"
+        },
+        {
+          "number": 278,
+          "original": "Fan Dance",
+          "key": "Status.2052",
+          "keys": [
+            "Status.2052"
+          ],
+          "job": "状态 ID 2052",
+          "kind": "状态",
+          "symbols": "",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "扇舞"
+        },
+        {
+          "number": 279,
+          "original": "Covered",
+          "key": "Status.2413",
+          "keys": [
+            "Status.2413"
+          ],
+          "job": "状态 ID 2413",
+          "kind": "状态",
+          "symbols": "MajorStatus.Covered",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "掩护"
+        },
+        {
+          "number": 280,
+          "original": "Blackfeather Boost",
+          "key": "Status.2995",
+          "keys": [
+            "Status.2995"
+          ],
+          "job": "状态 ID 2995",
+          "kind": "状态",
+          "symbols": "MajorStatus.Blackfeather",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "黑羽强化"
+        },
+        {
+          "number": 281,
+          "original": "Unguarded",
+          "key": "Status.3021",
+          "keys": [
+            "Status.3021"
+          ],
+          "job": "状态 ID 3021",
+          "kind": "状态",
+          "symbols": "MajorStatus.Unguarded",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "无防备"
+        },
+        {
+          "number": 282,
+          "original": "Sacred Claim",
+          "key": "Status.3025",
+          "keys": [
+            "Status.3025"
+          ],
+          "job": "状态 ID 3025",
+          "kind": "状态",
+          "symbols": "MinorStatus.SacredClaim",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "神圣请求"
+        },
+        {
+          "number": 283,
+          "original": "Holy Sheltron",
+          "key": "Status.3026",
+          "keys": [
+            "Status.3026"
+          ],
+          "job": "状态 ID 3026",
+          "kind": "状态",
+          "symbols": "MinorStatus.HolySheltron",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "神圣盾阵"
+        },
+        {
+          "number": 284,
+          "original": "Onslaught",
+          "key": "Status.3029",
+          "keys": [
+            "Status.3029"
+          ],
+          "job": "状态 ID 3029",
+          "kind": "状态",
+          "symbols": "MinorStatus.Onslaught",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "突进"
+        },
+        {
+          "number": 285,
+          "original": "Bloodwhetting",
+          "key": "Status.3030",
+          "keys": [
+            "Status.3030"
+          ],
+          "job": "状态 ID 3030",
+          "kind": "状态",
+          "symbols": "MinorStatus.Bloodwhetting",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "血溅"
+        },
+        {
+          "number": 286,
+          "original": "Salted Earth",
+          "key": "Status.3037",
+          "keys": [
+            "Status.3037"
+          ],
+          "job": "状态 ID 3037",
+          "kind": "状态",
+          "symbols": "MinorStatus.SaltedEarthHeal",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "腐秽大地"
+        },
+        {
+          "number": 287,
+          "original": "Salt's Bane",
+          "key": "Status.3038",
+          "keys": [
+            "Status.3038"
+          ],
+          "job": "状态 ID 3038",
+          "kind": "状态",
+          "symbols": "MinorStatus.SaltedEarthDamage",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "腐秽灭杀"
+        },
+        {
+          "number": 288,
+          "original": "Undead Redemption",
+          "key": "Status.3039",
+          "keys": [
+            "Status.3039"
+          ],
+          "job": "状态 ID 3039",
+          "kind": "状态",
+          "symbols": "MajorStatus.UndeadRedemption",
+          "source_csv": "02_game_data_ids.csv",
+          "zh_CN": "不死救赎"
+        }
+      ],
+      "user_notes": {
+        "Status.895": "用户说明：无敌为通用占位名称，具体对应技能需按上下文确认。",
+        "Status.1306": "用户说明：死斗为战士技能附加的状态名称。此归属说明尚未独立核验；译名按用户版本保存。"
+      }
+    },
+    "08": {
+      "topic": "剩余状态及设置界面文字",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 289,
+          "original": "No Mercy",
+          "key": "Status.3042",
+          "keys": [
+            "Status.3042"
+          ],
+          "context": "状态 3042",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MinorStatus.NoMercy",
+          "zh_CN": "无情"
+        },
+        {
+          "number": 290,
+          "original": "Nebula",
+          "key": "Status.3051",
+          "keys": [
+            "Status.3051"
+          ],
+          "context": "状态 3051",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Nebula",
+          "zh_CN": "暗影墙"
+        },
+        {
+          "number": 291,
+          "original": "Relentless Rush",
+          "key": "Status.3052",
+          "keys": [
+            "Status.3052"
+          ],
+          "context": "状态 3052",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.RelentlessRush",
+          "zh_CN": "连续剑"
+        },
+        {
+          "number": 292,
+          "original": "Relentless Shrapnel",
+          "key": "Status.3053",
+          "keys": [
+            "Status.3053"
+          ],
+          "context": "状态 3053",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Shrapnel",
+          "zh_CN": "连续剑碎片"
+        },
+        {
+          "number": 293,
+          "original": "Guard",
+          "key": "Status.3054",
+          "keys": [
+            "Status.3054"
+          ],
+          "context": "状态 3054",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Guard",
+          "zh_CN": "防御"
+        },
+        {
+          "number": 294,
+          "original": "Miracle of Nature",
+          "key": "Status.3085",
+          "keys": [
+            "Status.3085"
+          ],
+          "context": "状态 3085",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.MiracleOfNature",
+          "zh_CN": "自然奇迹"
+        },
+        {
+          "number": 295,
+          "original": "Celestial River",
+          "key": "Status.3105",
+          "keys": [
+            "Status.3105"
+          ],
+          "context": "状态 3105",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.CelestialRiver",
+          "zh_CN": "天星河流"
+        },
+        {
+          "number": 296,
+          "original": "Celestial Tide",
+          "key": "Status.3106",
+          "keys": [
+            "Status.3106"
+          ],
+          "context": "状态 3106",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.CelestialTide",
+          "zh_CN": "天星潮汐"
+        },
+        {
+          "number": 297,
+          "original": "Mesotes",
+          "key": "Status.3119",
+          "keys": [
+            "Status.3119"
+          ],
+          "context": "状态 3119",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Mesotes",
+          "zh_CN": "中庸之道"
+        },
+        {
+          "number": 298,
+          "original": "Lype",
+          "key": "Status.3120",
+          "keys": [
+            "Status.3120"
+          ],
+          "context": "状态 3120",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Lype",
+          "zh_CN": "悲叹"
+        },
+        {
+          "number": 299,
+          "original": "Starfall Dance",
+          "key": "Status.3161",
+          "keys": [
+            "Status.3161"
+          ],
+          "context": "状态 3161",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "",
+          "zh_CN": "流星之舞"
+        },
+        {
+          "number": 300,
+          "original": "Meteodrive",
+          "key": "Status.3174",
+          "keys": [
+            "Status.3174"
+          ],
+          "context": "状态 3174",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Meteodrive",
+          "zh_CN": "陨石冲击"
+        },
+        {
+          "number": 301,
+          "original": "メテオドライヴ",
+          "key": "Status.3175",
+          "keys": [
+            "Status.3175"
+          ],
+          "context": "状态 3175",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "",
+          "zh_CN": "陨石冲击"
+        },
+        {
+          "number": 302,
+          "original": "Thrill of Battle",
+          "key": "Status.3185",
+          "keys": [
+            "Status.3185"
+          ],
+          "context": "状态 3185",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.ThrillOfBattle",
+          "zh_CN": "战栗"
+        },
+        {
+          "number": 303,
+          "original": "Shield Oath",
+          "key": "Status.3188",
+          "keys": [
+            "Status.3188"
+          ],
+          "context": "状态 3188",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MinorStatus.ShieldOath",
+          "zh_CN": "忠义之盾"
+        },
+        {
+          "number": 304,
+          "original": "Phalanx",
+          "key": "Status.3210",
+          "keys": [
+            "Status.3210"
+          ],
+          "context": "状态 3210",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Phalanx",
+          "zh_CN": "列阵"
+        },
+        {
+          "number": 305,
+          "original": "Resilience",
+          "key": "Status.3248",
+          "keys": [
+            "Status.3248"
+          ],
+          "context": "状态 3248",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Purify",
+          "zh_CN": "坚韧"
+        },
+        {
+          "number": 306,
+          "original": "Orogeny",
+          "key": "Status.3256",
+          "keys": [
+            "Status.3256"
+          ],
+          "context": "状态 3256",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MinorStatus.Orogeny",
+          "zh_CN": "造山运动"
+        },
+        {
+          "number": 307,
+          "original": "Mini",
+          "key": "Status.3518",
+          "keys": [
+            "Status.3518"
+          ],
+          "context": "状态 3518",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Mini",
+          "zh_CN": "缩小"
+        },
+        {
+          "number": 308,
+          "original": "Guard",
+          "key": "Status.3673",
+          "keys": [
+            "Status.3673"
+          ],
+          "context": "状态 3673",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.GuardBroken",
+          "zh_CN": "防御"
+        },
+        {
+          "number": 309,
+          "original": "Shield Smite",
+          "key": "Status.4283",
+          "keys": [
+            "Status.4283"
+          ],
+          "context": "状态 4283",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MinorStatus.ShieldSmite",
+          "zh_CN": "盾牌猛击"
+        },
+        {
+          "number": 310,
+          "original": "Heart of Corundum",
+          "key": "Status.4295",
+          "keys": [
+            "Status.4295"
+          ],
+          "context": "状态 4295",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MinorStatus.HeartOfCorundum",
+          "zh_CN": "刚玉之心"
+        },
+        {
+          "number": 311,
+          "original": "Catharsis of Corundum",
+          "key": "Status.4296",
+          "keys": [
+            "Status.4296"
+          ],
+          "context": "状态 4296",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MinorStatus.CatharsisOfCorundum",
+          "zh_CN": "刚玉之净"
+        },
+        {
+          "number": 312,
+          "original": "Dance of the Dawn",
+          "key": "Status.4314",
+          "keys": [
+            "Status.4314"
+          ],
+          "context": "状态 4314",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "",
+          "zh_CN": "黎明舞步"
+        },
+        {
+          "number": 313,
+          "original": "Covered",
+          "key": "Status.4352",
+          "keys": [
+            "Status.4352"
+          ],
+          "context": "状态 4352",
+          "source_csv": "02_game_data_ids.csv",
+          "symbols": "MajorStatus.Covered2",
+          "zh_CN": "掩护"
+        },
+        {
+          "number": 314,
+          "original": "IS",
+          "key": "text.0ac01b3165cbb1f9",
+          "keys": [
+            "text.0ac01b3165cbb1f9"
+          ],
+          "context": "角色关联关系",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "是"
+        },
+        {
+          "number": 315,
+          "original": "IS NOT",
+          "key": "text.3f969e9e58f7b127",
+          "keys": [
+            "text.3f969e9e58f7b127"
+          ],
+          "context": "角色关联关系",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "不是"
+        },
+        {
+          "number": 316,
+          "original": "PvP Tracker Settings",
+          "key": "text.80417f40067b8e6f",
+          "keys": [
+            "text.80417f40067b8e6f"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "PvP 记录器设置"
+        },
+        {
+          "number": 317,
+          "original": "Interface",
+          "key": "text.9749f627b3189d2d",
+          "keys": [
+            "text.9749f627b3189d2d"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "界面"
+        },
+        {
+          "number": 318,
+          "original": "Player Links",
+          "key": "text.c4710f9cc7cd6de9",
+          "keys": [
+            "text.c4710f9cc7cd6de9"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "玩家关联"
+        },
+        {
+          "number": 319,
+          "original": "Performance",
+          "key": "text.4bf09a5013c97171",
+          "keys": [
+            "text.4bf09a5013c97171"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "性能"
+        },
+        {
+          "number": 320,
+          "original": "General",
+          "key": "text.934f4416165ce912",
+          "keys": [
+            "text.934f4416165ce912"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "通用"
+        },
+        {
+          "number": 321,
+          "original": "Fixed",
+          "key": "text.8cb8ff582ec85753",
+          "keys": [
+            "text.8cb8ff582ec85753"
+          ],
+          "context": "表格列宽",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "固定"
+        },
+        {
+          "number": 322,
+          "original": "Stretch",
+          "key": "text.e9c361ae6d2a087e",
+          "keys": [
+            "text.e9c361ae6d2a087e"
+          ],
+          "context": "表格列宽",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "拉伸"
+        },
+        {
+          "number": 323,
+          "original": "Column styles",
+          "key": "text.56ef94f7d9b5d3f5",
+          "keys": [
+            "text.56ef94f7d9b5d3f5"
+          ],
+          "context": "表格列宽",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "列宽样式"
+        },
+        {
+          "number": 324,
+          "original": "Tracker Window",
+          "key": "text.2abb80b4a8852609",
+          "keys": [
+            "text.2abb80b4a8852609"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "记录器窗口"
+        },
+        {
+          "number": 325,
+          "original": "Filter child height",
+          "key": "text.5216c8f8ed079841",
+          "keys": [
+            "text.5216c8f8ed079841"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "筛选子项高度"
+        },
+        {
+          "number": 326,
+          "original": "Offset window size when filters hidden",
+          "key": "text.9c5ffd3f88651082",
+          "keys": [
+            "text.9c5ffd3f88651082"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "隐藏筛选时调整窗口大小"
+        },
+        {
+          "number": 327,
+          "original": "Shrink window on collapse",
+          "key": "text.52fb634de8f573b0",
+          "keys": [
+            "text.52fb634de8f573b0"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "折叠时缩小窗口"
+        },
+        {
+          "number": 328,
+          "original": "Anchor left-side of window on shrink",
+          "key": "text.bfd780f796dad396",
+          "keys": [
+            "text.bfd780f796dad396"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "缩小时锚定窗口左侧"
+        },
+        {
+          "number": 329,
+          "original": "Save window size per tab",
+          "key": "text.3bd91f45fd7d698f",
+          "keys": [
+            "text.3bd91f45fd7d698f"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "按标签页保存窗口大小"
+        },
+        {
+          "number": 330,
+          "original": "Resize window leftwards on tab switch",
+          "key": "text.13ea0d0ab012b194",
+          "keys": [
+            "text.13ea0d0ab012b194"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "切换标签页时向左调整窗口大小"
+        },
+        {
+          "number": 331,
+          "original": "Color scale stat values",
+          "key": "text.3115c8e85ae1167a",
+          "keys": [
+            "text.3115c8e85ae1167a"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "按数值渐变着色"
+        },
+        {
+          "number": 332,
+          "original": "Match Details Window",
+          "key": "text.8be8dbada7648df4",
+          "keys": [
+            "text.8be8dbada7648df4"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "比赛详情窗口"
+        },
+        {
+          "number": 333,
+          "original": "Show background image",
+          "key": "text.6e925d070c13e702",
+          "keys": [
+            "text.6e925d070c13e702"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "显示背景图片"
+        },
+        {
+          "number": 334,
+          "original": "Always show player team on left",
+          "key": "text.da03b6f4e022a70b",
+          "keys": [
+            "text.da03b6f4e022a70b"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "始终在左侧显示我方队伍"
+        },
+        {
+          "number": 335,
+          "original": "Anchor team stats",
+          "key": "text.1be3c9d07b0dbe51",
+          "keys": [
+            "text.1be3c9d07b0dbe51"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "锚定队伍统计"
+        },
+        {
+          "number": 336,
+          "original": "Team row alpha",
+          "key": "text.35675e6d827f8873",
+          "keys": [
+            "text.35675e6d827f8873"
+          ],
+          "context": "行背景不透明度",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "队伍行不透明度"
+        },
+        {
+          "number": 337,
+          "original": "Reset",
+          "key": "text.402be0c66821819f",
+          "keys": [
+            "text.402be0c66821819f"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "重置"
+        },
+        {
+          "number": 338,
+          "original": "Player row alpha",
+          "key": "text.8336751ff06e7903",
+          "keys": [
+            "text.8336751ff06e7903"
+          ],
+          "context": "行背景不透明度",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "玩家行不透明度"
+        },
+        {
+          "number": 339,
+          "original": "Colors",
+          "key": "text.421962567f30fb3e",
+          "keys": [
+            "text.421962567f30fb3e"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "颜色"
+        },
+        {
+          "number": 340,
+          "original": "Reset to Defaults",
+          "key": "text.33634590e864f44f",
+          "keys": [
+            "text.33634590e864f44f"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "重置为默认值"
+        },
+        {
+          "number": 341,
+          "original": "Revert Changes",
+          "key": "text.e161dfb0ea619aaa",
+          "keys": [
+            "text.e161dfb0ea619aaa"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "还原更改"
+        },
+        {
+          "number": 342,
+          "original": "Headers",
+          "key": "text.c6b1c4bab9ccc58b",
+          "keys": [
+            "text.c6b1c4bab9ccc58b"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "表头"
+        },
+        {
+          "number": 343,
+          "original": "Favorites",
+          "key": "text.520525a3a2429bb7",
+          "keys": [
+            "text.520525a3a2429bb7"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "收藏"
+        },
+        {
+          "number": 344,
+          "original": "Wins",
+          "key": "text.a723ec9d3c1c53a4",
+          "keys": [
+            "text.a723ec9d3c1c53a4"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "胜场"
+        },
+        {
+          "number": 345,
+          "original": "Losses",
+          "key": "text.d3e9a65cfe945642",
+          "keys": [
+            "text.d3e9a65cfe945642"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "败场"
+        },
+        {
+          "number": 346,
+          "original": "Draws",
+          "key": "text.39eda6abec26f2c7",
+          "keys": [
+            "text.39eda6abec26f2c7"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "平局"
+        },
+        {
+          "number": 347,
+          "original": "Local Player",
+          "key": "text.b4d9800a4df30932",
+          "keys": [
+            "text.b4d9800a4df30932"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "本地玩家"
+        },
+        {
+          "number": 348,
+          "original": "Player Team",
+          "key": "text.fd2e04ac75de6662",
+          "keys": [
+            "text.fd2e04ac75de6662"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "我方队伍"
+        },
+        {
+          "number": 349,
+          "original": "Enemy Team",
+          "key": "text.124ebec929172a89",
+          "keys": [
+            "text.124ebec929172a89"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "敌方队伍"
+        },
+        {
+          "number": 350,
+          "original": "High stat",
+          "key": "text.b2216f8dc9ac0f2c",
+          "keys": [
+            "text.b2216f8dc9ac0f2c"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "高数值"
+        },
+        {
+          "number": 351,
+          "original": "Low stat",
+          "key": "text.451347380dbcb130",
+          "keys": [
+            "text.451347380dbcb130"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "低数值"
+        },
+        {
+          "number": 352,
+          "original": "Player row text",
+          "key": "text.92ccacd2d655ba03",
+          "keys": [
+            "text.92ccacd2d655ba03"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "玩家行文本"
+        },
+        {
+          "number": 353,
+          "original": "Team row text",
+          "key": "text.a4a80b17c5c46357",
+          "keys": [
+            "text.a4a80b17c5c46357"
+          ],
+          "context": "颜色设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "队伍行文本"
+        },
+        {
+          "number": 354,
+          "original": "Enable player linking",
+          "key": "text.bcff36dd2f6e98ee",
+          "keys": [
+            "text.bcff36dd2f6e98ee"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "启用玩家关联"
+        },
+        {
+          "number": 355,
+          "original": "Enable auto linking (requires PlayerTrack)",
+          "key": "text.7c28997ae4f63145",
+          "keys": [
+            "text.7c28997ae4f63145"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "启用自动关联（需要 PlayerTrack）"
+        },
+        {
+          "number": 356,
+          "original": "Enable manual linking",
+          "key": "text.85ff7328bbbf8e96",
+          "keys": [
+            "text.85ff7328bbbf8e96"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "启用手动关联"
+        },
+        {
+          "number": 357,
+          "original": "Auto",
+          "key": "text.809d88bd4e8bd98c",
+          "keys": [
+            "text.809d88bd4e8bd98c"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "自动"
+        },
+        {
+          "number": 358,
+          "original": "Update Now",
+          "key": "text.3641aab763a861bd",
+          "keys": [
+            "text.3641aab763a861bd"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "立即更新"
+        },
+        {
+          "number": 359,
+          "original": "Manual",
+          "key": "text.4627940de2d88771",
+          "keys": [
+            "text.4627940de2d88771"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "手动"
+        },
+        {
+          "number": 360,
+          "original": "Players with auto-linked aliases: ",
+          "key": "text.87c4c5d102d52785",
+          "keys": [
+            "text.87c4c5d102d52785"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "已自动关联别名的玩家："
+        },
+        {
+          "number": 361,
+          "original": "Save",
+          "key": "text.88c3604f3547f6b9",
+          "keys": [
+            "text.88c3604f3547f6b9"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "保存"
+        },
+        {
+          "number": 362,
+          "original": "Saved!",
+          "key": "text.0638b3df83185598",
+          "keys": [
+            "text.0638b3df83185598"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "已保存！"
+        },
+        {
+          "number": 363,
+          "original": "Cancel",
+          "key": "text.e1fa0fb0ef17bfd7",
+          "keys": [
+            "text.e1fa0fb0ef17bfd7"
+          ],
+          "context": "设置界面",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "取消"
+        },
+        {
+          "number": 364,
+          "original": "Enter main player",
+          "key": "text.1ec9e9ab382800db",
+          "keys": [
+            "text.1ec9e9ab382800db"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "输入主玩家"
+        },
+        {
+          "number": 365,
+          "original": "Enter linked player",
+          "key": "text.e8d0caebe901c560",
+          "keys": [
+            "text.e8d0caebe901c560"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "输入关联玩家"
+        },
+        {
+          "number": 366,
+          "original": "Add Link",
+          "key": "text.e1a990e4ff0ddf93",
+          "keys": [
+            "text.e1a990e4ff0ddf93"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "添加关联"
+        },
+        {
+          "number": 367,
+          "original": "Remove",
+          "key": "text.d3f41c042f29b5f4",
+          "keys": [
+            "text.d3f41c042f29b5f4"
+          ],
+          "context": "角色名称关联",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "移除"
+        },
+        {
+          "number": 368,
+          "original": "Match Caching",
+          "key": "text.f318dc085c6c3dfb",
+          "keys": [
+            "text.f318dc085c6c3dfb"
+          ],
+          "context": "性能设置",
+          "source_csv": "03_ui_text_candidates.csv",
+          "zh_CN": "比赛记录缓存"
+        }
+      ]
+    },
+    "09": {
+      "topic": "剩余核心比赛类型和事件名称",
+      "status": "confirmed",
+      "entries": [
+        {
+          "number": 369,
+          "key": "enum.CrystallineConflictMatchType.Casual",
+          "keys": [
+            "enum.CrystallineConflictMatchType.Casual"
+          ],
+          "original": "Casual",
+          "context": "休闲比赛类型",
+          "source_csv": "01_game_terms.csv",
+          "zh_CN": "练习赛"
+        },
+        {
+          "number": 370,
+          "key": "enum.CrystallineConflictMatchType.Ranked",
+          "keys": [
+            "enum.CrystallineConflictMatchType.Ranked"
+          ],
+          "original": "Ranked",
+          "context": "排位比赛类型",
+          "source_csv": "01_game_terms.csv",
+          "zh_CN": "段位赛"
+        },
+        {
+          "number": 371,
+          "key": "enum.CrystallineConflictMatchType.Custom",
+          "keys": [
+            "enum.CrystallineConflictMatchType.Custom"
+          ],
+          "original": "Custom",
+          "context": "自定义比赛类型",
+          "source_csv": "01_game_terms.csv",
+          "zh_CN": "自定赛"
+        },
+        {
+          "number": 372,
+          "key": "enum.ArenaTier.None",
+          "keys": [
+            "enum.ArenaTier.None"
+          ],
+          "original": "None",
+          "context": "无段位的显示名称",
+          "source_csv": "01_game_terms.csv",
+          "zh_CN": "无"
+        },
+        {
+          "number": 373,
+          "key": "enum.CrystallineConflictMatchEvent.MatchEnded",
+          "keys": [
+            "enum.CrystallineConflictMatchEvent.MatchEnded"
+          ],
+          "original": "MatchEnded",
+          "context": "比赛结束事件",
+          "source_csv": "01_game_terms.csv",
+          "zh_CN": "比赛结束"
+        },
+        {
+          "number": 374,
+          "key": "enum.CrystallineConflictMatchEvent.SpecialEvent",
+          "keys": [
+            "enum.CrystallineConflictMatchEvent.SpecialEvent"
+          ],
+          "original": "SpecialEvent",
+          "context": "地图特殊事件类别",
+          "source_csv": "01_game_terms.csv",
+          "zh_CN": "地图特殊事件"
+        }
+      ]
+    }
+  }
+}

@@ -3,6 +3,8 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility.Signatures;
 using PvpStats.Managers;
+using PvpStats.Leaderboards;
+using System.IO;
 using PvpStats.Managers.Game;
 using PvpStats.Managers.Stats;
 using PvpStats.Services;
@@ -23,10 +25,7 @@ public sealed class Plugin : IDalamudPlugin {
 
     internal const string DatabaseName = "data.db";
 
-    private const string SplashCommandName = "/pvpstats";
     private const string CCStatsCommandName = "/ccstats";
-    private const string FLStatsCommandName = "/flstats";
-    private const string RWStatsCommandName = "/rwstats";
     private const string DebugCommandName = "/pvpstatsdebug";
     private const string ConfigCommandName = "/pvpstatsconfig";
     private const string LastMatchCommandName = "/lastmatch";
@@ -53,21 +52,16 @@ public sealed class Plugin : IDalamudPlugin {
     internal ISigScanner SigScanner { get; init; }
 
     internal CrystallineConflictMatchManager? CCMatchManager { get; init; }
-    internal FrontlineMatchManager? FLMatchManager { get; init; }
-    internal RivalWingsMatchManager? RWMatchManager { get; init; }
     internal WindowManager WindowManager { get; init; }
     internal ValidationManager Validation { get; init; }
     internal CrystallineConflictStatsManager CCStatsEngine { get; init; }
-    internal FrontlineStatsManager FLStatsEngine { get; init; }
-    internal RivalWingsStatsManager RWStatsEngine { get; init; }
+    internal RegionalLeaderboardService Leaderboards { get; init; }
 
     internal DataQueue DataQueue { get; init; }
     internal LocalizationService Localization { get; init; }
     internal IpcService Ipc { get; init; }
     internal StorageService Storage { get; init; }
     internal CCMatchCacheService CCCache { get; init; }
-    internal FLMatchCacheService FLCache { get; init; }
-    internal RWMatchCacheService RWCache { get; init; }
     internal GameStateService GameState { get; init; }
     internal AtkNodeService AtkNodeService { get; init; }
     internal PlayerLinkService PlayerLinksService { get; init; }
@@ -127,16 +121,13 @@ public sealed class Plugin : IDalamudPlugin {
             Ipc = new(this);
             Storage = new(this, $"{PluginInterface.GetPluginConfigDirectory()}\\{DatabaseName}");
             CCCache = new(this);
-            FLCache = new(this);
-            RWCache = new(this);
             Functions = new(this);
             GameState = new(this);
             AtkNodeService = new(this);
             PlayerLinksService = new(this);
             Localization = new(this);
             CCStatsEngine = new(this);
-            FLStatsEngine = new(this);
-            RWStatsEngine = new(this);
+            Leaderboards = new(Path.Combine(PluginInterface.GetPluginConfigDirectory(), "leaderboards"), Configuration.LeaderboardRegion);
             WindowManager = new(this);
             Validation = new(this);
             try {
@@ -144,28 +135,9 @@ public sealed class Plugin : IDalamudPlugin {
             } catch(SignatureException e) {
                 Log.Error(e, $"failed to initialize cc match manager");
             }
-            try {
-                FLMatchManager = new(this);
-            } catch(SignatureException e) {
-                Log.Error(e, $"failed to initialize fl match manager");
-            }
-            try {
-                RWMatchManager = new(this);
-            } catch(SignatureException e) {
-                Log.Error(e, $"failed to initialize rw match manager");
-            }
 
-            CommandManager.AddHandler(SplashCommandName, new CommandInfo(OnSplashCommand) {
-                HelpMessage = "Opens launcher window."
-            });
             CommandManager.AddHandler(CCStatsCommandName, new CommandInfo(OnCCCommand) {
-                HelpMessage = "Opens Crystalline Conflict tracker."
-            });
-            CommandManager.AddHandler(FLStatsCommandName, new CommandInfo(OnFLCommand) {
-                HelpMessage = "Opens Frontline tracker."
-            });
-            CommandManager.AddHandler(RWStatsCommandName, new CommandInfo(OnRWCommand) {
-                HelpMessage = "Opens Rival Wings tracker."
+                HelpMessage = "打开水晶冲突记录器。"
             });
             CommandManager.AddHandler(ConfigCommandName, new CommandInfo(OnConfigCommand) {
                 HelpMessage = "Opens config window."
@@ -180,6 +152,7 @@ public sealed class Plugin : IDalamudPlugin {
             });
 #endif
             DataQueue.QueueDataOperation(Initialize);
+            _ = Task.Run(Leaderboards.CheckAtStartupAsync);
         } catch(Exception e) {
             //remove handlers and release database if we fail to start
             Log!.Error(e, "Failed to initialize plugin constructor");
@@ -195,15 +168,17 @@ public sealed class Plugin : IDalamudPlugin {
         Log.Debug("disposing plugin");
 #endif
 
+        CommandManager.RemoveHandler(LastMatchCommandName);
+#if DEBUG
+        CommandManager.RemoveHandler(DebugCommandName);
+#endif
         CommandManager.RemoveHandler(CCStatsCommandName);
-        CommandManager.RemoveHandler(FLStatsCommandName);
         CommandManager.RemoveHandler(ConfigCommandName);
 
         Functions?.Dispose();
         CCMatchManager?.Dispose();
-        FLMatchManager?.Dispose();
-        RWMatchManager?.Dispose();
         WindowManager?.Dispose();
+        Leaderboards?.Dispose();
         Ipc?.Dispose();
         Storage?.Dispose();
         DataQueue?.Dispose();
@@ -212,26 +187,10 @@ public sealed class Plugin : IDalamudPlugin {
         Configuration?.Save();
     }
 
-    private void OnSplashCommand(string command, string args) {
-        WindowManager.OpenSplashWindow();
-    }
-
     private void OnLastMatchCommand(string command, string args) {
         Task.Run(() => {
-            var lastMatchCC = CCCache.Matches.OrderByDescending(x => x.DutyStartTime).FirstOrDefault(x => x.IsCompleted && !x.IsQuarantined && !x.IsDeleted);
-            var lastMatchFL = FLCache.Matches.OrderByDescending(x => x.DutyStartTime).FirstOrDefault(x => x.IsCompleted && !x.IsQuarantined && !x.IsDeleted);
-            var lastMatchRW = RWCache.Matches.OrderByDescending(x => x.DutyStartTime).FirstOrDefault(x => x.IsCompleted && !x.IsQuarantined && !x.IsDeleted);
-            List<PvpMatch> matches = [];
-            if(lastMatchCC != null) {
-                matches.Add(lastMatchCC);
-            }
-            if(lastMatchFL != null) {
-                matches.Add(lastMatchFL);
-            }
-            if(lastMatchRW != null) {
-                matches.Add(lastMatchRW);
-            }
-            var lastMatch = matches.OrderByDescending(x => x.DutyStartTime).FirstOrDefault();
+            var lastMatch = CCCache.Matches.OrderByDescending(x => x.DutyStartTime)
+                .FirstOrDefault(x => x.IsCompleted && !x.IsQuarantined && !x.IsDeleted);
             if(lastMatch != null) {
                 WindowManager.OpenMatchDetailsWindow(lastMatch);
             }
@@ -240,14 +199,6 @@ public sealed class Plugin : IDalamudPlugin {
 
     private void OnCCCommand(string command, string args) {
         WindowManager.OpenCCWindow();
-    }
-
-    private void OnFLCommand(string command, string args) {
-        WindowManager.OpenFLWindow();
-    }
-
-    private void OnRWCommand(string command, string args) {
-        WindowManager.OpenRWWindow();
     }
 
     private void OnConfigCommand(string command, string args) {
@@ -264,12 +215,6 @@ public sealed class Plugin : IDalamudPlugin {
         if(Configuration.EnableDBCachingCC ?? true) {
             CCCache.EnableCaching();
         }
-        if(Configuration.EnableDBCachingFL ?? true) {
-            FLCache.EnableCaching();
-        }
-        if(Configuration.EnableDBCachingRW ?? true) {
-            RWCache.EnableCaching();
-        }
 
         var lastVersion = new Version(Configuration.LastPluginVersion);
         var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
@@ -285,22 +230,7 @@ public sealed class Plugin : IDalamudPlugin {
             }
         });
 
-        var flValidationTask = Task.Run(async () => {
-            if(lastVersion < new Version(2, 5, 2, 0)) {
-                await Validation.ClearFrontlinePreProcessedData();
-            }
-            if(lastVersion < new Version(2, 5, 3, 0)) {
-                await Validation.SetFrontlineMatchFlags();
-            }
-        });
-
-        var rwValidationTask = Task.Run(async () => {
-            if(lastVersion < new Version(2, 5, 3, 0)) {
-                await Validation.SetRivalWingsMatchFlags();
-            }
-        });
-
-        await Task.WhenAll(ccValidationTask, flValidationTask, rwValidationTask);
+        await ccValidationTask;
 
         await WindowManager.RefreshAll();
         Configuration.LastPluginVersion = currentVersion?.ToString() ?? "0.0.0.0";

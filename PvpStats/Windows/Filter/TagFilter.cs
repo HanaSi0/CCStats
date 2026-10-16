@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ internal class TagFilter : DataFilter {
         int logicIndex = (int)Logic;
         bool allowPartial = AllowPartial;
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if(ImGui.InputTextWithHint("##TagsInput", "Enter tags...", ref tags, 100)) {
+        if(ImGui.InputTextWithHint("##TagsInput", ChineseText.Text("Enter tags..."), ref tags, 100)) {
             if(tags != _lastTextValue) {
                 _lastTextValue = tags;
                 Task.Run(() => {

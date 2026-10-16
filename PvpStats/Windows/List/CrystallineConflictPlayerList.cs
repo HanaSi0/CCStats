@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
 using PvpStats.Helpers;
@@ -180,7 +181,7 @@ internal class CrystallineConflictPlayerList : PlayerStatsList<CCPlayerJobStats,
         }
         if(ImGui.TableNextColumn()) {
             var job = StatsModel[item].StatsAll.Job;
-            var jobString = job.ToString() ?? "";
+            var jobString = ChineseText.EnumName(job);
             ImGuiHelper.CenterAlignCursor(jobString);
             ImGui.TextColored(_plugin.Configuration.GetJobColor(job), jobString);
         }

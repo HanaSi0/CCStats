@@ -1,0 +1,201 @@
+﻿key,category,original,zh_CN,source,notes
+term.fe614949d14beb4a,资料片,Endwalker,晓月之终途,PvpStats/Types/GamePeriod.cs:9,仅翻译显示文本，保留原文列。
+term.fcf0f07e78e74efb,资料片,Dawntrail,金曦之遗辉,PvpStats/Types/GamePeriod.cs:14,仅翻译显示文本，保留原文列。
+term.0e8998ab59e3113e,职业或职能,Paladin,骑士,PvpStats/Helpers/PlayerJobHelper.cs:10,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.5004729bf10d9c0d,职业或职能,Warrior,战士,PvpStats/Helpers/PlayerJobHelper.cs:11,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.c7238f5aed4aca00,职业或职能,Dark Knight,暗黑骑士,PvpStats/Helpers/PlayerJobHelper.cs:12,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.3d14656c4c29157a,职业或职能,Gunbreaker,绝枪战士,PvpStats/Helpers/PlayerJobHelper.cs:13,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.bd5df3f7b596874c,职业或职能,Monk,武僧,PvpStats/Helpers/PlayerJobHelper.cs:14,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.eacdddefabd3dc85,职业或职能,Dragoon,龙骑士,PvpStats/Helpers/PlayerJobHelper.cs:15,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.d3a6cdf587571e05,职业或职能,Ninja,忍者,PvpStats/Helpers/PlayerJobHelper.cs:16,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.901afcdcfbbe0617,职业或职能,Samurai,武士,PvpStats/Helpers/PlayerJobHelper.cs:17,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.a068b98d5cb1e9f2,职业或职能,Reaper,钐镰客,PvpStats/Helpers/PlayerJobHelper.cs:18,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.915affdcdc80e3e3,职业或职能,Viper,蝰蛇剑士,PvpStats/Helpers/PlayerJobHelper.cs:19,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.2c9392af49d375a9,职业或职能,White Mage,白魔法师,PvpStats/Helpers/PlayerJobHelper.cs:20,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.3f65cf7402c57a64,职业或职能,Scholar,学者,PvpStats/Helpers/PlayerJobHelper.cs:21,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.62f7e9cabae25135,职业或职能,Astrologian,占星术士,PvpStats/Helpers/PlayerJobHelper.cs:22,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.69c6d2482a7cac61,职业或职能,Sage,贤者,PvpStats/Helpers/PlayerJobHelper.cs:23,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.4ca81ffa8a1cd29d,职业或职能,Bard,吟游诗人,PvpStats/Helpers/PlayerJobHelper.cs:24,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.2603ff13e34983a9,职业或职能,Machinist,机工士,PvpStats/Helpers/PlayerJobHelper.cs:25,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.2bca5502135b78db,职业或职能,Dancer,舞者,PvpStats/Helpers/PlayerJobHelper.cs:26,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.f061e4bea866ee1f,职业或职能,Black Mage,黑魔法师,PvpStats/Helpers/PlayerJobHelper.cs:27,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.6138fe30e031fef2,职业或职能,Summoner,召唤师,PvpStats/Helpers/PlayerJobHelper.cs:28,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.3bf6e9f603a9c571,职业或职能,Red Mage,赤魔法师,PvpStats/Helpers/PlayerJobHelper.cs:29,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.3fa85b9edb5278ff,职业或职能,Pictomancer,绘灵法师,PvpStats/Helpers/PlayerJobHelper.cs:30,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.08e3e952f5c42341,职业或职能,Tank,防护职业,PvpStats/Helpers/PlayerJobHelper.cs:34; PvpStats/Helpers/PlayerJobHelper.cs:40,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.c4356ac2621f0d47,职业或职能,Healer,治疗职业,PvpStats/Helpers/PlayerJobHelper.cs:35; PvpStats/Helpers/PlayerJobHelper.cs:41,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.46c787cc607b86c3,职业或职能,DPS,输出职业,PvpStats/Helpers/PlayerJobHelper.cs:36,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.361354aeecf59f9c,职业或职能,Melee,近战输出职业,PvpStats/Helpers/PlayerJobHelper.cs:42,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.5a9e7da4ba9d6813,职业或职能,Ranged,远程物理输出职业,PvpStats/Helpers/PlayerJobHelper.cs:43,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.45a8515b76ad665c,职业或职能,Caster,远程魔法输出职业,PvpStats/Helpers/PlayerJobHelper.cs:44,职业英文全名也被 GetJobFromName 用于识别；回填时另设显示翻译，不能覆盖识别字典。
+term.7ba971929dcbe971,段位识别词,bronze,青铜,PvpStats/Helpers/MatchHelper.cs:28,这是英文输入识别键；填写中文对应词，回填时保留原键。
+term.8dec0a03979c3ff7,段位识别词,silver,白银,PvpStats/Helpers/MatchHelper.cs:29,这是英文输入识别键；填写中文对应词，回填时保留原键。
+term.2f94a0681ac914fb,段位识别词,gold,黄金,PvpStats/Helpers/MatchHelper.cs:30,这是英文输入识别键；填写中文对应词，回填时保留原键。
+term.d2d86b8103d83fd8,段位识别词,platinum,白金,PvpStats/Helpers/MatchHelper.cs:31,这是英文输入识别键；填写中文对应词，回填时保留原键。
+term.9c9669abba1c5aa5,段位识别词,diamond,钻石,PvpStats/Helpers/MatchHelper.cs:32,这是英文输入识别键；填写中文对应词，回填时保留原键。
+term.192b391791a50520,段位识别词,crystal,水晶,PvpStats/Helpers/MatchHelper.cs:33,这是英文输入识别键；填写中文对应词，回填时保留原键。
+term.471abfbbbeb96288,地图或队伍,The Palaistra,角力学校,PvpStats/Helpers/MatchHelper.cs:135,仅翻译显示文本，保留原文列。
+term.9c657cb8f5ffb94d,地图或队伍,The Volcanic Heart,火山之心,PvpStats/Helpers/MatchHelper.cs:136,仅翻译显示文本，保留原文列。
+term.25016cfdc194f900,地图或队伍,Cloud Nine,九霄云上,PvpStats/Helpers/MatchHelper.cs:137,仅翻译显示文本，保留原文列。
+term.95869574a7327c87,地图或队伍,Clockwork Castletown,机关大殿,PvpStats/Helpers/MatchHelper.cs:138,仅翻译显示文本，保留原文列。
+term.b6ee8b5e386ae247,地图或队伍,The Red Sands,赤土红沙,PvpStats/Helpers/MatchHelper.cs:139,仅翻译显示文本，保留原文列。
+term.775dd6a36a9fd8cd,地图或队伍,Bayside Battleground,海岸斗场,PvpStats/Helpers/MatchHelper.cs:140,仅翻译显示文本，保留原文列。
+term.6f67fd6aa1b94cdf,地图或队伍,Archeia Harmonias,休兵书库,PvpStats/Helpers/MatchHelper.cs:141,仅翻译显示文本，保留原文列。
+term.01c945c426d1b812,地图或队伍,Unknown,未知,PvpStats/Helpers/MatchHelper.cs:142; PvpStats/Helpers/MatchHelper.cs:160,仅翻译显示文本，保留原文列。
+term.d0426ebb1c542fb8,地图或队伍,Astra,星极队,PvpStats/Helpers/MatchHelper.cs:158,仅翻译显示文本，保留原文列。
+term.3df5c9eec7ec2a9d,地图或队伍,Umbra,灵极队,PvpStats/Helpers/MatchHelper.cs:159,仅翻译显示文本，保留原文列。
+term.43ba4a0450195a69,战斗或界面名词,Crystalline Conflict,水晶冲突,PvpStats/Windows/ConfigWindow.cs:563,仅翻译显示文本，保留原文列。
+term.c4e68861a4ad5c43,战斗或界面名词,Crystalline Conflict Timeline Tracking,水晶冲突时间线记录,PvpStats/Windows/ConfigWindow.cs:579,仅翻译显示文本，保留原文列。
+term.ec70e1c522f7d25e,战斗或界面名词,Crystalline Conflict Action Tracking,水晶冲突技能分析记录,PvpStats/Windows/ConfigWindow.cs:586,仅翻译显示文本，保留原文列。
+term.5fb1fc1db3f24d33,战斗或界面名词,Crystalline Conflict,,PvpStats/Windows/SplashWindow.cs:25,仅翻译显示文本，保留原文列。
+term.93831f2ecde8d574,战斗或界面名词,Crystal unbinding in:,,PvpStats/Windows/DebugWindow.cs:378,仅翻译显示文本，保留原文列。
+term.057fcea584e28df2,战斗或界面名词,Crystal position:,,PvpStats/Windows/DebugWindow.cs:387,仅翻译显示文本，保留原文列。
+term.f3fe7f3b23606be9,战斗或界面名词,Astra prog:,,PvpStats/Windows/DebugWindow.cs:391,仅翻译显示文本，保留原文列。
+term.ab92fe67d3040718,战斗或界面名词,Astra midpoint prog:,,PvpStats/Windows/DebugWindow.cs:395,仅翻译显示文本，保留原文列。
+term.a687272c2a405e45,战斗或界面名词,Astra dudes on point:,,PvpStats/Windows/DebugWindow.cs:399,仅翻译显示文本，保留原文列。
+term.ea6e315b1ac3a4dd,战斗或界面名词,Umbra prog:,,PvpStats/Windows/DebugWindow.cs:404,仅翻译显示文本，保留原文列。
+term.d1e7419a95b38abe,战斗或界面名词,Umbra midpoint prog:,,PvpStats/Windows/DebugWindow.cs:408,仅翻译显示文本，保留原文列。
+term.891272ac298d1e60,战斗或界面名词,Umbra dudes on point:,,PvpStats/Windows/DebugWindow.cs:412,仅翻译显示文本，保留原文列。
+term.96fe71e090bf7875,战斗或界面名词,Limit Breaks,极限技,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1003; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1273,仅翻译显示文本，保留原文列。
+term.8a5165f14dff9c65,战斗或界面名词,Limit Break Uses,极限技使用,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1034,仅翻译显示文本，保留原文列。
+term.0c3c640c83eda4be,战斗或界面名词,Limit Break Affected,极限技影响,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1042,仅翻译显示文本，保留原文列。
+term.900502e2cebb710b,战斗或界面名词,The crystal has been unchained.,战术水晶已解除束缚。,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1058,仅翻译显示文本，保留原文列。
+term.a914732914b0560c,战斗或界面名词,Overtime has started.,加时阶段已开始。,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1061,仅翻译显示文本，保留原文列。
+term.b6f850f520091935,战斗或界面名词,Crystal Progress,战术水晶推进进度,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1284,仅翻译显示文本，保留原文列。
+term.4c95ca9acfee19a5,战斗或界面名词,Overtime,加时阶段,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1316,仅翻译显示文本，保留原文列。
+term.5bbb0256b6e4a058,战斗或界面名词,Crystal Position,战术水晶位置,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1323,仅翻译显示文本，保留原文列。
+term.f838111178e27f49,战斗或界面名词,Astra Progress,星极队推进进度,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1330,仅翻译显示文本，保留原文列。
+term.383352f4cd83c133,战斗或界面名词,Umbra Progress,灵极队推进进度,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1337,仅翻译显示文本，保留原文列。
+term.154108e1e641b38e,战斗或界面名词,Astra Checkpoint,星极队魔力检测点,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1344,仅翻译显示文本，保留原文列。
+term.6b08d021b093ece5,战斗或界面名词,Umbra Checkpoint,灵极队魔力检测点,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1351,仅翻译显示文本，保留原文列。
+term.92774910bdf3341b,战斗或界面名词,"
+* Everlasting Flight heal will not have a source if the SMN dies before it expires.",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1594,仅翻译显示文本，保留原文列。
+term.f73fadcdc45409d7,战斗或界面名词,Medicine Kits,医疗道具包,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1598,仅翻译显示文本，保留原文列。
+term.c51f068678a955ef,战斗或界面名词,"Id,Start Time,Arena,Queue,Winner,Duration,Astra Progress,Umbra Progress,
+",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:2127,仅翻译显示文本，保留原文列。
+term.6915007661af51fd,战斗或界面名词,Crystal Credit,水晶段位积分,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:131,仅翻译显示文本，保留原文列。
+term.9eec43667dd37f74,战斗或界面名词,Time on Crystal Per Match,场均运送战术水晶时间,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:65,仅翻译显示文本，保留原文列。
+term.f5c6f4400068d858,战斗或界面名词,Time on Crystal Per Min,每分钟运送战术水晶时间,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:73,仅翻译显示文本，保留原文列。
+term.e2fccc8eb5c875e2,战斗或界面名词,Median Time on Crystal Contrib.,运送战术水晶时间贡献中位数,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:81,仅翻译显示文本，保留原文列。
+term.c777cb19f0e053aa,战斗或界面名词,Time on Crystal Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:65,仅翻译显示文本，保留原文列。
+term.d356375426bd95c2,战斗或界面名词,Time on Crystal Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:73,仅翻译显示文本，保留原文列。
+term.9d825286225c4d91,战斗或界面名词,Median Time on Crystal Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:81,仅翻译显示文本，保留原文列。
+term.1a325d58e51ebc69,战斗或界面名词,Crystalline Conflict Tracker,水晶冲突记录器,PvpStats/Windows/Tracker/CCTrackerWindow.cs:22,仅翻译显示文本，保留原文列。
+term.76c3611b99ce317d,战斗或界面名词,Longest time on crystal per min,每分钟运送战术水晶时间最高纪录,PvpStats/Windows/Records/CrystallineConflictRecords.cs:129,仅翻译显示文本，保留原文列。
+term.d1e04d8dccdbb833,技能组合,Royal Authority Combo,王权剑连击,PvpStats/Types/Display/Action/ActionSet.cs:10,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.4ea460c4b6c71ab0,技能组合,Sepulchre Combo,葬送剑连击,PvpStats/Types/Display/Action/ActionSet.cs:11,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.bf255af31d2807be,技能组合,Blade of Valor Combo,英勇之剑连击,PvpStats/Types/Display/Action/ActionSet.cs:12,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.413bcb5c1ef99f4a,技能组合,Storm's Path Combo,动乱连击,PvpStats/Types/Display/Action/ActionSet.cs:14,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.5f7b870f4dec3672,技能组合,Souleater Combo,噬魂斩连击,PvpStats/Types/Display/Action/ActionSet.cs:16,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.a839a1d7c2f35763,技能组合,Shadowbringer,暗影使者,PvpStats/Types/Display/Action/ActionSet.cs:17,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.eefb8e7a48f2633e,技能组合,Torcleaver Combo,戮山连击,PvpStats/Types/Display/Action/ActionSet.cs:18,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.2e5d8ce62c708176,技能组合,Salt and Darkness,盐与暗,PvpStats/Types/Display/Action/ActionSet.cs:19,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.a7149aaa95c3b791,技能组合,Burst Strike Combo,爆发击连击,PvpStats/Types/Display/Action/ActionSet.cs:21,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.1cb1b49994558edb,技能组合,Wicked Talon Combo,凶禽爪连击,PvpStats/Types/Display/Action/ActionSet.cs:22,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.4e43363e29896db7,技能组合,Continuation,续剑,PvpStats/Types/Display/Action/ActionSet.cs:23,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.94987488422547e3,技能组合,Relentless Rush,连续剑,PvpStats/Types/Display/Action/ActionSet.cs:24,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.1d8e69b84dc09c0e,技能组合,Terminal Trigger,终结击,PvpStats/Types/Display/Action/ActionSet.cs:25,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.0d251eea49836c9a,技能组合,Fall Malefic,煞星,PvpStats/Types/Display/Action/ActionSet.cs:29,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.be1186fe8ae196f9,技能组合,Aspected Benefic,吉星相位,PvpStats/Types/Display/Action/ActionSet.cs:30,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.44285bad5307218e,技能组合,Gravity II,重力II,PvpStats/Types/Display/Action/ActionSet.cs:31,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.09ba10891dbf0aad,技能组合,Pneuma,魂灵风息,PvpStats/Types/Display/Action/ActionSet.cs:33,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.d12f0f7f5f115627,技能组合,Pouncing Coeurl Combo,猛豹连击,PvpStats/Types/Display/Action/ActionSet.cs:35,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.300692477c8de1c6,技能组合,Meteodrive,陨石冲击,PvpStats/Types/Display/Action/ActionSet.cs:36,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.f16a626a91a3b37a,技能组合,Drakesbane Combo,云蒸龙变连击,PvpStats/Types/Display/Action/ActionSet.cs:38,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.2b564083a1930d00,技能组合,Sky Shatter,天穹破碎,PvpStats/Types/Display/Action/ActionSet.cs:39,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.0ebe7ba6b97095f3,技能组合,Aeolian Edge Combo,旋风刃连击,PvpStats/Types/Display/Action/ActionSet.cs:41,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.c41b5acd83e6a0b1,技能组合,Fuma Shuriken,风魔手里剑,PvpStats/Types/Display/Action/ActionSet.cs:42,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.c2d0b37d0187855b,技能组合,Assassinate,终击,PvpStats/Types/Display/Action/ActionSet.cs:43,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.02dcd1fff678cf45,技能组合,Zesho Meppo,断绝,PvpStats/Types/Display/Action/ActionSet.cs:44,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.d6d6171b234ec26e,技能组合,Fleeting Raiju Combo,月影雷兽牙连击,PvpStats/Types/Display/Action/ActionSet.cs:45,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.2d647ff7d425c2a6,技能组合,Seiton Tenchu,星遁天诛,PvpStats/Types/Display/Action/ActionSet.cs:46,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.b3f60d0fca018512,技能组合,Kasha Combo,花车连击,PvpStats/Types/Display/Action/ActionSet.cs:48,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.da53edaba5e719e4,技能组合,Kaiten,必杀剑·回天,PvpStats/Types/Display/Action/ActionSet.cs:49,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.7d52dfc0849fb9e1,技能组合,Setsugekka,纷乱雪月花,PvpStats/Types/Display/Action/ActionSet.cs:50,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.eb018ad2eac4a244,技能组合,Namikiri,奥义波切,PvpStats/Types/Display/Action/ActionSet.cs:51,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.7f3719daae214439,技能组合,Infernal Slice Combo,地狱切割连击,PvpStats/Types/Display/Action/ActionSet.cs:53,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.33ceb4b39a42b80f,技能组合,Cross Reaping Combo,交错收割连击,PvpStats/Types/Display/Action/ActionSet.cs:54,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.8289a14dea480939,技能组合,Death Warrant,死亡之影,PvpStats/Types/Display/Action/ActionSet.cs:55,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.8aa9566847954d17,技能组合,Ravenous Bite Combo,咬噬尖齿连击,PvpStats/Types/Display/Action/ActionSet.cs:57,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.bc091ca3d17d9d9b,技能组合,Sanguine Feast Combo,强碎灵蛇连击,PvpStats/Types/Display/Action/ActionSet.cs:58,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.b0f3d03c5a2f2958,技能组合,Fourth Generation Combo,侧击擦齿连击,PvpStats/Types/Display/Action/ActionSet.cs:59,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.80ac9fe6f2a970d2,技能组合,Serpent's Tail,蛇尾,PvpStats/Types/Display/Action/ActionSet.cs:60,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.571dea7bdec82a77,技能组合,Uncoiled Serpent's Tail,蛇尾闪,PvpStats/Types/Display/Action/ActionSet.cs:61,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.2381063b63409c43,技能组合,Serpent's Legacy,蛇尾术,PvpStats/Types/Display/Action/ActionSet.cs:62,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.4b58d605c49680e1,技能组合,Backlash,反噬,PvpStats/Types/Display/Action/ActionSet.cs:63,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.2d73e5353baa3a2e,技能组合,Harmonic Arrow,和音箭,PvpStats/Types/Display/Action/ActionSet.cs:65,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.df9e0c3390322dac,技能组合,Wildfire,野火,PvpStats/Types/Display/Action/ActionSet.cs:67,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.d64ff7167dc0e5e4,技能组合,Honing Ovation,锐利喝彩,PvpStats/Types/Display/Action/ActionSet.cs:69,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.cf7dbd58bbac95bd,技能组合,Fountainfall Combo,坠喷泉连击,PvpStats/Types/Display/Action/ActionSet.cs:70,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.53561f2154cbe57c,技能组合,Honing Dance,锐利舞步,PvpStats/Types/Display/Action/ActionSet.cs:71,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.a96ce8c996d60acb,技能组合,Saber Dance,剑舞,PvpStats/Types/Display/Action/ActionSet.cs:72,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.a463e633e4283953,技能组合,Starfall Dance,流星之舞,PvpStats/Types/Display/Action/ActionSet.cs:73,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.33ac760c4a48dc46,技能组合,Fan Dance,扇舞·序,PvpStats/Types/Display/Action/ActionSet.cs:74,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.967fb5b82c343704,技能组合,Dance of the Dawn,黎明舞步,PvpStats/Types/Display/Action/ActionSet.cs:75,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.1176daf3a5254828,技能组合,Fire IV Combo,火炎IV连击,PvpStats/Types/Display/Action/ActionSet.cs:77,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.cea41ee204b232f6,技能组合,Blizzard IV Combo,冰结IV连击,PvpStats/Types/Display/Action/ActionSet.cs:78,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.9852a5ad44699b69,技能组合,Enchanted Redoublement Combo,魔回刺连击,PvpStats/Types/Display/Action/ActionSet.cs:82,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.094996b056fe7709,技能组合,Water in Blue Combo,蓝之水彩连击,PvpStats/Types/Display/Action/ActionSet.cs:84,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.509ea6de4287b275,技能组合,Thunder in Magenta Combo,品红之雷连击,PvpStats/Types/Display/Action/ActionSet.cs:85,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.5b2dd00169adf4ea,技能组合,Creature Motif,动物意象,PvpStats/Types/Display/Action/ActionSet.cs:86,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.55f406fb084b13bf,技能组合,Living Muse,动物具现,PvpStats/Types/Display/Action/ActionSet.cs:87,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.6dadff940ab1ad67,技能组合,Living Portrait,肖像具现,PvpStats/Types/Display/Action/ActionSet.cs:88,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+term.99d3b97dd8c12daa,技能组合,Star Prism,星空构想,PvpStats/Types/Display/Action/ActionSet.cs:89,源码自定义组合显示名，可能不同于单个 Action 的游戏名称。
+enum.DutyType.Unknown,枚举显示名,Unknown,,PvpStats/Types/Match/MatchEnums.cs:4,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.DutyType.CrystallineConflict,枚举显示名,CrystallineConflict,,PvpStats/Types/Match/MatchEnums.cs:5,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictTeamName.Unknown,枚举显示名,Unknown,,PvpStats/Types/Match/MatchEnums.cs:9,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictTeamName.Astra,枚举显示名,Astra,,PvpStats/Types/Match/MatchEnums.cs:10,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictTeamName.Umbra,枚举显示名,Umbra,,PvpStats/Types/Match/MatchEnums.cs:11,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchType.Unknown,枚举显示名,Unknown,,PvpStats/Types/Match/MatchEnums.cs:15,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchType.Casual,枚举显示名,Casual,练习赛,PvpStats/Types/Match/MatchEnums.cs:16,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchType.Ranked,枚举显示名,Ranked,段位赛,PvpStats/Types/Match/MatchEnums.cs:17,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchType.Custom,枚举显示名,Custom,自定赛,PvpStats/Types/Match/MatchEnums.cs:18,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMap.Palaistra,枚举显示名,Palaistra,,PvpStats/Types/Match/MatchEnums.cs:22,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMap.VolcanicHeart,枚举显示名,VolcanicHeart,,PvpStats/Types/Match/MatchEnums.cs:23,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMap.CloudNine,枚举显示名,CloudNine,,PvpStats/Types/Match/MatchEnums.cs:24,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMap.ClockworkCastleTown,枚举显示名,ClockworkCastleTown,,PvpStats/Types/Match/MatchEnums.cs:25,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMap.RedSands,枚举显示名,RedSands,,PvpStats/Types/Match/MatchEnums.cs:26,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMap.BaysideBattleground,枚举显示名,BaysideBattleground,,PvpStats/Types/Match/MatchEnums.cs:27,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMap.ArcheiaHarmonias,枚举显示名,ArcheiaHarmonias,,PvpStats/Types/Match/MatchEnums.cs:28,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.None,枚举显示名,None,无,PvpStats/Types/Match/MatchEnums.cs:33,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Bronze,枚举显示名,Bronze,,PvpStats/Types/Match/MatchEnums.cs:34,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Silver,枚举显示名,Silver,,PvpStats/Types/Match/MatchEnums.cs:35,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Gold,枚举显示名,Gold,,PvpStats/Types/Match/MatchEnums.cs:36,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Platinum,枚举显示名,Platinum,,PvpStats/Types/Match/MatchEnums.cs:37,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Diamond,枚举显示名,Diamond,,PvpStats/Types/Match/MatchEnums.cs:38,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Crystal,枚举显示名,Crystal,,PvpStats/Types/Match/MatchEnums.cs:39,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Omega,枚举显示名,Omega,欧米茄,PvpStats/Types/Match/MatchEnums.cs:40,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.ArenaTier.Ultima,枚举显示名,Ultima,究极,PvpStats/Types/Match/MatchEnums.cs:41,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchEvent.CrystalUnchained,枚举显示名,CrystalUnchained,,PvpStats/Types/Match/MatchEnums.cs:45,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchEvent.OvertimeCommenced,枚举显示名,OvertimeCommenced,,PvpStats/Types/Match/MatchEnums.cs:46,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchEvent.MatchEnded,枚举显示名,MatchEnded,比赛结束,PvpStats/Types/Match/MatchEnums.cs:47,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.CrystallineConflictMatchEvent.SpecialEvent,枚举显示名,SpecialEvent,地图特殊事件,PvpStats/Types/Match/MatchEnums.cs:48,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.PLD,枚举显示名,PLD,,PvpStats/Types/Player/PlayerJobEnums.cs:4,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.WAR,枚举显示名,WAR,,PvpStats/Types/Player/PlayerJobEnums.cs:5,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.DRK,枚举显示名,DRK,,PvpStats/Types/Player/PlayerJobEnums.cs:6,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.GNB,枚举显示名,GNB,,PvpStats/Types/Player/PlayerJobEnums.cs:7,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.WHM,枚举显示名,WHM,,PvpStats/Types/Player/PlayerJobEnums.cs:8,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.SCH,枚举显示名,SCH,,PvpStats/Types/Player/PlayerJobEnums.cs:9,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.AST,枚举显示名,AST,,PvpStats/Types/Player/PlayerJobEnums.cs:10,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.SGE,枚举显示名,SGE,,PvpStats/Types/Player/PlayerJobEnums.cs:11,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.MNK,枚举显示名,MNK,,PvpStats/Types/Player/PlayerJobEnums.cs:12,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.DRG,枚举显示名,DRG,,PvpStats/Types/Player/PlayerJobEnums.cs:13,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.NIN,枚举显示名,NIN,,PvpStats/Types/Player/PlayerJobEnums.cs:14,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.SAM,枚举显示名,SAM,,PvpStats/Types/Player/PlayerJobEnums.cs:15,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.RPR,枚举显示名,RPR,,PvpStats/Types/Player/PlayerJobEnums.cs:16,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.VPR,枚举显示名,VPR,,PvpStats/Types/Player/PlayerJobEnums.cs:17,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.BRD,枚举显示名,BRD,,PvpStats/Types/Player/PlayerJobEnums.cs:18,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.MCH,枚举显示名,MCH,,PvpStats/Types/Player/PlayerJobEnums.cs:19,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.DNC,枚举显示名,DNC,,PvpStats/Types/Player/PlayerJobEnums.cs:20,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.BLM,枚举显示名,BLM,,PvpStats/Types/Player/PlayerJobEnums.cs:21,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.SMN,枚举显示名,SMN,,PvpStats/Types/Player/PlayerJobEnums.cs:22,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.RDM,枚举显示名,RDM,,PvpStats/Types/Player/PlayerJobEnums.cs:23,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.Job.PCT,枚举显示名,PCT,,PvpStats/Types/Player/PlayerJobEnums.cs:24,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobRole.TANK,枚举显示名,TANK,,PvpStats/Types/Player/PlayerJobEnums.cs:28,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobRole.HEALER,枚举显示名,HEALER,,PvpStats/Types/Player/PlayerJobEnums.cs:29,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobRole.DPS,枚举显示名,DPS,,PvpStats/Types/Player/PlayerJobEnums.cs:30,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobSubRole.TANK,枚举显示名,TANK,,PvpStats/Types/Player/PlayerJobEnums.cs:34,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobSubRole.HEALER,枚举显示名,HEALER,,PvpStats/Types/Player/PlayerJobEnums.cs:35,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobSubRole.MELEE,枚举显示名,MELEE,,PvpStats/Types/Player/PlayerJobEnums.cs:36,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobSubRole.RANGED,枚举显示名,RANGED,,PvpStats/Types/Player/PlayerJobEnums.cs:37,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。
+enum.JobSubRole.CASTER,枚举显示名,CASTER,,PvpStats/Types/Player/PlayerJobEnums.cs:38,填写显示翻译；不得改枚举名称、数字值或数据库字段。地图/职业与完整英文名可能重复，保持一致。

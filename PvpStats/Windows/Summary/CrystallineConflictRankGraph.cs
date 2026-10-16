@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Bindings.ImPlot;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
@@ -128,14 +129,14 @@ internal class CrystallineConflictRankGraph : Refreshable<CrystallineConflictMat
                 using(var style = ImRaii.PushColor(ImPlotCol.Line, ImGui.GetColorU32(ImGuiColors.DalamudWhite))) {
                     using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 5f * ImGuiHelpers.GlobalScale);
                     ImPlot.SetNextMarkerStyle(ImPlotMarker.None);
-                    ImPlot.PlotLine("Crystal Credit", ref xs[0], ref ys[0], xs.Length, ImPlotLineFlags.None);
+                    ImPlot.PlotLine(ChineseText.Label("Crystal Credit"), ref xs[0], ref ys[0], xs.Length, ImPlotLineFlags.None);
                 }
 
                 if(xsLoss.Length > 0) {
                     using(var style = ImRaii.PushColor(ImPlotCol.Line, ImGui.GetColorU32(_plugin.Configuration.Colors.Loss))) {
                         using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 10f * ImGuiHelpers.GlobalScale);
                         ImPlot.SetNextMarkerStyle(ImPlotMarker.None);
-                        ImPlot.PlotLine("Losses", ref xsLoss[0], ref ysLoss[0], xsLoss.Length, ImPlotLineFlags.Segments);
+                        ImPlot.PlotLine(ChineseText.Label("Losses"), ref xsLoss[0], ref ysLoss[0], xsLoss.Length, ImPlotLineFlags.Segments);
                     }
                 }
 
@@ -143,7 +144,7 @@ internal class CrystallineConflictRankGraph : Refreshable<CrystallineConflictMat
                     using(var style = ImRaii.PushColor(ImPlotCol.Line, ImGui.GetColorU32(_plugin.Configuration.Colors.Win))) {
                         using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 5f * ImGuiHelpers.GlobalScale);
                         ImPlot.SetNextMarkerStyle(ImPlotMarker.None);
-                        ImPlot.PlotLine("Wins", ref xsWin[0], ref ysWin[0], xsWin.Length, ImPlotLineFlags.Segments);
+                        ImPlot.PlotLine(ChineseText.Label("Wins"), ref xsWin[0], ref ysWin[0], xsWin.Length, ImPlotLineFlags.Segments);
                     }
                 }
 

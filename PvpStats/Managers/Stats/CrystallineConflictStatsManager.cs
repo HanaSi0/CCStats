@@ -1,5 +1,6 @@
 ﻿using Dalamud.Utility;
 using PvpStats.Helpers;
+using PvpStats.Localization;
 using PvpStats.Types.Display;
 using PvpStats.Types.Match;
 using PvpStats.Types.Player;
@@ -139,6 +140,26 @@ internal class CrystallineConflictStatsManager : StatsManager<CrystallineConflic
         } else {
             stats.ScoreboardContrib = new();
         }
+    }
+
+    protected List<CrystallineConflictMatch> ApplyFilter(MatchSearchFilter filter, List<CrystallineConflictMatch> matches) {
+        var terms = MatchQuery.Parse(filter.SearchText);
+        if(terms.Count == 0) return matches;
+        return matches.Where(match => {
+            var document = string.Join(" ", match.Id.ToString(), match.Tags, match.DutyStartTime.ToLocalTime().ToString("yyyy-MM-dd"),
+                match.Arena?.ToString(), match.Arena.HasValue ? MatchHelper.GetArenaName(match.Arena.Value) : "",
+                match.MatchType.ToString(), ChineseText.EnumName(match.MatchType), match.LocalPlayer?.FullName);
+            foreach(var team in match.Teams.Values) {
+                foreach(var player in team.Players) {
+                    document += " " + player.Alias.FullName + " " + player.Job;
+                    if(player.Job.HasValue) {
+                        document += " " + PlayerJobHelper.GetNameFromJob(player.Job.Value)
+                            + " " + PlayerJobHelper.AbbreviationNameMap.GetValueOrDefault(player.Job.Value, "");
+                    }
+                }
+            }
+            return MatchQuery.Matches(document, terms);
+        }).ToList();
     }
 
     protected List<CrystallineConflictMatch> ApplyFilter(MatchTypeFilter filter, List<CrystallineConflictMatch> matches) {

@@ -1,4 +1,4 @@
-﻿#pragma warning disable
+#pragma warning disable
 #if DEBUG
 using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Objects.Enums;
@@ -35,7 +35,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using static FFXIVClientStructs.FFXIV.Client.UI.Misc.GroupPoseModule;
 using static Lumina.Data.Parsing.Uld.UldRoot;
-using static PvpStats.Types.ClientStruct.RivalWingsContentDirector;
 
 namespace PvpStats.Windows;
 internal unsafe class DebugWindow : Window {
@@ -95,7 +94,6 @@ internal unsafe class DebugWindow : Window {
                         _plugin.AtkNodeService.PrintTextNodes(_addon);
                     }
 
-
                     if(ImGui.Button("GetNodeById")) {
                         unsafe {
                             AtkUnitBase* addonNode = AtkStage.Instance()->RaptureAtkUnitManager->GetAddonByName(_addon);
@@ -120,7 +118,6 @@ internal unsafe class DebugWindow : Window {
                         _plugin.AtkNodeService.PrintAtkStringArray();
                     }
 
-
                     //var battleLog = AtkStage.Instance()->RaptureAtkUnitManager->GetAddonByName("PvPMKSBattleLog");
                     ////Plugin.Log2.Debug($"{new IntPtr(battleLog):X2}");
                     ////Plugin.Log2.Debug($"{battleLog != null}");
@@ -131,7 +128,6 @@ internal unsafe class DebugWindow : Window {
                     //        ImGui.SetClipboardText($"{valueAddress:X2}");
                     //    }
                     //}
-
 
                     ImGui.Separator();
                     var agent = AgentModule.Instance()->GetAgentByInternalId(AgentId.PvPMKSIntroduction);
@@ -207,24 +203,16 @@ internal unsafe class DebugWindow : Window {
                     ImGui.Text($"Shown?: {directorToDo.IsShown}");
 
                     ImGui.Separator();
-                    if(instanceDirector != null && instanceDirector->InstanceContentType == FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentType.RivalWing) {
-                        DrawRivalWingsDirector();
-                    } else if(instanceDirector != null && instanceDirector->InstanceContentType == FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentType.Frontlines) {
-                        DrawFrontlineDirector();
-                    } else if(instanceDirector != null && instanceDirector->InstanceContentType == FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentType.CrystallineConflict) {
+                    if(instanceDirector != null && instanceDirector->InstanceContentType == FFXIVClientStructs.FFXIV.Client.Game.InstanceContent.InstanceContentType.CrystallineConflict) {
                         DrawCrystallineConflictDirector();
                     }
-                    //ImGui.Text($"0x{new IntPtr(instanceDirector + RivalWingsMatchManager.RivalWingsContentDirectorOffset).ToString("X2")}");
                     //ImGui.Text($"0x{new IntPtr(instanceDirector + 0x1E58).ToString("X2")}");
                     //var x = (IntPtr)instanceDirector + 0x1E58;
                     //ImGui.Text($"0x{x.ToString("X2")}");
                     //var x = EventFramework.Instance()->GetInstanceContentDirector();
                     //ImGui.Text($"0x{((IntPtr)x).ToString("X2")}");
-                    //var y = x + RivalWingsMatchManager.RivalWingsContentDirectorOffset;
                     //ImGui.Text($"0x{((IntPtr)y).ToString("X2")}");
-                    //var z = (IntPtr)x + RivalWingsMatchManager.RivalWingsContentDirectorOffset;
                     //ImGui.Text($"0x{((IntPtr)z).ToString("X2")}");
-
 
                 }
             }
@@ -234,7 +222,6 @@ internal unsafe class DebugWindow : Window {
                     DrawObjectTable();
                 }
             }
-
 
             using(var tab = ImRaii.TabItem("Network Messages")) {
                 if(tab) {
@@ -310,30 +297,6 @@ internal unsafe class DebugWindow : Window {
                         _plugin.DebugMode = debugMode;
                     }
 
-                    if(ImGui.Button("Enable Duty Leave Button")) {
-                        _plugin.RWMatchManager.EnableLeaveDutyButton();
-                    }
-
-                    if(ImGui.Button("Clear FL pre-processed Data")) {
-                        _plugin.DataQueue.QueueDataOperation(async () => {
-                            System.Threading.Tasks.Task.WhenAll(_plugin.Validation.ClearFrontlinePreProcessedData());
-                            _plugin.WindowManager.RefreshAll();
-                        });
-                    }
-
-                    //if(ImGui.Button("Get competent players")) {
-                    //    _plugin.DataQueue.QueueDataOperation(() => {
-                    //        CompetentPlayers = [];
-                    //        foreach(var match in _plugin.FLCache.Matches.Where(x => x.IsCompleted && !x.IsDeleted)) {
-                    //            foreach(var scoreboard in match.PlayerScoreboards) {
-                    //                if(scoreboard.Value.KDA >= 20) {
-                    //                    CompetentPlayers.Add((PlayerAlias)scoreboard.Key);
-                    //                }
-                    //            }
-                    //        }
-                    //    });
-                    //}
-
                     //if(ImGui.Button("Find shared accounts")) {
                     //    Dictionary<ulong, PlayerAlias> accounts = new();
                     //    Dictionary<ulong, HashSet<PlayerAlias>> linkedAliases = new();
@@ -368,45 +331,6 @@ internal unsafe class DebugWindow : Window {
                         }
                     }
 
-                    if(ImGui.Button("First Mid wins...%")) {
-                        _plugin.DataQueue.QueueDataOperation(() => {
-                            int matchCount = 0;
-                            int firstMidWins = 0;
-
-                            var rwMatches = _plugin.RWCache.Matches.Where(x => x.IsCompleted && x.TimelineId != null);
-                            var timelines = _plugin.Storage.GetRWTimelines().Query().ToList();
-                            foreach(var rwMatch in rwMatches) {
-                                var timeline = timelines.Where(x => x.Id.Equals(rwMatch.TimelineId)).FirstOrDefault();
-                                if(timeline == null || timeline.MidClaims == null) {
-                                    continue;
-                                }
-                                if(timeline.MidClaims.First().Kind == RivalWingsSupplies.Gobbiejuice) {
-                                    continue;
-                                }
-                                matchCount++;
-                                var firstMid = timeline.MidClaims.First();
-                                if(firstMid.Team == rwMatch.MatchWinner) {
-                                    firstMidWins++;
-                                }
-                            }
-
-                            Plugin.Log2.Debug($"Matches: {matchCount}\nFirst Mid Winner Wins Match (no Gobbiejuice): {firstMidWins}\n{((float)firstMidWins / matchCount):P2}");
-                        });
-
-                    }
-
-                    if(ImGui.Button("Test Function")) {
-                        //var match = _plugin.FLCache.Matches.FirstOrDefault(x => x.Id.ToString() == "6945d0c8505fee0dd5ec1ffe");
-                        //if(match != null) {
-                        //    foreach(var playerScoreboard in match.PlayerScoreboards) {
-                        //        var scoreboard = playerScoreboard.Value;
-                        //        scoreboard.ClaimTime = TimeSpan.FromSeconds(scoreboard.Occupations);
-                        //        scoreboard.Occupations = 0;
-                        //    }
-                        //    _plugin.FLCache.UpdateMatch(match);
-                        //}
-
-                    }
                     var pvpProfile = PvPProfile.Instance();
                     ImGui.Text($"PvP Profile Addr: {(IntPtr)pvpProfile:X2}");
 
@@ -441,185 +365,6 @@ internal unsafe class DebugWindow : Window {
 
         //}
 
-    }
-
-    private void DrawRivalWingsDirector() {
-        var instanceDirector = (RivalWingsContentDirector*)(IntPtr)EventFramework.Instance()->GetInstanceContentDirector();
-        using(var table = ImRaii.Table("core", 2)) {
-            if(table) {
-                ImGui.TableSetupColumn("falcons");
-                ImGui.TableSetupColumn("ravens");
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Falcon Core");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Raven Core");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FalconCore.Integrity.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->RavenCore.Integrity.ToString());
-            }
-        }
-
-        using(var table = ImRaii.Table("towers", 4)) {
-            if(table) {
-                ImGui.TableSetupColumn("ft1");
-                ImGui.TableSetupColumn("ft2");
-                ImGui.TableSetupColumn("rt1");
-                ImGui.TableSetupColumn("rt2");
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Tower 1");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Tower 2");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Tower 1");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Tower 2");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FalconTower1.Integrity.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FalconTower2.Integrity.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->RavenTower1.Integrity.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->RavenTower2.Integrity.ToString());
-            }
-        }
-
-        using(var table = ImRaii.Table("mechs", 3)) {
-            if(table) {
-                ImGui.TableSetupColumn("mech");
-                ImGui.TableSetupColumn("falcons");
-                ImGui.TableSetupColumn("ravens");
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Chasers:");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FalconChaserCount.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->RavenChaserCount.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Oppressors:");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FalconOppressorCount.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->RavenOppressorCount.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Justices:");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FalconJusticeCount.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->RavenJusticeCount.ToString());
-            }
-        }
-
-        using(var table = ImRaii.Table("mercs", 2)) {
-            if(table) {
-                ImGui.TableSetupColumn("desc");
-                ImGui.TableSetupColumn("val");
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Merc Control");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->MercControl.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Balance");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->MercBalance.ToString());
-            }
-        }
-
-        using(var table = ImRaii.Table("mid", 2)) {
-            if(table) {
-                ImGui.TableSetupColumn("desc");
-                ImGui.TableSetupColumn("val");
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Mid Type");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->MidType.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Mid Control");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->MidControl.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Falcon Score");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FalconMidScore.ToString());
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Raven Score");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->RavenMidScore.ToString());
-            }
-        }
-
-        using(var table = ImRaii.Table("playermechs", 2)) {
-            if(table) {
-                ImGui.TableSetupColumn("player");
-                ImGui.TableSetupColumn("mech");
-
-                for(int i = 0; i < instanceDirector->FriendlyMechSpan.Length; i++) {
-                    var friendlyMechNative = instanceDirector->FriendlyMechSpan[i];
-                    //var mechStats = _playerMechStats[i];
-                    //add input bounds for sanity check in case of missing alliance
-                    if(friendlyMechNative.Type != MechType.None) {
-                        ImGui.TableNextColumn();
-                        ImGui.TextUnformatted(friendlyMechNative.PlayerObjectId.ToString());
-                        ImGui.TableNextColumn();
-                        ImGui.TextUnformatted(friendlyMechNative.Type.ToString());
-                    }
-                }
-            }
-        }
-
-        using(var table = ImRaii.Table("Alliances", 3)) {
-            if(table) {
-                ImGui.TableSetupColumn("alliance");
-                ImGui.TableSetupColumn("soaring");
-                ImGui.TableSetupColumn("ceruleum");
-
-                for(int i = 0; i < instanceDirector->AllianceSpan.Length; i++) {
-                    var allianceStat = instanceDirector->AllianceSpan[i];
-                    ImGui.TableNextColumn();
-                    ImGui.TextUnformatted(i.ToString());
-                    ImGui.TableNextColumn();
-                    ImGui.TextUnformatted(allianceStat.SoaringStacks.ToString());
-                    ImGui.TableNextColumn();
-                    ImGui.TextUnformatted(allianceStat.Ceruleum.ToString());
-                }
-            }
-        }
-    }
-
-    private void DrawFrontlineDirector() {
-        var instanceDirector = (FrontlineContentDirector*)(IntPtr)EventFramework.Instance()->GetInstanceContentDirector();
-        using(var table = ImRaii.Table("main", 2)) {
-            if(table) {
-                ImGui.TableSetupColumn("c1");
-                ImGui.TableSetupColumn("c2");
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Battle High");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->PlayerBattleHigh.ToString());
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Maelstrom");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->MaelstromScore.ToString());
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Adders");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->AddersScore.ToString());
-
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted("Flames");
-                ImGui.TableNextColumn();
-                ImGui.TextUnformatted(instanceDirector->FlamesScore.ToString());
-            }
-        }
     }
 
     private void DrawCrystallineConflictDirector() {
@@ -667,7 +412,6 @@ internal unsafe class DebugWindow : Window {
                 ImGui.TextUnformatted("Umbra dudes on point:");
                 ImGui.TableNextColumn();
                 ImGui.TextUnformatted(instanceDirector->UmbraOnPoint.ToString());
-
 
                 ImGui.TableNextColumn();
                 ImGui.TextUnformatted("Unknown0:");

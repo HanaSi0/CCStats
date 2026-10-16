@@ -1,10 +1,8 @@
-﻿namespace PvpStats.Types.Match;
+namespace PvpStats.Types.Match;
 
 public enum DutyType {
     Unknown,
     CrystallineConflict,
-    Frontline,
-    RivalWings
 }
 
 public enum CrystallineConflictTeamName {
@@ -48,48 +46,4 @@ public enum CrystallineConflictMatchEvent {
     OvertimeCommenced,
     MatchEnded,
     SpecialEvent
-}
-
-public enum FrontlineMap {
-    BorderlandRuins,
-    SealRock,
-    FieldsOfGlory,
-    OnsalHakair,
-    WorqorChirteh,
-}
-
-public enum FrontlineTeamName {
-    Maelstrom,
-    Adders,
-    Flames
-}
-
-public enum RivalWingsMap {
-    Astragalos,
-    HiddenGorge,
-}
-
-public enum RivalWingsTeamName {
-    Falcons = 0,
-    Ravens = 1,
-    Unknown = 2
-}
-
-public enum RivalWingsMech {
-    Chaser = 0,
-    Oppressor = 1,
-    Justice = 2,
-}
-
-public enum RivalWingsSupplies {
-    Gobtank = 0,
-    Ceruleum = 1,
-    Gobbiejuice = 2,
-    Gobcrate = 3
-}
-
-public enum RivalWingsStructure {
-    Core = 0,
-    Tower1 = 1,
-    Tower2 = 2
 }

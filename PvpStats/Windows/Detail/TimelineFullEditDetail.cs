@@ -1,4 +1,4 @@
-﻿using Dalamud.Bindings.ImGui;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
@@ -54,10 +54,6 @@ internal class TimelineFullEditDetail<T> : Window where T : PvpMatchTimeline {
                 var x = BsonMapper.Global.Deserialize<T>(returnValue);
                 if(_dataModel is CrystallineConflictMatchTimeline) {
                     await _plugin.Storage.UpdateCCTimeline(_dataModel as CrystallineConflictMatchTimeline);
-                } else if(_dataModel is FrontlineMatchTimeline) {
-                    await _plugin.Storage.UpdateFLTimeline(_dataModel as FrontlineMatchTimeline);
-                } else if(_dataModel is RivalWingsMatchTimeline) {
-                    await _plugin.Storage.UpdateRWTimeline(_dataModel as RivalWingsMatchTimeline);
                 }
 
                 await _plugin.WindowManager.RefreshAll();

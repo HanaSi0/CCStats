@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -65,6 +66,6 @@ public class DurationFilter : DataFilter {
                 });
             }
         }
-        ImGuiHelper.WrappedTooltip("Reset");
+        ImGuiHelper.WrappedTooltip(ChineseText.Text("Reset"));
     }
 }

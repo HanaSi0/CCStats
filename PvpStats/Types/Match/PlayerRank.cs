@@ -1,4 +1,5 @@
-﻿using LiteDB;
+using PvpStats.Localization;
+using LiteDB;
 using PvpStats.Helpers;
 using System;
 using System.Collections.Generic;
@@ -114,7 +115,7 @@ public class PlayerRank : IComparable<PlayerRank> {
     public override string ToString() {
         string rank = "";
         if(Tier != ArenaTier.None) {
-            rank += $"{Tier}";
+            rank += ChineseText.EnumName(Tier);
         }
 
         if(Tier == ArenaTier.Crystal || Tier == ArenaTier.Omega || Tier == ArenaTier.Ultima) {

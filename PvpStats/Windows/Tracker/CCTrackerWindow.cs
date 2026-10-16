@@ -1,9 +1,17 @@
+using PvpStats.Localization;
+using PvpStats.Interface;
+using System;
+using System.Threading.Tasks;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Types.Match;
+using System.Linq;
+using System.Collections.Generic;
+using System.Numerics;
 using PvpStats.Windows.Filter;
 using PvpStats.Windows.List;
+using PvpStats.Windows.Leaderboards;
 using PvpStats.Windows.Records;
 using PvpStats.Windows.Summary;
 
@@ -11,6 +19,13 @@ namespace PvpStats.Windows.Tracker;
 
 internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
 
+    private List<CrystallineConflictMatch>? _overviewMatches;
+    private int _overviewWins, _overviewPlayed;
+    private CrystallineConflictMatch? _latestVisibleMatch;
+
+    private readonly MatchSearchFilter _search;
+    private readonly LeaderboardPage _leaderboard;
+    private TimeSpan _averageDuration;
     private readonly CrystallineConflictMatchList _matches;
     private readonly CrystallineConflictSummary _summary;
     private readonly CrystallineConflictRecords _records;
@@ -19,17 +34,23 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
     private readonly CrystallineConflictPvPProfile _profile;
     private readonly CrystallineConflictRankGraph _credit;
 
-    internal CCTrackerWindow(Plugin plugin) : base(plugin, plugin.CCStatsEngine, plugin.Configuration.CCWindowConfig, "Crystalline Conflict Tracker") {
+    internal CCTrackerWindow(Plugin plugin) : base(plugin, plugin.CCStatsEngine, plugin.Configuration.CCWindowConfig, ChineseText.Label("Crystalline Conflict Tracker")) {
         //SizeConstraints = new WindowSizeConstraints {
         //    MinimumSize = new Vector2(425, 400),
         //    MaximumSize = new Vector2(5000, 5000)
         //};
         //Flags = Flags | ImGuiWindowFlags.NoScrollbar;
 
+        Size = new Vector2(1240, 820);
+        SizeCondition = ImGuiCond.FirstUseEver;
+
+        _leaderboard = new(plugin);
         var refreshAction = () => Refresh();
 
         var playerFilter = new OtherPlayerFilter(plugin, refreshAction);
 
+        _search = new MatchSearchFilter(plugin, refreshAction, WindowConfig.MatchFilters.MatchSearchFilter);
+        MatchFilters.Add(_search);
         MatchFilters.Add(new MatchTypeFilter(plugin, refreshAction, WindowConfig.MatchFilters.MatchTypeFilter));
         MatchFilters.Add(new TierFilter(plugin, refreshAction));
         MatchFilters.Add(new ArenaFilter(plugin, refreshAction));
@@ -63,42 +84,124 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         PlayerStatFilters.Add(_players.PlayerQuickSearchFilter);
     }
 
-    public override void OnClose() {
-        base.OnClose();
+    private void UpdateOverview() {
+        var matches = Plugin.CCStatsEngine.Matches;
+        if(ReferenceEquals(_overviewMatches, matches)) return;
+        _overviewMatches = matches;
+        _overviewWins = _overviewPlayed = 0;
+        _latestVisibleMatch = matches.FirstOrDefault(x => x.IsCompleted && !x.IsDeleted && !x.IsQuarantined);
+        long ticks = 0;
+        var timed = 0;
+        foreach(var match in matches) {
+            if(match.MatchDuration is { } duration && duration > TimeSpan.Zero) { ticks += duration.Ticks; timed++; }
+            if(match.IsSpectated || match.MatchWinner is not (CrystallineConflictTeamName.Astra or CrystallineConflictTeamName.Umbra)) continue;
+            _overviewPlayed++;
+            if(match.IsWin) _overviewWins++;
+        }
+        _averageDuration = timed == 0 ? TimeSpan.Zero : TimeSpan.FromTicks(ticks / timed);
     }
 
     public override void DrawInternal() {
-        DrawFilters();
-        using(var tabBar = ImRaii.TabBar("TabBar", ImGuiTabBarFlags.None)) {
-            if(tabBar) {
-                if(Plugin.Configuration.ResizeWindowLeft) {
-                    ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 20f * ImGuiHelpers.GlobalScale);
-                }
-                Tab("Matches", _matches.Draw, _matches.RefreshActive, 0f);
-                Tab("Summary", () => {
-                    using(ImRaii.Child("SummaryChild")) {
-                        _summary.Draw();
-                    }
-                }, _summary.RefreshActive, _summary.RefreshProgress);
-                Tab("Records", () => {
-                    using(ImRaii.Child("RecordsChild")) {
-                        _records.Draw();
-                    }
-                }, _records.RefreshActive, _records.RefreshProgress);
-                Tab("Jobs", _jobs.Draw, _jobs.RefreshActive, _jobs.RefreshProgress);
-                Tab("Players", _players.Draw, _players.RefreshActive, _players.RefreshProgress);
-                Tab("Credit", () => {
-                    using(ImRaii.Child("CreditChild")) {
-                        _credit.Draw();
-                    }
-                }, _credit.RefreshActive, _credit.RefreshProgress);
-                Tab("Profile", () => {
-                    using(ImRaii.Child("ProfileChild")) {
-                        _profile.Draw();
-                    }
-                });
+        UpdateOverview();
+        if(CurrentTab == "") ChangeTab("Matches");
+        ModernTheme.Brand(Plugin, "CCStats", "水晶冲突 · 战绩与数据中心");
+        var sidebarWidth = ImGuiHelpers.GlobalScale * 142;
+        using(var sidebar = ImRaii.Child("CCNavigation", new Vector2(sidebarWidth, 0), true)) {
+            if(sidebar) {
+                ImGui.TextDisabled("工作空间");
+                Navigation("Matches", "战绩查询");
+                Navigation("Summary", "数据概览");
+                Navigation("Credit", "段位趋势");
+                Navigation("Leaderboard", "榜单");
+                ImGui.Spacing();
+                ImGui.TextDisabled("深入分析");
+                Navigation("Jobs", "职业分析");
+                Navigation("Players", "玩家分析");
+                Navigation("Records", "个人纪录");
+                Navigation("Profile", "个人资料");
+                ImGui.Separator();
+                if(ImGui.Button("设置###CCSettingsNav", new Vector2(-1, 0))) Plugin.WindowManager.OpenConfigWindow();
+                ImGui.Spacing();
+                ImGui.TextDisabled("自动记录 · 本地保存");
             }
         }
+        ImGui.SameLine();
+        using var workspace = ImRaii.Child("CCWorkspace", Vector2.Zero, false);
+        if(!workspace) return;
+        if(CurrentTab == "Leaderboard") { _leaderboard.Draw(); return; }
+        DrawOverviewCards();
+        ImGui.Spacing();
+        ImGui.SetNextItemWidth(Math.Max(120, ImGui.GetContentRegionAvail().X - 92 * ImGuiHelpers.GlobalScale));
+        _search.Draw();
+        ImGui.SameLine();
+        if(ImGui.Button("清空###ClearMatchSearch")) _search.Clear();
+        if(ImGui.IsItemHovered()) ImGui.SetTooltip("搜索支持多个关键词、双引号短语和 -排除词。");
+        DrawQuickFilters();
+        DrawFilters();
+        ImGui.Spacing();
+        switch(CurrentTab) {
+            case "Summary": DrawPanel("SummaryContent", _summary.Draw, _summary.RefreshActive, _summary.RefreshProgress); break;
+            case "Records": DrawPanel("RecordsContent", _records.Draw, _records.RefreshActive, _records.RefreshProgress); break;
+            case "Jobs": DrawPanel("JobsContent", _jobs.Draw, _jobs.RefreshActive, _jobs.RefreshProgress); break;
+            case "Players": DrawPanel("PlayersContent", _players.Draw, _players.RefreshActive, _players.RefreshProgress); break;
+            case "Credit": DrawPanel("CreditContent", _credit.Draw, _credit.RefreshActive, _credit.RefreshProgress); break;
+            case "Profile": DrawPanel("ProfileContent", _profile.Draw, false, 0); break;
+            default: DrawPanel("MatchesContent", _matches.Draw, _matches.RefreshActive, _matches.RefreshProgress); break;
+        }
+    }
 
+    private void Navigation(string key, string caption) {
+        if(ImGui.Selectable(caption + "###CCNav" + key, CurrentTab == key, ImGuiSelectableFlags.None,
+            new Vector2(0, 31f * ImGuiHelpers.GlobalScale))) ChangeTab(key);
+    }
+
+    private void DrawOverviewCards() {
+        var gap = ImGui.GetStyle().ItemSpacing.X;
+        var width = Math.Max(40, (ImGui.GetContentRegionAvail().X - 3 * gap) / 4);
+        ModernTheme.Card("MetricMatches", "筛选比赛", (_overviewMatches?.Count ?? 0).ToString("N0"), width, ModernTheme.Accent);
+        ImGui.SameLine();
+        ModernTheme.Card("MetricWinRate", "有效胜率", _overviewPlayed == 0 ? "—" : ((double)_overviewWins / _overviewPlayed).ToString("P1"), width, ModernTheme.Gold);
+        ImGui.SameLine();
+        ModernTheme.Card("MetricWins", "胜 / 负", $"{_overviewWins} / {_overviewPlayed - _overviewWins}", width, ModernTheme.Accent);
+        ImGui.SameLine();
+        ModernTheme.Card("MetricDuration", "平均时长", _averageDuration == TimeSpan.Zero ? "—" : _averageDuration.ToString(@"m\:ss"), width, ModernTheme.Accent);
+    }
+
+    private void DrawQuickFilters() {
+        var mode = MatchFilters.OfType<MatchTypeFilter>().First();
+        foreach(var item in new[] { ("全部", (CrystallineConflictMatchType?)null), ("练习赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Casual),
+            ("段位赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Ranked), ("自定赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Custom) }) {
+            var selected = item.Item2 == null ? mode.FilterState.Values.All(x => x)
+                : mode.FilterState.All(x => x.Value == (x.Key == item.Item2));
+            using var tint = ImRaii.PushColor(ImGuiCol.Button, selected ? ModernTheme.Selection : ModernTheme.Button);
+            if(ImGui.Button(item.Item1 + "###CCQuick" + item.Item1)) {
+                foreach(var key in mode.FilterState.Keys.ToArray()) mode.FilterState[key] = item.Item2 == null || key == item.Item2;
+                mode.AllSelected = item.Item2 == null;
+                _ = Task.Run(() => Refresh());
+            }
+            ImGui.SameLine();
+        }
+        var bookmark = MatchFilters.OfType<BookmarkFilter>().First();
+        var onlyFavorites = bookmark.BookmarkedOnly;
+        if(ImGui.Checkbox("仅收藏###CCQuickFavorites", ref onlyFavorites)) {
+            bookmark.BookmarkedOnly = onlyFavorites;
+            _ = Task.Run(() => Refresh());
+        }
+        using(var disabled = ImRaii.Disabled(_latestVisibleMatch == null)) {
+            if(ImGui.Button("最近一场###CCLatestMatch") && _latestVisibleMatch != null) Plugin.WindowManager.OpenMatchDetailsWindow(_latestVisibleMatch);
+        }
+    }
+
+    private void DrawPanel(string id, Action draw, bool refreshing, double progress) {
+        using var panel = ImRaii.Child(id, Vector2.Zero, false);
+        if(!panel) return;
+        try { draw(); }
+        catch(Exception e) {
+            if(!refreshing) {
+                Plugin.Log.Error(e, "Modern content panel draw failed.");
+                ImGui.TextDisabled("内容暂时无法显示，请查看插件日志。");
+            }
+        }
+        finally { if(refreshing) ImGui.TextDisabled($"正在刷新… {progress:P0}"); }
     }
 }

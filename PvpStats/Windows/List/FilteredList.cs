@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using LiteDB;
@@ -76,7 +77,7 @@ internal abstract class FilteredList<T, U> : Refreshable<U> where T : notnull wh
 
     public void GoToPage(int? pageNumber = null) {
         pageNumber ??= PageNumber;
-        PageNumber = (int)pageNumber;
+        PageNumber = Math.Clamp((int)pageNumber, 0, Math.Max(0, (DataModel.Count - 1) / PageSize));
         CurrentPage = DataModel.Skip(PageNumber * PageSize).Take(PageSize).ToList();
     }
 
@@ -100,26 +101,15 @@ internal abstract class FilteredList<T, U> : Refreshable<U> where T : notnull wh
                 }
             }
 
-            ImGui.Text("");
-            if(PageNumber > 0) {
-                ImGui.SameLine();
-                if(ImGui.Button($"Previous {PageSize}")) {
-                    RefreshQueue.QueueDataOperation(() => {
-                        PageNumber--;
-                        GoToPage();
-                    });
-                }
+            var pages = Math.Max(1, (DataModel.Count + PageSize - 1) / PageSize);
+            ImGui.TextDisabled($"共 {DataModel.Count:N0} 条  ·  第 {PageNumber + 1} / {pages} 页");
+            ImGui.SameLine();
+            using(var disabled = ImRaii.Disabled(PageNumber == 0)) {
+                if(ImGui.Button("上一页###PreviousPage")) RefreshQueue.QueueDataOperation(() => GoToPage(PageNumber - 1));
             }
-
-            if((PageNumber + 1) * PageSize < DataModel.Count) {
-                ImGui.SameLine();
-                ImGui.SetCursorPosX(ImGui.GetContentRegionMax().X - 65f * ImGuiHelpers.GlobalScale);
-                if(ImGui.Button($"Next {PageSize}")) {
-                    RefreshQueue.QueueDataOperation(() => {
-                        PageNumber++;
-                        GoToPage();
-                    });
-                }
+            ImGui.SameLine();
+            using(var disabled = ImRaii.Disabled(PageNumber + 1 >= pages)) {
+                if(ImGui.Button("下一页###NextPage")) RefreshQueue.QueueDataOperation(() => GoToPage(PageNumber + 1));
             }
         } finally {
             ReleaseLocks();
@@ -159,23 +149,23 @@ internal abstract class FilteredList<T, U> : Refreshable<U> where T : notnull wh
         //setup columns
         foreach(var column in Columns) {
             var columnWidth = column.Width * ImGuiHelpers.GlobalScale;
-            var tableHeader = column.Header ?? ImGuiHelper.WrappedString(column.Name, 2);
+            var tableHeader = column.Header != null ? ChineseText.Text(column.Header) : ImGuiHelper.WrappedString(ChineseText.Text(column.Name), 2);
             var headerSize = ImGui.CalcTextSize(tableHeader);
             var sizeDiff = headerSize.X - columnWidth;
             if(sizeDiff >= -5f * ImGuiHelpers.GlobalScale) {
                 columnWidth = headerSize.X + 5f * ImGuiHelpers.GlobalScale;
             }
-            ImGui.TableSetupColumn(column.Name, column.Flags, columnWidth, column.Id);
+            ImGui.TableSetupColumn(ChineseText.Label(column.Name), column.Flags, columnWidth, column.Id);
         }
-        var clipper = new ListClipper(CurrentPage.Count, Columns.Count, true);
         PostColumnSetup();
+        var clipper = new ListClipper(CurrentPage.Count, Columns.Count, true);
         if(ShowHeader) {
             //ImGui.TableSetupScrollFreeze(1, 1);
             //ImGui.TableHeadersRow();
             foreach(var i in clipper.Columns) {
                 if(ImGui.TableNextColumn()) {
                     var column = Columns[i];
-                    var tableHeader = column.Header ?? ImGuiHelper.WrappedString(column.Name, 2);
+                    var tableHeader = column.Header != null ? ChineseText.Text(column.Header) : ImGuiHelper.WrappedString(ChineseText.Text(column.Name), 2);
                     //ImGui.TableHeader(tableHeader);
                     ImGuiHelper.DrawTableHeader(tableHeader, column.Alignment, true, true, -5f);
                 }

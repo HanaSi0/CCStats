@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Helpers;
@@ -66,7 +67,7 @@ internal class CCTeamQuickFilter : DataFilter {
                 }
                 ImGui.SameLine();
                 DrawCCTeamIcon(category.Key, 25f);
-                ImGuiHelper.WrappedTooltip(category.Key.ToString());
+                ImGuiHelper.WrappedTooltip(ChineseText.EnumName(category.Key));
             }
         }
     }

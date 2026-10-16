@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Fixtures/**" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
+    <Compile Include="../../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />
+    <PackageReference Include="LiteDB" Version="5.0.16" />
+    <Compile Include="../../PvpStats/Windows/Floating/LauncherInteraction.cs" Link="LauncherInteraction.cs" />
+    <Compile Include="../../PvpStats/Localization/*.cs" Link="Localization/%(Filename)%(Extension)" />
+    <Compile Include="../../PvpStats/Settings/ThemeConfiguration.cs" Link="ThemeConfiguration.cs" />
+    <Compile Include="../../PvpStats/Helpers/WinRateLabel.cs" Link="WinRateLabel.cs" />
+    <Compile Include="../../PvpStats/Helpers/MatchQuery.cs" Link="MatchQuery.cs" />
+    <Compile Include="../../PvpStats/Helpers/MatchHelper.cs" Link="MatchHelper.cs" />
+    <Compile Include="../../PvpStats/Types/GamePeriod.cs" Link="GamePeriod.cs" />
+    <Compile Include="../../PvpStats/Types/Match/MatchEnums.cs" Link="MatchEnums.cs" />
+    <Compile Include="../../PvpStats/Types/Match/PlayerRank.cs" Link="PlayerRank.cs" />
+    <Compile Include="../../PvpStats/Types/Player/PlayerJobEnums.cs" Link="PlayerJobEnums.cs" />
+  </ItemGroup>
+</Project>

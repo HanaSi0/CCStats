@@ -1,4 +1,6 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using PvpStats.Interface;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Bindings.ImPlot;
 using Dalamud.Game;
 using Dalamud.Interface.Colors;
@@ -55,7 +57,23 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
     private Vector2 _defaultCastsSize;
     private Vector2? _savedCastsSize;
     private bool _firstDraw = true;
-    private ulong _scoreboardTicks = 0;
+    private static readonly (string Key, string Caption, float Width, uint Id, bool Required)[] ScoreboardColumns = [
+        ("Name", "玩家", 150, 0, true), ("Home World", "所属服务器", 115, 1, false), ("Job", "职业", 90, 2, true),
+        ("Kills", "击倒", 55, (uint)"Kills".GetHashCode(), false),
+        ("Deaths", "死亡", 55, (uint)"Deaths".GetHashCode(), false),
+        ("Assists", "助攻", 55, (uint)"Assists".GetHashCode(), false),
+        ("Damage Dealt", "造成伤害", 110, (uint)"DamageDealt".GetHashCode(), true),
+        ("Damage Taken", "受到伤害", 110, (uint)"DamageTaken".GetHashCode(), true),
+        ("HP Restored", "治疗量", 110, (uint)"HPRestored".GetHashCode(), true),
+        ("Time on Crystal", "推车时间", 100, (uint)"TimeOnCrystal".GetHashCode(), true),
+        ("Damage Dealt per Kill/Assist", "每次击倒/助攻伤害", 155, (uint)"DamageDealtPerKA".GetHashCode(), false),
+        ("Damage Dealt per Life", "每条生命造成伤害", 150, (uint)"DamageDealtPerLife".GetHashCode(), false),
+        ("Damage Taken per Life", "每条生命受到伤害", 150, (uint)"DamageTakenPerLife".GetHashCode(), false),
+        ("HP Restored per Life", "每条生命治疗量", 140, (uint)"HPRestoredPerLife".GetHashCode(), false),
+        ("KDA Ratio", "KDA", 70, (uint)"KDA".GetHashCode(), false),
+    ];
+
+    private bool _triggerScoreboardSort;
     private readonly bool _easterEgg = false;
     private readonly CrystallineConflictMatchTimeline? _timeline;
     private List<MatchEvent> _consolidatedEvents = [];
@@ -114,18 +132,21 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
         switch(match.MatchType) {
             default:
-                _defaultScoreboardSize = new Vector2(700, 680);
+                _defaultScoreboardSize = new Vector2(1240, 850);
                 _defaultGraphSize = new Vector2(975, 900);
                 _defaultTimelineSize = new Vector2(700, 680);
                 _defaultCastsSize = new Vector2(975, 900);
                 break;
             case CrystallineConflictMatchType.Ranked:
-                _defaultScoreboardSize = new Vector2(700, 700);
+                _defaultScoreboardSize = new Vector2(1240, 870);
                 _defaultGraphSize = new Vector2(975, 920);
                 _defaultTimelineSize = new Vector2(700, 700);
                 _defaultCastsSize = new Vector2(975, 920);
                 break;
         }
+
+        Size = _defaultScoreboardSize;
+        SizeCondition = ImGuiCond.FirstUseEver;
 
         //if(!plugin.Configuration.ResizeableMatchWindow) {
         //    Flags |= ImGuiWindowFlags.AlwaysAutoResize;
@@ -190,9 +211,9 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                     || mEvent.ActionId == (uint)LimitBreak.Mesotes2) {
                     continue;
                 }
-                var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(mEvent.ActionId);
+                var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(mEvent.ActionId);
                 if(!_actionNames.ContainsKey(action.RowId)) {
-                    _actionNames.Add(action.RowId, action.Name.ToString());
+                    _actionNames.Add(action.RowId, ChineseText.ActionName(action.RowId, action.Name.ToString()));
                     _actionIcons.Add(action.RowId, action.Icon);
                 }
                 var effectEvent = _timeline.LimitBreakEffects?.FirstOrDefault(x => x.ActionId == mEvent.ActionId
@@ -275,9 +296,9 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
             foreach(var nameId in nameIds) {
                 if(_bNPCNames.TryAdd(nameId, "")) {
-                    var row = Plugin.DataManager.GetExcelSheet<BNpcName>(ClientLanguage.English).GetRow(nameId);
+                    var row = Plugin.DataManager.GetExcelSheet<BNpcName>().GetRow(nameId);
                     string fullName = row.Singular.ToString();
-                    if(row.Article == 0) {
+                    if(Plugin.ClientState.ClientLanguage == ClientLanguage.English && row.Article == 0) {
                         if(row.StartsWithVowel == 0) {
                             fullName = "A " + fullName;
                         } else {
@@ -323,12 +344,11 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             //    }
             //}
 
-
             //add action icons and names to cache
             void addActionToCache(uint actionKey) {
                 try {
-                    var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(actionKey);
-                    _actionNames.TryAdd(action.RowId, action.Name.ToString());
+                    var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(actionKey);
+                    _actionNames.TryAdd(action.RowId, ChineseText.ActionName(action.RowId, action.Name.ToString()));
                     _actionIcons.TryAdd(action.RowId, action.Icon);
                 } catch {
                     //suppress
@@ -357,8 +377,8 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             //add status icons and names
             void addStatusToCache(uint statusId) {
                 try {
-                    var status = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>(ClientLanguage.English).GetRow(statusId);
-                    _actionNames.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, status.Name.ToString());
+                    var status = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>().GetRow(statusId);
+                    _actionNames.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, ChineseText.StatusName(status.RowId, status.Name.ToString()));
                     _actionIcons.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, status.Icon);
                 } catch {
                     //suppress
@@ -389,16 +409,21 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
     public override void Draw() {
         base.Draw();
         if(Plugin.Configuration.ShowBackgroundImage) {
-            var cursorPosBefore = ImGui.GetCursorPos();
-            //ImGui.SetCursorPosX(ImGui.GetWindowSize().X / 2 - (250f + 3f) * ImGuiHelpers.GlobalScale);
-            //ImGui.SetCursorPosY((ImGui.GetCursorPos().Y + 50f * ImGuiHelpers.GlobalScale));
-            //ImGui.Image(Plugin.WindowManager.CCBannerImage.ImGuiHandle, new Vector2(500, 230) * ImGuiHelpers.GlobalScale, Vector2.Zero, Vector2.One, new Vector4(1, 1, 1, 0.1f));
-            ImGui.SetCursorPosX(ImGui.GetWindowSize().X / 2 - (243 / 2 + 3f) * ImGuiHelpers.GlobalScale);
-            ImGui.SetCursorPosY((ImGui.GetCursorPos().Y + 40f * ImGuiHelpers.GlobalScale));
-            ImGui.Image(Plugin.TextureProvider.GetFromFile(Path.Combine(Plugin.PluginInterface.AssemblyLocation.Directory?.FullName!, "cc_logo_full.png")).GetWrapOrEmpty().Handle,
-                new Vector2(243, 275) * ImGuiHelpers.GlobalScale, Vector2.Zero, Vector2.One, new Vector4(1, 1, 1, 0.1f));
-
-            ImGui.SetCursorPos(cursorPosBefore);
+            var watermark = Plugin.TextureProvider.GetFromFile(Path.Combine(Plugin.PluginInterface.AssemblyLocation.Directory!.FullName, "icon.png")).GetWrapOrEmpty();
+            var corner = ImGui.GetWindowPos() + new Vector2(Math.Max(0, ImGui.GetWindowWidth() - 190 * ImGuiHelpers.GlobalScale), 40 * ImGuiHelpers.GlobalScale);
+            ImGui.GetWindowDrawList().AddImage(watermark.Handle, corner, corner + new Vector2(160 * ImGuiHelpers.GlobalScale), Vector2.Zero, Vector2.One,
+                ImGui.GetColorU32(new Vector4(1, 1, 1, 0.06f)));
+        }
+        ModernTheme.Brand(Plugin, "比赛详情", $"{Match.DutyStartTime.ToLocalTime():yyyy-MM-dd HH:mm} · {ChineseText.EnumName(Match.MatchType)}");
+        {
+            var width = Math.Max(40, (ImGui.GetContentRegionAvail().X - 2 * ImGui.GetStyle().ItemSpacing.X) / 3);
+            var result = Match.IsSpectated ? "观战" : Match.MatchWinner is not (CrystallineConflictTeamName.Astra or CrystallineConflictTeamName.Umbra) ? "未知" : Match.IsWin ? "胜利" : "失败";
+            ModernTheme.Card("DetailResult", "比赛结果", result, width, result == "胜利" ? ModernTheme.Accent : ModernTheme.Gold);
+            ImGui.SameLine();
+            ModernTheme.Card("DetailMap", "地图", Match.Arena.HasValue ? MatchHelper.GetArenaName(Match.Arena.Value) : "未知", width, ModernTheme.Accent);
+            ImGui.SameLine();
+            ModernTheme.Card("DetailDuration", "比赛时长", Match.MatchDuration?.ToString(@"m\:ss") ?? "—", width, ModernTheme.Accent);
+            ImGui.Spacing();
         }
 
         using(var table = ImRaii.Table("header", 3, ImGuiTableFlags.PadOuterX)) {
@@ -422,7 +447,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                 ImGui.TableNextRow(ImGuiTableRowFlags.None, 5f * ImGuiHelpers.GlobalScale);
                 ImGui.TableNextRow();
                 ImGui.TableNextColumn();
-                ImGui.Text($"{Match.MatchType}");
+                ImGui.Text(ChineseText.EnumName(Match.MatchType));
                 ImGui.TableNextColumn();
                 bool noWinner = Match.MatchWinner is null;
                 bool isWin = Match.MatchWinner == Match.LocalPlayerTeam?.TeamName;
@@ -595,7 +620,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         }
         ImGui.NewLine();
         if(Match.PostMatch is null) {
-            ImGui.Text("Post game statistics unavailable.");
+            ImGui.TextDisabled("此局未保存结算数据，无法显示玩家统计。");
         } else {
             if((Match.MatchType == CrystallineConflictMatchType.Ranked || Match.MatchType == CrystallineConflictMatchType.Unknown)
                 && Match.PostMatch.RankBefore is not null && Match.PostMatch.RankAfter is not null) {
@@ -606,28 +631,22 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             if(_timeline != null) {
                 using(var tabBar = ImRaii.TabBar("TabBar")) {
                     if(Match.PostMatch != null) {
-                        using var tab = ImRaii.TabItem("Scoreboard");
+                        using var tab = ImRaii.TabItem("结算数据###Scoreboard");
                         if(tab) {
                             if(CurrentTab != "Scoreboard") {
-                                if(_scoreboardTicks < 20) {
-                                    Flags |= ImGuiWindowFlags.AlwaysAutoResize;
-                                } else {
-                                    Flags &= ~ImGuiWindowFlags.AlwaysAutoResize;
-                                    SetWindowSize(_savedScoreboardSize ?? _defaultScoreboardSize);
-                                }
-                                CurrentTab = "Scoreboard";
-                            } else if(_scoreboardTicks >= 20) {
-                                _savedScoreboardSize ??= ImGui.GetWindowSize();
                                 Flags &= ~ImGuiWindowFlags.AlwaysAutoResize;
+                                SetWindowSize(_savedScoreboardSize ?? _defaultScoreboardSize);
+                                CurrentTab = "Scoreboard";
+                            } else {
+                                _savedScoreboardSize = ImGui.GetWindowSize();
                             }
-                            _scoreboardTicks++;
                             DrawScoreboard();
                         } else {
                             Flags &= ~ImGuiWindowFlags.AlwaysAutoResize;
                         }
                     }
                     if(_timeline.Kills != null) {
-                        using(var tab = ImRaii.TabItem("Timeline")) {
+                        using(var tab = ImRaii.TabItem("事件时间线###Timeline")) {
                             if(tab) {
                                 if(CurrentTab != "Timeline") {
                                     //SetWindowSize(new Vector2(SizeConstraints!.Value.MinimumSize.X, 600));
@@ -640,7 +659,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         }
                     }
                     if(_timeline.Kills != null) {
-                        using(var tab = ImRaii.TabItem("Graphs")) {
+                        using(var tab = ImRaii.TabItem("推进曲线###Graphs")) {
                             if(tab) {
                                 if(CurrentTab != "Graphs") {
                                     SetWindowSize(_savedGraphSize ?? _defaultGraphSize);
@@ -652,7 +671,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         }
                     }
                     if(_timeline.PlayerTargetedActionAnalytics != null) {
-                        using(var tab = ImRaii.TabItem("Actions")) {
+                        using(var tab = ImRaii.TabItem("技能分析###Actions")) {
                             if(tab) {
                                 if(CurrentTab != "Actions") {
                                     SetWindowSize(_savedCastsSize ?? _defaultCastsSize);
@@ -672,100 +691,37 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
     }
 
     private void DrawScoreboard() {
-        ImGui.NewLine();
-        //ImGui.AlignTextToFramePadding();
-        ImGuiHelper.HelpMarker("Right-click table header to show and hide columns including extra metrics.", true, true);
-        using(var _ = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, ImGui.GetStyle().ItemSpacing * 2.5f * ImGuiHelpers.GlobalScale)) {
-            ImGui.SameLine();
-        }
-        ImGuiComponents.ToggleButton("##showPercentages", ref ShowPercentages);
+        ImGui.Checkbox("队伍贡献占比###showPercentages", ref ShowPercentages);
+        if(ImGui.IsItemDeactivatedAfterEdit()) _triggerScoreboardSort = true;
         ImGui.SameLine();
-        //ImGui.AlignTextToFramePadding();
-        ImGui.Text("Show team contributions");
-        using(var _ = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, ImGui.GetStyle().ItemSpacing * 2.5f * ImGuiHelpers.GlobalScale)) {
-            ImGui.SameLine();
-        }
-        ImGui.Checkbox("###showTeamRows", ref ShowTeamRows);
+        ImGui.Checkbox("显示队伍合计###showTeamRows", ref ShowTeamRows);
         ImGui.SameLine();
-        ImGui.Text("Show team totals");
-        using(var _ = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, ImGui.GetStyle().ItemSpacing * 2.5f * ImGuiHelpers.GlobalScale)) {
-            ImGui.SameLine();
-        }
+        var restoreColumns = ImGui.Button("显示全部数据###ShowAllScoreboardColumns");
+        ImGui.SameLine();
         _teamQuickFilter.Draw();
+        ImGui.TextDisabled("推车时间为运送战术水晶时间；可横向滚动查看全部指标，点击表头排序。");
 
-        var tableFlags = ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable | ImGuiTableFlags.ScrollX | ImGuiTableFlags.NoSavedSettings | ImGuiTableFlags.PadOuterX;
-        if(Plugin.Configuration.StretchScoreboardColumns ?? false) {
-            tableFlags -= ImGuiTableFlags.ScrollX;
-        }
-        using var table = ImRaii.Table($"postmatchplayers##{Match.Id}", 15, tableFlags);
+        var tableFlags = ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable
+            | ImGuiTableFlags.ScrollX | ImGuiTableFlags.Resizable | ImGuiTableFlags.RowBg
+            | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.NoSavedSettings | ImGuiTableFlags.PadOuterX;
+        using var table = ImRaii.Table($"postmatchplayers##{Match.Id}", ScoreboardColumns.Length, tableFlags);
         if(!table) return;
-        var widthStyle = Plugin.Configuration.StretchScoreboardColumns ?? false ? ImGuiTableColumnFlags.WidthStretch : ImGuiTableColumnFlags.WidthFixed;
-        ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch, ImGuiHelpers.GlobalScale * 100f, 0);
-        ImGui.TableSetupColumn("Home World", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 110f, 1);
-        ImGui.TableSetupColumn("Job", widthStyle, ImGuiHelpers.GlobalScale * 50f, 2);
-        ImGui.TableSetupColumn("Kills", widthStyle, ImGuiHelpers.GlobalScale * 52f, (uint)"Kills".GetHashCode());
-        ImGui.TableSetupColumn("Deaths", widthStyle, ImGuiHelpers.GlobalScale * 52f, (uint)"Deaths".GetHashCode());
-        ImGui.TableSetupColumn("Assists", widthStyle, ImGuiHelpers.GlobalScale * 52f, (uint)"Assists".GetHashCode());
-        ImGui.TableSetupColumn("Damage Dealt", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"DamageDealt".GetHashCode());
-        ImGui.TableSetupColumn("Damage Taken", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"DamageTaken".GetHashCode());
-        ImGui.TableSetupColumn("HP Restored", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"HPRestored".GetHashCode());
-        ImGui.TableSetupColumn("Time on Crystal", widthStyle, ImGuiHelpers.GlobalScale * 60f, (uint)"TimeOnCrystal".GetHashCode());
-        ImGui.TableSetupColumn("Damage Dealt per Kill/Assist", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 100f, (uint)"DamageDealtPerKA".GetHashCode());
-        ImGui.TableSetupColumn("Damage Dealt per Life", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 100f, (uint)"DamageDealtPerLife".GetHashCode());
-        ImGui.TableSetupColumn("Damage Taken per Life", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 100f, (uint)"DamageTakenPerLife".GetHashCode());
-        ImGui.TableSetupColumn("HP Restored per Life", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 100f, (uint)"HPRestoredPerLife".GetHashCode());
-        ImGui.TableSetupColumn("KDA Ratio", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 50f, (uint)"KDA".GetHashCode());
-
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Name", 0);
+        foreach(var column in ScoreboardColumns) {
+            var flags = ImGuiTableColumnFlags.WidthFixed;
+            if(column.Required) flags |= ImGuiTableColumnFlags.NoHide;
+            ImGui.TableSetupColumn(column.Caption + "###" + column.Key, flags, column.Width * ImGuiHelpers.GlobalScale, column.Id);
         }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Home World", 0);
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Job", 1);
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Kills");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Deaths");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Assists");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Damage\nDealt");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Damage\nTaken");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("HP\nRestored");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Time on\nCrystal");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Damage Dealt\nper Kill/Assist");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Damage Dealt\nper Life");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("Damage Taken\nper Life");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("HP Restored\nper Life");
-        }
-        if(ImGui.TableNextColumn()) {
-            ImGuiHelper.DrawTableHeader("KDA\nRatio");
+        ImGui.TableSetupScrollFreeze(3, 0);
+        if(restoreColumns) for(var i = 0; i < ScoreboardColumns.Length; i++) ImGui.TableSetColumnEnabled(i, true);
+        foreach(var column in ScoreboardColumns) {
+            if(ImGui.TableNextColumn()) ImGuiHelper.DrawTableHeader(column.Caption, column.Id <= 1 ? 0 : column.Id == 2 ? 1 : 2, true, false);
         }
 
         //column sorting
         ImGuiTableSortSpecsPtr sortSpecs = ImGui.TableGetSortSpecs();
-        if(sortSpecs.SpecsDirty) {
+        if(sortSpecs.SpecsCount > 0 && (sortSpecs.SpecsDirty || _triggerScoreboardSort)) {
             ScoreboardSort(sortSpecs.Specs.ColumnUserID, sortSpecs.Specs.SortDirection);
+            _triggerScoreboardSort = false;
             sortSpecs.SpecsDirty = false;
         }
 
@@ -791,13 +747,13 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                     ImGuiHelper.DrawNumericCell($"{row.Value.Assists}", -11f);
                 }
                 if(ImGui.TableNextColumn()) {
-                    ImGuiHelper.DrawNumericCell($"{row.Value.DamageDealt}", -11f);
+                    ImGuiHelper.DrawNumericCell($"{row.Value.DamageDealt:N0}", -11f);
                 }
                 if(ImGui.TableNextColumn()) {
-                    ImGuiHelper.DrawNumericCell($"{row.Value.DamageTaken}", -11f);
+                    ImGuiHelper.DrawNumericCell($"{row.Value.DamageTaken:N0}", -11f);
                 }
                 if(ImGui.TableNextColumn()) {
-                    ImGuiHelper.DrawNumericCell($"{row.Value.HPRestored}", -11f);
+                    ImGuiHelper.DrawNumericCell($"{row.Value.HPRestored:N0}", -11f);
                 }
                 if(ImGui.TableNextColumn()) {
                     ImGuiHelper.DrawNumericCell($"{ImGuiHelper.GetTimeSpanString(row.Value.TimeOnCrystal)}", -11f);
@@ -839,7 +795,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                 ImGui.TextColored(textColor, $"{row.Key.HomeWorld}");
             }
             if(ImGui.TableNextColumn()) {
-                var jobString = $"{player?.Job}";
+                var jobString = ChineseText.EnumName(player?.Job);
                 ImGuiHelper.CenterAlignCursor(jobString);
                 ImGui.TextColored(textColor, jobString);
             }
@@ -854,13 +810,13 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                 ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].Assists) : row.Value.Assists)}", -11f, textColor);
             }
             if(ImGui.TableNextColumn()) {
-                ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].DamageDealt) : row.Value.DamageDealt)}", -11f, textColor);
+                ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].DamageDealt) : row.Value.DamageDealt.ToString("N0"))}", -11f, textColor);
             }
             if(ImGui.TableNextColumn()) {
-                ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].DamageTaken) : row.Value.DamageTaken)}", -11f, textColor);
+                ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].DamageTaken) : row.Value.DamageTaken.ToString("N0"))}", -11f, textColor);
             }
             if(ImGui.TableNextColumn()) {
-                ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].HPRestored) : row.Value.HPRestored)}", -11f, textColor);
+                ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].HPRestored) : row.Value.HPRestored.ToString("N0"))}", -11f, textColor);
             }
             if(ImGui.TableNextColumn()) {
                 ImGuiHelper.DrawNumericCell($"{(ShowPercentages ? string.Format("{0:P1}", _playerContributions?[row.Key].TimeOnCrystal) : ImGuiHelper.GetTimeSpanString(row.Value.TimeOnCrystal))}", -11f, textColor);
@@ -925,7 +881,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             if(table) {
                 ImGui.TableSetupColumn("time", ImGuiTableColumnFlags.WidthFixed, 40f * ImGuiHelpers.GlobalScale);
                 ImGui.TableSetupColumn("team1", ImGuiTableColumnFlags.WidthFixed, 30f * ImGuiHelpers.GlobalScale);
-                ImGui.TableSetupColumn("crystal", ImGuiTableColumnFlags.WidthFixed, 30f * ImGuiHelpers.GlobalScale);
+                ImGui.TableSetupColumn(ChineseText.Label("crystal"), ImGuiTableColumnFlags.WidthFixed, 30f * ImGuiHelpers.GlobalScale);
                 ImGui.TableSetupColumn("team2", ImGuiTableColumnFlags.WidthFixed, 30f * ImGuiHelpers.GlobalScale);
                 ImGui.TableSetupColumn("text", ImGuiTableColumnFlags.WidthStretch);
 
@@ -1001,7 +957,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         }
                         ImGui.TableNextColumn();
                         var f3 = _eventFilters[typeof(CombinedActionEvent)];
-                        if(ImGui.Checkbox("Limit Breaks", ref f3)) {
+                        if(ImGui.Checkbox(ChineseText.Label("Limit Breaks"), ref f3)) {
                             _eventFilters[typeof(CombinedActionEvent)] = f3;
                             RefreshQueue.QueueDataOperation(() => {
                                 ApplyTimelineFilters();
@@ -1032,7 +988,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
                         ImGui.TableNextColumn();
                         var f6 = _lbCastFilter;
-                        if(ImGui.Checkbox("Limit Break Uses", ref f6)) {
+                        if(ImGui.Checkbox(ChineseText.Label("Limit Break Uses"), ref f6)) {
                             _lbCastFilter = f6;
                             RefreshQueue.QueueDataOperation(() => {
                                 ApplyTimelineFilters();
@@ -1040,7 +996,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         }
                         ImGui.TableNextColumn();
                         var f7 = _lbImpactFilter;
-                        if(ImGui.Checkbox("Limit Break Affected", ref f7)) {
+                        if(ImGui.Checkbox(ChineseText.Label("Limit Break Affected"), ref f7)) {
                             _lbImpactFilter = f7;
                             RefreshQueue.QueueDataOperation(() => {
                                 ApplyTimelineFilters();
@@ -1056,10 +1012,10 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
     private void DrawEvent(GenericMatchEvent mEvent) {
         switch(mEvent.Type) {
             case CrystallineConflictMatchEvent.CrystalUnchained:
-                ImGui.Text("The crystal has been unchained.");
+                ImGui.Text(ChineseText.Text("The crystal has been unchained."));
                 break;
             case CrystallineConflictMatchEvent.OvertimeCommenced:
-                ImGui.Text("Overtime has started.");
+                ImGui.Text(ChineseText.Text("Overtime has started."));
                 break;
             case CrystallineConflictMatchEvent.MatchEnded:
                 var color = Plugin.Configuration.Colors.CCEnemyTeam;
@@ -1069,12 +1025,12 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                 }
                 if(Match.MatchWinner != null) {
                     using(var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0f, ImGui.GetStyle().ItemSpacing.Y))) {
-                        ImGui.TextColored(color, $"Team {Match.MatchWinner}");
+                        ImGui.TextColored(color, $"{ChineseText.EnumName(Match.MatchWinner)}");
                         ImGui.SameLine();
                         ImGui.Text(" is victorious!");
                     }
                 } else {
-                    ImGui.Text("The match has ended...");
+                    ImGui.Text(ChineseText.EnumName(CrystallineConflictMatchEvent.MatchEnded));
                 }
                 break;
             case CrystallineConflictMatchEvent.SpecialEvent:
@@ -1111,7 +1067,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         switch(mEvent.Type) {
             case 1:
                 using(var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0f, ImGui.GetStyle().ItemSpacing.Y))) {
-                    ImGui.TextColored(color, $"Team {mEvent.Team}");
+                    ImGui.TextColored(color, $"{ChineseText.EnumName(mEvent.Team)}");
                     ImGui.SameLine();
                     ImGui.Text(" has breached the checkpoint.");
                 }
@@ -1271,7 +1227,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
         ImGui.Checkbox("Knockouts", ref _knockoutIcons);
         ImGui.SameLine();
-        ImGui.Checkbox("Limit Breaks", ref _limitBreakIcons);
+        ImGui.Checkbox(ChineseText.Label("Limit Breaks"), ref _limitBreakIcons);
 
         using var child = ImRaii.Child("graphChild", ImGui.GetContentRegionAvail(), true);
         if(child) {
@@ -1314,42 +1270,42 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
         using(var style = ImRaii.PushColor(ImPlotCol.Line, ImGuiColors.DalamudOrange)) {
             using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 1f * ImGuiHelpers.GlobalScale);
-            ImPlot.PlotStairs("Overtime", ref fiftyXs[0],
+            ImPlot.PlotStairs(ChineseText.Label("Overtime"), ref fiftyXs[0],
                 ref fiftyYs[0],
                 fiftyXs.Length, ImPlotStairsFlags.None);
         }
 
         using(var style = ImRaii.PushColor(ImPlotCol.Line, ImGuiColors.DalamudWhite)) {
             using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 1f * ImGuiHelpers.GlobalScale);
-            ImPlot.PlotStairs("Crystal Position", ref _crystalPosition.Xs[0],
+            ImPlot.PlotStairs(ChineseText.Label("Crystal Position"), ref _crystalPosition.Xs[0],
                 ref _crystalPosition.Ys[0],
                 _crystalPosition.Xs.Length, ImPlotStairsFlags.None);
         }
 
         using(var style = ImRaii.PushColor(ImPlotCol.Line, astraColor)) {
             using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 3f * ImGuiHelpers.GlobalScale);
-            ImPlot.PlotStairs("Astra Progress", ref _teamPoints[CrystallineConflictTeamName.Astra].Xs[0],
+            ImPlot.PlotStairs(ChineseText.Label("Astra Progress"), ref _teamPoints[CrystallineConflictTeamName.Astra].Xs[0],
                 ref _teamPoints[CrystallineConflictTeamName.Astra].Ys[0],
                 _teamPoints[CrystallineConflictTeamName.Astra].Xs.Length, ImPlotStairsFlags.None);
         }
 
         using(var style = ImRaii.PushColor(ImPlotCol.Line, umbraColor)) {
             using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 3f * ImGuiHelpers.GlobalScale);
-            ImPlot.PlotStairs("Umbra Progress", ref _teamPoints[CrystallineConflictTeamName.Umbra].Xs[0],
+            ImPlot.PlotStairs(ChineseText.Label("Umbra Progress"), ref _teamPoints[CrystallineConflictTeamName.Umbra].Xs[0],
                 ref _teamPoints[CrystallineConflictTeamName.Umbra].Ys[0],
                 _teamPoints[CrystallineConflictTeamName.Umbra].Xs.Length, ImPlotStairsFlags.None);
         }
 
         using(var style = ImRaii.PushColor(ImPlotCol.Line, astraColor - new Vector4(0f, 0f, 0f, 0.6f))) {
             using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 2f * ImGuiHelpers.GlobalScale);
-            ImPlot.PlotStairs("Astra Checkpoint", ref _teamMidPoints[CrystallineConflictTeamName.Astra].Xs[0],
+            ImPlot.PlotStairs(ChineseText.Label("Astra Checkpoint"), ref _teamMidPoints[CrystallineConflictTeamName.Astra].Xs[0],
                 ref _teamMidPoints[CrystallineConflictTeamName.Astra].Ys[0],
                 _teamMidPoints[CrystallineConflictTeamName.Astra].Xs.Length, ImPlotStairsFlags.None);
         }
 
         using(var style = ImRaii.PushColor(ImPlotCol.Line, umbraColor - new Vector4(0f, 0f, 0f, 0.6f))) {
             using var _ = ImRaii.PushStyle(ImPlotStyleVar.LineWeight, 2f * ImGuiHelpers.GlobalScale);
-            ImPlot.PlotStairs("Umbra Checkpoint", ref _teamMidPoints[CrystallineConflictTeamName.Umbra].Xs[0],
+            ImPlot.PlotStairs(ChineseText.Label("Umbra Checkpoint"), ref _teamMidPoints[CrystallineConflictTeamName.Umbra].Xs[0],
                 ref _teamMidPoints[CrystallineConflictTeamName.Umbra].Ys[0],
                 _teamMidPoints[CrystallineConflictTeamName.Umbra].Xs.Length, ImPlotStairsFlags.None);
         }
@@ -1596,7 +1552,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         } else if(isMedkit) {
                             Plugin.WindowManager.DrawMedicineKit(new Vector2(24f * ImGuiHelpers.GlobalScale));
                             ImGui.SameLine();
-                            ImGui.Text("Medicine Kits");
+                            ImGui.Text(ChineseText.Text("Medicine Kits"));
                         } else if(isStatus) {
                             var texture = Plugin.TextureProvider.GetFromGameIcon(_actionIcons[action.Key]).GetWrapOrEmpty();
                             var sizeHeight = 24f * ImGuiHelpers.GlobalScale;
@@ -1610,7 +1566,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         } else if(isActionSet) {
                             ImGui.Image(Plugin.WindowManager.GetTextureHandle(ActionSet.Sets[setIndex].IconId), new Vector2(24 * ImGuiHelpers.GlobalScale));
                             ImGui.SameLine();
-                            ImGui.Text(ActionSet.Sets[setIndex].Name);
+                            ImGui.Text(ChineseText.Text(ActionSet.Sets[setIndex].Name));
                             if(ImGui.IsItemHovered()) {
                                 using var tooltip = ImRaii.Tooltip();
                                 foreach(var setAction in ActionSet.Sets[setIndex].Actions) {

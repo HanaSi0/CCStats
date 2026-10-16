@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using System;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ public class LocalPlayerFilter : DataFilter {
 
     internal override void Draw() {
         bool currentPlayerOnly = CurrentPlayerOnly;
-        if(ImGui.Checkbox("Current player only", ref currentPlayerOnly)) {
+        if(ImGui.Checkbox(ChineseText.Label("Current player only"), ref currentPlayerOnly)) {
             Task.Run(async () => {
                 CurrentPlayerOnly = currentPlayerOnly;
                 await Refresh();

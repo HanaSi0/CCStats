@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using PvpStats.Helpers;
 using PvpStats.Types.Player;
 using System;
@@ -26,7 +27,7 @@ public class OtherPlayerFilter : DataFilter, IEquatable<OtherPlayerFilter> {
     private string _lastRefreshedValue = "";
 
     private List<string> _jobCombo = new();
-    private string[] _teamStatusCombo = { "Any Side", "Teammate", "Opponent" };
+    private string[] _teamStatusCombo = { ChineseText.Text("Any Side"), ChineseText.Text("Teammate"), ChineseText.Text("Opponent") };
 
     public OtherPlayerFilter() { }
 
@@ -40,7 +41,7 @@ public class OtherPlayerFilter : DataFilter, IEquatable<OtherPlayerFilter> {
 
     internal OtherPlayerFilter(Plugin plugin, Func<Task> action, OtherPlayerFilter? filter = null) : base(plugin, action) {
         var allJobs = Enum.GetValues(typeof(Job)).Cast<Job>();
-        _jobCombo.Add("Any Job");
+        _jobCombo.Add(ChineseText.Text("Any Job"));
         foreach(var job in allJobs) {
             _jobCombo.Add(PlayerJobHelper.GetNameFromJob(job));
         }
@@ -74,7 +75,7 @@ public class OtherPlayerFilter : DataFilter, IEquatable<OtherPlayerFilter> {
         int teamIndex = (int)TeamStatus;
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if(ImGui.InputTextWithHint("###PlayerNameInput", "Enter player name and world", ref playerName, 50)) {
+        if(ImGui.InputTextWithHint("###PlayerNameInput", ChineseText.Text("Enter player name and world"), ref playerName, 50)) {
             if(playerName != _lastTextValue) {
                 _lastTextValue = playerName;
                 Task.Run(() => {

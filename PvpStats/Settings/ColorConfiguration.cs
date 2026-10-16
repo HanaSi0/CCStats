@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Colors;
+using Dalamud.Interface.Colors;
 using System.Numerics;
 
 namespace PvpStats.Settings;
@@ -10,13 +10,6 @@ public class ColorConfiguration {
     public Vector4 Other { get; set; } = ImGuiColors.DalamudGrey;
     public Vector4 CCPlayerTeam { get; set; } = ImGuiColors.TankBlue;
     public Vector4 CCEnemyTeam { get; set; } = ImGuiColors.DPSRed;
-
-    public Vector4 Maelstrom { get; set; } = ImGuiColors.DPSRed;
-    public Vector4 Adders { get; set; } = ImGuiColors.DalamudYellow;
-    public Vector4 Flames { get; set; } = ImGuiColors.TankBlue;
-
-    public Vector4 Falcons { get; set; } = ImGuiColors.TankBlue;
-    public Vector4 Ravens { get; set; } = ImGuiColors.DPSRed;
 
     public Vector4 Tank { get; set; } = ImGuiColors.TankBlue;
     public Vector4 Healer { get; set; } = ImGuiColors.HealerGreen;

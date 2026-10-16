@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ public class ResultFilter : DataFilter {
         }
         var results = Enum.GetValues(typeof(MatchResult)).Cast<MatchResult>();
         foreach(var result in results) {
-            _resultCombo.Add(result.ToString());
+            _resultCombo.Add(ChineseText.Text(result.ToString()));
         }
     }
 

@@ -1,0 +1,261 @@
+﻿key,sheet,row_id,original,zh_CN,symbols,source,notes
+Action.29054,Action,29054,Guard,防御,KeyAction.Guard,PvpStats/Types/Action/ActionEnums.cs:36,
+Action.29055,Action,29055,Standard-issue Elixir,军用圣灵药,KeyAction.Elixir,PvpStats/Types/Action/ActionEnums.cs:41,
+Action.29056,Action,29056,Purify,净化,KeyAction.Purify,PvpStats/Types/Action/ActionEnums.cs:39,
+Action.29057,Action,29057,Sprint,冲刺,KeyAction.Sprint,PvpStats/Types/Action/ActionEnums.cs:37,
+Action.29058,Action,29058,Fast Blade,先锋剑,,PvpStats/Types/Display/Action/ActionSet.cs:10,技能组合中的单个技能。
+Action.29059,Action,29059,Riot Blade,暴乱剑,,PvpStats/Types/Display/Action/ActionSet.cs:10,技能组合中的单个技能。
+Action.29060,Action,29060,Royal Authority,王权剑,,PvpStats/Types/Display/Action/ActionSet.cs:10,技能组合中的单个技能。
+Action.29061,Action,29061,Atonement,赎罪剑,,PvpStats/Types/Display/Action/ActionSet.cs:11,技能组合中的单个技能。
+Action.29066,Action,29066,Guardian,守护,KeyAction.Guardian,PvpStats/Types/Action/ActionEnums.cs:42,
+Action.29069,Action,29069,Phalanx,列阵,LimitBreak.Phalanx,PvpStats/Types/Action/ActionEnums.cs:3,
+Action.29071,Action,29071,Blade of Faith,信念之剑,,PvpStats/Types/Display/Action/ActionSet.cs:12,技能组合中的单个技能。
+Action.29072,Action,29072,Blade of Truth,真理之剑,,PvpStats/Types/Display/Action/ActionSet.cs:12,技能组合中的单个技能。
+Action.29073,Action,29073,Blade of Valor,英勇之剑,,PvpStats/Types/Display/Action/ActionSet.cs:12,技能组合中的单个技能。
+Action.29074,Action,29074,Heavy Swing,重劈,,PvpStats/Types/Display/Action/ActionSet.cs:14,技能组合中的单个技能。
+Action.29075,Action,29075,Maim,凶残劈,,PvpStats/Types/Display/Action/ActionSet.cs:14,技能组合中的单个技能。
+Action.29076,Action,29076,Storm's Path,动乱,,PvpStats/Types/Display/Action/ActionSet.cs:14,技能组合中的单个技能。
+Action.29083,Action,29083,Primal Scream,原初的怒吼,LimitBreak.PrimalScream,PvpStats/Types/Action/ActionEnums.cs:4,
+Action.29085,Action,29085,Hard Slash,重斩,,PvpStats/Types/Display/Action/ActionSet.cs:16,技能组合中的单个技能。
+Action.29086,Action,29086,Syphon Strike,吸收斩,,PvpStats/Types/Display/Action/ActionSet.cs:16,技能组合中的单个技能。
+Action.29087,Action,29087,Souleater,噬魂斩,,PvpStats/Types/Display/Action/ActionSet.cs:16,技能组合中的单个技能。
+Action.29091,Action,29091,Shadowbringer,暗影使者,,PvpStats/Types/Display/Action/ActionSet.cs:17,技能组合中的单个技能。
+Action.29095,Action,29095,Salt and Darkness,盐与暗,,PvpStats/Types/Display/Action/ActionSet.cs:19,技能组合中的单个技能。
+Action.29096,Action,29096,Salt and Darkness,盐与暗,,PvpStats/Types/Display/Action/ActionSet.cs:19,技能组合中的单个技能。
+Action.29097,Action,29097,Eventide,黄昏,LimitBreak.Eventide,PvpStats/Types/Action/ActionEnums.cs:5,
+Action.29098,Action,29098,Keen Edge,利刃斩,,PvpStats/Types/Display/Action/ActionSet.cs:21,技能组合中的单个技能。
+Action.29099,Action,29099,Brutal Shell,残暴弹,,PvpStats/Types/Display/Action/ActionSet.cs:21,技能组合中的单个技能。
+Action.29100,Action,29100,Solid Barrel,迅连斩,,PvpStats/Types/Display/Action/ActionSet.cs:21,技能组合中的单个技能。
+Action.29101,Action,29101,Burst Strike,爆发击,,PvpStats/Types/Display/Action/ActionSet.cs:21,技能组合中的单个技能。
+Action.29102,Action,29102,Gnashing Fang,烈牙,,PvpStats/Types/Display/Action/ActionSet.cs:22,技能组合中的单个技能。
+Action.29103,Action,29103,Savage Claw,猛兽爪,,PvpStats/Types/Display/Action/ActionSet.cs:22,技能组合中的单个技能。
+Action.29104,Action,29104,Wicked Talon,凶禽爪,,PvpStats/Types/Display/Action/ActionSet.cs:22,技能组合中的单个技能。
+Action.29107,Action,29107,Hypervelocity,超高速,,PvpStats/Types/Display/Action/ActionSet.cs:23,技能组合中的单个技能。
+Action.29108,Action,29108,Jugular Rip,噬喉,,PvpStats/Types/Display/Action/ActionSet.cs:23,技能组合中的单个技能。
+Action.29109,Action,29109,Abdomen Tear,裂腹,,PvpStats/Types/Display/Action/ActionSet.cs:23,技能组合中的单个技能。
+Action.29110,Action,29110,Eye Gouge,刺目,,PvpStats/Types/Display/Action/ActionSet.cs:23,技能组合中的单个技能。
+Action.29130,Action,29130,Relentless Rush,连续剑,LimitBreak.RelentlessRush,PvpStats/Types/Action/ActionEnums.cs:6; PvpStats/Types/Display/Action/ActionSet.cs:24,技能组合中的单个技能。
+Action.29131,Action,29131,Terminal Trigger,终结击,LimitBreak.TerminalTrigger,PvpStats/Types/Action/ActionEnums.cs:7; PvpStats/Types/Display/Action/ActionSet.cs:25,技能组合中的单个技能。
+Action.29230,Action,29230,Afflatus Purgation,狂喜之心,LimitBreak.AfflatusPurgation,PvpStats/Types/Action/ActionEnums.cs:9,
+Action.29242,Action,29242,Fall Malefic,煞星,,PvpStats/Types/Display/Action/ActionSet.cs:29,技能组合中的单个技能。
+Action.29243,Action,29243,Aspected Benefic,吉星相位,,PvpStats/Types/Display/Action/ActionSet.cs:30,技能组合中的单个技能。
+Action.29244,Action,29244,Gravity II,重力II,,PvpStats/Types/Display/Action/ActionSet.cs:31,技能组合中的单个技能。
+Action.29246,Action,29246,Fall Malefic,煞星,,PvpStats/Types/Display/Action/ActionSet.cs:29,技能组合中的单个技能。
+Action.29247,Action,29247,Aspected Benefic,吉星相位,,PvpStats/Types/Display/Action/ActionSet.cs:30,技能组合中的单个技能。
+Action.29248,Action,29248,Gravity II,重力II,,PvpStats/Types/Display/Action/ActionSet.cs:31,技能组合中的单个技能。
+Action.29255,Action,29255,Celestial River,天星河流,LimitBreak.CelestialRiver,PvpStats/Types/Action/ActionEnums.cs:11,
+Action.29260,Action,29260,Pneuma,魂灵风息,,PvpStats/Types/Display/Action/ActionSet.cs:33,技能组合中的单个技能。
+Action.29266,Action,29266,Mesotes,中庸之道,LimitBreak.Mesotes,PvpStats/Types/Action/ActionEnums.cs:12,
+Action.29267,Action,29267,Mesotes,中庸之道,LimitBreak.Mesotes2,PvpStats/Types/Action/ActionEnums.cs:13,
+Action.29401,Action,29401,Final Fantasia,最终幻想,LimitBreak.FinalFantasia,PvpStats/Types/Action/ActionEnums.cs:23,
+Action.29409,Action,29409,Wildfire,野火,,PvpStats/Types/Display/Action/ActionSet.cs:67,技能组合中的单个技能。
+Action.29410,Action,29410,Wildfire,野火,,PvpStats/Types/Display/Action/ActionSet.cs:67,技能组合中的单个技能。
+Action.29411,Action,29411,Wildfire,野火,,PvpStats/Types/Display/Action/ActionSet.cs:67,技能组合中的单个技能。
+Action.29415,Action,29415,Marksman's Spite,魔弹射手,LimitBreak.MarksmansSpite,PvpStats/Types/Action/ActionEnums.cs:24,
+Action.29416,Action,29416,Cascade,瀑泻,,PvpStats/Types/Display/Action/ActionSet.cs:70,技能组合中的单个技能。
+Action.29417,Action,29417,Fountain,喷泉,,PvpStats/Types/Display/Action/ActionSet.cs:70,技能组合中的单个技能。
+Action.29418,Action,29418,Reverse Cascade,逆瀑泻,,PvpStats/Types/Display/Action/ActionSet.cs:70,技能组合中的单个技能。
+Action.29419,Action,29419,Fountainfall,坠喷泉,,PvpStats/Types/Display/Action/ActionSet.cs:70,技能组合中的单个技能。
+Action.29420,Action,29420,Saber Dance,剑舞,,PvpStats/Types/Display/Action/ActionSet.cs:72,技能组合中的单个技能。
+Action.29421,Action,29421,Starfall Dance,流星之舞,,PvpStats/Types/Display/Action/ActionSet.cs:73,技能组合中的单个技能。
+Action.29422,Action,29422,Honing Dance,锐利舞步,,PvpStats/Types/Display/Action/ActionSet.cs:71,技能组合中的单个技能。
+Action.29423,Action,29423,Honing Ovation,锐利喝彩,,PvpStats/Types/Display/Action/ActionSet.cs:69,技能组合中的单个技能。
+Action.29424,Action,29424,Honing Ovation,锐利喝彩,,PvpStats/Types/Display/Action/ActionSet.cs:69,技能组合中的单个技能。
+Action.29425,Action,29425,Honing Ovation,锐利喝彩,,PvpStats/Types/Display/Action/ActionSet.cs:69,技能组合中的单个技能。
+Action.29426,Action,29426,Honing Ovation,锐利喝彩,,PvpStats/Types/Display/Action/ActionSet.cs:69,技能组合中的单个技能。
+Action.29427,Action,29427,Honing Ovation,锐利喝彩,,PvpStats/Types/Display/Action/ActionSet.cs:69,技能组合中的单个技能。
+Action.29428,Action,29428,Fan Dance,扇舞·序,,PvpStats/Types/Display/Action/ActionSet.cs:74,技能组合中的单个技能。
+Action.29432,Action,29432,Contradance,行列舞,LimitBreak.Contradance,PvpStats/Types/Action/ActionEnums.cs:25,
+Action.29469,Action,29469,Terminal Trigger,终结击,LimitBreak.TerminalTrigger2,PvpStats/Types/Action/ActionEnums.cs:8; PvpStats/Types/Display/Action/ActionSet.cs:25,技能组合中的单个技能。
+Action.29475,Action,29475,Dragon Kick,双龙脚,,PvpStats/Types/Display/Action/ActionSet.cs:35,技能组合中的单个技能。
+Action.29476,Action,29476,Twin Snakes,双掌打,,PvpStats/Types/Display/Action/ActionSet.cs:35,技能组合中的单个技能。
+Action.29477,Action,29477,Demolish,破碎拳,,PvpStats/Types/Display/Action/ActionSet.cs:35,技能组合中的单个技能。
+Action.29485,Action,29485,Meteodrive,陨石冲击,LimitBreak.Meteodrive,PvpStats/Types/Action/ActionEnums.cs:14; PvpStats/Types/Display/Action/ActionSet.cs:36,技能组合中的单个技能。
+Action.29486,Action,29486,Raiden Thrust,龙眼雷电,,PvpStats/Types/Display/Action/ActionSet.cs:38,技能组合中的单个技能。
+Action.29487,Action,29487,Fang and Claw,龙牙龙爪,,PvpStats/Types/Display/Action/ActionSet.cs:38,技能组合中的单个技能。
+Action.29488,Action,29488,Wheeling Thrust,龙尾大回旋,,PvpStats/Types/Display/Action/ActionSet.cs:38,技能组合中的单个技能。
+Action.29497,Action,29497,Sky High,高跳,LimitBreak.SkyHigh,PvpStats/Types/Action/ActionEnums.cs:15,
+Action.29498,Action,29498,Sky Shatter,天穹破碎,LimitBreak.SkyShatter,PvpStats/Types/Action/ActionEnums.cs:16; PvpStats/Types/Display/Action/ActionSet.cs:39,技能组合中的单个技能。
+Action.29499,Action,29499,Sky Shatter,天穹破碎,LimitBreak.SkyShatter2,PvpStats/Types/Action/ActionEnums.cs:17; PvpStats/Types/Display/Action/ActionSet.cs:39,技能组合中的单个技能。
+Action.29500,Action,29500,Spinning Edge,双刃旋,,PvpStats/Types/Display/Action/ActionSet.cs:41,技能组合中的单个技能。
+Action.29501,Action,29501,Gust Slash,影牙,,PvpStats/Types/Display/Action/ActionSet.cs:41,技能组合中的单个技能。
+Action.29502,Action,29502,Aeolian Edge,旋风刃,,PvpStats/Types/Display/Action/ActionSet.cs:41,技能组合中的单个技能。
+Action.29503,Action,29503,Assassinate,终击,,PvpStats/Types/Display/Action/ActionSet.cs:43,技能组合中的单个技能。
+Action.29505,Action,29505,Fuma Shuriken,风魔手里剑,,PvpStats/Types/Display/Action/ActionSet.cs:42,技能组合中的单个技能。
+Action.29510,Action,29510,Forked Raiju,月影雷兽爪,,PvpStats/Types/Display/Action/ActionSet.cs:45,技能组合中的单个技能。
+Action.29515,Action,29515,Seiton Tenchu,星遁天诛,LimitBreak.SeitonTenchu,PvpStats/Types/Action/ActionEnums.cs:18; PvpStats/Types/Display/Action/ActionSet.cs:46,技能组合中的单个技能。
+Action.29516,Action,29516,Seiton Tenchu,星遁天诛,LimitBreak.SeitonTenchu2,PvpStats/Types/Action/ActionEnums.cs:19; PvpStats/Types/Display/Action/ActionSet.cs:46,技能组合中的单个技能。
+Action.29517,Action,29517,Spinning Edge,双刃旋,,PvpStats/Types/Display/Action/ActionSet.cs:41,技能组合中的单个技能。
+Action.29518,Action,29518,Gust Slash,影牙,,PvpStats/Types/Display/Action/ActionSet.cs:41,技能组合中的单个技能。
+Action.29519,Action,29519,Aeolian Edge,旋风刃,,PvpStats/Types/Display/Action/ActionSet.cs:41,技能组合中的单个技能。
+Action.29520,Action,29520,Assassinate,终击,,PvpStats/Types/Display/Action/ActionSet.cs:43,技能组合中的单个技能。
+Action.29521,Action,29521,Fuma Shuriken,风魔手里剑,,PvpStats/Types/Display/Action/ActionSet.cs:42,技能组合中的单个技能。
+Action.29522,Action,29522,Forked Raiju,月影雷兽爪,,PvpStats/Types/Display/Action/ActionSet.cs:45,技能组合中的单个技能。
+Action.29523,Action,29523,Yukikaze,雪风,,PvpStats/Types/Display/Action/ActionSet.cs:48,技能组合中的单个技能。
+Action.29524,Action,29524,Gekko,月光,,PvpStats/Types/Display/Action/ActionSet.cs:48,技能组合中的单个技能。
+Action.29525,Action,29525,Kasha,花车,,PvpStats/Types/Display/Action/ActionSet.cs:48,技能组合中的单个技能。
+Action.29526,Action,29526,Hyosetsu,冰月,,PvpStats/Types/Display/Action/ActionSet.cs:49,技能组合中的单个技能。
+Action.29527,Action,29527,Mangetsu,满月,,PvpStats/Types/Display/Action/ActionSet.cs:49,技能组合中的单个技能。
+Action.29528,Action,29528,Oka,樱花,,PvpStats/Types/Display/Action/ActionSet.cs:49,技能组合中的单个技能。
+Action.29530,Action,29530,Ogi Namikiri,奥义波切,,PvpStats/Types/Display/Action/ActionSet.cs:51,技能组合中的单个技能。
+Action.29531,Action,29531,Kaeshi: Namikiri,回返波切,,PvpStats/Types/Display/Action/ActionSet.cs:51,技能组合中的单个技能。
+Action.29537,Action,29537,Zantetsuken,斩铁剑,LimitBreak.Zantetsuken,PvpStats/Types/Action/ActionEnums.cs:20,
+Action.29538,Action,29538,Slice,切割,,PvpStats/Types/Display/Action/ActionSet.cs:53,技能组合中的单个技能。
+Action.29539,Action,29539,Waxing Slice,增盈切割,,PvpStats/Types/Display/Action/ActionSet.cs:53,技能组合中的单个技能。
+Action.29540,Action,29540,Infernal Slice,地狱切割,,PvpStats/Types/Display/Action/ActionSet.cs:53,技能组合中的单个技能。
+Action.29543,Action,29543,Void Reaping,缢杀,,PvpStats/Types/Display/Action/ActionSet.cs:54,技能组合中的单个技能。
+Action.29544,Action,29544,Cross Reaping,绞决,,PvpStats/Types/Display/Action/ActionSet.cs:54,技能组合中的单个技能。
+Action.29549,Action,29549,Death Warrant,死亡之影,,PvpStats/Types/Display/Action/ActionSet.cs:55,技能组合中的单个技能。
+Action.29553,Action,29553,Tenebrae Lemurum,妖异之镰,LimitBreak.TenebraeLemurum,PvpStats/Types/Action/ActionEnums.cs:21,
+Action.29557,Action,29557,Relentless Rush,连续剑,,PvpStats/Types/Display/Action/ActionSet.cs:24,技能组合中的单个技能。
+Action.29558,Action,29558,Honing Dance,锐利舞步,,PvpStats/Types/Display/Action/ActionSet.cs:71,技能组合中的单个技能。
+Action.29603,Action,29603,Death Warrant,死亡之影,,PvpStats/Types/Display/Action/ActionSet.cs:55,技能组合中的单个技能。
+Action.29649,Action,29649,Fire,火炎,,PvpStats/Types/Display/Action/ActionSet.cs:77,技能组合中的单个技能。
+Action.29650,Action,29650,Fire IV,火炎IV,,PvpStats/Types/Display/Action/ActionSet.cs:77,技能组合中的单个技能。
+Action.29653,Action,29653,Blizzard,冰结,,PvpStats/Types/Display/Action/ActionSet.cs:78,技能组合中的单个技能。
+Action.29654,Action,29654,Blizzard IV,冰结IV,,PvpStats/Types/Display/Action/ActionSet.cs:78,技能组合中的单个技能。
+Action.29662,Action,29662,Soul Resonance,灵魂共鸣,LimitBreak.SoulResonance,PvpStats/Types/Action/ActionEnums.cs:26,
+Action.29673,Action,29673,Summon Bahamut,召唤巴哈姆特,LimitBreak.SummonBahamut,PvpStats/Types/Action/ActionEnums.cs:27,
+Action.29675,Action,29675,Megaflare,百万核爆,LimitBreak.Megaflare,PvpStats/Types/Action/ActionEnums.cs:28,
+Action.29678,Action,29678,Summon Phoenix,召唤不死鸟,LimitBreak.SummonPhoenix,PvpStats/Types/Action/ActionEnums.cs:29,
+Action.29680,Action,29680,Everlasting Flight,不死鸟之翼,LimitBreak.EverlastingFlight,PvpStats/Types/Action/ActionEnums.cs:30,
+Action.29706,Action,29706,Pneuma,魂灵风息,,PvpStats/Types/Display/Action/ActionSet.cs:33,技能组合中的单个技能。
+Action.29707,Action,29707,Fleeting Raiju,月影雷兽牙,,PvpStats/Types/Display/Action/ActionSet.cs:45,技能组合中的单个技能。
+Action.29708,Action,29708,Fleeting Raiju,月影雷兽牙,,PvpStats/Types/Display/Action/ActionSet.cs:45,技能组合中的单个技能。
+Action.29711,Action,29711,Recuperate,奋起,KeyAction.Recuperate,PvpStats/Types/Action/ActionEnums.cs:40,
+Action.29735,Action,29735,Guard,防御,KeyAction.Guard2,PvpStats/Types/Action/ActionEnums.cs:38,
+Action.29738,Action,29738,Shadowbringer,暗影使者,,PvpStats/Types/Display/Action/ActionSet.cs:17,技能组合中的单个技能。
+Action.30896,Action,30896,Fire III,火炎III,,PvpStats/Types/Display/Action/ActionSet.cs:77,技能组合中的单个技能。
+Action.30897,Action,30897,Blizzard III,冰结III,,PvpStats/Types/Display/Action/ActionSet.cs:78,技能组合中的单个技能。
+Action.39157,Action,39157,Steel Fangs,咬噬尖齿,,PvpStats/Types/Display/Action/ActionSet.cs:57,技能组合中的单个技能。
+Action.39158,Action,39158,Piercing Fangs,穿裂尖齿,,PvpStats/Types/Display/Action/ActionSet.cs:57,技能组合中的单个技能。
+Action.39159,Action,39159,Hunter's Sting,猛袭利齿,,PvpStats/Types/Display/Action/ActionSet.cs:57,技能组合中的单个技能。
+Action.39160,Action,39160,Swiftskin's Sting,疾速利齿,,PvpStats/Types/Display/Action/ActionSet.cs:57,技能组合中的单个技能。
+Action.39161,Action,39161,Barbarous Bite,咬击獠齿,,PvpStats/Types/Display/Action/ActionSet.cs:57,技能组合中的单个技能。
+Action.39163,Action,39163,Ravenous Bite,咬噬獠齿,,PvpStats/Types/Display/Action/ActionSet.cs:57,技能组合中的单个技能。
+Action.39166,Action,39166,Bloodcoil,血宴灵蛇,,PvpStats/Types/Display/Action/ActionSet.cs:58,技能组合中的单个技能。
+Action.39167,Action,39167,Sanguine Feast,强碎灵蛇,,PvpStats/Types/Display/Action/ActionSet.cs:58,技能组合中的单个技能。
+Action.39169,Action,39169,First Generation,祖灵之牙一式,,PvpStats/Types/Display/Action/ActionSet.cs:59,技能组合中的单个技能。
+Action.39170,Action,39170,Second Generation,祖灵之牙二式,,PvpStats/Types/Display/Action/ActionSet.cs:59,技能组合中的单个技能。
+Action.39171,Action,39171,Third Generation,祖灵之牙三式,,PvpStats/Types/Display/Action/ActionSet.cs:59,技能组合中的单个技能。
+Action.39172,Action,39172,Fourth Generation,祖灵之牙四式,,PvpStats/Types/Display/Action/ActionSet.cs:59,技能组合中的单个技能。
+Action.39174,Action,39174,Death Rattle,死亡嘶鸣,,PvpStats/Types/Display/Action/ActionSet.cs:60,技能组合中的单个技能。
+Action.39175,Action,39175,Twinfang Bite,双牙连击,,PvpStats/Types/Display/Action/ActionSet.cs:60,技能组合中的单个技能。
+Action.39176,Action,39176,Twinblood Bite,双牙乱击,,PvpStats/Types/Display/Action/ActionSet.cs:60,技能组合中的单个技能。
+Action.39177,Action,39177,Uncoiled Twinfang,双牙连闪,,PvpStats/Types/Display/Action/ActionSet.cs:61,技能组合中的单个技能。
+Action.39178,Action,39178,Uncoiled Twinblood,双牙乱闪,,PvpStats/Types/Display/Action/ActionSet.cs:61,技能组合中的单个技能。
+Action.39179,Action,39179,First Legacy,祖灵之尾一式,,PvpStats/Types/Display/Action/ActionSet.cs:62,技能组合中的单个技能。
+Action.39180,Action,39180,Second Legacy,祖灵之尾二式,,PvpStats/Types/Display/Action/ActionSet.cs:62,技能组合中的单个技能。
+Action.39181,Action,39181,Third Legacy,祖灵之尾三式,,PvpStats/Types/Display/Action/ActionSet.cs:62,技能组合中的单个技能。
+Action.39182,Action,39182,Fourth Legacy,祖灵之尾四式,,PvpStats/Types/Display/Action/ActionSet.cs:62,技能组合中的单个技能。
+Action.39186,Action,39186,Backlash,反噬,,PvpStats/Types/Display/Action/ActionSet.cs:63,技能组合中的单个技能。
+Action.39187,Action,39187,Backlash,反噬,,PvpStats/Types/Display/Action/ActionSet.cs:63,技能组合中的单个技能。
+Action.39188,Action,39188,Furious Backlash,愤怒反噬,,PvpStats/Types/Display/Action/ActionSet.cs:63,技能组合中的单个技能。
+Action.39190,Action,39190,World-swallower,吞世巨蛇,LimitBreak.WorldSwallower,PvpStats/Types/Action/ActionEnums.cs:22,
+Action.39191,Action,39191,Fire in Red,火炎之红,,PvpStats/Types/Display/Action/ActionSet.cs:84,技能组合中的单个技能。
+Action.39192,Action,39192,Aero in Green,劲风之绿,,PvpStats/Types/Display/Action/ActionSet.cs:84,技能组合中的单个技能。
+Action.39193,Action,39193,Water in Blue,流水之蓝,,PvpStats/Types/Display/Action/ActionSet.cs:84,技能组合中的单个技能。
+Action.39194,Action,39194,Blizzard in Cyan,冰结之青,,PvpStats/Types/Display/Action/ActionSet.cs:85,技能组合中的单个技能。
+Action.39195,Action,39195,Stone in Yellow,坚石之黄,,PvpStats/Types/Display/Action/ActionSet.cs:85,技能组合中的单个技能。
+Action.39196,Action,39196,Thunder in Magenta,品红之雷,,PvpStats/Types/Display/Action/ActionSet.cs:85,技能组合中的单个技能。
+Action.39200,Action,39200,Pom Motif,绒球彩绘,,PvpStats/Types/Display/Action/ActionSet.cs:86,技能组合中的单个技能。
+Action.39201,Action,39201,Wing Motif,翅膀彩绘,,PvpStats/Types/Display/Action/ActionSet.cs:86,技能组合中的单个技能。
+Action.39202,Action,39202,Claw Motif,利爪彩绘,,PvpStats/Types/Display/Action/ActionSet.cs:86,技能组合中的单个技能。
+Action.39203,Action,39203,Maw Motif,尖牙彩绘,,PvpStats/Types/Display/Action/ActionSet.cs:86,技能组合中的单个技能。
+Action.39205,Action,39205,Pom Muse,绒球具现,,PvpStats/Types/Display/Action/ActionSet.cs:87,技能组合中的单个技能。
+Action.39206,Action,39206,Winged Muse,翅膀具现,,PvpStats/Types/Display/Action/ActionSet.cs:87,技能组合中的单个技能。
+Action.39207,Action,39207,Clawed Muse,利爪具现,,PvpStats/Types/Display/Action/ActionSet.cs:87,技能组合中的单个技能。
+Action.39208,Action,39208,Fanged Muse,尖牙具现,,PvpStats/Types/Display/Action/ActionSet.cs:87,技能组合中的单个技能。
+Action.39215,Action,39215,Advent of Chocobastion,陆行鸟堡垒降临,LimitBreak.AdventOfChocobastion,PvpStats/Types/Action/ActionEnums.cs:32,
+Action.39216,Action,39216,Star Prism,星空构想,,PvpStats/Types/Display/Action/ActionSet.cs:89,技能组合中的单个技能。
+Action.39217,Action,39217,Star Prism,星空构想,,PvpStats/Types/Display/Action/ActionSet.cs:89,技能组合中的单个技能。
+Action.39782,Action,39782,Mog of the Ages,莫古力永恒,,PvpStats/Types/Display/Action/ActionSet.cs:88,技能组合中的单个技能。
+Action.39783,Action,39783,Retribution of the Madeen,玛蒂恩的报应,,PvpStats/Types/Display/Action/ActionSet.cs:88,技能组合中的单个技能。
+Action.41428,Action,41428,Supplication,祈求,,PvpStats/Types/Display/Action/ActionSet.cs:11,技能组合中的单个技能。
+Action.41429,Action,41429,Sepulchre,葬送剑,,PvpStats/Types/Display/Action/ActionSet.cs:11,技能组合中的单个技能。
+Action.41434,Action,41434,Scarlet Delirium,绯红乱,,PvpStats/Types/Display/Action/ActionSet.cs:18,技能组合中的单个技能。
+Action.41435,Action,41435,Comeuppance,报应,,PvpStats/Types/Display/Action/ActionSet.cs:18,技能组合中的单个技能。
+Action.41436,Action,41436,Torcleaver,戮山,,PvpStats/Types/Display/Action/ActionSet.cs:18,技能组合中的单个技能。
+Action.41444,Action,41444,Leaping Opo,豹袭,,PvpStats/Types/Display/Action/ActionSet.cs:35,技能组合中的单个技能。
+Action.41445,Action,41445,Rising Raptor,猛豹,,PvpStats/Types/Display/Action/ActionSet.cs:35,技能组合中的单个技能。
+Action.41446,Action,41446,Pouncing Coeurl,猛豹,,PvpStats/Types/Display/Action/ActionSet.cs:35,技能组合中的单个技能。
+Action.41449,Action,41449,Drakesbane,云蒸龙变,,PvpStats/Types/Display/Action/ActionSet.cs:38,技能组合中的单个技能。
+Action.41452,Action,41452,Zesho Meppo,断绝,,PvpStats/Types/Display/Action/ActionSet.cs:44,技能组合中的单个技能。
+Action.41453,Action,41453,Zesho Meppo,断绝,,PvpStats/Types/Display/Action/ActionSet.cs:44,技能组合中的单个技能。
+Action.41454,Action,41454,Tendo Setsugekka,天道雪月花,,PvpStats/Types/Display/Action/ActionSet.cs:50,技能组合中的单个技能。
+Action.41455,Action,41455,Tendo Kaeshi Setsugekka,天道回返雪月花,,PvpStats/Types/Display/Action/ActionSet.cs:50,技能组合中的单个技能。
+Action.41457,Action,41457,Fate Sealed,命定,,PvpStats/Types/Display/Action/ActionSet.cs:55,技能组合中的单个技能。
+Action.41464,Action,41464,Harmonic Arrow,和音箭,,PvpStats/Types/Display/Action/ActionSet.cs:65,技能组合中的单个技能。
+Action.41465,Action,41465,Harmonic Arrow,和音箭,,PvpStats/Types/Display/Action/ActionSet.cs:65,技能组合中的单个技能。
+Action.41466,Action,41466,Harmonic Arrow,和音箭,,PvpStats/Types/Display/Action/ActionSet.cs:65,技能组合中的单个技能。
+Action.41470,Action,41470,Detonator,起爆,,PvpStats/Types/Display/Action/ActionSet.cs:67,技能组合中的单个技能。
+Action.41472,Action,41472,Dance of the Dawn,黎明舞步,,PvpStats/Types/Display/Action/ActionSet.cs:75,技能组合中的单个技能。
+Action.41488,Action,41488,Enchanted Riposte,魔回刺,,PvpStats/Types/Display/Action/ActionSet.cs:82,技能组合中的单个技能。
+Action.41489,Action,41489,Enchanted Zwerchhau,魔交击斩,,PvpStats/Types/Display/Action/ActionSet.cs:82,技能组合中的单个技能。
+Action.41490,Action,41490,Enchanted Redoublement,魔连攻,,PvpStats/Types/Display/Action/ActionSet.cs:82,技能组合中的单个技能。
+Action.41498,Action,41498,Southern Cross,南十字,LimitBreak.SouthernCross,PvpStats/Types/Action/ActionEnums.cs:31,
+Action.41502,Action,41502,Seraphism,炽天附体,LimitBreak.Seraphism,PvpStats/Types/Action/ActionEnums.cs:10,
+Action.41964,Action,41964,Harmonic Arrow,和音箭,,PvpStats/Types/Display/Action/ActionSet.cs:65,技能组合中的单个技能。
+Addon.14438,Addon,14438,Team Astra,,AstraIntro,PvpStats/Services/LocalizationService.cs:36,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Addon.14439,Addon,14439,Team Umbra,,UmbraIntro,PvpStats/Services/LocalizationService.cs:37,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Addon.14894,Addon,14894,Bronze,,BronzeIntro,PvpStats/Services/LocalizationService.cs:38,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Addon.14895,Addon,14895,Silver,,SilverIntro,PvpStats/Services/LocalizationService.cs:39,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Addon.14896,Addon,14896,Gold,,GoldIntro,PvpStats/Services/LocalizationService.cs:40,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Addon.14897,Addon,14897,Platinum,,PlatinumIntro,PvpStats/Services/LocalizationService.cs:41,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Addon.14898,Addon,14898,Diamond,,DiamondIntro,PvpStats/Services/LocalizationService.cs:42,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Addon.14899,Addon,14899,Crystal ,,CrystalIntro,PvpStats/Services/LocalizationService.cs:43,原始游戏 Addon 文本可能包含控制标记，勿修改原文或标记。
+Status.48,Status,48,Well Fed,,UselessStatus.WellFed,PvpStats/Types/Action/ActionEnums.cs:106,UselessStatus 是采集排除项，原文仅供参考。
+Status.895,Status,895,Invincibility,无敌,MajorStatus.Invincible,PvpStats/Types/Action/ActionEnums.cs:47,
+Status.902,Status,902,Jackpot,,UselessStatus.Jackpot,PvpStats/Types/Action/ActionEnums.cs:107,UselessStatus 是采集排除项，原文仅供参考。
+Status.1078,Status,1078,Priority Seal Allowance,,UselessStatus.PrioritySeals,PvpStats/Types/Action/ActionEnums.cs:108,UselessStatus 是采集排除项，原文仅供参考。
+Status.1302,Status,1302,Hallowed Ground,神圣领域,MajorStatus.HallowedGround,PvpStats/Types/Action/ActionEnums.cs:61,
+Status.1303,Status,1303,Inner Release,原初的解放,MajorStatus.InnerRelease,PvpStats/Types/Action/ActionEnums.cs:64,
+Status.1306,Status,1306,Sole Survivor,死斗,MajorStatus.SoleSurvivor,PvpStats/Types/Action/ActionEnums.cs:68,
+Status.1343,Status,1343,Stun,眩晕,MajorStatus.Stun,PvpStats/Types/Action/ActionEnums.cs:48,
+Status.1344,Status,1344,Heavy,加重,MajorStatus.Heavy,PvpStats/Types/Action/ActionEnums.cs:49,
+Status.1345,Status,1345,Bind,止步,MajorStatus.Bind,PvpStats/Types/Action/ActionEnums.cs:50,
+Status.1347,Status,1347,Silence,沉默,MajorStatus.Silence,PvpStats/Types/Action/ActionEnums.cs:51,
+Status.1348,Status,1348,Sleep,睡眠,MajorStatus.Sleep,PvpStats/Types/Action/ActionEnums.cs:52,
+Status.1411,Status,1411,Preferred World Bonus,,UselessStatus.PreferredWorld,PvpStats/Types/Action/ActionEnums.cs:109,UselessStatus 是采集排除项，原文仅供参考。
+Status.2022,Status,2022,Saber Dance,剑舞,,PvpStats/Types/Display/Action/ActionSet.cs:72,技能组合引用；StatusIdOffset 是程序内部偏移，row_id 已去除偏移。
+Status.2052,Status,2052,Fan Dance,扇舞,,PvpStats/Types/Display/Action/ActionSet.cs:74,技能组合引用；StatusIdOffset 是程序内部偏移，row_id 已去除偏移。
+Status.2413,Status,2413,Covered,掩护,MajorStatus.Covered,PvpStats/Types/Action/ActionEnums.cs:58,
+Status.2995,Status,2995,Blackfeather Boost,黑羽强化,MajorStatus.Blackfeather,PvpStats/Types/Action/ActionEnums.cs:82,
+Status.3021,Status,3021,Unguarded,无防备,MajorStatus.Unguarded,PvpStats/Types/Action/ActionEnums.cs:66,
+Status.3025,Status,3025,Sacred Claim,神圣请求,MinorStatus.SacredClaim,PvpStats/Types/Action/ActionEnums.cs:90,
+Status.3026,Status,3026,Holy Sheltron,神圣盾阵,MinorStatus.HolySheltron,PvpStats/Types/Action/ActionEnums.cs:88,
+Status.3029,Status,3029,Onslaught,突进,MinorStatus.Onslaught,PvpStats/Types/Action/ActionEnums.cs:93,
+Status.3030,Status,3030,Bloodwhetting,血溅,MinorStatus.Bloodwhetting,PvpStats/Types/Action/ActionEnums.cs:94,
+Status.3037,Status,3037,Salted Earth,腐秽大地,MinorStatus.SaltedEarthHeal,PvpStats/Types/Action/ActionEnums.cs:97,
+Status.3038,Status,3038,Salt's Bane,腐秽灭杀,MinorStatus.SaltedEarthDamage,PvpStats/Types/Action/ActionEnums.cs:98,
+Status.3039,Status,3039,Undead Redemption,不死救赎,MajorStatus.UndeadRedemption,PvpStats/Types/Action/ActionEnums.cs:69,
+Status.3042,Status,3042,No Mercy,无情,MinorStatus.NoMercy,PvpStats/Types/Action/ActionEnums.cs:100,
+Status.3051,Status,3051,Nebula,暗影墙,MajorStatus.Nebula,PvpStats/Types/Action/ActionEnums.cs:71,
+Status.3052,Status,3052,Relentless Rush,连续剑,MajorStatus.RelentlessRush,PvpStats/Types/Action/ActionEnums.cs:72,
+Status.3053,Status,3053,Relentless Shrapnel,连续剑碎片,MajorStatus.Shrapnel,PvpStats/Types/Action/ActionEnums.cs:73,
+Status.3054,Status,3054,Guard,防御,MajorStatus.Guard,PvpStats/Types/Action/ActionEnums.cs:54,
+Status.3085,Status,3085,Miracle of Nature,自然奇迹,MajorStatus.MiracleOfNature,PvpStats/Types/Action/ActionEnums.cs:75,
+Status.3105,Status,3105,Celestial River,天星河流,MajorStatus.CelestialRiver,PvpStats/Types/Action/ActionEnums.cs:77,
+Status.3106,Status,3106,Celestial Tide,天星潮汐,MajorStatus.CelestialTide,PvpStats/Types/Action/ActionEnums.cs:78,
+Status.3119,Status,3119,Mesotes,中庸之道,MajorStatus.Mesotes,PvpStats/Types/Action/ActionEnums.cs:79,
+Status.3120,Status,3120,Lype,悲叹,MajorStatus.Lype,PvpStats/Types/Action/ActionEnums.cs:81,
+Status.3161,Status,3161,Starfall Dance,流星之舞,,PvpStats/Types/Display/Action/ActionSet.cs:73,技能组合引用；StatusIdOffset 是程序内部偏移，row_id 已去除偏移。
+Status.3174,Status,3174,Meteodrive,陨石冲击,MajorStatus.Meteodrive,PvpStats/Types/Action/ActionEnums.cs:80,
+Status.3175,Status,3175,メテオドライヴ,陨石冲击,,PvpStats/Types/Display/Action/ActionSet.cs:36,技能组合引用；StatusIdOffset 是程序内部偏移，row_id 已去除偏移。
+Status.3185,Status,3185,Thrill of Battle,战栗,MajorStatus.ThrillOfBattle,PvpStats/Types/Action/ActionEnums.cs:65,
+Status.3188,Status,3188,Shield Oath,忠义之盾,MinorStatus.ShieldOath,PvpStats/Types/Action/ActionEnums.cs:89,
+Status.3190,Status,3190,星遁天誅,,UselessStatus.Nin1,PvpStats/Types/Action/ActionEnums.cs:110,UselessStatus 是采集排除项，原文仅供参考。
+Status.3210,Status,3210,Phalanx,列阵,MajorStatus.Phalanx,PvpStats/Types/Action/ActionEnums.cs:62,
+Status.3248,Status,3248,Resilience,坚韧,MajorStatus.Purify,PvpStats/Types/Action/ActionEnums.cs:56,
+Status.3256,Status,3256,Orogeny,造山运动,MinorStatus.Orogeny,PvpStats/Types/Action/ActionEnums.cs:95,
+Status.3518,Status,3518,Mini,缩小,MajorStatus.Mini,PvpStats/Types/Action/ActionEnums.cs:83,
+Status.3673,Status,3673,Guard,防御,MajorStatus.GuardBroken,PvpStats/Types/Action/ActionEnums.cs:55,
+Status.4086,Status,4086,,,UselessStatus.Vpr1,PvpStats/Types/Action/ActionEnums.cs:111,UselessStatus 是采集排除项，原文仅供参考。 当前参考表没有原文，请按游戏表 ID 核对。
+Status.4087,Status,4087,,,UselessStatus.Vpr2,PvpStats/Types/Action/ActionEnums.cs:112,UselessStatus 是采集排除项，原文仅供参考。 当前参考表没有原文，请按游戏表 ID 核对。
+Status.4088,Status,4088,,,UselessStatus.Vpr3,PvpStats/Types/Action/ActionEnums.cs:113,UselessStatus 是采集排除项，原文仅供参考。 当前参考表没有原文，请按游戏表 ID 核对。
+Status.4089,Status,4089,,,UselessStatus.Vpr4,PvpStats/Types/Action/ActionEnums.cs:114,UselessStatus 是采集排除项，原文仅供参考。 当前参考表没有原文，请按游戏表 ID 核对。
+Status.4283,Status,4283,Shield Smite,盾牌猛击,MinorStatus.ShieldSmite,PvpStats/Types/Action/ActionEnums.cs:91,
+Status.4295,Status,4295,Heart of Corundum,刚玉之心,MinorStatus.HeartOfCorundum,PvpStats/Types/Action/ActionEnums.cs:101,
+Status.4296,Status,4296,Catharsis of Corundum,刚玉之净,MinorStatus.CatharsisOfCorundum,PvpStats/Types/Action/ActionEnums.cs:102,
+Status.4314,Status,4314,Dance of the Dawn,黎明舞步,,PvpStats/Types/Display/Action/ActionSet.cs:75,技能组合引用；StatusIdOffset 是程序内部偏移，row_id 已去除偏移。
+Status.4352,Status,4352,Covered,掩护,MajorStatus.Covered2,PvpStats/Types/Action/ActionEnums.cs:59,

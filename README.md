@@ -1,37 +1,99 @@
-# PvP Tracker
-<img src="https://raw.githubusercontent.com/wrath16/PvpStats/master/images/icon.png" width="256" height="256">
+# CCStats
 
-[![Download count](https://img.shields.io/endpoint?url=https://qzysathwfhebdai6xgauhz4q7m0mzmrf.lambda-url.us-east-1.on.aws/PvpStats)](https://github.com/wrath16/PvpStats)
+基于 [wrath16/PvpStats](https://github.com/wrath16/PvpStats) 的水晶冲突专用版本。
+上游基线：`ba41904e9cdd2d3c4cb77800945a1a30c8f88715`，版本 `2.7.1.0`。
+原作者：SaMo。原项目采用 MIT 许可证，许可全文保留在 [LICENSE.txt](LICENSE.txt)。
+当前发布版本：`0.1.0`（首轮游戏内测试）。
 
-Final Fantasy XIV Dalamud plugin for recording PvP match history.
+## 安装与测试
 
-## Examples
-![image](https://raw.githubusercontent.com/wrath16/PvpStats/master/images/example1.PNG)
-![image](https://raw.githubusercontent.com/wrath16/PvpStats/master/images/example2.PNG)
-![image](https://raw.githubusercontent.com/wrath16/PvpStats/master/images/example3.PNG)
+在 Dalamud 设置 → 实验性 → 自定义插件库中添加：
 
-## Usage Instructions
-* Install from main Dalamud repo.
-* Matches are recorded automatically.
-* Enter `/ccstats` to open the Crystalline Conflict stats window.
-* Enter `/flstats` to open the Frontline stats window.
-* Enter `/rwstats` to open the Rival Wings stats window.
-* Enter `/lastmatch` to open the most recent match details window of any game mode.
-* Enter `/pvpstatsconfig` or press the gear on the plugin description to access various settings.
+```text
+https://raw.githubusercontent.com/HanaSi0/CCStats/main/repo.json
+```
 
-## Known Issues
-* Spectated Crystalline Conflict matches are not recorded.
-* Rematches in Crystalline Conflict custom matches are not recorded.
-* Crystalline Conflict matches that you reload into just as they are ending are not recorded.
-* Rival Wings matches that end between 14:51 and 14:59 have skewed match timeline timestamps by a few seconds.
-* Rival Wings matches recorded before v2.3.0.0 may have incorrect merc counts.
-* Rival Wings matches recorded prior to game version 7.0 may have incorrect ceruleum counts for players with >255.
-* Rival Wings matches recorded during game version 7.2 and prior to v2.3.4.1 have incorrect alliance Soaring stacks.
-* Text may be clipped in some cases if using non-standard font settings.
+保存后刷新插件安装器，搜索 **CCStats** 并安装，输入 `/ccstats` 打开。
+安装包与更新说明见 [Release 0.1.0](https://github.com/HanaSi0/CCStats/releases/tag/v0.1.0)。
+本版本面向 **Dalamud API 15**；实际采集和 Hook 兼容性需要在目标客户端验证。
+若已安装上游 PvP Tracker，请先停用它；两个版本保留同一个内部名称 `PvpStats`，不能同时加载。替换前可备份原插件配置目录。
 
-## Feature Roadmap
-May or may not eventually get implemented:
-* More stats.
-* More localization.
-* UI improvements.
-* Performance and reliability improvements.
+## 当前范围
+
+- 保留水晶冲突的自动记录、结算、时间线、技能分析、筛选和统计。
+- 删除纷争前线和烈羽争锋的采集、数据模型、缓存、统计、界面、命令、专属配置及背景素材。
+- `/ccstats` 打开水晶冲突主窗口，`/lastmatch` 仅查询水晶冲突，`/pvpstatsconfig` 打开设置。
+- 为兼容既有水晶冲突记录，暂保留 `PvpStats` 程序集、内部名称和数据库集合名。
+- 不主动删除用户既有 `data.db` 中其他模式的历史记录；本版本不再读取、记录或展示它们。
+
+## 翻译交接
+
+从 [translation/README.zh-CN.md](translation/README.zh-CN.md) 开始。填写 CSV 的 `zh_CN` 列，保留键、ID 和原文。已确认 374 项聊天译文，并接入显示层。主窗口及战绩列表已完成第一轮中文布局调整。未确认的其他说明文案仍可后续处理。
+
+## 构建
+
+需要 .NET 10 SDK 和与 Dalamud SDK 15 对应的官方 Dalamud 开发程序集。项目 SDK 和 NuGet 锁文件保持上游版本。
+
+```bash
+export DALAMUD_HOME=/path/to/dalamud
+# Linux 编译 Windows 目标需要 EnableWindowsTargeting。
+dotnet restore PvpStats.sln --locked-mode -p:EnableWindowsTargeting=true
+dotnet build PvpStats.sln -c Release --no-restore -p:EnableWindowsTargeting=true
+dotnet build PvpStats.sln -c Debug --no-restore -p:EnableWindowsTargeting=true
+```
+
+云环境安装与验证说明见 [docs/development.md](docs/development.md)。
+实际比赛采集、Hook 签名、中文客户端适配和界面效果，需要在对应 FFXIV/Dalamud 客户端中验证。
+
+## 当前主窗口
+
+- 默认 1240×820，深蓝圆角窗口配侧栏导航；顶部卡片显示筛选场数、有效胜率、胜负和平均时长。
+- 搜索支持玩家、职业、地图、比赛类型、标签、日期与记录 ID；多个关键词同时匹配，双引号匹配短语，`-关键词` 排除。支持比赛类型快捷切换、仅收藏和高级筛选。
+- 职业、地图、比赛类型和段位使用中文，战绩表支持点击表头排序、调整列宽、隐藏列、分页和横向滚动；保留详情、收藏、标签和导出。
+- 比赛详情与设置使用同一套圆角主题；详情保留结算、时间线、推进曲线及技能分析，设置使用侧栏分类。
+- 概览、纪录、职业、玩家、积分和个人资料功能仍保留。
+- 技能与状态按不同的 ID 字典取译名，缺失条目使用当前客户端数据表原文。
+- `translation/ui-layout.zh-CN.json` 保存本轮新增界面用语；用户确认的游戏译名仍以 CSV 为准。
+
+更新 CSV 后运行 `python3 tools/generate_localization.py`，再构建插件。原始模板导出工具会拒绝覆盖已有译文。
+验证本地化：`dotnet run --project tests/LocalizationChecks`。游戏内字体、布局、采集和 Hook 仍需在目标客户端验证。
+
+## 游戏内悬浮图标
+
+登录游戏后默认显示 48 像素（随 Dalamud UI 缩放）的悬浮图标。左键打开 `/ccstats` 主窗口，按住右键拖动，松开后保存位置。
+悬浮图标不会被左键拖动；退出登录后隐藏。图标位置相对游戏主视口保存，分辨率变化后会限制在可见区域内。
+设置窗口的“界面”标签提供显示开关、32–96 的大小调整，以及位置重置。
+
+`images/icon.png` 是本地插件图标和悬浮按钮的共同资源，构建时复制到输出目录和插件 ZIP 的 `icon.png`。
+Logo 已从用户提供的 `crystal_conflict_logo.zip` 中原样提取，大小为 500×500，未重新绘制、裁剪或压缩。插件清单的 `IconUrl` 指向本仓库的 `main/images/icon.png`；该远程地址在源码推送后可用。
+PNG SHA-256：`6581c05e53c5bff96c82d906a2f0bdbd58ca34189609b321542a238a8ef6f33c`。
+
+## 自定义主题
+
+设置 → 主题与配色，提供水晶冰蓝、暮色紫晶、翠绿森林、清晨浅色四个预设。可编辑窗口、卡片、输入框、边框、文字、按钮、选中背景、表头及交替行颜色，支持 HEX 输入和窗口不透明度调节。修改即时生效；可保存、还原至打开设置或上次保存时的主题、恢复默认，关闭设置时自动保存。主题不会覆盖原有职业、胜负、收藏和队伍颜色。
+
+`docs/ui-preview.html` 提供独立的网页交互原型，主题页面支持浏览器本地保存；原型不连接游戏数据。
+
+## 榜单
+
+主窗口侧栏 → **榜单**。只按四个大区选择：日服、北美服、欧服、大洋洲服；每大区一份官方完整榜单，无服务器或数据中心筛选。玩家所属服务器与数据中心仍显示在表格中，姓名完整保留，可悬停、复制和搜索。
+
+顶部使用紧凑摘要行显示大区、官网榜单日期和玩家人数；详细检查状态、来源及赛季放在状态提示中。没有“更新策略”卡片或常驻策略说明。
+
+游戏启动/插件加载时在后台依次检查四大区一次，优先检查上次查看的大区。比较官网 `summarytime` 标注的日历日与该区完整缓存：日期相同就使用缓存，不抓分页；日期不同或缓存格式需要升级时更新整个大区。无定时轮询，浏览与切换大区不会触发更新。手动重试仍执行日期比较，并间隔至少 60 秒。网络失败或更新中途跨日保留旧缓存。
+
+已实测的官方接口是 `https://<官网>/lodestone/ranking/crystallineconflict/`：首页返回 50 条，`.js--ranking-loading[data-next-page]` 指向后续批次，追加 `page` 参数继续读取 HTML 片段，空响应表示结束。官网按物理大区汇总，`dcgroup=Elemental/Primal/Light/Materia` 是官网使用的代表查询值；日服页面包含 Gaia、Mana、Meteor、Elemental 的玩家，不能再按该参数当作独立服务器分榜。
+
+真实字段来自 `.ranking_set[data-href]`、姓名 `h3`、服务器 `.world`、段位图片 alt/data-tooltip、阶位 `.tier p`、积分/胜星 `.points`、胜场 `.wins` 与上次排名 `.prev_order`。积分和胜场的日变化独立保存，完整 HTML 与未知字段一同保留。官网仅公开其显示范围内的玩家，不补造未上榜数据。
+
+各区缓存位于插件配置目录 `leaderboards/<地区键>/latest.json`，完整 ZIP 在对应目录 `exports/`，包含 CSV、JSON 和全部原始页面。旧单文件缓存保留。抓取每页至少间隔 1 秒，最多 250 页、每页 4 MB；异常不会覆盖旧缓存。滚动片段没有日期，因此完成前再次核对首页的日期与赛季。
+
+**2026-10-16 实际联网验证：**日服 300 人、北美 300 人、欧服 300 人、大洋洲 100 人；四区后续再次检查均确认日期相同并复用缓存。日服与欧服标注 2026-10-16，北美与大洋洲英文站标注 2026-10-15，按各站原样显示的日历日比较。此前主站 403 问题在本次重试时已恢复。
+
+`docs/ui-preview.html` 的榜单页面已植入上述 1000 条官方公开快照，其他界面仍为示例数据。网页预览不联网，正式插件执行启动日期检查；游戏内的显示效果仍需在目标客户端验证。
+
+## 每局结算与胜率标注
+
+比赛详情默认展示全部 15 列：玩家、服务器、职业、击倒、死亡、助攻、造成伤害、受到伤害、治疗量、推车时间，以及每次击倒/助攻伤害、每条生命的伤害/承伤/治疗、KDA。四项核心结算指标不能被隐藏，其余列可调整；“显示全部数据”恢复全部列。支持横向滚动、冻结身份列、排序和队伍合计，推车时间显示分:秒，原始字段与导出保持原样。没有保存结算数据的对局会明确提示不可用。
+
+总览、地图、比赛类型、常用职业、队友/对手相关胜率均显示百分比和“胜场/有效场数”，例如 `60.0% · 12/20`。分母为胜场加负场，观战或未计胜负记录不混入分母；悬停显示完整场数说明。没有有效样本时显示 `— · 0/0`。网页中的这些比赛分析仍为示例数据，但标注的百分比与场数均由对应示例记录计算；正式插件使用已有统计结果。

@@ -1,4 +1,5 @@
-﻿using PvpStats.Types;
+using PvpStats.Localization;
+using PvpStats.Types;
 using PvpStats.Types.Match;
 using System;
 using System.Collections.Generic;
@@ -132,14 +133,14 @@ public static class MatchHelper {
 
     public static string GetArenaName(CrystallineConflictMap map) {
         return map switch {
-            CrystallineConflictMap.Palaistra => "The Palaistra",
-            CrystallineConflictMap.VolcanicHeart => "The Volcanic Heart",
-            CrystallineConflictMap.CloudNine => "Cloud Nine",
-            CrystallineConflictMap.ClockworkCastleTown => "Clockwork Castletown",
-            CrystallineConflictMap.RedSands => "The Red Sands",
-            CrystallineConflictMap.BaysideBattleground => "Bayside Battleground",
-            CrystallineConflictMap.ArcheiaHarmonias => "Archeia Harmonias",
-            _ => "Unknown",
+            CrystallineConflictMap.Palaistra => ChineseText.Text("The Palaistra"),
+            CrystallineConflictMap.VolcanicHeart => ChineseText.Text("The Volcanic Heart"),
+            CrystallineConflictMap.CloudNine => ChineseText.Text("Cloud Nine"),
+            CrystallineConflictMap.ClockworkCastleTown => ChineseText.Text("Clockwork Castletown"),
+            CrystallineConflictMap.RedSands => ChineseText.Text("The Red Sands"),
+            CrystallineConflictMap.BaysideBattleground => ChineseText.Text("Bayside Battleground"),
+            CrystallineConflictMap.ArcheiaHarmonias => ChineseText.Text("Archeia Harmonias"),
+            _ => ChineseText.Text("Unknown"),
         };
     }
 
@@ -155,9 +156,9 @@ public static class MatchHelper {
 
     public static string GetTeamName(CrystallineConflictTeamName team) {
         switch(team) {
-            case CrystallineConflictTeamName.Astra: return "Astra";
-            case CrystallineConflictTeamName.Umbra: return "Umbra";
-            default: return "Unknown";
+            case CrystallineConflictTeamName.Astra: return ChineseText.Text("Astra");
+            case CrystallineConflictTeamName.Umbra: return ChineseText.Text("Umbra");
+            default: return ChineseText.Text("Unknown");
         }
     }
 
@@ -177,130 +178,6 @@ public static class MatchHelper {
         } else {
             return null;
         }
-    }
-
-    public static FrontlineMap? GetFrontlineMap(uint dutyId) {
-        return dutyId switch {
-            127 => FrontlineMap.BorderlandRuins,
-            130 => FrontlineMap.SealRock,
-            180 => FrontlineMap.FieldsOfGlory,
-            701 => FrontlineMap.OnsalHakair,
-            1080 => FrontlineMap.WorqorChirteh,
-            _ => null,
-        };
-    }
-
-    public static string GetFrontlineArenaName(FrontlineMap? map) {
-        return map switch {
-            FrontlineMap.BorderlandRuins => "The Borderland Ruins",
-            FrontlineMap.SealRock => "Seal Rock",
-            FrontlineMap.FieldsOfGlory => "The Fields of Glory",
-            FrontlineMap.OnsalHakair => "Onsal Hakair",
-            FrontlineMap.WorqorChirteh => "Worqor Chirteh",
-            _ => "Unknown",
-        };
-    }
-
-    public static string GetFrontlineArenaType(FrontlineMap? map) {
-        return map switch {
-            FrontlineMap.BorderlandRuins => "Secure",
-            FrontlineMap.SealRock => "Seize",
-            FrontlineMap.FieldsOfGlory => "Shatter",
-            FrontlineMap.OnsalHakair => "Danshig Naadam",
-            FrontlineMap.WorqorChirteh => "Triumph",
-            _ => "Unknown",
-        };
-    }
-
-    public static int GetFrontlineMaxPoints(FrontlineMap? map, DateTime? time = null) {
-        switch(map) {
-            case FrontlineMap.BorderlandRuins:
-                //patch 7.25
-                if(time != null && time <= GamePeriod.Patch[8].StartDate) {
-                    return 3000;
-                }
-                return 2400;
-            case FrontlineMap.SealRock:
-                return 700;
-            case FrontlineMap.FieldsOfGlory:
-                return 1600;
-            case FrontlineMap.OnsalHakair:
-            case FrontlineMap.WorqorChirteh:
-                return 1400;
-            default:
-                return 2000;
-        }
-    }
-
-    public static int GetFrontlineMaxPoints(FrontlineMatch? match) {
-        return GetFrontlineMaxPoints(match.Arena, match.DutyStartTime);
-    }
-
-    public static string GetTeamName(FrontlineTeamName? team) {
-        switch(team) {
-            case FrontlineTeamName.Maelstrom: return "Maelstrom";
-            case FrontlineTeamName.Adders: return "Order of the Twin Adder";
-            case FrontlineTeamName.Flames: return "Immortal Flames";
-            default: return "Unknown";
-        }
-    }
-
-    public static RivalWingsMap? GetRivalWingsMap(uint dutyId) {
-        switch(dutyId) {
-            case 277:
-                return RivalWingsMap.Astragalos;
-            case 599:
-                return RivalWingsMap.HiddenGorge;
-            default:
-                return null;
-        }
-    }
-
-    public static string GetArenaName(RivalWingsMap? map) {
-        return map switch {
-            RivalWingsMap.Astragalos => "Astragalos",
-            RivalWingsMap.HiddenGorge => "Hidden Gorge",
-            _ => "Unknown",
-        };
-    }
-
-    public static string GetTeamName(RivalWingsTeamName? team) {
-        switch(team) {
-            case RivalWingsTeamName.Falcons: return "Falcons";
-            case RivalWingsTeamName.Ravens: return "Ravens";
-            default: return "Unknown";
-        }
-    }
-
-    public static string GetSuppliesName(RivalWingsSupplies? supplies) {
-        return supplies switch {
-            RivalWingsSupplies.Gobtank => "Gobtank",
-            RivalWingsSupplies.Ceruleum => "Main Ceruleum Tank",
-            RivalWingsSupplies.Gobbiejuice => "Gobbiejuice",
-            RivalWingsSupplies.Gobcrate => "Gobcrate",
-            _ => "???",
-        };
-    }
-
-    public static string GetStructureName(RivalWingsStructure? structure) {
-        return structure switch {
-            RivalWingsStructure.Core => "Core",
-            RivalWingsStructure.Tower1 => "North Tower",
-            RivalWingsStructure.Tower2 => "South Tower",
-            _ => "???",
-        };
-    }
-
-    public static string GetAllianceLetter(int alliance) {
-        return alliance switch {
-            0 => "A",
-            1 => "B",
-            2 => "C",
-            3 => "D",
-            4 => "E",
-            5 => "F",
-            _ => "?",
-        };
     }
 
     public static readonly Regex CreditBeforeRegex = new Regex(@"^\d+(?= →)", RegexOptions.IgnoreCase | RegexOptions.Multiline);

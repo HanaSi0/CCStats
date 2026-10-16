@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using PvpStats.Helpers;
 using PvpStats.Types.Match;
 using System;
@@ -21,7 +22,7 @@ public class ArenaFilter : DataFilter {
     internal ArenaFilter(Plugin plugin, Func<Task> action, ArenaFilter? filter = null) : base(plugin, action) {
         FilterState = new();
         _range = new() {
-            "All",
+            ChineseText.Text("All"),
         };
         var allMaps = Enum.GetValues(typeof(CrystallineConflictMap)).Cast<CrystallineConflictMap>();
         foreach(var map in allMaps) {

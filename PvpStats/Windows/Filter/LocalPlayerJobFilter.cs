@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using PvpStats.Helpers;
 using PvpStats.Types.Player;
 using System;
@@ -23,9 +24,9 @@ public class LocalPlayerJobFilter : DataFilter {
         var allJobs = Enum.GetValues(typeof(Job)).Cast<Job>();
         var allRoles = Enum.GetValues(typeof(JobSubRole)).Cast<JobSubRole>();
         _roleCount = allRoles.Count();
-        _jobCombo.Add("All Jobs");
+        _jobCombo.Add(ChineseText.Text("All Jobs"));
         foreach(var role in allRoles) {
-            _jobCombo.Add(role.ToString());
+            _jobCombo.Add(ChineseText.EnumName(role));
         }
         foreach(var job in allJobs) {
             _jobCombo.Add(PlayerJobHelper.GetNameFromJob(job));

@@ -1,4 +1,4 @@
-﻿using Dalamud.Game;
+using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
@@ -286,7 +286,7 @@ internal class CrystallineConflictMatchManager : IDisposable {
             bool isPet = false;
 
             var actor = _plugin.ObjectTable.SearchByEntityId(casterEntityId);
-            var spell = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(actionId);
+            var spell = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(actionId);
             if(_plugin.DebugMode) {
                 Plugin.Log2.Debug($"{actor?.Name} cast {spell.Name} {actionId} targets: {targets} display: {effectHeader->ActionType} " +
             $"hidden anim: {effectHeader->SourceSequence} counter: {effectHeader->GlobalSequence} rotation: {effectHeader->RotationInt} variation: {effectHeader->AnimationVariation}");

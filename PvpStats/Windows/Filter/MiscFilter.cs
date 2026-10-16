@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using System;
@@ -38,7 +39,7 @@ public class MiscFilter : DataFilter {
         //    });
         //}
         bool includeSpectated = IncludeSpectated;
-        if(ImGui.Checkbox("Include spectated matches", ref includeSpectated)) {
+        if(ImGui.Checkbox(ChineseText.Label("Include spectated matches"), ref includeSpectated)) {
             Task.Run(async () => {
                 IncludeSpectated = includeSpectated;
                 await Refresh();

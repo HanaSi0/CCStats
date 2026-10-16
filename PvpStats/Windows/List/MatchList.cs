@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -78,14 +79,14 @@ internal abstract class MatchList<T> : FilteredList<T, T> where T : PvpMatch {
                 Task.Run(_plugin.WindowManager.CloseAllMatchWindows);
             }
         }
-        ImGuiHelper.WrappedTooltip("Close all open match windows");
+        ImGuiHelper.WrappedTooltip(ChineseText.Text("Close all open match windows"));
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
             if(ImGui.Button($"{FontAwesomeIcon.Tags.ToIconString()}##SetTags")) {
                 ImGui.OpenPopup("MultiTagsPopup");
             }
         }
-        ImGuiHelper.WrappedTooltip("Set tags");
+        ImGuiHelper.WrappedTooltip(ChineseText.Text("Set tags"));
         MultiTagPopup();
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
@@ -97,7 +98,7 @@ internal abstract class MatchList<T> : FilteredList<T, T> where T : PvpMatch {
                 _plugin.WindowManager.OpenConfigWindow();
             }
         }
-        ImGuiHelper.WrappedTooltip("Settings");
+        ImGuiHelper.WrappedTooltip(ChineseText.Text("Settings"));
         ImGui.SameLine();
         ImGuiHelper.DonateButton();
     }

@@ -1,4 +1,6 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using PvpStats.Interface;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.GameFonts;
 using Dalamud.Interface.ManagedFontAtlas;
@@ -12,6 +14,7 @@ using PvpStats.Types.Match;
 using PvpStats.Types.Match.Timeline;
 using PvpStats.Types.Player;
 using PvpStats.Windows;
+using PvpStats.Windows.Floating;
 using PvpStats.Windows.Detail;
 using PvpStats.Windows.Tracker;
 using System;
@@ -27,10 +30,8 @@ internal class WindowManager : IDisposable {
     private WindowSystem WindowSystem;
     private Plugin _plugin;
     internal CCTrackerWindow CCTrackerWindow { get; private set; }
-    internal FLTrackerWindow FLTrackerWindow { get; private set; }
-    internal RWTrackerWindow RWTrackerWindow { get; private set; }
+    internal FloatingLauncher Launcher { get; private set; }
     internal ConfigWindow ConfigWindow { get; private set; }
-    internal SplashWindow SplashWindow { get; private set; }
 #if DEBUG
     internal DebugWindow? DebugWindow { get; private set; }
 #endif
@@ -42,15 +43,10 @@ internal class WindowManager : IDisposable {
         WindowSystem = new("PvP Stats");
 
         CCTrackerWindow = new(plugin);
-        FLTrackerWindow = new(plugin);
-        RWTrackerWindow = new(plugin);
         ConfigWindow = new(plugin);
-        SplashWindow = new(plugin);
+        Launcher = new(plugin);
         WindowSystem.AddWindow(CCTrackerWindow);
-        WindowSystem.AddWindow(FLTrackerWindow);
-        WindowSystem.AddWindow(RWTrackerWindow);
         WindowSystem.AddWindow(ConfigWindow);
-        WindowSystem.AddWindow(SplashWindow);
 
 #if DEBUG
         DebugWindow = new(plugin);
@@ -60,17 +56,20 @@ internal class WindowManager : IDisposable {
         LargeFont = _plugin.PluginInterface.UiBuilder.FontAtlas.NewGameFontHandle(new GameFontStyle(GameFontFamily.Axis, 24f));
         _plugin.PluginInterface.UiBuilder.Draw += DrawUI;
         _plugin.PluginInterface.UiBuilder.OpenConfigUi += OpenConfigWindow;
-        _plugin.PluginInterface.UiBuilder.OpenMainUi += OpenSplashWindow;
+        _plugin.PluginInterface.UiBuilder.OpenMainUi += OpenCCWindow;
         _plugin.ClientState.Login += OnLogin;
     }
     private void DrawUI() {
+        using var theme = ModernTheme.Apply(_plugin.Configuration.Theme);
         WindowSystem.Draw();
+        Launcher.Draw();
     }
 
     public void Dispose() {
         WindowSystem.RemoveAllWindows();
         _plugin.PluginInterface.UiBuilder.Draw -= DrawUI;
         _plugin.PluginInterface.UiBuilder.OpenConfigUi -= OpenConfigWindow;
+        _plugin.PluginInterface.UiBuilder.OpenMainUi -= OpenCCWindow;
 
         _plugin.ClientState.Login -= OnLogin;
     }
@@ -97,23 +96,13 @@ internal class WindowManager : IDisposable {
 
     internal void OpenCCWindow() {
         CCTrackerWindow.IsOpen = true;
-    }
-
-    internal void OpenFLWindow() {
-        FLTrackerWindow.IsOpen = true;
-    }
-
-    internal void OpenRWWindow() {
-        RWTrackerWindow.IsOpen = true;
+        CCTrackerWindow.BringToFront();
     }
 
     internal void OpenConfigWindow() {
         ConfigWindow.IsOpen = true;
     }
 
-    internal void OpenSplashWindow() {
-        SplashWindow.IsOpen = true;
-    }
 
 #if DEBUG
     internal void OpenDebugWindow() {
@@ -149,14 +138,6 @@ internal class WindowManager : IDisposable {
                 var itemDetail = new CrystallineConflictMatchDetail(_plugin, (match as CrystallineConflictMatch)!);
                 itemDetail.IsOpen = true;
                 _plugin.WindowManager.AddWindow(itemDetail);
-            } else if(match.GetType() == typeof(FrontlineMatch)) {
-                var itemDetail = new FrontlineMatchDetail(_plugin, (match as FrontlineMatch)!);
-                itemDetail.IsOpen = true;
-                _plugin.WindowManager.AddWindow(itemDetail);
-            } else if(match.GetType() == typeof(RivalWingsMatch)) {
-                var itemDetail = new RivalWingsMatchDetail(_plugin, (match as RivalWingsMatch)!);
-                itemDetail.IsOpen = true;
-                _plugin.WindowManager.AddWindow(itemDetail);
             }
 
             //var itemDetail = new CrystallineConflictMatchDetail(_plugin, match);
@@ -185,12 +166,6 @@ internal class WindowManager : IDisposable {
             switch(matchType) {
                 case Type _ when matchType == typeof(CrystallineConflictMatch):
                     matchCache = _plugin.CCCache as MatchCacheService<T>;
-                    break;
-                case Type _ when matchType == typeof(FrontlineMatch):
-                    matchCache = _plugin.FLCache as MatchCacheService<T>;
-                    break;
-                case Type _ when matchType == typeof(RivalWingsMatch):
-                    matchCache = _plugin.RWCache as MatchCacheService<T>;
                     break;
                 default:
                     break;
@@ -227,14 +202,6 @@ internal class WindowManager : IDisposable {
             //hacky time!
             if(timeline is CrystallineConflictMatchTimeline) {
                 var itemDetail = new TimelineFullEditDetail<CrystallineConflictMatchTimeline>(_plugin, timeline as CrystallineConflictMatchTimeline);
-                itemDetail.IsOpen = true;
-                _plugin.WindowManager.AddWindow(itemDetail);
-            } else if(timeline is FrontlineMatchTimeline) {
-                var itemDetail = new TimelineFullEditDetail<FrontlineMatchTimeline>(_plugin, timeline as FrontlineMatchTimeline);
-                itemDetail.IsOpen = true;
-                _plugin.WindowManager.AddWindow(itemDetail);
-            } else if(timeline is RivalWingsMatchTimeline) {
-                var itemDetail = new TimelineFullEditDetail<RivalWingsMatchTimeline>(_plugin, timeline as RivalWingsMatchTimeline);
                 itemDetail.IsOpen = true;
                 _plugin.WindowManager.AddWindow(itemDetail);
             }
@@ -274,9 +241,7 @@ internal class WindowManager : IDisposable {
         Plugin.Log2.Debug("refreshing windows...");
         await Task.WhenAll(
             ConfigWindow.Refresh(),
-            RefreshCCWindow(fullRefresh),
-            RefreshFLWindow(fullRefresh),
-            RefreshRWWindow(fullRefresh)
+            RefreshCCWindow(fullRefresh)
             );
     }
 
@@ -286,14 +251,6 @@ internal class WindowManager : IDisposable {
 
     public async Task RefreshCCWindow(bool fullRefresh = false) {
         await CCTrackerWindow.Refresh(fullRefresh);
-    }
-
-    public async Task RefreshFLWindow(bool fullRefresh = false) {
-        await FLTrackerWindow.Refresh(fullRefresh);
-    }
-
-    public async Task RefreshRWWindow(bool fullRefresh = false) {
-        await RWTrackerWindow.Refresh(fullRefresh);
     }
 
     public ImTextureID GetTextureHandle(uint iconId) {
@@ -345,6 +302,10 @@ internal class WindowManager : IDisposable {
                 ImGui.SameLine();
             }
             ImGui.Image(texture.Handle, new Vector2(sizeHeight * texture.Width / texture.Height, sizeHeight));
+            if(ImGui.IsItemHovered()) {
+                var row = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>().GetRow(effect.Item1);
+                ImGuiHelper.WrappedTooltip(ChineseText.StatusName(effect.Item1, row.Name.ToString()));
+            }
             ImGui.SameLine();
         }
         ImGui.NewLine();
@@ -355,6 +316,10 @@ internal class WindowManager : IDisposable {
                 ImGui.SameLine();
             }
             ImGui.Image(texture.Handle, new Vector2(sizeHeight * texture.Width / texture.Height, sizeHeight));
+            if(ImGui.IsItemHovered()) {
+                var row = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>().GetRow(effect.Item1);
+                ImGuiHelper.WrappedTooltip(ChineseText.StatusName(effect.Item1, row.Name.ToString()));
+            }
             ImGui.SameLine();
         }
     }

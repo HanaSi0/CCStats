@@ -1,0 +1,216 @@
+﻿key,source,code,context,notes
+read.51c9610677d814f7,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:187,var killerWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((killerObj as IPlayerCharacter).HomeWorld.RowId).Name.ToString();,"            if(IsMatchInProgress() && _currentMatchTimeline != null && _currentMatchTimeline.Kills != null) {
+                var killerObj = _plugin.ObjectTable.SearchByEntityId(((CCPlayer*)killerPlayer)->EntityId);
+                var killerWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((killerObj as IPlayerCharacter).HomeWorld.RowId).Name.ToString();
+                var killerAlias = (PlayerAlias)$""{killerObj.Name} {killerWorld}"";
+                var victimObj = _plugin.ObjectTable.SearchByEntityId(((CCPlayer*)victimPlayer)->EntityId);",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.0819475b9fce08c6,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:190,var victimWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((victimObj as IPlayerCharacter).HomeWorld.RowId).Name.ToString();,"                var killerAlias = (PlayerAlias)$""{killerObj.Name} {killerWorld}"";
+                var victimObj = _plugin.ObjectTable.SearchByEntityId(((CCPlayer*)victimPlayer)->EntityId);
+                var victimWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((victimObj as IPlayerCharacter).HomeWorld.RowId).Name.ToString();
+                var victimAlias = (PlayerAlias)$""{victimObj.Name} {victimWorld}"";
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.d43d7048953cdb84,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:223,var victimWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((victim as IPlayerCharacter).HomeWorld.RowId).Name.ToString();,"
+                if(victim?.ObjectKind is ObjectKind.Pc) {
+                    var victimWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((victim as IPlayerCharacter).HomeWorld.RowId).Name.ToString();
+                    var victimAlias = (PlayerAlias)$""{victim.Name} {victimWorld}"";
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.0129b0d2f787b258,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:257,var world = _plugin.DataManager.GetExcelSheet<World>().GetRow((player as IPlayerCharacter).HomeWorld.RowId).Name.ToString();,"                    Plugin.Log2.Warning($""Non-standard potion amount: {amount}"");
+                }
+                var world = _plugin.DataManager.GetExcelSheet<World>().GetRow((player as IPlayerCharacter).HomeWorld.RowId).Name.ToString();
+                var alias = (PlayerAlias)$""{player.Name} {world}"";
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.6548f229a9441c61,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:289,var spell = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(actionId);,"
+            var actor = _plugin.ObjectTable.SearchByEntityId(casterEntityId);
+            var spell = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(actionId);
+            if(_plugin.DebugMode) {
+                Plugin.Log2.Debug($""{actor?.Name} cast {spell.Name} {actionId} targets: {targets} display: {effectHeader->ActionType} "" +",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.4deb0bb5ded0d711,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:310,actorWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((actor as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();,"            ActionEvent? actionEvent = null;
+            if(actor is IPlayerCharacter) {
+                actorWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((actor as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();
+                actorAlias = (PlayerAlias)$""{(actor as IPlayerCharacter)!.Name} {actorWorld}"";
+                actionEvent = new(now, actionId, actorAlias) {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.c3ca79443e5ed073,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:352,targetWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((target as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();,"                ActionAnalytics? actionAnalytics = null;
+                if(target is IPlayerCharacter) {
+                    targetWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((target as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();
+                    targetAlias = (PlayerAlias)$""{(target as IPlayerCharacter)!.Name} {targetWorld}"";
+                    if(!playerActionAnalytics.TryGetValue(targetAlias, out actionAnalytics)) {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.c49ce29ada3f2604,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:517,var status = _plugin.DataManager.GetExcelSheet<Status>().GetRow(statusId);,"            var source = _plugin.ObjectTable.SearchByEntityId(sourceEntityId);
+            var target = _plugin.ObjectTable.CreateObjectReference(targetObj);
+            var status = _plugin.DataManager.GetExcelSheet<Status>().GetRow(statusId);
+            if(source is IBattleNpc) {
+                //attempt to retrieve owner in case of pet (summoner)",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.8f2be512c2ac05bf,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:530,actorWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((source as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();,"            ActionEvent? actionEvent = null;
+            if(source is IPlayerCharacter) {
+                actorWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((source as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();
+                actorAlias = (PlayerAlias)$""{(source as IPlayerCharacter)!.Name} {actorWorld}"";
+            }",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.0b46c5cf057732a6,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:569,var targetWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((target as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();,"
+                if(target is IPlayerCharacter) {
+                    var targetWorld = _plugin.DataManager.GetExcelSheet<World>().GetRow((target as IPlayerCharacter)!.HomeWorld.RowId).Name.ToString();
+                    var targetAlias = (PlayerAlias)$""{(target as IPlayerCharacter)!.Name} {targetWorld}"";
+                    targetedActionAnalytics.PlayerAnalytics.Add(targetAlias, actionAnalytics);",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.7486b7140410ff46,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:756,"Job = PlayerJobHelper.GetJobFromName(_plugin.DataManager.GetExcelSheet<ClassJob>()?.GetRow(player.ClassJobId).NameEnglish.ToString() ?? """"),","            CrystallineConflictPostMatchRow playerStats = new() {
+                Team = player.Team == 0 ? CrystallineConflictTeamName.Astra : CrystallineConflictTeamName.Umbra,
+                Job = PlayerJobHelper.GetJobFromName(_plugin.DataManager.GetExcelSheet<ClassJob>()?.GetRow(player.ClassJobId).NameEnglish.ToString() ?? """"),
+                PlayerRank = new PlayerRank() {
+                    Tier = (ArenaTier)player.ColosseumMatchRankId",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.6b418e54dbb7dbee,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:769,"playerStats.Player = (PlayerAlias)$""{MemoryService.ReadString(player.PlayerName, 32)} {_plugin.DataManager.GetExcelSheet<World>()?.GetRow(player.WorldId).Name}"";","            };
+            unsafe {
+                playerStats.Player = (PlayerAlias)$""{MemoryService.ReadString(player.PlayerName, 32)} {_plugin.DataManager.GetExcelSheet<World>()?.GetRow(player.WorldId).Name}"";
+            }
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.05f315e40d57413f,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:919,"var name = MemoryService.ReadString(player.Name, 64) ?? """";","                var player = director->Players[i];
+                if(player.EntityId == 0) continue;
+                var name = MemoryService.ReadString(player.Name, 64) ?? """";
+                var world = _plugin.DataManager.GetExcelSheet<World>()?.GetRow(player.WorldId).Name.ToString() ?? """";
+                var alias = new PlayerAlias(name, world);",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.0aadf0da4e4586e5,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:920,"var world = _plugin.DataManager.GetExcelSheet<World>()?.GetRow(player.WorldId).Name.ToString() ?? """";","                if(player.EntityId == 0) continue;
+                var name = MemoryService.ReadString(player.Name, 64) ?? """";
+                var world = _plugin.DataManager.GetExcelSheet<World>()?.GetRow(player.WorldId).Name.ToString() ?? """";
+                var alias = new PlayerAlias(name, world);
+                var team = (CrystallineConflictTeamName)(player.Team + 1);",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.91d2fc81f012e5ec,PvpStats/Managers/Game/CrystallineConflictMatchManager.cs:923,"var job = PlayerJobHelper.GetJobFromName(_plugin.DataManager.GetExcelSheet<ClassJob>()?.GetRow(player.ClassJobId).NameEnglish.ToString() ?? """");","                var alias = new PlayerAlias(name, world);
+                var team = (CrystallineConflictTeamName)(player.Team + 1);
+                var job = PlayerJobHelper.GetJobFromName(_plugin.DataManager.GetExcelSheet<ClassJob>()?.GetRow(player.ClassJobId).NameEnglish.ToString() ?? """");
+                var rank = new PlayerRank((ArenaTier)player.ColosseumMatchRankId, player.Riser);
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.c5997b540ef53737,PvpStats/Managers/WindowManager.cs:283,var statusRow = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>().GetRow(status.StatusId);,"                continue;
+            }
+            var statusRow = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>().GetRow(status.StatusId);
+            uint stackCount = status.Param;
+            var iconId = statusRow.Icon;",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.01a19b195196cab0,PvpStats/Services/AtkNodeService.cs:207,"_plugin.Log.Debug($""{count} {internalCount}\t{MemoryService.ReadString(internalArray)}"");","                //}
+
+                _plugin.Log.Debug($""{count} {internalCount}\t{MemoryService.ReadString(internalArray)}"");
+
+                internalCount++;",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.88280560097c93e3,PvpStats/Services/GameStateService.cs:37,string? currentPlayerName = _plugin.ObjectTable.LocalPlayer?.Name?.ToString();,"
+    private void OnFrameworkUpdate(IFramework framework) {
+        string? currentPlayerName = _plugin.ObjectTable.LocalPlayer?.Name?.ToString();
+        string? currentPlayerWorld = _plugin.ObjectTable.LocalPlayer?.HomeWorld.Value.Name.ToString();
+        if(currentPlayerName != null && currentPlayerWorld != null) {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.956609bfe17deb6d,PvpStats/Services/GameStateService.cs:38,string? currentPlayerWorld = _plugin.ObjectTable.LocalPlayer?.HomeWorld.Value.Name.ToString();,"    private void OnFrameworkUpdate(IFramework framework) {
+        string? currentPlayerName = _plugin.ObjectTable.LocalPlayer?.Name?.ToString();
+        string? currentPlayerWorld = _plugin.ObjectTable.LocalPlayer?.HomeWorld.Value.Name.ToString();
+        if(currentPlayerName != null && currentPlayerWorld != null) {
+            CurrentPlayer = (PlayerAlias)$""{currentPlayerName} {currentPlayerWorld}"";",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.cb53822428b95dba,PvpStats/Services/GameStateService.cs:42,DataCenterName = _plugin.ObjectTable.LocalPlayer?.CurrentWorld.Value.DataCenter.Value.Name.ToString();,"            CurrentPlayer = (PlayerAlias)$""{currentPlayerName} {currentPlayerWorld}"";
+        }
+        DataCenterName = _plugin.ObjectTable.LocalPlayer?.CurrentWorld.Value.DataCenter.Value.Name.ToString();
+    }
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.898ecff7bb564b87,PvpStats/Services/LocalizationService.cs:47,var row = _plugin.DataManager.GetExcelSheet<Addon>().GetRow(rowId);,"
+    private void AddAddonString(Dictionary<string, string> cache, string key, uint rowId) {
+        var row = _plugin.DataManager.GetExcelSheet<Addon>().GetRow(rowId);
+        cache.Add(key, row.Text.ToString());
+    }",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.d6a8e519b3eef1cd,PvpStats/Services/LocalizationService.cs:67,foreach(var row in _plugin.DataManager.GetExcelSheet<T>((ClientLanguage)language)) {,"        }
+
+        foreach(var row in _plugin.DataManager.GetExcelSheet<T>((ClientLanguage)language)) {
+            var rowData = columnProperty!.GetValue(row)?.ToString()?.Trim();
+            if(data.Equals(rowData, StringComparison.OrdinalIgnoreCase)) {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.883afd02253c8354,PvpStats/Services/LocalizationService.cs:76,"public string TranslateDataTableEntry<T>(string data, string column, ClientLanguage destinationLanguage, ClientLanguage? originLanguage = null) where T : struct, IExcelRow<T> {","    }
+
+    public string TranslateDataTableEntry<T>(string data, string column, ClientLanguage destinationLanguage, ClientLanguage? originLanguage = null) where T : struct, IExcelRow<T> {
+        originLanguage ??= _plugin.ClientState.ClientLanguage;
+        uint? rowId = null;",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.4a44967b64761e6d,PvpStats/Services/LocalizationService.cs:97,foreach(var row in _plugin.DataManager.GetExcelSheet<T>((ClientLanguage)originLanguage)!) {,"
+        //iterate over table to find rowId
+        foreach(var row in _plugin.DataManager.GetExcelSheet<T>((ClientLanguage)originLanguage)!) {
+            var rowData = columnProperty!.GetValue(row)?.ToString();
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.10d4f586a64bb5f5,PvpStats/Services/LocalizationService.cs:116,var translatedRow = _plugin.DataManager.GetExcelSheet<T>(destinationLanguage)!.Where(r => r.RowId == rowId).FirstOrDefault();,"
+        //get data from destinationLanguage
+        var translatedRow = _plugin.DataManager.GetExcelSheet<T>(destinationLanguage)!.Where(r => r.RowId == rowId).FirstOrDefault();
+        string? translatedString = columnProperty!.GetValue(translatedRow)?.ToString() ?? throw new InvalidOperationException($""row id {rowId} not found in table {type.Name} for language: {destinationLanguage}"");
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.661f238a0797718b,PvpStats/Services/LocalizationService.cs:131,"public string TranslateRankString(string rank, ClientLanguage destinationLanguage, ClientLanguage? originLanguage = null) {","    }
+
+    public string TranslateRankString(string rank, ClientLanguage destinationLanguage, ClientLanguage? originLanguage = null) {
+        //if(!IsLanguageSupported(destinationLanguage) || !IsLanguageSupported(originLanguage)) {
+        //    throw new ArgumentException(""Cannot translate to/from an unsupported client language."");",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.503b64c386725ef1,PvpStats/Services/LocalizationService.cs:166,"var translatedTier = TranslateDataTableEntry<ColosseumMatchRank>(tier, ""Unknown0"", ClientLanguage.English);","        }
+
+        var translatedTier = TranslateDataTableEntry<ColosseumMatchRank>(tier, ""Unknown0"", ClientLanguage.English);
+
+        if(riser != null) {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.ef01b49375b38d4a,PvpStats/Services/MemoryService.cs:385,"public static string? ReadString(byte* b, int maxLength = 0, bool nullIsEmpty = true) {","    }
+
+    public static string? ReadString(byte* b, int maxLength = 0, bool nullIsEmpty = true) {
+        if(b == null) return nullIsEmpty ? string.Empty : null;
+        if(maxLength > 0) return Encoding.UTF8.GetString(b, maxLength).Split('\0')[0];",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.98d13ab3a91dcd1a,PvpStats/Services/PlayerLinkService.cs:186,var worlds = _plugin.DataManager.GetExcelSheet<World>();,"        var aliasLinkMap = new Dictionary<PlayerAlias, PlayerAliasLink>();
+        var playerSet = new HashSet<PlayerAlias>(players);
+        var worlds = _plugin.DataManager.GetExcelSheet<World>();
+        var worldNameToId = worlds.GroupBy(w => w.Name.ToString(), StringComparer.OrdinalIgnoreCase).ToDictionary(g => g.Key, g => g.First().RowId, StringComparer.OrdinalIgnoreCase);
+        var worldIdToName = worlds.ToDictionary(w => w.RowId, w => w.Name.ToString());",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.a4cd65fbc74c0d5c,PvpStats/Services/PlayerLinkService.cs:187,"var worldNameToId = worlds.GroupBy(w => w.Name.ToString(), StringComparer.OrdinalIgnoreCase).ToDictionary(g => g.Key, g => g.First().RowId, StringComparer.OrdinalIgnoreCase);","        var playerSet = new HashSet<PlayerAlias>(players);
+        var worlds = _plugin.DataManager.GetExcelSheet<World>();
+        var worldNameToId = worlds.GroupBy(w => w.Name.ToString(), StringComparer.OrdinalIgnoreCase).ToDictionary(g => g.Key, g => g.First().RowId, StringComparer.OrdinalIgnoreCase);
+        var worldIdToName = worlds.ToDictionary(w => w.RowId, w => w.Name.ToString());
+",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.8dd4ee982c309805,PvpStats/Services/PlayerLinkService.cs:188,"var worldIdToName = worlds.ToDictionary(w => w.RowId, w => w.Name.ToString());","        var worlds = _plugin.DataManager.GetExcelSheet<World>();
+        var worldNameToId = worlds.GroupBy(w => w.Name.ToString(), StringComparer.OrdinalIgnoreCase).ToDictionary(g => g.Key, g => g.First().RowId, StringComparer.OrdinalIgnoreCase);
+        var worldIdToName = worlds.ToDictionary(w => w.RowId, w => w.Name.ToString());
+
+        var results = GetPreviousAliasesFunction.InvokeFunc();",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.e6fdc2fd223e028e,PvpStats/Windows/DebugWindow.cs:323,foreach(var duty in _plugin.DataManager.GetExcelSheet<ContentFinderCondition>()) {,"
+                    if(ImGui.Button(""Show all Duties"")) {
+                        foreach(var duty in _plugin.DataManager.GetExcelSheet<ContentFinderCondition>()) {
+                            _plugin.Log.Debug($""id: {duty.RowId} name: {duty.Name}"");
+                        }",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.ea258258c22b2a89,PvpStats/Windows/DebugWindow.cs:329,foreach(var zone in _plugin.DataManager.GetExcelSheet<TerritoryType>()) {,"
+                    if(ImGui.Button(""Show all Zones"")) {
+                        foreach(var zone in _plugin.DataManager.GetExcelSheet<TerritoryType>()) {
+                            _plugin.Log.Debug($""id: {zone.RowId} name: {zone.PlaceName.Value.Name}"");
+                        }",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.0cf2257504c876fb,PvpStats/Windows/DebugWindow.cs:330,"_plugin.Log.Debug($""id: {zone.RowId} name: {zone.PlaceName.Value.Name}"");","                    if(ImGui.Button(""Show all Zones"")) {
+                        foreach(var zone in _plugin.DataManager.GetExcelSheet<TerritoryType>()) {
+                            _plugin.Log.Debug($""id: {zone.RowId} name: {zone.PlaceName.Value.Name}"");
+                        }
+                    }",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.fcc01ced44575936,PvpStats/Windows/DebugWindow.cs:461,"ImGui.TextUnformatted(MemoryService.ReadString(player.Name, 64));","                        var player = instanceDirector->Players[i];
+                        ImGui.TableNextColumn();
+                        ImGui.TextUnformatted(MemoryService.ReadString(player.Name, 64));
+                        ImGui.TableNextColumn();
+                        ImGui.TextUnformatted(player.WorldId.ToString());",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.4319b2d1f7ea459f,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:193,var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(mEvent.ActionId);,"                    continue;
+                }
+                var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(mEvent.ActionId);
+                if(!_actionNames.ContainsKey(action.RowId)) {
+                    _actionNames.Add(action.RowId, action.Name.ToString());",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.ca1fe68b8a8a7ac2,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:195,"_actionNames.Add(action.RowId, action.Name.ToString());","                var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(mEvent.ActionId);
+                if(!_actionNames.ContainsKey(action.RowId)) {
+                    _actionNames.Add(action.RowId, action.Name.ToString());
+                    _actionIcons.Add(action.RowId, action.Icon);
+                }",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.d8b73f46ee0744c1,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:278,var row = Plugin.DataManager.GetExcelSheet<BNpcName>(ClientLanguage.English).GetRow(nameId);,"            foreach(var nameId in nameIds) {
+                if(_bNPCNames.TryAdd(nameId, """")) {
+                    var row = Plugin.DataManager.GetExcelSheet<BNpcName>(ClientLanguage.English).GetRow(nameId);
+                    string fullName = row.Singular.ToString();
+                    if(row.Article == 0) {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.751faa6130a2cb2a,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:279,string fullName = row.Singular.ToString();,"                if(_bNPCNames.TryAdd(nameId, """")) {
+                    var row = Plugin.DataManager.GetExcelSheet<BNpcName>(ClientLanguage.English).GetRow(nameId);
+                    string fullName = row.Singular.ToString();
+                    if(row.Article == 0) {
+                        if(row.StartsWithVowel == 0) {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.b0a6d08e30b57f57,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:329,var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(actionKey);,"            void addActionToCache(uint actionKey) {
+                try {
+                    var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(actionKey);
+                    _actionNames.TryAdd(action.RowId, action.Name.ToString());
+                    _actionIcons.TryAdd(action.RowId, action.Icon);",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.1d4d8d199679348f,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:330,"_actionNames.TryAdd(action.RowId, action.Name.ToString());","                try {
+                    var action = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>(ClientLanguage.English).GetRow(actionKey);
+                    _actionNames.TryAdd(action.RowId, action.Name.ToString());
+                    _actionIcons.TryAdd(action.RowId, action.Icon);
+                } catch {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.5f7a9f16e6f972c6,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:359,var status = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>(ClientLanguage.English).GetRow(statusId);,"            void addStatusToCache(uint statusId) {
+                try {
+                    var status = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>(ClientLanguage.English).GetRow(statusId);
+                    _actionNames.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, status.Name.ToString());
+                    _actionIcons.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, status.Icon);",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。
+read.929ea9905c05c965,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:360,"_actionNames.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, status.Name.ToString());","                try {
+                    var status = Plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Status>(ClientLanguage.English).GetRow(statusId);
+                    _actionNames.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, status.Name.ToString());
+                    _actionIcons.TryAdd(status.RowId + CrystallineConflictMatchTimeline.StatusIdOffset, status.Icon);
+                } catch {",检查语言参数；角色名/服务器名可能参与身份关联和数据库键，不得直接用中文替换存储值。

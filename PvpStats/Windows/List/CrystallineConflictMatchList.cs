@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
 using PvpStats.Helpers;
@@ -6,24 +7,59 @@ using PvpStats.Types.Match;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PvpStats.Windows.List;
 internal class CrystallineConflictMatchList : MatchList<CrystallineConflictMatch> {
 
+    private volatile bool _sortDirty = true;
     public override string Name => "CC Matches";
+    protected override bool ShowHeader { get; set; } = true;
+    protected override bool DynamicColumns { get; set; } = false;
+    protected override ImGuiTableFlags TableFlags { get; set; } = ImGuiTableFlags.Hideable | ImGuiTableFlags.Sortable
+        | ImGuiTableFlags.Resizable | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV
+        | ImGuiTableFlags.ScrollX | ImGuiTableFlags.ScrollY;
 
     protected override List<ColumnParams> Columns { get; set; } = new() {
-        new ColumnParams{Name = "Start Time", Flags = ImGuiTableColumnFlags.WidthFixed, Width = 125f },
-        new ColumnParams{Name = "Arena", Flags = ImGuiTableColumnFlags.WidthFixed, Width = 145f },
-        new ColumnParams{Name = "Job", Flags = ImGuiTableColumnFlags.WidthFixed, Width = 40f, Priority = 1 },
-        new ColumnParams{Name = "Queue", Flags = ImGuiTableColumnFlags.WidthFixed, Width = 50f },
-        new ColumnParams{Name = "Duration", Flags = ImGuiTableColumnFlags.WidthFixed, Width = 40f, Priority = 2 },
-        new ColumnParams{Name = "Result", Flags = ImGuiTableColumnFlags.WidthFixed, Width = 40f },
-        new ColumnParams{Name = "RankAfter", Flags = ImGuiTableColumnFlags.WidthFixed, Width = 125f, Priority = 3 },
-        new ColumnParams{Name = "Tags", Flags = ImGuiTableColumnFlags.WidthStretch, Width = 80f, Priority = 4 },
+        new ColumnParams{Name = "Start Time", Id = 1, Flags = ImGuiTableColumnFlags.WidthFixed | ImGuiTableColumnFlags.DefaultSort | ImGuiTableColumnFlags.PreferSortDescending, Width = 145f },
+        new ColumnParams{Name = "Arena", Id = 2, Flags = ImGuiTableColumnFlags.WidthFixed, Width = 130f },
+        new ColumnParams{Name = "Job", Id = 3, Flags = ImGuiTableColumnFlags.WidthFixed, Width = 105f, Priority = 1 },
+        new ColumnParams{Name = "Queue", Id = 4, Flags = ImGuiTableColumnFlags.WidthFixed, Width = 75f },
+        new ColumnParams{Name = "Duration", Id = 5, Flags = ImGuiTableColumnFlags.WidthFixed, Width = 65f, Priority = 2 },
+        new ColumnParams{Name = "Result", Id = 6, Flags = ImGuiTableColumnFlags.WidthFixed, Width = 65f },
+        new ColumnParams{Name = "RankAfter", Id = 7, Flags = ImGuiTableColumnFlags.WidthFixed, Width = 150f, Priority = 3 },
+        new ColumnParams{Name = "Tags", Id = 8, Flags = ImGuiTableColumnFlags.WidthStretch, Width = 90f, Priority = 4 },
     };
 
     public CrystallineConflictMatchList(Plugin plugin) : base(plugin, plugin.CCCache, plugin.CCStatsEngine.RefreshLock) {
+    }
+
+    protected override Task RefreshInner(List<CrystallineConflictMatch> matches, List<CrystallineConflictMatch> additions, List<CrystallineConflictMatch> removals) {
+        var result = base.RefreshInner(matches, additions, removals);
+        _sortDirty = true;
+        return result;
+    }
+
+    protected override void PostColumnSetup() {
+        ImGui.TableSetupScrollFreeze(1, 1);
+        var specs = ImGui.TableGetSortSpecs();
+        if(specs.SpecsCount == 0 || (!specs.SpecsDirty && !_sortDirty)) return;
+        Func<CrystallineConflictMatch, object> key = specs.Specs.ColumnUserID switch {
+            2 => m => m.Arena.HasValue ? MatchHelper.GetArenaName(m.Arena.Value) : "",
+            3 => m => ChineseText.EnumName(m.LocalPlayerTeamMember?.Job),
+            4 => m => (int)m.MatchType,
+            5 => m => m.MatchDuration?.Ticks ?? 0L,
+            6 => m => m.IsSpectated ? 2 : m.MatchWinner is not (CrystallineConflictTeamName.Astra or CrystallineConflictTeamName.Umbra) ? 3 : m.IsWin ? 0 : 1,
+            7 => m => m.PostMatch?.RankAfter?.TotalCredit ?? int.MinValue,
+            8 => m => m.Tags,
+            _ => m => m.DutyStartTime,
+        };
+        DataModel = specs.Specs.SortDirection == ImGuiSortDirection.Ascending
+            ? DataModel.OrderBy(key).ToList() : DataModel.OrderByDescending(key).ToList();
+        GoToPage(0);
+        specs.SpecsDirty = false;
+        _sortDirty = false;
     }
 
     public override void DrawListItem(CrystallineConflictMatch item) {
@@ -38,29 +74,29 @@ internal class CrystallineConflictMatchList : MatchList<CrystallineConflictMatch
         }
         ImGui.TableNextColumn();
         if(!item.IsSpectated) {
-            var localPlayerJob = item.LocalPlayerTeamMember!.Job;
-            ImGuiHelper.CenterAlignCursor(localPlayerJob.ToString() ?? "");
-            ImGui.TextColored(_plugin.Configuration.GetJobColor(localPlayerJob), localPlayerJob.ToString());
+            var localPlayerJob = item.LocalPlayerTeamMember?.Job;
+            ImGuiHelper.CenterAlignCursor(ChineseText.EnumName(localPlayerJob));
+            ImGui.TextColored(_plugin.Configuration.GetJobColor(localPlayerJob), ChineseText.EnumName(localPlayerJob));
         }
         ImGui.TableNextColumn();
-        ImGui.Text($"{item.MatchType}");
+        ImGui.Text(ChineseText.EnumName(item.MatchType));
         ImGui.TableNextColumn();
         var timeSpanString = ImGuiHelper.GetTimeSpanString(item.MatchDuration ?? TimeSpan.Zero);
         ImGuiHelper.DrawNumericCell(timeSpanString, -10f);
         ImGui.TableNextColumn();
-        bool noWinner = item.MatchWinner is null;
+        bool noWinner = item.MatchWinner is not (CrystallineConflictTeamName.Astra or CrystallineConflictTeamName.Umbra);
         bool isWin = item.MatchWinner == item.LocalPlayerTeam?.TeamName;
         bool isSpectated = item.LocalPlayerTeam is null;
         Vector4 color;
         string resultText;
         if(isSpectated) {
             color = ImGuiColors.DalamudWhite;
-            resultText = "N/A";
+            resultText = "观战";
         } else {
             color = isWin ? _plugin.Configuration.Colors.Win : _plugin.Configuration.Colors.Loss;
             color = noWinner ? _plugin.Configuration.Colors.Other : color;
-            resultText = isWin ? "WIN" : "LOSS";
-            resultText = noWinner ? "???" : resultText;
+            resultText = isWin ? "胜利" : "失败";
+            resultText = noWinner ? ChineseText.Text("Unknown") : resultText;
         }
         ImGuiHelper.CenterAlignCursor(resultText);
         ImGui.TextColored(color, resultText);

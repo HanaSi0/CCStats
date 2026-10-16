@@ -1,0 +1,977 @@
+﻿key,original,zh_CN,source,context,raw_csharp,notes
+text.0ac01b3165cbb1f9,IS,是,PvpStats/Windows/ConfigWindow.cs:21,FieldDeclaration,"""IS""",界面候选文本；纯内部标识、格式串可留空。
+text.3f969e9e58f7b127,IS NOT,不是,PvpStats/Windows/ConfigWindow.cs:21,FieldDeclaration,"""IS NOT""",界面候选文本；纯内部标识、格式串可留空。
+text.80417f40067b8e6f,PvP Tracker Settings,PvP 记录器设置,PvpStats/Windows/ConfigWindow.cs:29,ConstructorDeclaration,"""PvP Tracker Settings""",界面候选文本；纯内部标识、格式串可留空。
+text.9749f627b3189d2d,Interface,界面,PvpStats/Windows/ConfigWindow.cs:74,ImRaii.TabItem,"""Interface""",界面候选文本；纯内部标识、格式串可留空。
+text.c4710f9cc7cd6de9,Player Links,玩家关联,PvpStats/Windows/ConfigWindow.cs:79,ImRaii.TabItem,"""Player Links""",界面候选文本；纯内部标识、格式串可留空。
+text.4bf09a5013c97171,Performance,性能,PvpStats/Windows/ConfigWindow.cs:84,ImRaii.TabItem,"""Performance""",界面候选文本；纯内部标识、格式串可留空。
+text.934f4416165ce912,General,通用,PvpStats/Windows/ConfigWindow.cs:94,ImGui.TextColored,"""General""",界面候选文本；纯内部标识、格式串可留空。
+text.8cb8ff582ec85753,Fixed,固定,PvpStats/Windows/ConfigWindow.cs:97,MethodDeclaration,"""Fixed""",界面候选文本；纯内部标识、格式串可留空。
+text.e9c361ae6d2a087e,Stretch,拉伸,PvpStats/Windows/ConfigWindow.cs:97,MethodDeclaration,"""Stretch""",界面候选文本；纯内部标识、格式串可留空。
+text.56ef94f7d9b5d3f5,Column styles,列宽样式,PvpStats/Windows/ConfigWindow.cs:99,ImGui.Combo,"""Column styles""",界面候选文本；纯内部标识、格式串可留空。
+text.2abb80b4a8852609,Tracker Window,记录器窗口,PvpStats/Windows/ConfigWindow.cs:106,ImGui.TextColored,"""Tracker Window""",界面候选文本；纯内部标识、格式串可留空。
+text.5216c8f8ed079841,Filter child height,筛选子项高度,PvpStats/Windows/ConfigWindow.cs:110,ImGui.SliderInt,"""Filter child height""",界面候选文本；纯内部标识、格式串可留空。
+text.9c5ffd3f88651082,Offset window size when filters hidden,隐藏筛选时调整窗口大小,PvpStats/Windows/ConfigWindow.cs:115,ImGui.Checkbox,"""Offset window size when filters hidden""",界面候选文本；纯内部标识、格式串可留空。
+text.cf4bb07476bb62fe,The height of the window will be offset by the height of the filter child whenever filters are shown or hidden.,,PvpStats/Windows/ConfigWindow.cs:119,ImGuiHelper.HelpMarker,"""The height of the window will be offset by the height of the filter child whenever filters are shown or hidden.""",界面候选文本；纯内部标识、格式串可留空。
+text.52fb634de8f573b0,Shrink window on collapse,折叠时缩小窗口,PvpStats/Windows/ConfigWindow.cs:121,ImGui.Checkbox,"""Shrink window on collapse""",界面候选文本；纯内部标识、格式串可留空。
+text.bfd780f796dad396,Anchor left-side of window on shrink,缩小时锚定窗口左侧,PvpStats/Windows/ConfigWindow.cs:126,ImGui.Checkbox,"""Anchor left-side of window on shrink""",界面候选文本；纯内部标识、格式串可留空。
+text.19b34ccbf9d67066,Only applies to previous setting. Otherwise anchors on the right-side.,,PvpStats/Windows/ConfigWindow.cs:130,ImGuiHelper.HelpMarker,"""Only applies to previous setting. Otherwise anchors on the right-side.""",界面候选文本；纯内部标识、格式串可留空。
+text.3bd91f45fd7d698f,Save window size per tab,按标签页保存窗口大小,PvpStats/Windows/ConfigWindow.cs:132,ImGui.Checkbox,"""Save window size per tab""",界面候选文本；纯内部标识、格式串可留空。
+text.13ea0d0ab012b194,Resize window leftwards on tab switch,切换标签页时向左调整窗口大小,PvpStats/Windows/ConfigWindow.cs:137,ImGui.Checkbox,"""Resize window leftwards on tab switch""",界面候选文本；纯内部标识、格式串可留空。
+text.3115c8e85ae1167a,Color scale stat values,按数值渐变着色,PvpStats/Windows/ConfigWindow.cs:142,ImGui.Checkbox,"""Color scale stat values""",界面候选文本；纯内部标识、格式串可留空。
+text.8be8dbada7648df4,Match Details Window,比赛详情窗口,PvpStats/Windows/ConfigWindow.cs:148,ImGui.TextColored,"""Match Details Window""",界面候选文本；纯内部标识、格式串可留空。
+text.6e925d070c13e702,Show background image,显示背景图片,PvpStats/Windows/ConfigWindow.cs:158,ImGui.Checkbox,"""Show background image""",界面候选文本；纯内部标识、格式串可留空。
+text.da03b6f4e022a70b,Always show player team on left,始终在左侧显示我方队伍,PvpStats/Windows/ConfigWindow.cs:163,ImGui.Checkbox,"""Always show player team on left""",界面候选文本；纯内部标识、格式串可留空。
+text.1be3c9d07b0dbe51,Anchor team stats,锚定队伍统计,PvpStats/Windows/ConfigWindow.cs:168,ImGui.Checkbox,"""Anchor team stats""",界面候选文本；纯内部标识、格式串可留空。
+text.dbbacd925cd977fa,Team stat rows will not be affected by sorting.,,PvpStats/Windows/ConfigWindow.cs:172,ImGuiHelper.HelpMarker,"""Team stat rows will not be affected by sorting.""",界面候选文本；纯内部标识、格式串可留空。
+text.35675e6d827f8873,Team row alpha,队伍行不透明度,PvpStats/Windows/ConfigWindow.cs:190,ImGui.SliderFloat,"""Team row alpha""",界面候选文本；纯内部标识、格式串可留空。
+text.7e1a48ae3c3d690b,"$""{FontAwesomeIcon.Undo.ToIconString()}###teamAlphaReset""",,PvpStats/Windows/ConfigWindow.cs:196,ImGui.Button,"$""{FontAwesomeIcon.Undo.ToIconString()}###teamAlphaReset""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.402be0c66821819f,Reset,重置,PvpStats/Windows/ConfigWindow.cs:201; PvpStats/Windows/ConfigWindow.cs:215,ImGuiHelper.WrappedTooltip,"""Reset""",界面候选文本；纯内部标识、格式串可留空。
+text.8336751ff06e7903,Player row alpha,玩家行不透明度,PvpStats/Windows/ConfigWindow.cs:204,ImGui.SliderFloat,"""Player row alpha""",界面候选文本；纯内部标识、格式串可留空。
+text.732d2a7395790aa6,"$""{FontAwesomeIcon.Undo.ToIconString()}###playerAlphaReset""",,PvpStats/Windows/ConfigWindow.cs:210,ImGui.Button,"$""{FontAwesomeIcon.Undo.ToIconString()}###playerAlphaReset""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.421962567f30fb3e,Colors,颜色,PvpStats/Windows/ConfigWindow.cs:218,ImGui.TextColored,"""Colors""",界面候选文本；纯内部标识、格式串可留空。
+text.33634590e864f44f,Reset to Defaults,重置为默认值,PvpStats/Windows/ConfigWindow.cs:223,ImGui.Button,"""Reset to Defaults""",界面候选文本；纯内部标识、格式串可留空。
+text.e161dfb0ea619aaa,Revert Changes,还原更改,PvpStats/Windows/ConfigWindow.cs:230,ImGui.Button,"""Revert Changes""",界面候选文本；纯内部标识、格式串可留空。
+text.9974ab81e4c30217,Colors will lock in after this window is closed or a non-color setting is changed.,,PvpStats/Windows/ConfigWindow.cs:236,ImGuiHelper.HelpMarker,"""Colors will lock in after this window is closed or a non-color setting is changed.""",界面候选文本；纯内部标识、格式串可留空。
+text.e94235d0dbcd8964,c1,,PvpStats/Windows/ConfigWindow.cs:242,ImGui.TableSetupColumn,"""c1""",界面候选文本；纯内部标识、格式串可留空。
+text.5ad46a81ac422fc9,c2,,PvpStats/Windows/ConfigWindow.cs:243,ImGui.TableSetupColumn,"""c2""",界面候选文本；纯内部标识、格式串可留空。
+text.1555877e5bda5916,c3,,PvpStats/Windows/ConfigWindow.cs:244,ImGui.TableSetupColumn,"""c3""",界面候选文本；纯内部标识、格式串可留空。
+text.c6b1c4bab9ccc58b,Headers,表头,PvpStats/Windows/ConfigWindow.cs:248; PvpStats/Windows/ConfigWindow.cs:349,ImGui.ColorEdit4,"""Headers""",界面候选文本；纯内部标识、格式串可留空。
+text.520525a3a2429bb7,Favorites,收藏,PvpStats/Windows/ConfigWindow.cs:253,ImGui.ColorEdit4,"""Favorites""",界面候选文本；纯内部标识、格式串可留空。
+text.a723ec9d3c1c53a4,Wins,胜场,PvpStats/Windows/ConfigWindow.cs:260,ImGui.ColorEdit4,"""Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.d3e9a65cfe945642,Losses,败场,PvpStats/Windows/ConfigWindow.cs:265,ImGui.ColorEdit4,"""Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.39eda6abec26f2c7,Draws,平局,PvpStats/Windows/ConfigWindow.cs:270,ImGui.ColorEdit4,"""Draws""",界面候选文本；纯内部标识、格式串可留空。
+text.b4d9800a4df30932,Local Player,本地玩家,PvpStats/Windows/ConfigWindow.cs:277,ImGui.ColorEdit4,"""Local Player""",界面候选文本；纯内部标识、格式串可留空。
+text.fd2e04ac75de6662,Player Team,我方队伍,PvpStats/Windows/ConfigWindow.cs:282,ImGui.ColorEdit4,"""Player Team""",界面候选文本；纯内部标识、格式串可留空。
+text.124ebec929172a89,Enemy Team,敌方队伍,PvpStats/Windows/ConfigWindow.cs:287,ImGui.ColorEdit4,"""Enemy Team""",界面候选文本；纯内部标识、格式串可留空。
+text.ff29eb9966774385,Tank,,PvpStats/Windows/ConfigWindow.cs:294,ImGui.ColorEdit4,"""Tank""",界面候选文本；纯内部标识、格式串可留空。
+text.20c1de6bca2ab6af,Healer,,PvpStats/Windows/ConfigWindow.cs:299,ImGui.ColorEdit4,"""Healer""",界面候选文本；纯内部标识、格式串可留空。
+text.742f0f7acafacf41,Melee,,PvpStats/Windows/ConfigWindow.cs:304,ImGui.ColorEdit4,"""Melee""",界面候选文本；纯内部标识、格式串可留空。
+text.fd56d1bc1595e36c,Ranged,,PvpStats/Windows/ConfigWindow.cs:309,ImGui.ColorEdit4,"""Ranged""",界面候选文本；纯内部标识、格式串可留空。
+text.d195e76353464e16,Caster,,PvpStats/Windows/ConfigWindow.cs:314,ImGui.ColorEdit4,"""Caster""",界面候选文本；纯内部标识、格式串可留空。
+text.b2216f8dc9ac0f2c,High stat,高数值,PvpStats/Windows/ConfigWindow.cs:321,ImGui.ColorEdit4,"""High stat""",界面候选文本；纯内部标识、格式串可留空。
+text.451347380dbcb130,Low stat,低数值,PvpStats/Windows/ConfigWindow.cs:327,ImGui.ColorEdit4,"""Low stat""",界面候选文本；纯内部标识、格式串可留空。
+text.92ccacd2d655ba03,Player row text,玩家行文本,PvpStats/Windows/ConfigWindow.cs:335,ImGui.ColorEdit4,"""Player row text""",界面候选文本；纯内部标识、格式串可留空。
+text.a4a80b17c5c46357,Team row text,队伍行文本,PvpStats/Windows/ConfigWindow.cs:341,ImGui.ColorEdit4,"""Team row text""",界面候选文本；纯内部标识、格式串可留空。
+text.bcff36dd2f6e98ee,Enable player linking,启用玩家关联,PvpStats/Windows/ConfigWindow.cs:356,ImGui.Checkbox,"""Enable player linking""",界面候选文本；纯内部标识、格式串可留空。
+text.489d1666e1f540fa,Enable combining of player stats with different aliases linked with the same unique character or player.,,PvpStats/Windows/ConfigWindow.cs:364,ImGuiHelper.HelpMarker,"""Enable combining of player stats with different aliases linked with the same unique character or player.""",界面候选文本；纯内部标识、格式串可留空。
+text.7c28997ae4f63145,Enable auto linking (requires PlayerTrack),启用自动关联（需要 PlayerTrack）,PvpStats/Windows/ConfigWindow.cs:366,ImGui.Checkbox,"""Enable auto linking (requires PlayerTrack)""",界面候选文本；纯内部标识、格式串可留空。
+text.3c9e60972402950b,"Use name change data from PlayerTrack to create player links.
+
+",,PvpStats/Windows/ConfigWindow.cs:374,ImGuiHelper.HelpMarker,"""Use name change data from PlayerTrack to create player links.\n\n""",界面候选文本；纯内部标识、格式串可留空。
+text.f991a50270289092,Does not work on your own character (for now).,,PvpStats/Windows/ConfigWindow.cs:375,ImGuiHelper.HelpMarker,"""Does not work on your own character (for now).""",界面候选文本；纯内部标识、格式串可留空。
+text.85ff7328bbbf8e96,Enable manual linking,启用手动关联,PvpStats/Windows/ConfigWindow.cs:377,ImGui.Checkbox,"""Enable manual linking""",界面候选文本；纯内部标识、格式串可留空。
+text.4bdf30a514b325e8,Use the manual tab to create player links by hand or to track,,PvpStats/Windows/ConfigWindow.cs:385,ImGuiHelper.HelpMarker,"""Use the manual tab to create player links by hand or to track""",界面候选文本；纯内部标识、格式串可留空。
+text.6e99ae31258b3ad2," un-covered auto link scenarios such as personal character alias changes, track known alt characters or to override mistakes.
+
+Enter format as <player name> <home world>",,PvpStats/Windows/ConfigWindow.cs:386,ImGuiHelper.HelpMarker,""" un-covered auto link scenarios such as personal character alias changes, track known alt characters or to override mistakes.\n\nEnter format as <player name> <home world>""",界面候选文本；纯内部标识、格式串可留空。
+text.809d88bd4e8bd98c,Auto,自动,PvpStats/Windows/ConfigWindow.cs:388,ImRaii.TabItem,"""Auto""",界面候选文本；纯内部标识、格式串可留空。
+text.3641aab763a861bd,Update Now,立即更新,PvpStats/Windows/ConfigWindow.cs:394,ImGui.Button,"""Update Now""",界面候选文本；纯内部标识、格式串可留空。
+text.4627940de2d88771,Manual,手动,PvpStats/Windows/ConfigWindow.cs:408,ImRaii.TabItem,"""Manual""",界面候选文本；纯内部标识、格式串可留空。
+text.87c4c5d102d52785,Players with auto-linked aliases: ,已自动关联别名的玩家：,PvpStats/Windows/ConfigWindow.cs:417,ImGui.Text,"""Players with auto-linked aliases: """,界面候选文本；纯内部标识、格式串可留空。
+text.0f34988bfa853533,LinkedAlias,,PvpStats/Windows/ConfigWindow.cs:433,ImGui.TableSetupColumn,"""LinkedAlias""",界面候选文本；纯内部标识、格式串可留空。
+text.00feecfde326ec64,Verb,,PvpStats/Windows/ConfigWindow.cs:434,ImGui.TableSetupColumn,"""Verb""",界面候选文本；纯内部标识、格式串可留空。
+text.82f446b1790a0b64,SourceAlias,,PvpStats/Windows/ConfigWindow.cs:435,ImGui.TableSetupColumn,"""SourceAlias""",界面候选文本；纯内部标识、格式串可留空。
+text.b21648fb1a0e16fa,Button,,PvpStats/Windows/ConfigWindow.cs:436,ImGui.TableSetupColumn,"""Button""",界面候选文本；纯内部标识、格式串可留空。
+text.88c3604f3547f6b9,Save,保存,PvpStats/Windows/ConfigWindow.cs:449,ImGui.Button,"""Save""",界面候选文本；纯内部标识、格式串可留空。
+text.0638b3df83185598,Saved!,已保存！,PvpStats/Windows/ConfigWindow.cs:468,ImGui.TextColored,"""Saved!""",界面候选文本；纯内部标识、格式串可留空。
+text.e1fa0fb0ef17bfd7,Cancel,取消,PvpStats/Windows/ConfigWindow.cs:474,ImGui.Button,"""Cancel""",界面候选文本；纯内部标识、格式串可留空。
+text.e5038ac5c3b43a53,name,,PvpStats/Windows/ConfigWindow.cs:488,ImGui.TableSetupColumn,"""name""",界面候选文本；纯内部标识、格式串可留空。
+text.6630c9620636df08,homeworld,,PvpStats/Windows/ConfigWindow.cs:489,ImGui.TableSetupColumn,"""homeworld""",界面候选文本；纯内部标识、格式串可留空。
+text.df4ef28b20322339,"$""###{playerLink.GetHashCode()}--CurrentAlias""",,PvpStats/Windows/ConfigWindow.cs:512,ImGui.InputTextWithHint,"$""###{playerLink.GetHashCode()}--CurrentAlias""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.1ec9e9ab382800db,Enter main player,输入主玩家,PvpStats/Windows/ConfigWindow.cs:512,ImGui.InputTextWithHint,"""Enter main player""",界面候选文本；纯内部标识、格式串可留空。
+text.47adc2e052a3f214,"$""###{playerLink.GetHashCode()}--IsUnlink""",,PvpStats/Windows/ConfigWindow.cs:523,ImGui.Combo,"$""###{playerLink.GetHashCode()}--IsUnlink""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.da9589a8183e868e,"$""###{playerLink.GetHashCode()}--LinkedAlias""",,PvpStats/Windows/ConfigWindow.cs:529,ImGui.InputTextWithHint,"$""###{playerLink.GetHashCode()}--LinkedAlias""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.e8d0caebe901c560,Enter linked player,输入关联玩家,PvpStats/Windows/ConfigWindow.cs:529,ImGui.InputTextWithHint,"""Enter linked player""",界面候选文本；纯内部标识、格式串可留空。
+text.4e4226b1537f2cb3,"$""{FontAwesomeIcon.Plus.ToIconString()}###{playerLink.GetHashCode()}--Button""",,PvpStats/Windows/ConfigWindow.cs:543,ImGui.Button,"$""{FontAwesomeIcon.Plus.ToIconString()}###{playerLink.GetHashCode()}--Button""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.4a6a442ead56ccbe,"$""{FontAwesomeIcon.Trash.ToIconString()}###{playerLink.GetHashCode()}--Button""",,PvpStats/Windows/ConfigWindow.cs:549,ImGui.Button,"$""{FontAwesomeIcon.Trash.ToIconString()}###{playerLink.GetHashCode()}--Button""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.e1a990e4ff0ddf93,Add Link,添加关联,PvpStats/Windows/ConfigWindow.cs:555,ImGuiHelper.WrappedTooltip,"""Add Link""",界面候选文本；纯内部标识、格式串可留空。
+text.d3f41c042f29b5f4,Remove,移除,PvpStats/Windows/ConfigWindow.cs:555,ImGuiHelper.WrappedTooltip,"""Remove""",界面候选文本；纯内部标识、格式串可留空。
+text.f318dc085c6c3dfb,Match Caching,比赛记录缓存,PvpStats/Windows/ConfigWindow.cs:559,ImGui.TextColored,"""Match Caching""",界面候选文本；纯内部标识、格式串可留空。
+text.d62be2e0338803a4,Enabling these options will cache your entire match history in memory. Can help with refresh performance at the cost of increased memory usage.,,PvpStats/Windows/ConfigWindow.cs:560,ImGuiHelper.HelpMarker,"""Enabling these options will cache your entire match history in memory. Can help with refresh performance at the cost of increased memory usage.""",界面候选文本；纯内部标识、格式串可留空。
+text.43ba4a0450195a69,Crystalline Conflict,,PvpStats/Windows/ConfigWindow.cs:563,ImGui.Checkbox,"""Crystalline Conflict""",界面候选文本；纯内部标识、格式串可留空。
+text.97df4524c176f071,Enhanced Tracking Features,,PvpStats/Windows/ConfigWindow.cs:575,ImGui.TextColored,"""Enhanced Tracking Features""",界面候选文本；纯内部标识、格式串可留空。
+text.2944201af3d291a1,Disabling these features can help save disk space.,,PvpStats/Windows/ConfigWindow.cs:576,ImGuiHelper.HelpMarker,"""Disabling these features can help save disk space.""",界面候选文本；纯内部标识、格式串可留空。
+text.c4e68861a4ad5c43,Crystalline Conflict Timeline Tracking,,PvpStats/Windows/ConfigWindow.cs:579,ImGui.Checkbox,"""Crystalline Conflict Timeline Tracking""",界面候选文本；纯内部标识、格式串可留空。
+text.ec70e1c522f7d25e,Crystalline Conflict Action Tracking,,PvpStats/Windows/ConfigWindow.cs:586,ImGui.Checkbox,"""Crystalline Conflict Action Tracking""",界面候选文本；纯内部标识、格式串可留空。
+text.9eb7c585da44dea3,PvP Tracker,,PvpStats/Windows/SplashWindow.cs:14,ConstructorDeclaration,"""PvP Tracker""",界面候选文本；纯内部标识、格式串可留空。
+text.9c1afc7b0ae86b5f,Trackers:,,PvpStats/Windows/SplashWindow.cs:24,ImGui.TextUnformatted,"""Trackers:""",界面候选文本；纯内部标识、格式串可留空。
+text.5fb1fc1db3f24d33,Crystalline Conflict,,PvpStats/Windows/SplashWindow.cs:25,ImGui.Button,"""Crystalline Conflict""",界面候选文本；纯内部标识、格式串可留空。
+text.b357a11e87dc59bd,"$""{FontAwesomeIcon.Cog.ToIconString()}##--OpenSettings""",,PvpStats/Windows/SplashWindow.cs:33,ImGui.Button,"$""{FontAwesomeIcon.Cog.ToIconString()}##--OpenSettings""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.392367539326c8b4,Settings,,PvpStats/Windows/SplashWindow.cs:37,ImGuiHelper.WrappedTooltip,"""Settings""",界面候选文本；纯内部标识、格式串可留空。
+text.625c1a98e4a6f00d,Process Match Error,,PvpStats/Windows/RefreshableSync.cs:15,Plugin.Log2.Error,"""Process Match Error""",界面候选文本；纯内部标识、格式串可留空。
+text.e75ee740ca01ef5f,"{0,-50}: {1,4} ms",,PvpStats/Windows/Refreshable.cs:64,string.Format,"""{0,-50}: {1,4} ms""",界面候选文本；纯内部标识、格式串可留空。
+text.9ef5f80878d9a904,"$""{Name} Refresh""",,PvpStats/Windows/Refreshable.cs:64,string.Format,"$""{Name} Refresh""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.ae44004988ed0c92,Process Match Error,,PvpStats/Windows/Refreshable.cs:106,Plugin.Log2.Error,"""Process Match Error""",界面候选文本；纯内部标识、格式串可留空。
+text.d3856c618cda5e53,Player,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:19,PropertyDeclaration,"""Player""",界面候选文本；纯内部标识、格式串可留空。
+text.34a0fde534056919,Any Side,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:29,FieldDeclaration,"""Any Side""",界面候选文本；纯内部标识、格式串可留空。
+text.7f25fb60f551e9e5,Teammate,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:29,FieldDeclaration,"""Teammate""",界面候选文本；纯内部标识、格式串可留空。
+text.46a24f0da90c104d,Opponent,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:29,FieldDeclaration,"""Opponent""",界面候选文本；纯内部标识、格式串可留空。
+text.1247d24009c32f01,Any Job,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:43,_jobCombo.Add,"""Any Job""",界面候选文本；纯内部标识、格式串可留空。
+text.592dbad5c060b416,###PlayerNameInput,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:77,ImGui.InputTextWithHint,"""###PlayerNameInput""",界面候选文本；纯内部标识、格式串可留空。
+text.25651a005e51e030,Enter player name and world,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:77,ImGui.InputTextWithHint,"""Enter player name and world""",界面候选文本；纯内部标识、格式串可留空。
+text.37867540b8322593,###TeamStatusCombo,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:87,ImGui.Combo,"""###TeamStatusCombo""",界面候选文本；纯内部标识、格式串可留空。
+text.b5a1c1c5cb0c8ab2,###JobCombo,,PvpStats/Windows/Filter/OtherPlayerFilter.cs:95,ImGui.Combo,"""###JobCombo""",界面候选文本；纯内部标识、格式串可留空。
+text.8e940896fbe814bb,Quick Search,,PvpStats/Windows/Filter/PlayerQuickSearchFilter.cs:8,PropertyDeclaration,"""Quick Search""",界面候选文本；纯内部标识、格式串可留空。
+text.cfec29719c99d1f7,###playerQuickSearch,,PvpStats/Windows/Filter/PlayerQuickSearchFilter.cs:24,ImGui.InputTextWithHint,"""###playerQuickSearch""",界面候选文本；纯内部标识、格式串可留空。
+text.7967e0e5b1182e4b,Search...,,PvpStats/Windows/Filter/PlayerQuickSearchFilter.cs:24,ImGui.InputTextWithHint,"""Search...""",界面候选文本；纯内部标识、格式串可留空。
+text.440d4bc8b6f41f2c,Comma separate multiple players.,,PvpStats/Windows/Filter/PlayerQuickSearchFilter.cs:28,ImGuiHelper.HelpMarker,"""Comma separate multiple players.""",界面候选文本；纯内部标识、格式串可留空。
+text.64f30714b3ce6921,Min. Matches,,PvpStats/Windows/Filter/MinMatchFilter.cs:8,PropertyDeclaration,"""Min. Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.c41582739442cd35,Min. matches,,PvpStats/Windows/Filter/MinMatchFilter.cs:24,ImGui.SliderInt,"""Min. matches""",界面候选文本；纯内部标识、格式串可留空。
+text.f96e997868e5f0fd,Misc,,PvpStats/Windows/Filter/MiscFilter.cs:10,PropertyDeclaration,"""Misc""",界面候选文本；纯内部标识、格式串可留空。
+text.bb77f64586b82f60,"$""c1""",,PvpStats/Windows/Filter/MiscFilter.cs:28,ImGui.TableSetupColumn,"$""c1""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.50e2234302be1364,"$""c2""",,PvpStats/Windows/Filter/MiscFilter.cs:29,ImGui.TableSetupColumn,"$""c2""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.39a16b7f87fc8bb6,"$""c3""",,PvpStats/Windows/Filter/MiscFilter.cs:30,ImGui.TableSetupColumn,"$""c3""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8d48d3bb01fd8bd0,Include spectated matches,,PvpStats/Windows/Filter/MiscFilter.cs:41,ImGui.Checkbox,"""Include spectated matches""",界面候选文本；纯内部标识、格式串可留空。
+text.2e00b192a9fa3b76,Job,,PvpStats/Windows/Filter/LocalPlayerJobFilter.cs:11,PropertyDeclaration,"""Job""",界面候选文本；纯内部标识、格式串可留空。
+text.8127edecac5214d5,All Jobs,,PvpStats/Windows/Filter/LocalPlayerJobFilter.cs:26,_jobCombo.Add,"""All Jobs""",界面候选文本；纯内部标识、格式串可留空。
+text.9c335d4ba60d7bdc,###LocalPlayerJobCombo,,PvpStats/Windows/Filter/LocalPlayerJobFilter.cs:45,ImGui.Combo,"""###LocalPlayerJobCombo""",界面候选文本；纯内部标识、格式串可留空。
+text.eb677a5c1257b967,Favorites Only,,PvpStats/Windows/Filter/BookmarkFilter.cs:8,PropertyDeclaration,"""Favorites Only""",界面候选文本；纯内部标识、格式串可留空。
+text.7220036e008f5654,Queue,,PvpStats/Windows/Filter/MatchTypeFilter.cs:12,PropertyDeclaration,"""Queue""",界面候选文本；纯内部标识、格式串可留空。
+text.f6fc0d2589bef638,"$""Select All##{GetHashCode()}""",,PvpStats/Windows/Filter/MatchTypeFilter.cs:43,ImGui.Checkbox,"$""Select All##{GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.cd088b4b72d7e394,"$""c1""",,PvpStats/Windows/Filter/MatchTypeFilter.cs:62,ImGui.TableSetupColumn,"$""c1""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6bfd3ae93129b26f,"$""c2""",,PvpStats/Windows/Filter/MatchTypeFilter.cs:63,ImGui.TableSetupColumn,"$""c2""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8f54e09092536bad,"$""{category.Key}##{GetHashCode()}""",,PvpStats/Windows/Filter/MatchTypeFilter.cs:69,ImGui.Checkbox,"$""{category.Key}##{GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.fc39d4c4f61c31ea,Tags,,PvpStats/Windows/Filter/TagFilter.cs:16,PropertyDeclaration,"""Tags""",界面候选文本；纯内部标识、格式串可留空。
+text.227376bcc96a2521,"Comma-separate multiple tags.
+'AND' will include matches that have all tags.
+'OR' will include matches that have at least one tag.
+'NAND' will include matches that don't have all tags.
+'NOR' will include matches that don't have any of the listed tags.",,PvpStats/Windows/Filter/TagFilter.cs:17,PropertyDeclaration,"""Comma-separate multiple tags.\n'AND' will include matches that have all tags.\n'OR' will include matches that have at least one tag.\n'NAND' will include matches that don't have all tags.\n'NOR' will include matches that don't have any of the listed tags.""",界面候选文本；纯内部标识、格式串可留空。
+text.4a4ca9070240603b,AND,,PvpStats/Windows/Filter/TagFilter.cs:22,FieldDeclaration,"""AND""",界面候选文本；纯内部标识、格式串可留空。
+text.0ec59b9a114bb06d,OR,,PvpStats/Windows/Filter/TagFilter.cs:22,FieldDeclaration,"""OR""",界面候选文本；纯内部标识、格式串可留空。
+text.879e6b8564c216f0,NAND,,PvpStats/Windows/Filter/TagFilter.cs:22,FieldDeclaration,"""NAND""",界面候选文本；纯内部标识、格式串可留空。
+text.d62790e0dc4eff3b,NOR,,PvpStats/Windows/Filter/TagFilter.cs:22,FieldDeclaration,"""NOR""",界面候选文本；纯内部标识、格式串可留空。
+text.89657f97443d7acc,##TagsInput,,PvpStats/Windows/Filter/TagFilter.cs:55,ImGui.InputTextWithHint,"""##TagsInput""",界面候选文本；纯内部标识、格式串可留空。
+text.cd21904c150cfd39,Enter tags...,,PvpStats/Windows/Filter/TagFilter.cs:55,ImGui.InputTextWithHint,"""Enter tags...""",界面候选文本；纯内部标识、格式串可留空。
+text.b35dfeee5483d912,##TagLogic,,PvpStats/Windows/Filter/TagFilter.cs:65,ImGui.Combo,"""##TagLogic""",界面候选文本；纯内部标识、格式串可留空。
+text.0ee26dd2d91d7f8d,Partial matches,,PvpStats/Windows/Filter/TagFilter.cs:72,ImGui.Checkbox,"""Partial matches""",界面候选文本；纯内部标识、格式串可留空。
+text.76dee211b1caa0ae,Result,,PvpStats/Windows/Filter/ResultFilter.cs:17,PropertyDeclaration,"""Result""",界面候选文本；纯内部标识、格式串可留空。
+text.2fcea8ec0143c1da,"$""##matchResultCombo""",,PvpStats/Windows/Filter/ResultFilter.cs:38,ImGui.Combo,"$""##matchResultCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.489c404111a3c802,Duration,,PvpStats/Windows/Filter/DurationFilter.cs:14,PropertyDeclaration,"""Duration""",界面候选文本；纯内部标识、格式串可留空。
+text.7ab6566df49afef0,c1,,PvpStats/Windows/Filter/DurationFilter.cs:32,ImGui.TableSetupColumn,"""c1""",界面候选文本；纯内部标识、格式串可留空。
+text.a1097dc902f9c54d,c2,,PvpStats/Windows/Filter/DurationFilter.cs:33,ImGui.TableSetupColumn,"""c2""",界面候选文本；纯内部标识、格式串可留空。
+text.a873c40eeb3ec646,"$""##durationCombo""",,PvpStats/Windows/Filter/DurationFilter.cs:38,ImGui.Combo,"$""##durationCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8ee98ffd52d4b33b,"$""##matchDuration""",,PvpStats/Windows/Filter/DurationFilter.cs:47,ImGui.InputText,"$""##matchDuration""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.39a6b848f6b67a07,m\:ss,,PvpStats/Windows/Filter/DurationFilter.cs:50,TimeSpan.TryParseExact,"@""m\:ss""",界面候选文本；纯内部标识、格式串可留空。
+text.20643b5979384031,"$""{FontAwesomeIcon.Undo.ToIconString()}""",,PvpStats/Windows/Filter/DurationFilter.cs:60,ImGui.Button,"$""{FontAwesomeIcon.Undo.ToIconString()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f76388fece1bc8f7,Reset,,PvpStats/Windows/Filter/DurationFilter.cs:68,ImGuiHelper.WrappedTooltip,"""Reset""",界面候选文本；纯内部标识、格式串可留空。
+text.93f1796e60534b84,Stat Source,,PvpStats/Windows/Filter/StatSourceFilter.cs:21,PropertyDeclaration,"""Stat Source""",界面候选文本；纯内部标识、格式串可留空。
+text.291ecb7b2e608491,Local Player,,PvpStats/Windows/Filter/StatSourceFilter.cs:27,PropertyDeclaration,"""Local Player""",界面候选文本；纯内部标识、格式串可留空。
+text.16b8590e88965a3b,Teammates,,PvpStats/Windows/Filter/StatSourceFilter.cs:28,PropertyDeclaration,"""Teammates""",界面候选文本；纯内部标识、格式串可留空。
+text.b2381883c3b3a58a,Opponents,,PvpStats/Windows/Filter/StatSourceFilter.cs:29,PropertyDeclaration,"""Opponents""",界面候选文本；纯内部标识、格式串可留空。
+text.a4dd45ee6317e454,Spectated Matches,,PvpStats/Windows/Filter/StatSourceFilter.cs:30,PropertyDeclaration,"""Spectated Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.5ff142dbf2cd9080,"$""c1""",,PvpStats/Windows/Filter/StatSourceFilter.cs:72,ImGui.TableSetupColumn,"$""c1""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.06d9ec870c5c4cce,"$""c2""",,PvpStats/Windows/Filter/StatSourceFilter.cs:73,ImGui.TableSetupColumn,"$""c2""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9c0995df08a635a5,"$""c3""",,PvpStats/Windows/Filter/StatSourceFilter.cs:74,ImGui.TableSetupColumn,"$""c3""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d622d988f1059129,"$""c4""",,PvpStats/Windows/Filter/StatSourceFilter.cs:75,ImGui.TableSetupColumn,"$""c4""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.155121b5fddc03ba,"$""Select All##{GetHashCode()}""",,PvpStats/Windows/Filter/StatSourceFilter.cs:80,ImGui.Checkbox,"$""Select All##{GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.00f89924b3115586,"$""Inherit from player filter##{GetHashCode()}""",,PvpStats/Windows/Filter/StatSourceFilter.cs:91,ImGui.Checkbox,"$""Inherit from player filter##{GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.e0e063c58fe5746e,Will only include stats for players who match all conditions of the player filter.,,PvpStats/Windows/Filter/StatSourceFilter.cs:97,ImGuiHelper.HelpMarker,"""Will only include stats for players who match all conditions of the player filter.""",界面候选文本；纯内部标识、格式串可留空。
+text.6978f8028352c9db,"$""{FilterNames[category.Key]}##{GetHashCode()}""",,PvpStats/Windows/Filter/StatSourceFilter.cs:103,ImGui.Checkbox,"$""{FilterNames[category.Key]}##{GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f13f257afb567d60,No refresh action initialized!,,PvpStats/Windows/Filter/DataFilter.cs:30,MethodDeclaration,"""No refresh action initialized!""",界面候选文本；纯内部标识、格式串可留空。
+text.96b3b121d0d0d0fd,Team,,PvpStats/Windows/Filter/CCTeamQuickFilter.cs:14,PropertyDeclaration,"""Team""",界面候选文本；纯内部标识、格式串可留空。
+text.1ad8bb978c32f8a1,"$""c1""",,PvpStats/Windows/Filter/CCTeamQuickFilter.cs:54,ImGui.TableSetupColumn,"$""c1""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f4ba7df475111c0d,"$""c2""",,PvpStats/Windows/Filter/CCTeamQuickFilter.cs:55,ImGui.TableSetupColumn,"$""c2""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d832f2fb609a943d,"$""##{category.Key}{GetHashCode()}""",,PvpStats/Windows/Filter/CCTeamQuickFilter.cs:60,ImGui.Checkbox,"$""##{category.Key}{GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.be42b3d4c9db0948,Stat Source,,PvpStats/Windows/Filter/PlayerStatSourceFilter.cs:11,PropertyDeclaration,"""Stat Source""",界面候选文本；纯内部标识、格式串可留空。
+text.13e01b72a4cd5b3f,"$""Inherit from player filter##{GetHashCode()}""",,PvpStats/Windows/Filter/PlayerStatSourceFilter.cs:44,ImGui.Checkbox,"$""Inherit from player filter##{GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9be70c8615869f9b,Will only include stats for players who match all conditions of the player filter.,,PvpStats/Windows/Filter/PlayerStatSourceFilter.cs:50,ImGuiHelper.HelpMarker,"""Will only include stats for players who match all conditions of the player filter.""",界面候选文本；纯内部标识、格式串可留空。
+text.977f12d21e224449,Time,,PvpStats/Windows/Filter/TimeFilter.cs:33,PropertyDeclaration,"""Time""",界面候选文本；纯内部标识、格式串可留空。
+text.d479cc1cc0ed45df,Past 24 hours,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""Past 24 hours""",界面候选文本；纯内部标识、格式串可留空。
+text.af6d55f910bfd2b0,Past 7 days,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""Past 7 days""",界面候选文本；纯内部标识、格式串可留空。
+text.e7c9e183255de29b,This month,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""This month""",界面候选文本；纯内部标识、格式串可留空。
+text.8b352633c890653e,Last month,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""Last month""",界面候选文本；纯内部标识、格式串可留空。
+text.7a1d2085202d605c,This year,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""This year""",界面候选文本；纯内部标识、格式串可留空。
+text.ab663c5407ba6d46,Last year,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""Last year""",界面候选文本；纯内部标识、格式串可留空。
+text.c622f515dca6f33c,All-time,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""All-time""",界面候选文本；纯内部标识、格式串可留空。
+text.392933e7ad244582,By ranked season,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""By ranked season""",界面候选文本；纯内部标识、格式串可留空。
+text.46c64082b71ed66f,By expansion,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""By expansion""",界面候选文本；纯内部标识、格式串可留空。
+text.66dd4ca9ef087986,By patch,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""By patch""",界面候选文本；纯内部标识、格式串可留空。
+text.13a5ee8cd2594b7b,Custom,,PvpStats/Windows/Filter/TimeFilter.cs:36,FieldDeclaration,"""Custom""",界面候选文本；纯内部标识、格式串可留空。
+text.3c0468a6b936b240,BEFORE,,PvpStats/Windows/Filter/TimeFilter.cs:37,FieldDeclaration,"""BEFORE""",界面候选文本；纯内部标识、格式串可留空。
+text.ddc56897fc7ae454,SINCE,,PvpStats/Windows/Filter/TimeFilter.cs:37,FieldDeclaration,"""SINCE""",界面候选文本；纯内部标识、格式串可留空。
+text.344f02155b71a6a5,DURING,,PvpStats/Windows/Filter/TimeFilter.cs:37,FieldDeclaration,"""DURING""",界面候选文本；纯内部标识、格式串可留空。
+text.c252514be1f8a631,AFTER,,PvpStats/Windows/Filter/TimeFilter.cs:37,FieldDeclaration,"""AFTER""",界面候选文本；纯内部标识、格式串可留空。
+text.6f419754119f5435,"$""##timeRangeCombo""",,PvpStats/Windows/Filter/TimeFilter.cs:77,ImGui.Combo,"$""##timeRangeCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.a68141b2a047de06,"$""c1""",,PvpStats/Windows/Filter/TimeFilter.cs:86,ImGui.TableSetupColumn,"$""c1""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.c58e5fd4412fe1e3,"$""c2""",,PvpStats/Windows/Filter/TimeFilter.cs:87,ImGui.TableSetupColumn,"$""c2""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d19149aa2d7c1542,Start:,,PvpStats/Windows/Filter/TimeFilter.cs:91,ImGui.Text,"""Start:""",界面候选文本；纯内部标识、格式串可留空。
+text.73a0ae6138d923b1,"$""##startTime""",,PvpStats/Windows/Filter/TimeFilter.cs:95,ImGui.InputText,"$""##startTime""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.ad642f752b1f3679,End:,,PvpStats/Windows/Filter/TimeFilter.cs:107,ImGui.Text,"""End:""",界面候选文本；纯内部标识、格式串可留空。
+text.371dcf96c4983243,"$""##endTime""",,PvpStats/Windows/Filter/TimeFilter.cs:111,ImGui.InputText,"$""##endTime""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.982a75d9419c4b44,"$""##seasonRelationCombo""",,PvpStats/Windows/Filter/TimeFilter.cs:125,ImGui.Combo,"$""##seasonRelationCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.dd635b6240b28c98,"$""##seasonCombo""",,PvpStats/Windows/Filter/TimeFilter.cs:133,ImGui.Combo,"$""##seasonCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.089aa27458f480d0,"$""##expansionRelationCombo""",,PvpStats/Windows/Filter/TimeFilter.cs:141,ImGui.Combo,"$""##expansionRelationCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b6539b14661c4930,"$""##expansionCombo""",,PvpStats/Windows/Filter/TimeFilter.cs:149,ImGui.Combo,"$""##expansionCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6ed3715055ada3bc,"$""##patchRelationCombo""",,PvpStats/Windows/Filter/TimeFilter.cs:157,ImGui.Combo,"$""##patchRelationCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9a83143f02c510a5,"$""##milestoneCombo""",,PvpStats/Windows/Filter/TimeFilter.cs:165,ImGui.Combo,"$""##milestoneCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.c80fa24d07bfa069,Local Player,,PvpStats/Windows/Filter/LocalPlayerFilter.cs:7,PropertyDeclaration,"""Local Player""",界面候选文本；纯内部标识、格式串可留空。
+text.ccdf8e3e046847b8,Will only include matches using the currently logged-in character. Useful if you use multiple characters and want to view results separately.,,PvpStats/Windows/Filter/LocalPlayerFilter.cs:9,PropertyDeclaration,"""Will only include matches using the currently logged-in character. Useful if you use multiple characters and want to view results separately.""",界面候选文本；纯内部标识、格式串可留空。
+text.56236bf1f5b79371,Current player only,,PvpStats/Windows/Filter/LocalPlayerFilter.cs:21,ImGui.Checkbox,"""Current player only""",界面候选文本；纯内部标识、格式串可留空。
+text.04a0a5d54814b1be,Ranked Tier,,PvpStats/Windows/Filter/TierFilter.cs:11,PropertyDeclaration,"""Ranked Tier""",界面候选文本；纯内部标识、格式串可留空。
+text.73be689f25e6203e,Ranked match tier is determined by the highest ranked player in each match.,,PvpStats/Windows/Filter/TierFilter.cs:12,PropertyDeclaration,"""Ranked match tier is determined by the highest ranked player in each match.""",界面候选文本；纯内部标识、格式串可留空。
+text.d5c922778f771bc2,"$""##tierComboLow""",,PvpStats/Windows/Filter/TierFilter.cs:36,ImGui.Combo,"$""##tierComboLow""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.2f790f9377f6d6fb,to,,PvpStats/Windows/Filter/TierFilter.cs:43,ImGui.Text,"""to""",界面候选文本；纯内部标识、格式串可留空。
+text.a3103c63c048bc3f,"$""##tierComboHigh""",,PvpStats/Windows/Filter/TierFilter.cs:46,ImGui.Combo,"$""##tierComboHigh""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.100506ceb0c59eb1,Arena,,PvpStats/Windows/Filter/ArenaFilter.cs:12,PropertyDeclaration,"""Arena""",界面候选文本；纯内部标识、格式串可留空。
+text.f4d7513f0ce6f1aa,All,,PvpStats/Windows/Filter/ArenaFilter.cs:24,ConstructorDeclaration,"""All""",界面候选文本；纯内部标识、格式串可留空。
+text.30710556ceb61291,"$""##arenaRangeCombo""",,PvpStats/Windows/Filter/ArenaFilter.cs:53,ImGui.Combo,"$""##arenaRangeCombo""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.bb7c152b10bae12a,On Cast,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:37,FieldDeclaration,"""On Cast""",界面候选文本；纯内部标识、格式串可留空。
+text.9acb8548919cecfd,On Impact,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:37,FieldDeclaration,"""On Impact""",界面候选文本；纯内部标识、格式串可留空。
+text.54386b04d7cb8e77,A ,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:282,ConstructorDeclaration,"""A """,界面候选文本；纯内部标识、格式串可留空。
+text.2f4852177c31d288,An ,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:284,ConstructorDeclaration,"""An """,界面候选文本；纯内部标识、格式串可留空。
+text.8f397d4ec841ae0b,ALL,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:292,_actionSelectionList.Add,"""ALL""",界面候选文本；纯内部标识、格式串可留空。
+text.f05a99bb57b630de,cc_logo_full.png,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:397,Path.Combine,"""cc_logo_full.png""",界面候选文本；纯内部标识、格式串可留空。
+text.b9894852f548d55a,c1,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:405; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:981,ImGui.TableSetupColumn,"""c1""",界面候选文本；纯内部标识、格式串可留空。
+text.62b00c17162a0438,c2,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:406; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:982,ImGui.TableSetupColumn,"""c2""",界面候选文本；纯内部标识、格式串可留空。
+text.b77141348f01efd9,c3,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:407; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:983,ImGui.TableSetupColumn,"""c3""",界面候选文本；纯内部标识、格式串可留空。
+text.82b389d2fec27f1f,"$""{MatchHelper.GetArenaName((CrystallineConflictMap)Match.Arena)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:412,ImGui.Text,"$""{MatchHelper.GetArenaName((CrystallineConflictMap)Match.Arena)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f122279b7ab266df,"$""{dutyStartTime}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:419,ImGui.Text,"$""{dutyStartTime}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.fb16e4b915395771,"$""{Match.MatchType}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:424,ImGui.Text,"$""{Match.MatchType}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.44763d0a7d49d4d7, WINS,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:433,MethodDeclaration,""" WINS""",界面候选文本；纯内部标识、格式串可留空。
+text.5d3f0b8e96b34c6a,WIN,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:437,MethodDeclaration,"""WIN""",界面候选文本；纯内部标识、格式串可留空。
+text.4dd639623e3c0d1a,LOSS,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:437,MethodDeclaration,"""LOSS""",界面候选文本；纯内部标识、格式串可留空。
+text.5735f6f3b76be919,UNKNOWN,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:438; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1586,MethodDeclaration,"""UNKNOWN""",界面候选文本；纯内部标识、格式串可留空。
+text.66bfe88340caa056,"$""{duration.Value.Minutes}{duration.Value.ToString(@""\:ss"")}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:446,MethodDeclaration,"$""{duration.Value.Minutes}{duration.Value.ToString(@""\:ss"")}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6752bc94fc2d99d3,\:ss,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:446,duration.Value.ToString,"@""\:ss""",界面候选文本；纯内部标识、格式串可留空。
+text.9d222ad6cbfff2ec,team1,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:463; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:926,ImGui.TableSetupColumn,"""team1""",界面候选文本；纯内部标识、格式串可留空。
+text.c6273e30b2841c96,team2,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:464; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:928,ImGui.TableSetupColumn,"""team2""",界面候选文本；纯内部标识、格式串可留空。
+text.d3791a66c2a66fec,"$""{firstTeamName}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:469,ImGui.Text,"$""{firstTeamName}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.82364e6c963c027d,"$""{secondTeamName}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:473,ImGui.Text,"$""{secondTeamName}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6e074c6b47c4656b,{0:P1},,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:475; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:479; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:847; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:850; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:853; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:856; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:859; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:862; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:865,string.Format,"""{0:P1}""",界面候选文本；纯内部标识、格式串可留空。
+text.2cd55cb1bcfcae93,"$""{secondTeamProgress}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:481,ImGui.TextUnformatted,"$""{secondTeamProgress}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.4e3b76c711742f89,rankteam1,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:490,ImGui.TableSetupColumn,"""rankteam1""",界面候选文本；纯内部标识、格式串可留空。
+text.bc393c1b1e09092d,playerteam1,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:491,ImGui.TableSetupColumn,"""playerteam1""",界面候选文本；纯内部标识、格式串可留空。
+text.409ca62d3bd142d3,jobteam1,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:492,ImGui.TableSetupColumn,"""jobteam1""",界面候选文本；纯内部标识、格式串可留空。
+text.56125fab4a568da4,jobteam2,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:493,ImGui.TableSetupColumn,"""jobteam2""",界面候选文本；纯内部标识、格式串可留空。
+text.0195134d64dfe738,playerteam2,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:494,ImGui.TableSetupColumn,"""playerteam2""",界面候选文本；纯内部标识、格式串可留空。
+text.43b0d6a00e5c68de,rankteam2,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:495,ImGui.TableSetupColumn,"""rankteam2""",界面候选文本；纯内部标识、格式串可留空。
+text.b561e1113ddff545,Sarah Montcroix Siren,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:520; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:565,player0.Alias.Equals,"""Sarah Montcroix Siren""",界面候选文本；纯内部标识、格式串可留空。
+text.5c9b057169c50140,Post game statistics unavailable.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:597,ImGui.Text,"""Post game statistics unavailable.""",界面候选文本；纯内部标识、格式串可留空。
+text.56edde80e37291ee,"$""{Match.PostMatch.RankBefore.ToString()} → {Match.PostMatch.RankAfter.ToString()}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:601,ImGui.Text,"$""{Match.PostMatch.RankBefore.ToString()} → {Match.PostMatch.RankAfter.ToString()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.762bda9226ce1d8c,Scoreboard,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:608; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:610; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:617,ImRaii.TabItem,"""Scoreboard""",界面候选文本；纯内部标识、格式串可留空。
+text.7ae8351724d5211b,Timeline,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:629; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:631; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:634,ImRaii.TabItem,"""Timeline""",界面候选文本；纯内部标识、格式串可留空。
+text.77c840639a551935,Graphs,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:642; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:644; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:646,ImRaii.TabItem,"""Graphs""",界面候选文本；纯内部标识、格式串可留空。
+text.17dffd8eceace9cf,Actions,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:654; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:656; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:658,ImRaii.TabItem,"""Actions""",界面候选文本；纯内部标识、格式串可留空。
+text.2d41f5f29c84e5a4,Right-click table header to show and hide columns including extra metrics.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:676,ImGuiHelper.HelpMarker,"""Right-click table header to show and hide columns including extra metrics.""",界面候选文本；纯内部标识、格式串可留空。
+text.2cdf078b9656878f,##showPercentages,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:680,ImGuiComponents.ToggleButton,"""##showPercentages""",界面候选文本；纯内部标识、格式串可留空。
+text.cc23fad57e38d84a,Show team contributions,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:683,ImGui.Text,"""Show team contributions""",界面候选文本；纯内部标识、格式串可留空。
+text.be93b200c19629b3,###showTeamRows,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:687,ImGui.Checkbox,"""###showTeamRows""",界面候选文本；纯内部标识、格式串可留空。
+text.048b09c6404c211e,Show team totals,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:689,ImGui.Text,"""Show team totals""",界面候选文本；纯内部标识、格式串可留空。
+text.2fe384d0913be0ca,Name,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:702; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:719,ImGui.TableSetupColumn,"""Name""",界面候选文本；纯内部标识、格式串可留空。
+text.e0395f545aabae19,Home World,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:703; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:722,ImGui.TableSetupColumn,"""Home World""",界面候选文本；纯内部标识、格式串可留空。
+text.115134bf1974a44e,Job,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:704; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:725,ImGui.TableSetupColumn,"""Job""",界面候选文本；纯内部标识、格式串可留空。
+text.c73d2d3f7f7dd039,Kills,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:705; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:705; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:728; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1016,ImGui.TableSetupColumn,"""Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.22f78aec533d61f6,Deaths,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:706; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:706; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:731; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1024,ImGui.TableSetupColumn,"""Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.8c14de9d72f5548d,Assists,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:707; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:707; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:734,ImGui.TableSetupColumn,"""Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.0895f43dd3ad8bf7,Damage Dealt,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:708,ImGui.TableSetupColumn,"""Damage Dealt""",界面候选文本；纯内部标识、格式串可留空。
+text.1e7aa03404df3575,DamageDealt,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:708,"""DamageDealt"".GetHashCode","""DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.bc7f87bb010aa47c,Damage Taken,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:709,ImGui.TableSetupColumn,"""Damage Taken""",界面候选文本；纯内部标识、格式串可留空。
+text.caf3c10199aa344b,DamageTaken,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:709,"""DamageTaken"".GetHashCode","""DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.79b1cb31086e9678,HP Restored,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:710,ImGui.TableSetupColumn,"""HP Restored""",界面候选文本；纯内部标识、格式串可留空。
+text.70e3b3cc6786adcf,HPRestored,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:710,"""HPRestored"".GetHashCode","""HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.09fa0154f5784d5f,Time on Crystal,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:711,ImGui.TableSetupColumn,"""Time on Crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.b7f7d212659d3d01,TimeOnCrystal,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:711,"""TimeOnCrystal"".GetHashCode","""TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.df5ac7d2e073af99,Damage Dealt per Kill/Assist,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:712,ImGui.TableSetupColumn,"""Damage Dealt per Kill/Assist""",界面候选文本；纯内部标识、格式串可留空。
+text.a15a7663728f8de9,DamageDealtPerKA,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:712,"""DamageDealtPerKA"".GetHashCode","""DamageDealtPerKA""",界面候选文本；纯内部标识、格式串可留空。
+text.84b1d53a02f8b63a,Damage Dealt per Life,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:713,ImGui.TableSetupColumn,"""Damage Dealt per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.e30e6888d5cfae9a,DamageDealtPerLife,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:713,"""DamageDealtPerLife"".GetHashCode","""DamageDealtPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.ba74ec8e3d2d98d0,Damage Taken per Life,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:714,ImGui.TableSetupColumn,"""Damage Taken per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.20c2dc3061a1c37f,DamageTakenPerLife,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:714,"""DamageTakenPerLife"".GetHashCode","""DamageTakenPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.eb18c39bffb8ee40,HP Restored per Life,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:715,ImGui.TableSetupColumn,"""HP Restored per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.34afef0d873d331b,HPRestoredPerLife,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:715,"""HPRestoredPerLife"".GetHashCode","""HPRestoredPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.ba966ad69dd02e72,KDA Ratio,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:716,ImGui.TableSetupColumn,"""KDA Ratio""",界面候选文本；纯内部标识、格式串可留空。
+text.7814259147b8efdb,KDA,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:716,"""KDA"".GetHashCode","""KDA""",界面候选文本；纯内部标识、格式串可留空。
+text.313e496507d01a91,"Damage
+Dealt",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:737,ImGuiHelper.DrawTableHeader,"""Damage\nDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.702a5cfcb47c2683,"Damage
+Taken",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:740,ImGuiHelper.DrawTableHeader,"""Damage\nTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.f2893cc8620e4f5a,"HP
+Restored",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:743,ImGuiHelper.DrawTableHeader,"""HP\nRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.f94e94d7d04a4c04,"Time on
+Crystal",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:746,ImGuiHelper.DrawTableHeader,"""Time on\nCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.3a06b07fe8ac0fb5,"Damage Dealt
+per Kill/Assist",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:749,ImGuiHelper.DrawTableHeader,"""Damage Dealt\nper Kill/Assist""",界面候选文本；纯内部标识、格式串可留空。
+text.e5a1a61bdb6bb067,"Damage Dealt
+per Life",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:752,ImGuiHelper.DrawTableHeader,"""Damage Dealt\nper Life""",界面候选文本；纯内部标识、格式串可留空。
+text.f49142e7c8950f54,"Damage Taken
+per Life",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:755,ImGuiHelper.DrawTableHeader,"""Damage Taken\nper Life""",界面候选文本；纯内部标识、格式串可留空。
+text.26b008b69e0760e5,"HP Restored
+per Life",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:758,ImGuiHelper.DrawTableHeader,"""HP Restored\nper Life""",界面候选文本；纯内部标识、格式串可留空。
+text.b6e06b4c2f8466bf,"KDA
+Ratio",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:761,ImGuiHelper.DrawTableHeader,"""KDA\nRatio""",界面候选文本；纯内部标识、格式串可留空。
+text.ba5089781f7c2390,"$""{row.Value.Kills}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:784,ImGuiHelper.DrawNumericCell,"$""{row.Value.Kills}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.be56a8d96a76dbf1,"$""{row.Value.Deaths}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:787,ImGuiHelper.DrawNumericCell,"$""{row.Value.Deaths}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.4f748367797b02c3,"$""{row.Value.Assists}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:790,ImGuiHelper.DrawNumericCell,"$""{row.Value.Assists}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.1ddfe6d3bfe8c8ae,"$""{row.Value.DamageDealt}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:793,ImGuiHelper.DrawNumericCell,"$""{row.Value.DamageDealt}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.08ecb55bd7c25007,"$""{row.Value.DamageTaken}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:796,ImGuiHelper.DrawNumericCell,"$""{row.Value.DamageTaken}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.da9a5b01a392d1bb,"$""{row.Value.HPRestored}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:799,ImGuiHelper.DrawNumericCell,"$""{row.Value.HPRestored}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.4c4c5a9d9b2276af,"$""{ImGuiHelper.GetTimeSpanString(row.Value.TimeOnCrystal)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:802,ImGuiHelper.DrawNumericCell,"$""{ImGuiHelper.GetTimeSpanString(row.Value.TimeOnCrystal)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.155918aa19c5f55f,"$""{row.Value.DamageDealtPerKA}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:805,ImGuiHelper.DrawNumericCell,"$""{row.Value.DamageDealtPerKA}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b524b36c246016bc,"$""{row.Value.DamageDealtPerLife}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:808,ImGuiHelper.DrawNumericCell,"$""{row.Value.DamageDealtPerLife}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b1b32eb2ebd4879f,"$""{row.Value.DamageTakenPerLife}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:811,ImGuiHelper.DrawNumericCell,"$""{row.Value.DamageTakenPerLife}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6898ad0c3d8a0582,"$""{row.Value.HPRestoredPerLife}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:814,ImGuiHelper.DrawNumericCell,"$""{row.Value.HPRestoredPerLife}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.55a2726f7cebf967,"$""{string.Format(""{0:0.00}"", row.Value.KDA)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:817; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:880,ImGuiHelper.DrawNumericCell,"$""{string.Format(""{0:0.00}"", row.Value.KDA)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.627c33b863a7a50e,"$""{row.Key.Name}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:836,ImGui.TextColored,"$""{row.Key.Name}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.bd3e096c9f49e300,"$""{row.Key.HomeWorld}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:838,ImGui.TextColored,"$""{row.Key.HomeWorld}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6d66b99b648ef6fc,"$""{player?.Job}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:841,MethodDeclaration,"$""{player?.Job}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.7b1d1cb6aeb1007c,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].Kills) : row.Value.Kills)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:847,ImGuiHelper.DrawNumericCell,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].Kills) : row.Value.Kills)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.314a7250b54f9670,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].Deaths) : row.Value.Deaths)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:850,ImGuiHelper.DrawNumericCell,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].Deaths) : row.Value.Deaths)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.0dbb8619e7cc9475,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].Assists) : row.Value.Assists)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:853,ImGuiHelper.DrawNumericCell,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].Assists) : row.Value.Assists)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.be5e26ecd9e267b6,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].DamageDealt) : row.Value.DamageDealt)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:856,ImGuiHelper.DrawNumericCell,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].DamageDealt) : row.Value.DamageDealt)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.1a1f138b3a18395f,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].DamageTaken) : row.Value.DamageTaken)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:859,ImGuiHelper.DrawNumericCell,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].DamageTaken) : row.Value.DamageTaken)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.152be878ed32125b,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].HPRestored) : row.Value.HPRestored)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:862,ImGuiHelper.DrawNumericCell,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].HPRestored) : row.Value.HPRestored)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.dc2c9f4e0aa29fd7,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].TimeOnCrystal) : ImGuiHelper.GetTimeSpanString(row.Value.TimeOnCrystal))}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:865,ImGuiHelper.DrawNumericCell,"$""{(ShowPercentages ? string.Format(""{0:P1}"", _playerContributions?[row.Key].TimeOnCrystal) : ImGuiHelper.GetTimeSpanString(row.Value.TimeOnCrystal))}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.114f813d151d0ab9,"$""{string.Format(""{0:f0}"", row.Value.DamageDealtPerKA)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:868,ImGuiHelper.DrawNumericCell,"$""{string.Format(""{0:f0}"", row.Value.DamageDealtPerKA)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.bf699e7d426d1e60,{0:f0},,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:868; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:871; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:874; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:877,string.Format,"""{0:f0}""",界面候选文本；纯内部标识、格式串可留空。
+text.aa0f5766a673c5c7,"$""{string.Format(""{0:f0}"", row.Value.DamageDealtPerLife)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:871,ImGuiHelper.DrawNumericCell,"$""{string.Format(""{0:f0}"", row.Value.DamageDealtPerLife)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.421c8f9e3cdd61d1,"$""{string.Format(""{0:f0}"", row.Value.DamageTakenPerLife)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:874,ImGuiHelper.DrawNumericCell,"$""{string.Format(""{0:f0}"", row.Value.DamageTakenPerLife)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8962672db78aef5e,"$""{string.Format(""{0:f0}"", row.Value.HPRestoredPerLife)}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:877,ImGuiHelper.DrawNumericCell,"$""{string.Format(""{0:f0}"", row.Value.HPRestoredPerLife)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.5f6922a007d734ba,Filters,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:886,ImGui.Button,"""Filters""",界面候选文本；纯内部标识、格式串可留空。
+text.5385a2c39aa38a5e,"$""{Match.Id}--TimelineFilterPopup""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:887; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:977,ImGui.OpenPopup,"$""{Match.Id}--TimelineFilterPopup""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b03527cbd698d8b3,###playerQuickSearch,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:893,ImGui.InputTextWithHint,"""###playerQuickSearch""",界面候选文本；纯内部标识、格式串可留空。
+text.85e26b23a9533bb8,Search for players and actions...,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:893,ImGui.InputTextWithHint,"""Search for players and actions...""",界面候选文本；纯内部标识、格式串可留空。
+text.f6d6fa46a7c57180,Comma separate multiple phrases.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:899,ImGuiHelper.HelpMarker,"""Comma separate multiple phrases.""",界面候选文本；纯内部标识、格式串可留空。
+text.4bb0c6d5b208bf7c,Action timing,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:903,ImGui.Combo,"""Action timing""",界面候选文本；纯内部标识、格式串可留空。
+text.fb60fa255ddaa834,Affects the ordering of action events and which character snapshots are shown on hover.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:917,ImGuiHelper.HelpMarker,"""Affects the ordering of action events and which character snapshots are shown on hover.""",界面候选文本；纯内部标识、格式串可留空。
+text.03e51f89aaccc16a,Timeline incomplete due to duty joined in progress.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:921,ImGui.TextColored,"""Timeline incomplete due to duty joined in progress.""",界面候选文本；纯内部标识、格式串可留空。
+text.fea2185bcf88fe6a,time,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:925,ImGui.TableSetupColumn,"""time""",界面候选文本；纯内部标识、格式串可留空。
+text.3bdd099a332289cc,crystal,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:927,ImGui.TableSetupColumn,"""crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.2f103c7bd33e7e85,text,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:929,ImGui.TableSetupColumn,"""text""",界面候选文本；纯内部标识、格式串可留空。
+text.eedfbf4713f7536c,"$""{ImGuiHelper.GetTimeSpanString(timeDiff ?? TimeSpan.Zero)} : """,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:946,ImGuiHelper.DrawNumericCell,"$""{ImGuiHelper.GetTimeSpanString(timeDiff ?? TimeSpan.Zero)} : """,界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.186af257edc040b2,"$""{_consolidatedEventTeamPoints[i].Astra:0.0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:948,ImGuiHelper.DrawNumericCell,"$""{_consolidatedEventTeamPoints[i].Astra:0.0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.657072ee9503aba2,"$""{Math.Abs(_consolidatedEventTeamPoints[i].Crystal):0.0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:950,ImGuiHelper.DrawNumericCell,"$""{Math.Abs(_consolidatedEventTeamPoints[i].Crystal):0.0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.0edb8aa843dd4a81,"$""{_consolidatedEventTeamPoints[i].Umbra:0.0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:952,ImGuiHelper.DrawNumericCell,"$""{_consolidatedEventTeamPoints[i].Umbra:0.0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.90957ff75fdfa2a3,Map Events,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:987,ImGui.Checkbox,"""Map Events""",界面候选文本；纯内部标识、格式串可留空。
+text.da015ffbfac9c44c,Knockouts,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:995; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1271,ImGui.Checkbox,"""Knockouts""",界面候选文本；纯内部标识、格式串可留空。
+text.96fe71e090bf7875,Limit Breaks,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1003; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1273,ImGui.Checkbox,"""Limit Breaks""",界面候选文本；纯内部标识、格式串可留空。
+text.8a5165f14dff9c65,Limit Break Uses,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1034,ImGui.Checkbox,"""Limit Break Uses""",界面候选文本；纯内部标识、格式串可留空。
+text.0c3c640c83eda4be,Limit Break Affected,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1042,ImGui.Checkbox,"""Limit Break Affected""",界面候选文本；纯内部标识、格式串可留空。
+text.900502e2cebb710b,The crystal has been unchained.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1058,ImGui.Text,"""The crystal has been unchained.""",界面候选文本；纯内部标识、格式串可留空。
+text.a914732914b0560c,Overtime has started.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1061,ImGui.Text,"""Overtime has started.""",界面候选文本；纯内部标识、格式串可留空。
+text.1227b709f0aba05a,"$""Team {Match.MatchWinner}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1071,ImGui.TextColored,"$""Team {Match.MatchWinner}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.5c8dabede5797805, is victorious!,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1073,ImGui.Text,""" is victorious!""",界面候选文本；纯内部标识、格式串可留空。
+text.c16400ef55c5a4ba,The match has ended...,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1076,ImGui.Text,"""The match has ended...""",界面候选文本；纯内部标识、格式串可留空。
+text.97e882de053e6794,Igneous matter spews forth!,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1082,ImGui.Text,"""Igneous matter spews forth!""",界面候选文本；纯内部标识、格式串可留空。
+text.b89ef527389f632a,The winds whip and churn!,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1085,ImGui.Text,"""The winds whip and churn!""",界面候选文本；纯内部标识、格式串可留空。
+text.fcb545f886fd373b,The pneumatic parade is underway!,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1088,ImGui.Text,"""The pneumatic parade is underway!""",界面候选文本；纯内部标识、格式串可留空。
+text.0e53853130d969a7,The desert heat intensifies!,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1091,ImGui.Text,"""The desert heat intensifies!""",界面候选文本；纯内部标识、格式串可留空。
+text.d3e4843ef97e8ad2,A special map event has occurred.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1094,ImGui.Text,"""A special map event has occurred.""",界面候选文本；纯内部标识、格式串可留空。
+text.950dddb7dc44e595,"$""Team {mEvent.Team}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1113,ImGui.TextColored,"$""Team {mEvent.Team}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.74942c9a28849f69, has breached the checkpoint.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1115,ImGui.Text,""" has breached the checkpoint.""",界面候选文本；纯内部标识、格式串可留空。
+text.cb388cacd53d1795,"$""{_bNPCNames[(uint)mEvent.KillerNameId]}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1130,ImGui.Text,"$""{_bNPCNames[(uint)mEvent.KillerNameId]}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b8706a0fb07008dd,"$""A gentle breeze somehow """,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1144,ImGui.Text,"$""A gentle breeze somehow """,界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6d6f75b146c6ff75, knocked out ,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1148,ImGui.Text,""" knocked out """,界面候选文本；纯内部标识、格式串可留空。
+text.8e2d5ae89c2ea864,"$"" used """,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1180,ImGui.Text,"$"" used """,界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9b667dfb72d130b6,"$"" cast """,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1182,ImGui.Text,"$"" cast """,界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.522390ff3dff1fb0,"$"" ghosted """,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1185,ImGui.Text,"$"" ghosted """,界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.2866c98d5502bca6,"$"" {_actionNames[mEvent.ActionId]}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1190,ImGui.Text,"$"" {_actionNames[mEvent.ActionId]}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8aadfeeaa3ef81f6, on ,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1193,ImGui.Text,""" on """,界面候选文本；纯内部标识、格式串可留空。
+text.c4890b6436fc313d,"$"" +{affectedPlayers.Count - 1}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1209,ImGui.TextDisabled,"$"" +{affectedPlayers.Count - 1}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b241436cb4af7a22,"$"" {name.Name}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1254,ImGui.TextColored,"$"" {name.Name}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b6f850f520091935,Crystal Progress,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1284,ImRaii.Plot,"""Crystal Progress""",界面候选文本；纯内部标识、格式串可留空。
+text.c7a2fb0120d2bb62,Match Time,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1305,ImPlot.SetupAxes,"""Match Time""",界面候选文本；纯内部标识、格式串可留空。
+text.4c95ca9acfee19a5,Overtime,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1316,ImPlot.PlotStairs,"""Overtime""",界面候选文本；纯内部标识、格式串可留空。
+text.5bbb0256b6e4a058,Crystal Position,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1323,ImPlot.PlotStairs,"""Crystal Position""",界面候选文本；纯内部标识、格式串可留空。
+text.f838111178e27f49,Astra Progress,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1330,ImPlot.PlotStairs,"""Astra Progress""",界面候选文本；纯内部标识、格式串可留空。
+text.383352f4cd83c133,Umbra Progress,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1337,ImPlot.PlotStairs,"""Umbra Progress""",界面候选文本；纯内部标识、格式串可留空。
+text.154108e1e641b38e,Astra Checkpoint,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1344,ImPlot.PlotStairs,"""Astra Checkpoint""",界面候选文本；纯内部标识、格式串可留空。
+text.6b08d021b093ece5,Umbra Checkpoint,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1351,ImPlot.PlotStairs,"""Umbra Checkpoint""",界面候选文本；纯内部标识、格式串可留空。
+text.ad76d9fdac86c712,"$""##knockoutEvent-{mEvent.GetHashCode()}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1381; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1410,ImPlot.PlotImage,"$""##knockoutEvent-{mEvent.GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9733293dac69986a,Source,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1423,ImGui.Combo,"""Source""",界面候选文本；纯内部标识、格式串可留空。
+text.ec3ca00d8da6e5cc,Combine related actions,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1439,ImGui.Checkbox,"""Combine related actions""",界面候选文本；纯内部标识、格式串可留空。
+text.0879ed2ddeecd3f6,No actions by actor.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1448; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1459,ImGui.TextDisabled,"""No actions by actor.""",界面候选文本；纯内部标识、格式串可留空。
+text.d417831aa871c097,Action,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1492,ImGui.TableSetupColumn,"""Action""",界面候选文本；纯内部标识、格式串可留空。
+text.846e22b7ecc4f2af,Casts,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1493; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1493; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1515,ImGui.TableSetupColumn,"""Casts""",界面候选文本；纯内部标识、格式串可留空。
+text.dc834681c2159b82,Total Targets,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1494,ImGui.TableSetupColumn,"""Total Targets""",界面候选文本；纯内部标识、格式串可留空。
+text.e93cb812dba1da08,Targets,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1494,"""Targets"".GetHashCode","""Targets""",界面候选文本；纯内部标识、格式串可留空。
+text.0a97b970477c3e71,Average Targets,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1495,ImGui.TableSetupColumn,"""Average Targets""",界面候选文本；纯内部标识、格式串可留空。
+text.f720fcc6f3c7639b,AverageTargets,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1495,"""AverageTargets"".GetHashCode","""AverageTargets""",界面候选文本；纯内部标识、格式串可留空。
+text.e5491f12ef4a8f3e,Total Damage,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1496,ImGui.TableSetupColumn,"""Total Damage""",界面候选文本；纯内部标识、格式串可留空。
+text.73bdfdb66436f5d7,Damage,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1496,"""Damage"".GetHashCode","""Damage""",界面候选文本；纯内部标识、格式串可留空。
+text.9f6552739be10d1e,Average Damage,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1497,ImGui.TableSetupColumn,"""Average Damage""",界面候选文本；纯内部标识、格式串可留空。
+text.670af638e671dc4d,AverageDamage,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1497,"""AverageDamage"".GetHashCode","""AverageDamage""",界面候选文本；纯内部标识、格式串可留空。
+text.e64793ba336c9e53,Total Heal,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1500,ImGui.TableSetupColumn,"""Total Heal""",界面候选文本；纯内部标识、格式串可留空。
+text.cf251ccc46a10c89,Heal,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1500,"""Heal"".GetHashCode","""Heal""",界面候选文本；纯内部标识、格式串可留空。
+text.15217c6298c45191,Average Heal,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1501,ImGui.TableSetupColumn,"""Average Heal""",界面候选文本；纯内部标识、格式串可留空。
+text.802517b618544eff,AverageHeal,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1501,"""AverageHeal"".GetHashCode","""AverageHeal""",界面候选文本；纯内部标识、格式串可留空。
+text.46ddcd67f8e13f25,Total MP Drain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1502,ImGui.TableSetupColumn,"""Total MP Drain""",界面候选文本；纯内部标识、格式串可留空。
+text.0124daed967a3910,MPDrain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1502,"""MPDrain"".GetHashCode","""MPDrain""",界面候选文本；纯内部标识、格式串可留空。
+text.1d911bb3515b706b,Average MP Drain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1503,ImGui.TableSetupColumn,"""Average MP Drain""",界面候选文本；纯内部标识、格式串可留空。
+text.60163ed358af292f,AverageMPDrain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1503,"""AverageMPDrain"".GetHashCode","""AverageMPDrain""",界面候选文本；纯内部标识、格式串可留空。
+text.57ec3c2783b03402,Total MP Gain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1504,ImGui.TableSetupColumn,"""Total MP Gain""",界面候选文本；纯内部标识、格式串可留空。
+text.24f42a6d2613f9a3,MPGain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1504,"""MPGain"".GetHashCode","""MPGain""",界面候选文本；纯内部标识、格式串可留空。
+text.7956bb3e3d960261,Average MP Gain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1505,ImGui.TableSetupColumn,"""Average MP Gain""",界面候选文本；纯内部标识、格式串可留空。
+text.4c6a4745c989a7c7,AverageMPGain,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1505,"""AverageMPGain"".GetHashCode","""AverageMPGain""",界面候选文本；纯内部标识、格式串可留空。
+text.9db40256058530ff,Status Hits,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1506,ImGui.TableSetupColumn,"""Status Hits""",界面候选文本；纯内部标识、格式串可留空。
+text.9aa79533f28202c3,StatusHits,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1506,"""StatusHits"".GetHashCode","""StatusHits""",界面候选文本；纯内部标识、格式串可留空。
+text.eda6a3eecf52cf93,Status Success Rate,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1507,ImGui.TableSetupColumn,"""Status Success Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.a5c5a06e58e142c3,StatusEffectiveness,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1507,"""StatusEffectiveness"".GetHashCode","""StatusEffectiveness""",界面候选文本；纯内部标识、格式串可留空。
+text.c50629f4abf60ef5,Action/Status,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1512,ImGuiHelper.DrawTableHeader,"""Action/Status""",界面候选文本；纯内部标识、格式串可留空。
+text.875f00e1eda9e23e,"Total
+Hits",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1518,ImGuiHelper.DrawTableHeader,"""Total\nHits""",界面候选文本；纯内部标识、格式串可留空。
+text.c0eb38dedfa47a5e,"Average
+Hits",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1521,ImGuiHelper.DrawTableHeader,"""Average\nHits""",界面候选文本；纯内部标识、格式串可留空。
+text.b5fc7f75342c8b2b,"Total
+Damage",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1524,ImGuiHelper.DrawTableHeader,"""Total\nDamage""",界面候选文本；纯内部标识、格式串可留空。
+text.1156360985aeb644,"Average
+Damage",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1527,ImGuiHelper.DrawTableHeader,"""Average\nDamage""",界面候选文本；纯内部标识、格式串可留空。
+text.5daa04924a20ad46,"Total
+Heal",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1536,ImGuiHelper.DrawTableHeader,"""Total\nHeal""",界面候选文本；纯内部标识、格式串可留空。
+text.a5b56ff781bdf38f,"Average
+Heal",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1539,ImGuiHelper.DrawTableHeader,"""Average\nHeal""",界面候选文本；纯内部标识、格式串可留空。
+text.907f7d735427ef93,"Total
+MP Drain",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1542,ImGuiHelper.DrawTableHeader,"""Total\nMP Drain""",界面候选文本；纯内部标识、格式串可留空。
+text.baa7121421dfd33d,"Average
+MP Drain",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1545,ImGuiHelper.DrawTableHeader,"""Average\nMP Drain""",界面候选文本；纯内部标识、格式串可留空。
+text.bff9672ad9e9c4c4,"Total
+MP Gain",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1548,ImGuiHelper.DrawTableHeader,"""Total\nMP Gain""",界面候选文本；纯内部标识、格式串可留空。
+text.14b2b3d65356bfeb,"Average
+MP Gain",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1551,ImGuiHelper.DrawTableHeader,"""Average\nMP Gain""",界面候选文本；纯内部标识、格式串可留空。
+text.1433f80951b4c796,"Status
+Hits",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1554,ImGuiHelper.DrawTableHeader,"""Status\nHits""",界面候选文本；纯内部标识、格式串可留空。
+text.62cf54eb247b138d,"Status
+Rate",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1557,ImGuiHelper.DrawTableHeader,"""Status\nRate""",界面候选文本；纯内部标识、格式串可留空。
+text.63935e37fc8b7a39,"This is calculated from discrepancies from the scoreboard and will includes DoTs, HoTs, reflected damage (e.g. Chiten), actions that land after the scoreboard calculates, ",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1587,ImGuiHelper.HelpMarker,"""This is calculated from discrepancies from the scoreboard and will includes DoTs, HoTs, reflected damage (e.g. Chiten), actions that land after the scoreboard calculates, """,界面候选文本；纯内部标识、格式串可留空。
+text.c377942e9fe266eb,sources of damage/healing that the server does not tell the client about and data missing from incomplete match recordings.,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1588,ImGuiHelper.HelpMarker,"""sources of damage/healing that the server does not tell the client about and data missing from incomplete match recordings.""",界面候选文本；纯内部标识、格式串可留空。
+text.d560adf88bca4a32,"
+
+RESEARCH NOTES: ",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1589,ImGuiHelper.HelpMarker,"""\n\nRESEARCH NOTES: """,界面候选文本；纯内部标识、格式串可留空。
+text.af5025830236c2c0,"
+* Sacred Claim heals are attributed to the targeted players on the scoreboard. ",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1590,ImGuiHelper.HelpMarker,"""\n* Sacred Claim heals are attributed to the targeted players on the scoreboard. """,界面候选文本；纯内部标识、格式串可留空。
+text.e8731589d9716ccd,"
+* HoTs and DoTs will only be counted if the source player is alive. ",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1591,ImGuiHelper.HelpMarker,"""\n* HoTs and DoTs will only be counted if the source player is alive. """,界面候选文本；纯内部标识、格式串可留空。
+text.aebe8d7ec5df3427,"
+* Medkits are not counted.",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1592,ImGuiHelper.HelpMarker,"""\n* Medkits are not counted.""",界面候选文本；纯内部标识、格式串可留空。
+text.5f26f9be1392a3a6,"
+* Sole Survivor is not counted. Also will count twice per proc for HP and MP gain.",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1593,ImGuiHelper.HelpMarker,"""\n* Sole Survivor is not counted. Also will count twice per proc for HP and MP gain.""",界面候选文本；纯内部标识、格式串可留空。
+text.92774910bdf3341b,"
+* Everlasting Flight heal will not have a source if the SMN dies before it expires.",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1594,ImGuiHelper.HelpMarker,"""\n* Everlasting Flight heal will not have a source if the SMN dies before it expires.""",界面候选文本；纯内部标识、格式串可留空。
+text.f73fadcdc45409d7,Medicine Kits,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1598,ImGui.Text,"""Medicine Kits""",界面候选文本；纯内部标识、格式串可留空。
+text.1ec1ea3776289d79,"$""ID: {statusId}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1605; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1608,ImGuiHelper.WrappedTooltip,"$""ID: {statusId}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.a9c5bc756d70151f,"$""ID: {action.Key}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1623; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1626,ImGuiHelper.WrappedTooltip,"$""ID: {action.Key}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.cf74cad5bbbf643f,"$""{action.Value.Casts:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1631,ImGuiHelper.DrawNumericCell,"$""{action.Value.Casts:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.fcbe1cc10d157e80,"$""{action.Value.Targets:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1636,ImGuiHelper.DrawNumericCell,"$""{action.Value.Targets:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f504d7f070c3406a,"$""{action.Value.AverageTargets:0.0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1648,ImGuiHelper.DrawNumericCell,"$""{action.Value.AverageTargets:0.0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.2be0c9a0522b08f1,"$""{action.Value.Damage:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1660,ImGuiHelper.DrawNumericCell,"$""{action.Value.Damage:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.772df7efbb65491d,"$""{action.Value.AverageDamage:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1674,ImGuiHelper.DrawNumericCell,"$""{action.Value.AverageDamage:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.fcb5ca934e87af6a,"$""{action.Value.Heal:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1685,ImGuiHelper.DrawNumericCell,"$""{action.Value.Heal:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.1e971d9e0131cf3e,"$""{action.Value.AverageHeal:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1698,ImGuiHelper.DrawNumericCell,"$""{action.Value.AverageHeal:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.3d0a6bc85cfa90ac,"$""{action.Value.MPDrain:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1712,ImGuiHelper.DrawNumericCell,"$""{action.Value.MPDrain:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.2ad483813e897b51,"$""{action.Value.AverageMPDrain:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1724,ImGuiHelper.DrawNumericCell,"$""{action.Value.AverageMPDrain:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.760c592c79b4508e,"$""{action.Value.MPGain:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1736,ImGuiHelper.DrawNumericCell,"$""{action.Value.MPGain:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.c0b3a19ddad40bdb,"$""{action.Value.AverageMPGain:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1748,ImGuiHelper.DrawNumericCell,"$""{action.Value.AverageMPGain:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.17215cc2a64dbcb0,"$""{action.Value.StatusHits:0}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1760,ImGuiHelper.DrawNumericCell,"$""{action.Value.StatusHits:0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.94dbf2c3b5aa74e3,"$""{action.Value.StatusEffectiveness:P1}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1773,ImGuiHelper.DrawNumericCell,"$""{action.Value.StatusEffectiveness:P1}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d4b8c737e8edb14b,"$""P1""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1777,x.StatusEffectiveness.ToString,"$""P1""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.1a078a02e2fcfd81,player,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1791; PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1810,ImGui.TableSetupColumn,"""player""",界面候选文本；纯内部标识、格式串可留空。
+text.4626a44d1e08f2c1,value,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1792,ImGui.TableSetupColumn,"""value""",界面候选文本；纯内部标识、格式串可留空。
+text.6a80ff6ad1331e5d,medkit,,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1814,ImGui.TableSetupColumn,"""medkit""",界面候选文本；纯内部标识、格式串可留空。
+text.e79d7713a8589bde,"$""{_actionNames[action]}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1824,ImGuiHelper.WrappedTooltip,"$""{_actionNames[action]}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.e61ec1936dd05647,"$""Medicine Kits""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1833,ImGuiHelper.WrappedTooltip,"$""Medicine Kits""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d41aeaa26b4d8528,"$""{castCount.Casts:#}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1847,ImGuiHelper.DrawNumericCell,"$""{castCount.Casts:#}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b8be01512280f750,"$""{playerMedKits.Impacts:#}""",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:1862,ImGuiHelper.DrawNumericCell,"$""{playerMedKits.Impacts:#}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.c51f068678a955ef,"Id,Start Time,Arena,Queue,Winner,Duration,Astra Progress,Umbra Progress,
+",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:2127,MethodDeclaration,"""Id,Start Time,Arena,Queue,Winner,Duration,Astra Progress,Umbra Progress,\n""",界面候选文本；纯内部标识、格式串可留空。
+text.0c7a481db04e34f8,"Name,HomeWorld,Job,Team,Kills,Deaths,Assists,Damage Dealt,Damage Taken,HP Restored,Time on Crystal,
+",,PvpStats/Windows/Detail/CrystallineConflictMatchDetail.cs:2137,MethodDeclaration,"""Name,HomeWorld,Job,Team,Kills,Deaths,Assists,Damage Dealt,Damage Taken,HP Restored,Time on Crystal,\n""",界面候选文本；纯内部标识、格式串可留空。
+text.39284ad78b06d2ba,"$""Full Edit: {dataRow.GetHashCode()}""",,PvpStats/Windows/Detail/FullEditDetail.cs:20,ConstructorDeclaration,"$""Full Edit: {dataRow.GetHashCode()}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.768ad5f689f4683f,"$""Document size: {bytes.Length} bytes""",,PvpStats/Windows/Detail/FullEditDetail.cs:33,Plugin.Log2.Debug,"$""Document size: {bytes.Length} bytes""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.ce6de7cf5a24c487,Save and close,,PvpStats/Windows/Detail/FullEditDetail.cs:54,ImGui.Button,"""Save and close""",界面候选文本；纯内部标识、格式串可留空。
+text.91c7ec1c0ceb1f7a,"$""Match Details: {match.Id}""",,PvpStats/Windows/Detail/MatchDetail.cs:29,ConstructorDeclaration,"$""Match Details: {match.Id}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9d3432c21bb4c2e6,"$""{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch""",,PvpStats/Windows/Detail/MatchDetail.cs:73,ImGui.Button,"$""{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.7a64360ba5edb983,Favorite match,,PvpStats/Windows/Detail/MatchDetail.cs:81,ImGuiHelper.WrappedTooltip,"""Favorite match""",界面候选文本；纯内部标识、格式串可留空。
+text.13407369165e1720,"$""{FontAwesomeIcon.Tags.ToIconString()}##--Tags""",,PvpStats/Windows/Detail/MatchDetail.cs:87,ImGui.Button,"$""{FontAwesomeIcon.Tags.ToIconString()}##--Tags""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.a424ab766a326f71,"$""{Match.Id}--TagsPopup""",,PvpStats/Windows/Detail/MatchDetail.cs:88,ImGui.OpenPopup,"$""{Match.Id}--TagsPopup""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.45c9e727bdc63576,Set tags,,PvpStats/Windows/Detail/MatchDetail.cs:92,ImGuiHelper.WrappedTooltip,"""Set tags""",界面候选文本；纯内部标识、格式串可留空。
+text.16cbda817248da61,"$""Timeline Full Edit: {dataRow.Id}""",,PvpStats/Windows/Detail/TimelineFullEditDetail.cs:18,ConstructorDeclaration,"$""Timeline Full Edit: {dataRow.Id}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d0b913b6d9b09b9d,"$""Document size: {bytes.Length} bytes""",,PvpStats/Windows/Detail/TimelineFullEditDetail.cs:30,Plugin.Log2.Debug,"$""Document size: {bytes.Length} bytes""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.6d3c28f311d87afc,Save and close,,PvpStats/Windows/Detail/TimelineFullEditDetail.cs:51,ImGui.Button,"""Save and close""",界面候选文本；纯内部标识、格式串可留空。
+text.8d4a29dd9efee585,CC Credit,,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:17,PropertyDeclaration,"""CC Credit""",界面候选文本；纯内部标识、格式串可留空。
+text.de9a764053a69d80,No ranked matches for given filters.,,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:89,ImGui.TextDisabled,"""No ranked matches for given filters.""",界面候选文本；纯内部标识、格式串可留空。
+text.3c5dddc6b6a46923,rank graph,,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:93,ImRaii.Plot,"""rank graph""",界面候选文本；纯内部标识、格式串可留空。
+text.1d1097653f7234b6,UTC Time,,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:112,ImPlot.SetupAxes,"""UTC Time""",界面候选文本；纯内部标识、格式串可留空。
+text.6915007661af51fd,Crystal Credit,,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:131,ImPlot.PlotLine,"""Crystal Credit""",界面候选文本；纯内部标识、格式串可留空。
+text.289c711c682b8a7d,Losses,,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:138,ImPlot.PlotLine,"""Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.75b504982b43eded,Wins,,PvpStats/Windows/Summary/CrystallineConflictRankGraph.cs:146,ImPlot.PlotLine,"""Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.598ac4448093a901,CC Summary,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:20,PropertyDeclaration,"""CC Summary""",界面候选文本；纯内部标识、格式串可留空。
+text.163bd856a176df24,No matches for given filters.,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:155,ImGui.TextDisabled,"""No matches for given filters.""",界面候选文本；纯内部标识、格式串可留空。
+text.367a8c87fc8963f6,Jobs Played:,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:160,ImGui.TextColored,"""Jobs Played:""",界面候选文本；纯内部标识、格式串可留空。
+text.912145ba421d0753,Average Performance:,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:166,ImGui.TextColored,"""Average Performance:""",界面候选文本；纯内部标识、格式串可留空。
+text.b6989e10feb4a375,"1st row: average per match.
+2nd row: average per minute.
+3rd row: median team contribution per match.",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:167,ImGuiHelper.HelpMarker,"""1st row: average per match.\n2nd row: average per minute.\n3rd row: median team contribution per match.""",界面候选文本；纯内部标识、格式串可留空。
+text.d7e62865a273f494,KDA: ,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:168,ImGui.Text,"""KDA: """,界面候选文本；纯内部标识、格式串可留空。
+text.02a10b6d6503ad72,Kill Participation Rate: ,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:173,ImGui.Text,"""Kill Participation Rate: """,界面候选文本；纯内部标识、格式串可留空。
+text.69cb75b408cc129c,P1,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:176; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:463; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:465; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:467; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:469; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:471; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:473; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:475,LocalPlayerStats.ScoreboardTotal.KillParticipationRate.ToString,"""P1""",界面候选文本；纯内部标识、格式串可留空。
+text.28b5bd61e768a7f9,Arenas:,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:182,ImGui.TextColored,"""Arenas:""",界面候选文本；纯内部标识、格式串可留空。
+text.0ed882ed7a9f1dd9,Teammates' Jobs Played:,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:188,ImGui.TextColored,"""Teammates' Jobs Played:""",界面候选文本；纯内部标识、格式串可留空。
+text.7a0aa14bd288aa27,Opponents' Jobs Played:,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:194,ImGui.TextColored,"""Opponents' Jobs Played:""",界面候选文本；纯内部标识、格式串可留空。
+text.98873366887f36a8,Top Teammates:,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:200,ImGui.TextColored,"""Top Teammates:""",界面候选文本；纯内部标识、格式串可留空。
+text.d40118277bab3645,Top Opponents:,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:206,ImGui.TextColored,"""Top Opponents:""",界面候选文本；纯内部标识、格式串可留空。
+text.72cf728bf6e4bfce,description,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:214,ImGui.TableSetupColumn,"""description""",界面候选文本；纯内部标识、格式串可留空。
+text.b7405966d03a437a,"$""value""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:215,ImGui.TableSetupColumn,"$""value""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.7174a72fb2fe7cb5,"$""rate""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:216,ImGui.TableSetupColumn,"$""rate""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9a9cf33a776b0caf,Matches: ,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:219,ImGuiHelper.DrawNumericCell,"""Matches: """,界面候选文本；纯内部标识、格式串可留空。
+text.7b476b1cdcacb90e,"$""{LocalPlayerStats.StatsAll.Matches:N0}""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:221,ImGuiHelper.DrawNumericCell,"$""{LocalPlayerStats.StatsAll.Matches:N0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.be1f51219a0cd318,Wins: ,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:226,ImGuiHelper.DrawNumericCell,"""Wins: """,界面候选文本；纯内部标识、格式串可留空。
+text.b21b73d67746d8f6,"$""{LocalPlayerStats.StatsAll.Wins:N0}""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:228,ImGuiHelper.DrawNumericCell,"$""{LocalPlayerStats.StatsAll.Wins:N0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.7781a4dfa76ca11f,P2,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:230; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:291; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:338,LocalPlayerStats.StatsAll.WinRate.ToString,"""P2""",界面候选文本；纯内部标识、格式串可留空。
+text.f289b51ab96676e7,Losses: ,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:233,ImGuiHelper.DrawNumericCell,"""Losses: """,界面候选文本；纯内部标识、格式串可留空。
+text.2f6adcfe3a43ecb8,"$""{LocalPlayerStats.StatsAll.Losses:N0}""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:235,ImGuiHelper.DrawNumericCell,"$""{LocalPlayerStats.StatsAll.Losses:N0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.27d43991c02f4cb2,Other: ,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:240,ImGuiHelper.DrawNumericCell,"""Other: """,界面候选文本；纯内部标识、格式串可留空。
+text.cba497694cd151e8,"$""{LocalPlayerStats.StatsAll.OtherResult:N0}""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:242,ImGuiHelper.DrawNumericCell,"$""{LocalPlayerStats.StatsAll.OtherResult:N0}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.5d591795dc03f9d1,Average match length: ,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:249,ImGuiHelper.DrawNumericCell,"""Average match length: """,界面候选文本；纯内部标识、格式串可留空。
+text.bbe0384e77e191ff,Name,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:266; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:271; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:305; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:312; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:353; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:360,ImGui.TableSetupColumn,"""Name""",界面候选文本；纯内部标识、格式串可留空。
+text.969b5da1547100bf,"$""Matches""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:267; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:307; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:355,ImGui.TableSetupColumn,"$""Matches""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.0fd50a2a895e451c,"$""Wins""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:268; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:308; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:356,ImGui.TableSetupColumn,"$""Wins""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.09fd47bd4151c157,"$""Win Rate""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:269; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:309,ImGui.TableSetupColumn,"$""Win Rate""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.c370d2b4d6109b9b,Matches,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:273; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:316; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:364,ImGuiHelper.DrawTableHeader,"""Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.28467ad8f205d74d,Wins,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:275; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:318; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:366,ImGuiHelper.DrawTableHeader,"""Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.12d3c841063b2b6d,Win Rate,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:277; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:320,ImGuiHelper.WrappedString,"""Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.7b014216e93cc4dd,"$""{MatchHelper.GetArenaName(arena.Key)}""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:280,ImGui.Text,"$""{MatchHelper.GetArenaName(arena.Key)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.76debcb14b4eae22,"$""Role""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:306,ImGui.TableSetupColumn,"$""Role""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.fcfde9810ef9fb94,Role,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:314,ImGuiHelper.DrawTableHeader,"""Role""",界面候选文本；纯内部标识、格式串可留空。
+text.6d4fff8f254d4b3c,"$""{PlayerJobHelper.GetNameFromJob(job.Key)}""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:324,ImGui.Text,"$""{PlayerJobHelper.GetNameFromJob(job.Key)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f9127f55e24a34f0,"$""{PlayerJobHelper.GetSubRoleFromJob(job.Key)}""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:327,ImGui.TextColored,"$""{PlayerJobHelper.GetSubRoleFromJob(job.Key)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f9d3ac0902589388,"$""Favored Job""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:354,ImGui.TableSetupColumn,"$""Favored Job""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f4c27f55095eee18,"$""Win Diff.""",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:357,ImGui.TableSetupColumn,"$""Win Diff.""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.dd975836f078c4a1,"Favored
+Job",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:362,ImGuiHelper.DrawTableHeader,"""Favored\nJob""",界面候选文本；纯内部标识、格式串可留空。
+text.34176db4b49f3ada,Win Diff.,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:368,ImGuiHelper.WrappedString,"""Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.8d2001f4366681ea,Kills,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:395; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:413,MethodDeclaration,"""Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.652034fe2dfe9f71,Deaths,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:395; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:415,MethodDeclaration,"""Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.14a3b92e0fe3b08b,Assists,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:395; PvpStats/Windows/Summary/CrystallineConflictSummary.cs:417,MethodDeclaration,"""Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.5d2b436c55e25d48,Damage Dealt,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:395,MethodDeclaration,"""Damage Dealt""",界面候选文本；纯内部标识、格式串可留空。
+text.33a9d449fd31c148,Damage Taken,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:395,MethodDeclaration,"""Damage Taken""",界面候选文本；纯内部标识、格式串可留空。
+text.13d7964e46780b0c,HP Restored,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:395,MethodDeclaration,"""HP Restored""",界面候选文本；纯内部标识、格式串可留空。
+text.5d18e8ce406ec120,Time on Crystal,,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:395,MethodDeclaration,"""Time on Crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.bf2c212a13298036,"Damage
+Dealt",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:419,ImGuiHelper.DrawTableHeader,"""Damage\nDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.97696a9027cc1bd3,"Damage
+Taken",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:421,ImGuiHelper.DrawTableHeader,"""Damage\nTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.3112cda0165f790c,"HP
+Restored",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:423,ImGuiHelper.DrawTableHeader,"""HP\nRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.35db22585bb1fa51,"Time on
+Crystal",,PvpStats/Windows/Summary/CrystallineConflictSummary.cs:425,ImGuiHelper.DrawTableHeader,"""Time on\nCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.b63555b3755bb986,This data comes from SE's game servers.,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:23,ImGuiHelper.HelpMarker,"""This data comes from SE's game servers.""",界面候选文本；纯内部标识、格式串可留空。
+text.0e74f20386a363b7,Casual:,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:24,ImGui.TextColored,"""Casual:""",界面候选文本；纯内部标识、格式串可留空。
+text.0600249d80a4fac3,casualTable,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:26,ImRaii.PushId,"""casualTable""",界面候选文本；纯内部标识、格式串可留空。
+text.4df834490686294f,Current Ranked Season:,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:31,ImGui.TextColored,"""Current Ranked Season:""",界面候选文本；纯内部标识、格式串可留空。
+text.cff6228a2a98d985,rankedTable,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:33,ImRaii.PushId,"""rankedTable""",界面候选文本；纯内部标识、格式串可留空。
+text.fb6023e28ccd4723,description,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:39; PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:70,ImGui.TableSetupColumn,"""description""",界面候选文本；纯内部标识、格式串可留空。
+text.3e787a132f3ba6ca,"$""value""",,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:40; PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:71,ImGui.TableSetupColumn,"$""value""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.f05de54467d88cb4,Current Rank: ,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:42,ImGui.Text,"""Current Rank: """,界面候选文本；纯内部标识、格式串可留空。
+text.2b35f9394e10a1ac,"$""{curRank}""",,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:51,ImGui.Text,"$""{curRank}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b587f6827fd7604c,Highest Rank: ,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:53,ImGui.Text,"""Highest Rank: """,界面候选文本；纯内部标识、格式串可留空。
+text.7cb5c26b687a5859,"$""{peakRank}""",,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:61,ImGui.Text,"$""{peakRank}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.e913a91b3a5a1e5f,"$""rate""",,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:72,ImGui.TableSetupColumn,"$""rate""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.24f5a73463240148,Matches: ,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:75,ImGui.Text,"""Matches: """,界面候选文本；纯内部标识、格式串可留空。
+text.2d0e442c8ba82597,"$""{matches.ToString(""N0"")}""",,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:77,ImGui.Text,"$""{matches.ToString(""N0"")}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.1022534882d769bf,N0,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:77; PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:83,matches.ToString,"""N0""",界面候选文本；纯内部标识、格式串可留空。
+text.9cf01b9fd4a130ad,Wins: ,,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:81,ImGui.Text,"""Wins: """,界面候选文本；纯内部标识、格式串可留空。
+text.68c6348e7edcec2e,"$""{wins.ToString(""N0"")}""",,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:83,ImGui.Text,"$""{wins.ToString(""N0"")}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.124faf1570b56c71,"$""{string.Format(""{0:P}"", (double)wins / (matches))}""",,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:86,ImGui.Text,"$""{string.Format(""{0:P}"", (double)wins / (matches))}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.84c38e87d0a28f3b,{0:P},,PvpStats/Windows/Summary/CrystallineConflictPvPProfile.cs:86,string.Format,"""{0:P}""",界面候选文本；纯内部标识、格式串可留空。
+text.f0bc796bc61de395,Min. matches,,PvpStats/Windows/List/PlayerStatsList.cs:65,ImGui.SliderInt,"""Min. matches""",界面候选文本；纯内部标识、格式串可留空。
+text.f47a492d2ddaed82,###playerQuickSearch,,PvpStats/Windows/List/PlayerStatsList.cs:76,ImGui.InputTextWithHint,"""###playerQuickSearch""",界面候选文本；纯内部标识、格式串可留空。
+text.4ec9b4402a852494,Search...,,PvpStats/Windows/List/PlayerStatsList.cs:76,ImGui.InputTextWithHint,"""Search...""",界面候选文本；纯内部标识、格式串可留空。
+text.a0767e2e623ecc4a,Comma separate multiple players.,,PvpStats/Windows/List/PlayerStatsList.cs:84,ImGuiHelper.HelpMarker,"""Comma separate multiple players.""",界面候选文本；纯内部标识、格式串可留空。
+text.af93862b0a4e64f4,Right-click table header for column options.,,PvpStats/Windows/List/PlayerStatsList.cs:87,ImGuiHelper.HelpMarker,"""Right-click table header for column options.""",界面候选文本；纯内部标识、格式串可留空。
+text.7deeb172726deeb1,"$""Total players:   {DataModel.Count}""",,PvpStats/Windows/List/PlayerStatsList.cs:93,ImGui.TextUnformatted,"$""Total players:   {DataModel.Count}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.fdce4b683314ff43,CC Players,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:18,PropertyDeclaration,"""CC Players""",界面候选文本；纯内部标识、格式串可留空。
+text.466f394120ca316f,###CCPlayerStatsTable,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:19,PropertyDeclaration,"""###CCPlayerStatsTable""",界面候选文本；纯内部标识、格式串可留空。
+text.bed6fd6e9db242ee,Name,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:29,PropertyDeclaration,"""Name""",界面候选文本；纯内部标识、格式串可留空。
+text.4f0a219dbc40e3fe,Home World,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:30; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:30,PropertyDeclaration,"""Home World""",界面候选文本；纯内部标识、格式串可留空。
+text.3a622856c8119c19,Favored Job,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:31,PropertyDeclaration,"""Favored Job""",界面候选文本；纯内部标识、格式串可留空。
+text.a620ad5bc46debcc,StatsAll.Job,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:31,"""StatsAll.Job"".GetHashCode","""StatsAll.Job""",界面候选文本；纯内部标识、格式串可留空。
+text.f747c1a75e93f193,Total Matches,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:32,PropertyDeclaration,"""Total Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.e82c4819878a4faa,StatsAll.Matches,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:32,"""StatsAll.Matches"".GetHashCode","""StatsAll.Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.c037e3af936bbebd,Player Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:33,PropertyDeclaration,"""Player Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.d2341bc2012c89fd,StatsAll.Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:33,"""StatsAll.Wins"".GetHashCode","""StatsAll.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.e565757e49a224e5,Player Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:34,PropertyDeclaration,"""Player Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.b7024f7c32419898,StatsAll.Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:34,"""StatsAll.Losses"".GetHashCode","""StatsAll.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.e33083ff12859867,Player Win Diff.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:35,PropertyDeclaration,"""Player Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.e33a399fd1ca6f67,StatsAll.WinDiff,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:35,"""StatsAll.WinDiff"".GetHashCode","""StatsAll.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.be35505f4e787bca,Player Win Rate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:36,PropertyDeclaration,"""Player Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.0054dcc4c4be4013,"Player
+Win Rate",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:36,PropertyDeclaration,"""Player\nWin Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.57f7d0bbd9331f6d,StatsAll.WinRate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:36,"""StatsAll.WinRate"".GetHashCode","""StatsAll.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.37e841a04996166d,Your Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:37,PropertyDeclaration,"""Your Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.140a4132bb3b4d6b,StatsPersonal.Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:37,"""StatsPersonal.Wins"".GetHashCode","""StatsPersonal.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.97d5daa40e60d3fe,Your Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:38,PropertyDeclaration,"""Your Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.2be033f8b2b1966a,StatsPersonal.Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:38,"""StatsPersonal.Losses"".GetHashCode","""StatsPersonal.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.79bb97d5878cc738,Your Win Diff.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:39,PropertyDeclaration,"""Your Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.2182e248cdc9c756,StatsPersonal.WinDiff,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:39,"""StatsPersonal.WinDiff"".GetHashCode","""StatsPersonal.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.a983f436a860b32d,Your Win Rate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:40,PropertyDeclaration,"""Your Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.ac467fec2217a993,StatsPersonal.WinRate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:40,"""StatsPersonal.WinRate"".GetHashCode","""StatsPersonal.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.ac3e0e7b403bff41,Teammate Matches,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:41,PropertyDeclaration,"""Teammate Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.4b1ef1ded434d3e1,StatsTeammate.Matches,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:41,"""StatsTeammate.Matches"".GetHashCode","""StatsTeammate.Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.44ef0555063cb826,Teammate Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:42,PropertyDeclaration,"""Teammate Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.57090fe740aed81d,StatsTeammate.Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:42,"""StatsTeammate.Wins"".GetHashCode","""StatsTeammate.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.b8acf950df153b1b,Teammate Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:43,PropertyDeclaration,"""Teammate Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.8d63fb9e1df90d82,StatsTeammate.Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:43,"""StatsTeammate.Losses"".GetHashCode","""StatsTeammate.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.e12fa44c87bdf4a3,Teammate Win Diff.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:44,PropertyDeclaration,"""Teammate Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.2a7a93014539e6d7,StatsTeammate.WinDiff,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:44,"""StatsTeammate.WinDiff"".GetHashCode","""StatsTeammate.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.0c33efd43e7bf35d,Teammate Win Rate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:45,PropertyDeclaration,"""Teammate Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.5f8d50f4e80b57a4,StatsTeammate.WinRate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:45,"""StatsTeammate.WinRate"".GetHashCode","""StatsTeammate.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.892b1a88205bb484,Opponent Matches,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:46,PropertyDeclaration,"""Opponent Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.18f7935d45f9b17b,StatsOpponent.Matches,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:46,"""StatsOpponent.Matches"".GetHashCode","""StatsOpponent.Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.0e69edad70a41253,Opponent Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:47,PropertyDeclaration,"""Opponent Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.1717faeb6b9f12d8,StatsOpponent.Wins,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:47,"""StatsOpponent.Wins"".GetHashCode","""StatsOpponent.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.05f983b193bad7bf,Opponent Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:48,PropertyDeclaration,"""Opponent Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.c341a9b02a7506e3,StatsOpponent.Losses,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:48,"""StatsOpponent.Losses"".GetHashCode","""StatsOpponent.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.8eee60b59df0cdb2,Opponent Win Diff.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:49,PropertyDeclaration,"""Opponent Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.6b715589faeb2eac,StatsOpponent.WinDiff,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:49,"""StatsOpponent.WinDiff"".GetHashCode","""StatsOpponent.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.cc8114386320e2bc,Opponent Win Rate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:50,PropertyDeclaration,"""Opponent Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.bfa07fd1d01dce2c,StatsOpponent.WinRate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:50,"""StatsOpponent.WinRate"".GetHashCode","""StatsOpponent.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.f5f81fbf62e15f6a,Total Kills,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:51,PropertyDeclaration,"""Total Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.feeaa6ccad044e37,ScoreboardTotal.Kills,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:51,"""ScoreboardTotal.Kills"".GetHashCode","""ScoreboardTotal.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.e41565f2b90a9813,Total Deaths,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:52,PropertyDeclaration,"""Total Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.a7f121a318c0e82b,ScoreboardTotal.Deaths,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:52,"""ScoreboardTotal.Deaths"".GetHashCode","""ScoreboardTotal.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.01c9eb8a655bb55d,Total Assists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:53,PropertyDeclaration,"""Total Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.4285b2addd91df40,ScoreboardTotal.Assists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:53,"""ScoreboardTotal.Assists"".GetHashCode","""ScoreboardTotal.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.736037290943398e,Total Damage Dealt,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:54,PropertyDeclaration,"""Total Damage Dealt""",界面候选文本；纯内部标识、格式串可留空。
+text.396906f3c0a04514,"Total Damage
+Dealt",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:54,PropertyDeclaration,"""Total Damage\nDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.84e1cbbc3c3548c6,ScoreboardTotal.DamageDealt,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:54,"""ScoreboardTotal.DamageDealt"".GetHashCode","""ScoreboardTotal.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.ed4d2637db6e0bdf,Total Damage Taken,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:55,PropertyDeclaration,"""Total Damage Taken""",界面候选文本；纯内部标识、格式串可留空。
+text.e6ee326673c45194,"Total Damage
+Taken",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:55,PropertyDeclaration,"""Total Damage\nTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.9de47e8d8488c522,ScoreboardTotal.DamageTaken,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:55,"""ScoreboardTotal.DamageTaken"".GetHashCode","""ScoreboardTotal.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.202939183128b613,Total HP Restored,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:56,PropertyDeclaration,"""Total HP Restored""",界面候选文本；纯内部标识、格式串可留空。
+text.a1961088eeea113e,ScoreboardTotal.HPRestored,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:56,"""ScoreboardTotal.HPRestored"".GetHashCode","""ScoreboardTotal.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.0828ac9b737b3335,Total Time on Crystal,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:57,PropertyDeclaration,"""Total Time on Crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.06d85e4bfffa8086,"Total Time
+on Crystal",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:57,PropertyDeclaration,"""Total Time\non Crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.2c425e2916e2ad01,ScoreboardTotal.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:57,"""ScoreboardTotal.TimeOnCrystal"".GetHashCode","""ScoreboardTotal.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.7244f15ee505cf5d,Total Kills/Assists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:58,PropertyDeclaration,"""Total Kills/Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.b30adbf0829ce8a6,"Total Kills
+ and Assists",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:58,PropertyDeclaration,"""Total Kills\n and Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.d2a05f69bd8406a5,ScoreboardTotal.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:58,"""ScoreboardTotal.KillsAndAssists"".GetHashCode","""ScoreboardTotal.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.66b6251c0c7a4ed9,Kills Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:59,PropertyDeclaration,"""Kills Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.ee7ed929ef9cdf67,ScoreboardPerMatch.Kills,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:59,"""ScoreboardPerMatch.Kills"".GetHashCode","""ScoreboardPerMatch.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.94d505b3a6e98a97,Deaths Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:60,PropertyDeclaration,"""Deaths Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.49220672d21be355,ScoreboardPerMatch.Deaths,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:60,"""ScoreboardPerMatch.Deaths"".GetHashCode","""ScoreboardPerMatch.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.044df6f88540bbdd,Assists Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:61,PropertyDeclaration,"""Assists Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.8892f0747f4b6841,ScoreboardPerMatch.Assists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:61,"""ScoreboardPerMatch.Assists"".GetHashCode","""ScoreboardPerMatch.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.2b7613feb619aa25,Damage Dealt Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:62,PropertyDeclaration,"""Damage Dealt Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.e3c127b0d267a574,ScoreboardPerMatch.DamageDealt,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:62,"""ScoreboardPerMatch.DamageDealt"".GetHashCode","""ScoreboardPerMatch.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.ae84435bcd2988bd,Damage Taken Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:63,PropertyDeclaration,"""Damage Taken Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.275a3ffd95ec550b,ScoreboardPerMatch.DamageTaken,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:63,"""ScoreboardPerMatch.DamageTaken"".GetHashCode","""ScoreboardPerMatch.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.d6b8b2c6dce20994,HP Restored Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:64,PropertyDeclaration,"""HP Restored Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.29c59f81d61ee6bb,ScoreboardPerMatch.HPRestored,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:64,"""ScoreboardPerMatch.HPRestored"".GetHashCode","""ScoreboardPerMatch.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.9eec43667dd37f74,Time on Crystal Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:65,PropertyDeclaration,"""Time on Crystal Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.8e54748ef5dd905f,ScoreboardPerMatch.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:65,"""ScoreboardPerMatch.TimeOnCrystal"".GetHashCode","""ScoreboardPerMatch.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.fbceb29224c991d5,Kills/Assists Per Match,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:66,PropertyDeclaration,"""Kills/Assists Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.cab4b91aac4c4545,ScoreboardPerMatch.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:66,"""ScoreboardPerMatch.KillsAndAssists"".GetHashCode","""ScoreboardPerMatch.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.5156a2a94f62bdca,Kills Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:67,PropertyDeclaration,"""Kills Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.da3d4b6229d1c4ae,"Kills
+Per Min",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:67,PropertyDeclaration,"""Kills\nPer Min""",界面候选文本；纯内部标识、格式串可留空。
+text.9b1024ab5bfcfedb,ScoreboardPerMin.Kills,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:67,"""ScoreboardPerMin.Kills"".GetHashCode","""ScoreboardPerMin.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.51083ab756bc5131,Deaths Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:68,PropertyDeclaration,"""Deaths Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.5c9041b597851864,ScoreboardPerMin.Deaths,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:68,"""ScoreboardPerMin.Deaths"".GetHashCode","""ScoreboardPerMin.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.5f081f6e7cd987f5,Assists Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:69,PropertyDeclaration,"""Assists Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.04f423493089902a,ScoreboardPerMin.Assists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:69,"""ScoreboardPerMin.Assists"".GetHashCode","""ScoreboardPerMin.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.521d6802d6c00f18,Damage Dealt Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:70,PropertyDeclaration,"""Damage Dealt Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.972f89060e9202e1,ScoreboardPerMin.DamageDealt,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:70,"""ScoreboardPerMin.DamageDealt"".GetHashCode","""ScoreboardPerMin.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.9df22f54f84f8078,Damage Taken Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:71,PropertyDeclaration,"""Damage Taken Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.893b04dd0f9a8e85,ScoreboardPerMin.DamageTaken,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:71,"""ScoreboardPerMin.DamageTaken"".GetHashCode","""ScoreboardPerMin.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.0bd29961e74ad0ec,HP Restored Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:72,PropertyDeclaration,"""HP Restored Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.bd1e67da550faafe,ScoreboardPerMin.HPRestored,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:72,"""ScoreboardPerMin.HPRestored"".GetHashCode","""ScoreboardPerMin.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.f5c6f4400068d858,Time on Crystal Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:73,PropertyDeclaration,"""Time on Crystal Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.aa7914fe92d3c322,ScoreboardPerMin.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:73,"""ScoreboardPerMin.TimeOnCrystal"".GetHashCode","""ScoreboardPerMin.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.7fd1547bb9aa1124,Kills/Assists Per Min,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:74,PropertyDeclaration,"""Kills/Assists Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.ceb6b4096e945700,ScoreboardPerMin.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:74,"""ScoreboardPerMin.KillsAndAssists"".GetHashCode","""ScoreboardPerMin.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.d7400b09095766a6,Median Kill Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:75,PropertyDeclaration,"""Median Kill Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.f3f05e9813156096,ScoreboardContrib.Kills,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:75,"""ScoreboardContrib.Kills"".GetHashCode","""ScoreboardContrib.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.2b14c18014762322,Median Death Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:76,PropertyDeclaration,"""Median Death Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.2d70fccc5c70c221,ScoreboardContrib.Deaths,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:76,"""ScoreboardContrib.Deaths"".GetHashCode","""ScoreboardContrib.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.02aa48533fb0a95c,Median Assist Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:77,PropertyDeclaration,"""Median Assist Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.5cb4ffa44e0f6718,ScoreboardContrib.Assists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:77,"""ScoreboardContrib.Assists"".GetHashCode","""ScoreboardContrib.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.e913c13cfb632728,Median Damage Dealt Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:78,PropertyDeclaration,"""Median Damage Dealt Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.431d4fbf32a7a458,ScoreboardContrib.DamageDealt,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:78,"""ScoreboardContrib.DamageDealt"".GetHashCode","""ScoreboardContrib.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.596deee81b46bc81,Median Damage Taken Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:79,PropertyDeclaration,"""Median Damage Taken Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.2990e7a6cd51ce8e,ScoreboardContrib.DamageTaken,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:79,"""ScoreboardContrib.DamageTaken"".GetHashCode","""ScoreboardContrib.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.fe04330a61032530,Median HP Restored Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:80,PropertyDeclaration,"""Median HP Restored Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.85e437a86d4631b6,ScoreboardContrib.HPRestored,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:80,"""ScoreboardContrib.HPRestored"".GetHashCode","""ScoreboardContrib.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.e2fccc8eb5c875e2,Median Time on Crystal Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:81,PropertyDeclaration,"""Median Time on Crystal Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.9c32dc3a53b88f8a,ScoreboardContrib.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:81,"""ScoreboardContrib.TimeOnCrystal"".GetHashCode","""ScoreboardContrib.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.1eac7c92fda9589e,Median Kill/Assist Contrib.,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:82,PropertyDeclaration,"""Median Kill/Assist Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.a8bf8558dab9fba9,"Median Kill and
+Assist Contrib",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:82,PropertyDeclaration,"""Median Kill and\nAssist Contrib""",界面候选文本；纯内部标识、格式串可留空。
+text.fa50b3d3dc003dea,ScoreboardContrib.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:82,"""ScoreboardContrib.KillsAndAssists"".GetHashCode","""ScoreboardContrib.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.95d820ff861e387f,Damage Dealt Per Kill/Assist,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:83,PropertyDeclaration,"""Damage Dealt Per Kill/Assist""",界面候选文本；纯内部标识、格式串可留空。
+text.62dc4cc971a82f9e,"Damage Dealt
+Per Kill/Assist",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:83,PropertyDeclaration,"""Damage Dealt\nPer Kill/Assist""",界面候选文本；纯内部标识、格式串可留空。
+text.211d18ee7d418e7a,ScoreboardTotal.DamageDealtPerKA,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:83,"""ScoreboardTotal.DamageDealtPerKA"".GetHashCode","""ScoreboardTotal.DamageDealtPerKA""",界面候选文本；纯内部标识、格式串可留空。
+text.1573489c17db0f8b,Damage Dealt Per Life,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:84,PropertyDeclaration,"""Damage Dealt Per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.1a6305f2b0f9152d,ScoreboardTotal.DamageDealtPerLife,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:84,"""ScoreboardTotal.DamageDealtPerLife"".GetHashCode","""ScoreboardTotal.DamageDealtPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.7db6ea45007b3525,Damage Taken Per Life,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:85,PropertyDeclaration,"""Damage Taken Per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.62989785560d9fb0,ScoreboardTotal.DamageTakenPerLife,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:85,"""ScoreboardTotal.DamageTakenPerLife"".GetHashCode","""ScoreboardTotal.DamageTakenPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.439dcc57377a3260,HP Restored Per Life,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:86,PropertyDeclaration,"""HP Restored Per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.be13ebfd84ee8086,ScoreboardTotal.HPRestoredPerLife,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:86,"""ScoreboardTotal.HPRestoredPerLife"".GetHashCode","""ScoreboardTotal.HPRestoredPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.fd81e5182f0feb94,KDA Ratio,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:87,PropertyDeclaration,"""KDA Ratio""",界面候选文本；纯内部标识、格式串可留空。
+text.500e7eb54302e4fe,ScoreboardTotal.KDA,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:87,"""ScoreboardTotal.KDA"".GetHashCode","""ScoreboardTotal.KDA""",界面候选文本；纯内部标识、格式串可留空。
+text.ced6a11e17cf75af,Kill Participation,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:88,PropertyDeclaration,"""Kill Participation""",界面候选文本；纯内部标识、格式串可留空。
+text.3db134fdb6710b1c,ScoreboardTotal.KillParticipationRate,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:88,"""ScoreboardTotal.KillParticipationRate"".GetHashCode","""ScoreboardTotal.KillParticipationRate""",界面候选文本；纯内部标识、格式串可留空。
+text.485c37b9d2d7d352,"$""{item.Name}""",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:171,ImGui.TextUnformatted,"$""{item.Name}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.5578bdfc6ae194f9,"Including stats for:
+
+",,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:173,MethodDeclaration,"""Including stats for:\n\n""",界面候选文本；纯内部标识、格式串可留空。
+text.a4d034491664bb60,P1,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:204; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:220; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:239; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:258; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:347; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:350; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:353; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:356; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:359; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:362; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:365; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:368; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:388,StatsModel[item].StatsAll.WinRate.ToString,"""P1""",界面候选文本；纯内部标识、格式串可留空。
+text.f3e5306e95a57d9c,N0,,PvpStats/Windows/List/CrystallineConflictPlayerList.cs:263; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:266; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:269; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:272; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:275; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:278; PvpStats/Windows/List/CrystallineConflictPlayerList.cs:284,StatsModel[item].ScoreboardTotal.Kills.ToString,"""N0""",界面候选文本；纯内部标识、格式串可留空。
+text.d525b459d2f00269,CC Jobs,,PvpStats/Windows/List/CrystallineConflictJobList.cs:18,PropertyDeclaration,"""CC Jobs""",界面候选文本；纯内部标识、格式串可留空。
+text.3321724bab96dd94,###CCJobStatsTable,,PvpStats/Windows/List/CrystallineConflictJobList.cs:19,PropertyDeclaration,"""###CCJobStatsTable""",界面候选文本；纯内部标识、格式串可留空。
+text.1177ae9fe5ca3c3c,Job,,PvpStats/Windows/List/CrystallineConflictJobList.cs:29,PropertyDeclaration,"""Job""",界面候选文本；纯内部标识、格式串可留空。
+text.89b1a7df423046ed,Role,,PvpStats/Windows/List/CrystallineConflictJobList.cs:30,PropertyDeclaration,"""Role""",界面候选文本；纯内部标识、格式串可留空。
+text.0ba78d0b1d2c25c4,Total Instances,,PvpStats/Windows/List/CrystallineConflictJobList.cs:31,PropertyDeclaration,"""Total Instances""",界面候选文本；纯内部标识、格式串可留空。
+text.56334a30a5695bd6,StatsAll.Matches,,PvpStats/Windows/List/CrystallineConflictJobList.cs:31,"""StatsAll.Matches"".GetHashCode","""StatsAll.Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.83ac828bf39433b2,Job Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:32,PropertyDeclaration,"""Job Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.a2e23b37ad483502,StatsAll.Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:32,"""StatsAll.Wins"".GetHashCode","""StatsAll.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.6d40a47ae9bde857,Job Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:33,PropertyDeclaration,"""Job Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.a800d33e8470c793,StatsAll.Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:33,"""StatsAll.Losses"".GetHashCode","""StatsAll.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.338590f8afa93c00,Job Win Diff.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:34,PropertyDeclaration,"""Job Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.d1988ef27ba5fd91,StatsAll.WinDiff,,PvpStats/Windows/List/CrystallineConflictJobList.cs:34,"""StatsAll.WinDiff"".GetHashCode","""StatsAll.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.c174295b67bed038,Job Win Rate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:35,PropertyDeclaration,"""Job Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.bf1bda5bc3315266,StatsAll.WinRate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:35,"""StatsAll.WinRate"".GetHashCode","""StatsAll.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.06c85f5420a732b3,Your Matches,,PvpStats/Windows/List/CrystallineConflictJobList.cs:36,PropertyDeclaration,"""Your Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.0a45db248c0e90f8,StatsPersonal.Matches,,PvpStats/Windows/List/CrystallineConflictJobList.cs:36,"""StatsPersonal.Matches"".GetHashCode","""StatsPersonal.Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.e395987bc21e4eb5,Your Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:37,PropertyDeclaration,"""Your Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.35ea0b3517cac659,StatsPersonal.Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:37,"""StatsPersonal.Wins"".GetHashCode","""StatsPersonal.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.d7d43f9f17db8eb0,Your Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:38,PropertyDeclaration,"""Your Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.b102c52c2bba0fd2,StatsPersonal.Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:38,"""StatsPersonal.Losses"".GetHashCode","""StatsPersonal.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.cd4048bb76332083,Your Win Diff.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:39,PropertyDeclaration,"""Your Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.6336d8ef312a9f4a,StatsPersonal.WinDiff,,PvpStats/Windows/List/CrystallineConflictJobList.cs:39,"""StatsPersonal.WinDiff"".GetHashCode","""StatsPersonal.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.4454a908d4db15d4,Your Win Rate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:40,PropertyDeclaration,"""Your Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.deac99329b23ed8c,StatsPersonal.WinRate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:40,"""StatsPersonal.WinRate"".GetHashCode","""StatsPersonal.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.27df424ea8e29e3c,Teammate Matches,,PvpStats/Windows/List/CrystallineConflictJobList.cs:41,PropertyDeclaration,"""Teammate Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.e803d2896e3baf98,StatsTeammate.Matches,,PvpStats/Windows/List/CrystallineConflictJobList.cs:41,"""StatsTeammate.Matches"".GetHashCode","""StatsTeammate.Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.6e6704383eb348c1,Teammate Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:42,PropertyDeclaration,"""Teammate Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.46f59b2a497fbb16,StatsTeammate.Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:42,"""StatsTeammate.Wins"".GetHashCode","""StatsTeammate.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.396fbe9da8e56fb3,Teammate Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:43,PropertyDeclaration,"""Teammate Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.553b3b2f755eb113,StatsTeammate.Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:43,"""StatsTeammate.Losses"".GetHashCode","""StatsTeammate.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.d222095f5b786722,Teammate Win Diff.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:44,PropertyDeclaration,"""Teammate Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.d02fc2b7bd8fa32a,StatsTeammate.WinDiff,,PvpStats/Windows/List/CrystallineConflictJobList.cs:44,"""StatsTeammate.WinDiff"".GetHashCode","""StatsTeammate.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.3b6404fe2fb981de,Teammate Win Rate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:45,PropertyDeclaration,"""Teammate Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.ea5a97a41da0fd08,StatsTeammate.WinRate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:45,"""StatsTeammate.WinRate"".GetHashCode","""StatsTeammate.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.2c06ef3804f7d637,Opponent Matches,,PvpStats/Windows/List/CrystallineConflictJobList.cs:46,PropertyDeclaration,"""Opponent Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.26a91b8bd6990993,StatsOpponent.Matches,,PvpStats/Windows/List/CrystallineConflictJobList.cs:46,"""StatsOpponent.Matches"".GetHashCode","""StatsOpponent.Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.c39aec5cab2fa017,Opponent Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:47,PropertyDeclaration,"""Opponent Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.d739f558a94b4444,StatsOpponent.Wins,,PvpStats/Windows/List/CrystallineConflictJobList.cs:47,"""StatsOpponent.Wins"".GetHashCode","""StatsOpponent.Wins""",界面候选文本；纯内部标识、格式串可留空。
+text.70448462a48e4f4e,Opponent Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:48,PropertyDeclaration,"""Opponent Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.065e074571781c34,StatsOpponent.Losses,,PvpStats/Windows/List/CrystallineConflictJobList.cs:48,"""StatsOpponent.Losses"".GetHashCode","""StatsOpponent.Losses""",界面候选文本；纯内部标识、格式串可留空。
+text.6b7646d511b72e1a,Opponent Win Diff.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:49,PropertyDeclaration,"""Opponent Win Diff.""",界面候选文本；纯内部标识、格式串可留空。
+text.ea5fd389520ffa2e,StatsOpponent.WinDiff,,PvpStats/Windows/List/CrystallineConflictJobList.cs:49,"""StatsOpponent.WinDiff"".GetHashCode","""StatsOpponent.WinDiff""",界面候选文本；纯内部标识、格式串可留空。
+text.ba9ecce29f44ebbc,Opponent Win Rate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:50,PropertyDeclaration,"""Opponent Win Rate""",界面候选文本；纯内部标识、格式串可留空。
+text.5f597876506de18a,StatsOpponent.WinRate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:50,"""StatsOpponent.WinRate"".GetHashCode","""StatsOpponent.WinRate""",界面候选文本；纯内部标识、格式串可留空。
+text.c2c43557e0e0c9e9,Total Kills,,PvpStats/Windows/List/CrystallineConflictJobList.cs:51,PropertyDeclaration,"""Total Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.c3a0dc588635c626,ScoreboardTotal.Kills,,PvpStats/Windows/List/CrystallineConflictJobList.cs:51,"""ScoreboardTotal.Kills"".GetHashCode","""ScoreboardTotal.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.42e7489bde0932ef,Total Deaths,,PvpStats/Windows/List/CrystallineConflictJobList.cs:52,PropertyDeclaration,"""Total Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.35fec997f3c57411,ScoreboardTotal.Deaths,,PvpStats/Windows/List/CrystallineConflictJobList.cs:52,"""ScoreboardTotal.Deaths"".GetHashCode","""ScoreboardTotal.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.3718f20a7f4ac432,Total Assists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:53,PropertyDeclaration,"""Total Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.044a1c9ef16950c3,ScoreboardTotal.Assists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:53,"""ScoreboardTotal.Assists"".GetHashCode","""ScoreboardTotal.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.a12530892a3b9cf3,Total Damage Dealt,,PvpStats/Windows/List/CrystallineConflictJobList.cs:54,PropertyDeclaration,"""Total Damage Dealt""",界面候选文本；纯内部标识、格式串可留空。
+text.27111b563f4672db,"Total Damage
+Dealt",,PvpStats/Windows/List/CrystallineConflictJobList.cs:54,PropertyDeclaration,"""Total Damage\nDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.06da6ef90b42e8cc,ScoreboardTotal.DamageDealt,,PvpStats/Windows/List/CrystallineConflictJobList.cs:54,"""ScoreboardTotal.DamageDealt"".GetHashCode","""ScoreboardTotal.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.451ac39f39a74fed,Total Damage Taken,,PvpStats/Windows/List/CrystallineConflictJobList.cs:55,PropertyDeclaration,"""Total Damage Taken""",界面候选文本；纯内部标识、格式串可留空。
+text.4f01f00bbe2c47a6,"Total Damage
+Taken",,PvpStats/Windows/List/CrystallineConflictJobList.cs:55,PropertyDeclaration,"""Total Damage\nTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.7a2e8b38010554c7,ScoreboardTotal.DamageTaken,,PvpStats/Windows/List/CrystallineConflictJobList.cs:55,"""ScoreboardTotal.DamageTaken"".GetHashCode","""ScoreboardTotal.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.cd9b7d3172fb97a7,Total HP Restored,,PvpStats/Windows/List/CrystallineConflictJobList.cs:56,PropertyDeclaration,"""Total HP Restored""",界面候选文本；纯内部标识、格式串可留空。
+text.d193f3a2e4ba10be,ScoreboardTotal.HPRestored,,PvpStats/Windows/List/CrystallineConflictJobList.cs:56,"""ScoreboardTotal.HPRestored"".GetHashCode","""ScoreboardTotal.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.debccd70bdad03b7,Total Time on Crystal,,PvpStats/Windows/List/CrystallineConflictJobList.cs:57,PropertyDeclaration,"""Total Time on Crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.0439f667d796f225,"Total Time
+on Crystal",,PvpStats/Windows/List/CrystallineConflictJobList.cs:57,PropertyDeclaration,"""Total Time\non Crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.d83dd796a8e92f40,ScoreboardTotal.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictJobList.cs:57,"""ScoreboardTotal.TimeOnCrystal"".GetHashCode","""ScoreboardTotal.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.bd4709d3baab5f39,Total Kills/Assists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:58,PropertyDeclaration,"""Total Kills/Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.3eccc5c84858a9f2,"Total Kills
+ and Assists",,PvpStats/Windows/List/CrystallineConflictJobList.cs:58,PropertyDeclaration,"""Total Kills\n and Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.b93903903d77280f,ScoreboardTotal.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:58,"""ScoreboardTotal.KillsAndAssists"".GetHashCode","""ScoreboardTotal.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.6f7544473a62c4dd,Kills Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:59,PropertyDeclaration,"""Kills Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.8a62d0c6cc439acb,ScoreboardPerMatch.Kills,,PvpStats/Windows/List/CrystallineConflictJobList.cs:59,"""ScoreboardPerMatch.Kills"".GetHashCode","""ScoreboardPerMatch.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.4dcbd6cdd79c7dfc,Deaths Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:60,PropertyDeclaration,"""Deaths Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.b0c97297493801d1,ScoreboardPerMatch.Deaths,,PvpStats/Windows/List/CrystallineConflictJobList.cs:60,"""ScoreboardPerMatch.Deaths"".GetHashCode","""ScoreboardPerMatch.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.afc0ebe62617055e,Assists Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:61,PropertyDeclaration,"""Assists Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.c6f4a4f1cb50bff9,ScoreboardPerMatch.Assists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:61,"""ScoreboardPerMatch.Assists"".GetHashCode","""ScoreboardPerMatch.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.bd723b26023df5b9,Damage Dealt Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:62,PropertyDeclaration,"""Damage Dealt Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.fc933bfb14b2ff6b,ScoreboardPerMatch.DamageDealt,,PvpStats/Windows/List/CrystallineConflictJobList.cs:62,"""ScoreboardPerMatch.DamageDealt"".GetHashCode","""ScoreboardPerMatch.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.502ac30bf9fff2ad,Damage Taken Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:63,PropertyDeclaration,"""Damage Taken Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.2e3a4998a2dedce6,ScoreboardPerMatch.DamageTaken,,PvpStats/Windows/List/CrystallineConflictJobList.cs:63,"""ScoreboardPerMatch.DamageTaken"".GetHashCode","""ScoreboardPerMatch.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.d1f08cb9c3a031ee,HP Restored Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:64,PropertyDeclaration,"""HP Restored Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.a93d8e028059a7f3,ScoreboardPerMatch.HPRestored,,PvpStats/Windows/List/CrystallineConflictJobList.cs:64,"""ScoreboardPerMatch.HPRestored"".GetHashCode","""ScoreboardPerMatch.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.c777cb19f0e053aa,Time on Crystal Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:65,PropertyDeclaration,"""Time on Crystal Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.a11834f4086c8bb1,ScoreboardPerMatch.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictJobList.cs:65,"""ScoreboardPerMatch.TimeOnCrystal"".GetHashCode","""ScoreboardPerMatch.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.a1f528ae14784141,Kills/Assists Per Match,,PvpStats/Windows/List/CrystallineConflictJobList.cs:66,PropertyDeclaration,"""Kills/Assists Per Match""",界面候选文本；纯内部标识、格式串可留空。
+text.628946b129dca4f6,ScoreboardPerMatch.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:66,"""ScoreboardPerMatch.KillsAndAssists"".GetHashCode","""ScoreboardPerMatch.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.5ec7584ef7dd72b1,Kills Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:67,PropertyDeclaration,"""Kills Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.6b854908767803ec,"Kills
+Per Min",,PvpStats/Windows/List/CrystallineConflictJobList.cs:67,PropertyDeclaration,"""Kills\nPer Min""",界面候选文本；纯内部标识、格式串可留空。
+text.ef17dbbf2c373eec,ScoreboardPerMin.Kills,,PvpStats/Windows/List/CrystallineConflictJobList.cs:67,"""ScoreboardPerMin.Kills"".GetHashCode","""ScoreboardPerMin.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.55e489ade6ade497,Deaths Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:68,PropertyDeclaration,"""Deaths Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.39e145bcfdd4e6be,ScoreboardPerMin.Deaths,,PvpStats/Windows/List/CrystallineConflictJobList.cs:68,"""ScoreboardPerMin.Deaths"".GetHashCode","""ScoreboardPerMin.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.c1b8a9708ed7b9cb,Assists Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:69,PropertyDeclaration,"""Assists Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.8513d74c86815686,ScoreboardPerMin.Assists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:69,"""ScoreboardPerMin.Assists"".GetHashCode","""ScoreboardPerMin.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.c20079bc5526c485,Damage Dealt Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:70,PropertyDeclaration,"""Damage Dealt Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.3aaac3643968981d,ScoreboardPerMin.DamageDealt,,PvpStats/Windows/List/CrystallineConflictJobList.cs:70,"""ScoreboardPerMin.DamageDealt"".GetHashCode","""ScoreboardPerMin.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.a2140c26f0476bd0,Damage Taken Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:71,PropertyDeclaration,"""Damage Taken Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.7b719a962632d0e9,ScoreboardPerMin.DamageTaken,,PvpStats/Windows/List/CrystallineConflictJobList.cs:71,"""ScoreboardPerMin.DamageTaken"".GetHashCode","""ScoreboardPerMin.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.464191b4650aeaa0,HP Restored Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:72,PropertyDeclaration,"""HP Restored Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.cb8673c11b7fcbc1,ScoreboardPerMin.HPRestored,,PvpStats/Windows/List/CrystallineConflictJobList.cs:72,"""ScoreboardPerMin.HPRestored"".GetHashCode","""ScoreboardPerMin.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.d356375426bd95c2,Time on Crystal Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:73,PropertyDeclaration,"""Time on Crystal Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.f95bfc125f9d7946,ScoreboardPerMin.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictJobList.cs:73,"""ScoreboardPerMin.TimeOnCrystal"".GetHashCode","""ScoreboardPerMin.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.115f311e01b45245,Kills/Assists Per Min,,PvpStats/Windows/List/CrystallineConflictJobList.cs:74,PropertyDeclaration,"""Kills/Assists Per Min""",界面候选文本；纯内部标识、格式串可留空。
+text.45f1983e60286a74,ScoreboardPerMin.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:74,"""ScoreboardPerMin.KillsAndAssists"".GetHashCode","""ScoreboardPerMin.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.7bddad209f1d39a2,Median Kill Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:75,PropertyDeclaration,"""Median Kill Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.1b4bb1a5de2ee553,ScoreboardContrib.Kills,,PvpStats/Windows/List/CrystallineConflictJobList.cs:75,"""ScoreboardContrib.Kills"".GetHashCode","""ScoreboardContrib.Kills""",界面候选文本；纯内部标识、格式串可留空。
+text.852b6c2929a9723e,Median Death Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:76,PropertyDeclaration,"""Median Death Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.e7a857462c2e0472,ScoreboardContrib.Deaths,,PvpStats/Windows/List/CrystallineConflictJobList.cs:76,"""ScoreboardContrib.Deaths"".GetHashCode","""ScoreboardContrib.Deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.b6a72c5415c8a430,Median Assist Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:77,PropertyDeclaration,"""Median Assist Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.0a17fe658db1c643,ScoreboardContrib.Assists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:77,"""ScoreboardContrib.Assists"".GetHashCode","""ScoreboardContrib.Assists""",界面候选文本；纯内部标识、格式串可留空。
+text.945741773ba19236,Median Damage Dealt Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:78,PropertyDeclaration,"""Median Damage Dealt Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.2852919c0e4ce9ef,ScoreboardContrib.DamageDealt,,PvpStats/Windows/List/CrystallineConflictJobList.cs:78,"""ScoreboardContrib.DamageDealt"".GetHashCode","""ScoreboardContrib.DamageDealt""",界面候选文本；纯内部标识、格式串可留空。
+text.04cd842921981f7d,Median Damage Taken Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:79,PropertyDeclaration,"""Median Damage Taken Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.29b5375b5b89eea6,ScoreboardContrib.DamageTaken,,PvpStats/Windows/List/CrystallineConflictJobList.cs:79,"""ScoreboardContrib.DamageTaken"".GetHashCode","""ScoreboardContrib.DamageTaken""",界面候选文本；纯内部标识、格式串可留空。
+text.550ac3025f908297,Median HP Restored Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:80,PropertyDeclaration,"""Median HP Restored Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.046c06d22e10ec77,ScoreboardContrib.HPRestored,,PvpStats/Windows/List/CrystallineConflictJobList.cs:80,"""ScoreboardContrib.HPRestored"".GetHashCode","""ScoreboardContrib.HPRestored""",界面候选文本；纯内部标识、格式串可留空。
+text.9d825286225c4d91,Median Time on Crystal Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:81,PropertyDeclaration,"""Median Time on Crystal Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.a089b88682095330,ScoreboardContrib.TimeOnCrystal,,PvpStats/Windows/List/CrystallineConflictJobList.cs:81,"""ScoreboardContrib.TimeOnCrystal"".GetHashCode","""ScoreboardContrib.TimeOnCrystal""",界面候选文本；纯内部标识、格式串可留空。
+text.997adf355ee4e6c3,Median Kill/Assist Contrib.,,PvpStats/Windows/List/CrystallineConflictJobList.cs:82,PropertyDeclaration,"""Median Kill/Assist Contrib.""",界面候选文本；纯内部标识、格式串可留空。
+text.00403c3e7861b1c3,"Median Kill and
+Assist Contrib",,PvpStats/Windows/List/CrystallineConflictJobList.cs:82,PropertyDeclaration,"""Median Kill and\nAssist Contrib""",界面候选文本；纯内部标识、格式串可留空。
+text.0ff280bed5136fb4,ScoreboardContrib.KillsAndAssists,,PvpStats/Windows/List/CrystallineConflictJobList.cs:82,"""ScoreboardContrib.KillsAndAssists"".GetHashCode","""ScoreboardContrib.KillsAndAssists""",界面候选文本；纯内部标识、格式串可留空。
+text.1b048878d4a2de35,Damage Dealt Per Kill/Assist,,PvpStats/Windows/List/CrystallineConflictJobList.cs:83,PropertyDeclaration,"""Damage Dealt Per Kill/Assist""",界面候选文本；纯内部标识、格式串可留空。
+text.49e0bb47197b981d,"Damage Dealt
+Per Kill/Assist",,PvpStats/Windows/List/CrystallineConflictJobList.cs:83,PropertyDeclaration,"""Damage Dealt\nPer Kill/Assist""",界面候选文本；纯内部标识、格式串可留空。
+text.4eee154347edc46e,ScoreboardTotal.DamageDealtPerKA,,PvpStats/Windows/List/CrystallineConflictJobList.cs:83,"""ScoreboardTotal.DamageDealtPerKA"".GetHashCode","""ScoreboardTotal.DamageDealtPerKA""",界面候选文本；纯内部标识、格式串可留空。
+text.52fc1c8e5ee1465c,Damage Dealt Per Life,,PvpStats/Windows/List/CrystallineConflictJobList.cs:84,PropertyDeclaration,"""Damage Dealt Per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.df51de1826c74e01,ScoreboardTotal.DamageDealtPerLife,,PvpStats/Windows/List/CrystallineConflictJobList.cs:84,"""ScoreboardTotal.DamageDealtPerLife"".GetHashCode","""ScoreboardTotal.DamageDealtPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.7d9a11b3cd594a41,Damage Taken Per Life,,PvpStats/Windows/List/CrystallineConflictJobList.cs:85,PropertyDeclaration,"""Damage Taken Per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.614466ac31e01de1,ScoreboardTotal.DamageTakenPerLife,,PvpStats/Windows/List/CrystallineConflictJobList.cs:85,"""ScoreboardTotal.DamageTakenPerLife"".GetHashCode","""ScoreboardTotal.DamageTakenPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.16c6fc4b09e176e8,HP Restored Per Life,,PvpStats/Windows/List/CrystallineConflictJobList.cs:86,PropertyDeclaration,"""HP Restored Per Life""",界面候选文本；纯内部标识、格式串可留空。
+text.8ec8360eb93c1da1,ScoreboardTotal.HPRestoredPerLife,,PvpStats/Windows/List/CrystallineConflictJobList.cs:86,"""ScoreboardTotal.HPRestoredPerLife"".GetHashCode","""ScoreboardTotal.HPRestoredPerLife""",界面候选文本；纯内部标识、格式串可留空。
+text.c2eb0247ca857a4d,KDA Ratio,,PvpStats/Windows/List/CrystallineConflictJobList.cs:87,PropertyDeclaration,"""KDA Ratio""",界面候选文本；纯内部标识、格式串可留空。
+text.dcf087373c61070e,ScoreboardTotal.KDA,,PvpStats/Windows/List/CrystallineConflictJobList.cs:87,"""ScoreboardTotal.KDA"".GetHashCode","""ScoreboardTotal.KDA""",界面候选文本；纯内部标识、格式串可留空。
+text.093effdf5fb7d032,Kill Participation,,PvpStats/Windows/List/CrystallineConflictJobList.cs:88,PropertyDeclaration,"""Kill Participation""",界面候选文本；纯内部标识、格式串可留空。
+text.77649f381ef94f63,ScoreboardTotal.KillParticipationRate,,PvpStats/Windows/List/CrystallineConflictJobList.cs:88,"""ScoreboardTotal.KillParticipationRate"".GetHashCode","""ScoreboardTotal.KillParticipationRate""",界面候选文本；纯内部标识、格式串可留空。
+text.e138478f171588d2,"$""{PlayerJobHelper.GetNameFromJob(item)}""",,PvpStats/Windows/List/CrystallineConflictJobList.cs:166,ImGui.TextUnformatted,"$""{PlayerJobHelper.GetNameFromJob(item)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.ed131d7857da04b6,"$""{PlayerJobHelper.GetSubRoleFromJob(item)}""",,PvpStats/Windows/List/CrystallineConflictJobList.cs:168,ImGui.TextColored,"$""{PlayerJobHelper.GetSubRoleFromJob(item)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.334212c5884c5a90,P1,,PvpStats/Windows/List/CrystallineConflictJobList.cs:187; PvpStats/Windows/List/CrystallineConflictJobList.cs:206; PvpStats/Windows/List/CrystallineConflictJobList.cs:225; PvpStats/Windows/List/CrystallineConflictJobList.cs:244; PvpStats/Windows/List/CrystallineConflictJobList.cs:333; PvpStats/Windows/List/CrystallineConflictJobList.cs:336; PvpStats/Windows/List/CrystallineConflictJobList.cs:339; PvpStats/Windows/List/CrystallineConflictJobList.cs:342; PvpStats/Windows/List/CrystallineConflictJobList.cs:345; PvpStats/Windows/List/CrystallineConflictJobList.cs:348; PvpStats/Windows/List/CrystallineConflictJobList.cs:351; PvpStats/Windows/List/CrystallineConflictJobList.cs:354; PvpStats/Windows/List/CrystallineConflictJobList.cs:374,StatsModel[item].StatsAll.WinRate.ToString,"""P1""",界面候选文本；纯内部标识、格式串可留空。
+text.328207ba850d5036,N0,,PvpStats/Windows/List/CrystallineConflictJobList.cs:249; PvpStats/Windows/List/CrystallineConflictJobList.cs:252; PvpStats/Windows/List/CrystallineConflictJobList.cs:255; PvpStats/Windows/List/CrystallineConflictJobList.cs:258; PvpStats/Windows/List/CrystallineConflictJobList.cs:261; PvpStats/Windows/List/CrystallineConflictJobList.cs:264; PvpStats/Windows/List/CrystallineConflictJobList.cs:270,StatsModel[item].ScoreboardTotal.Kills.ToString,"""N0""",界面候选文本；纯内部标识、格式串可留空。
+text.f65d6a7f4f8faa53,Append,,PvpStats/Windows/List/MatchList.cs:24,FieldDeclaration,"""Append""",界面候选文本；纯内部标识、格式串可留空。
+text.795ee3c015b9f507,Remove,,PvpStats/Windows/List/MatchList.cs:24,FieldDeclaration,"""Remove""",界面候选文本；纯内部标识、格式串可留空。
+text.777f54f99cb9c36d,Overwrite,,PvpStats/Windows/List/MatchList.cs:24,FieldDeclaration,"""Overwrite""",界面候选文本；纯内部标识、格式串可留空。
+text.b7a0ec63be2c6022,"$""{FontAwesomeIcon.Ban.ToIconString()}##CloseAllMatches""",,PvpStats/Windows/List/MatchList.cs:77,ImGui.Button,"$""{FontAwesomeIcon.Ban.ToIconString()}##CloseAllMatches""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.c734099532943b38,Close all open match windows,,PvpStats/Windows/List/MatchList.cs:81,ImGuiHelper.WrappedTooltip,"""Close all open match windows""",界面候选文本；纯内部标识、格式串可留空。
+text.69205099d4cc50f6,"$""{FontAwesomeIcon.Tags.ToIconString()}##SetTags""",,PvpStats/Windows/List/MatchList.cs:84,ImGui.Button,"$""{FontAwesomeIcon.Tags.ToIconString()}##SetTags""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.ff04679b97bc38d8,MultiTagsPopup,,PvpStats/Windows/List/MatchList.cs:85,ImGui.OpenPopup,"""MultiTagsPopup""",界面候选文本；纯内部标识、格式串可留空。
+text.b6d319ea10d7b490,Set tags,,PvpStats/Windows/List/MatchList.cs:88,ImGuiHelper.WrappedTooltip,"""Set tags""",界面候选文本；纯内部标识、格式串可留空。
+text.725b78be50aa2933,"$""{FontAwesomeIcon.Cog.ToIconString()}##--OpenSettings""",,PvpStats/Windows/List/MatchList.cs:96,ImGui.Button,"$""{FontAwesomeIcon.Cog.ToIconString()}##--OpenSettings""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.51b48653df1d0a9b,Settings,,PvpStats/Windows/List/MatchList.cs:100,ImGuiHelper.WrappedTooltip,"""Settings""",界面候选文本；纯内部标识、格式串可留空。
+text.d63b6aa777edbab5,"$""Favorite##{item!.GetHashCode()}--AddBookmark""",,PvpStats/Windows/List/MatchList.cs:120,ImGui.MenuItem,"$""Favorite##{item!.GetHashCode()}--AddBookmark""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.81ad31daee5f91fa,"$""Set tags##{item!.GetHashCode()}--SetTags""",,PvpStats/Windows/List/MatchList.cs:126,ImGui.MenuItem,"$""Set tags##{item!.GetHashCode()}--SetTags""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9c5ea7e65789582a,"$""Edit document##{item!.GetHashCode()}--FullEditContext""",,PvpStats/Windows/List/MatchList.cs:132,ImGui.MenuItem,"$""Edit document##{item!.GetHashCode()}--FullEditContext""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.65ad73075a044c12,"$""Edit timeline##{item!.GetHashCode()}--OutputTimeline""",,PvpStats/Windows/List/MatchList.cs:137,ImGui.MenuItem,"$""Edit timeline##{item!.GetHashCode()}--OutputTimeline""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.03283680de0b7add,"$""{item.Id}--TagsPopup""",,PvpStats/Windows/List/MatchList.cs:154,ImGui.GetID,"$""{item.Id}--TagsPopup""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d27f3b2fbf1a806b,"$""MultiTagsPopup""",,PvpStats/Windows/List/MatchList.cs:158,ImRaii.Popup,"$""MultiTagsPopup""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.5c5820f893ba1eda,##MultiTagsOperation,,PvpStats/Windows/List/MatchList.cs:163,ImGui.Combo,"""##MultiTagsOperation""",界面候选文本；纯内部标识、格式串可留空。
+text.cb35d6a78c0ecf3a,"Comma-separate tags. Hit enter to save and close.
+
+'Append' will add all listed tags (if not present) to all matches.
+'Remove' will remove all listed tags (if present) from all matches.
+'Overwrite' will overwrite all tags on all matches with the listed tags.",,PvpStats/Windows/List/MatchList.cs:167,ImGuiHelper.HelpMarker,"""Comma-separate tags. Hit enter to save and close.\n\n'Append' will add all listed tags (if not present) to all matches.\n'Remove' will remove all listed tags (if present) from all matches.\n'Overwrite' will overwrite all tags on all matches with the listed tags.""",界面候选文本；纯内部标识、格式串可留空。
+text.310605f94c3a0d08,##TagsInput,,PvpStats/Windows/List/MatchList.cs:170,ImGui.InputTextWithHint,"""##TagsInput""",界面候选文本；纯内部标识、格式串可留空。
+text.abf117ba43769677,Enter tags...,,PvpStats/Windows/List/MatchList.cs:170,ImGui.InputTextWithHint,"""Enter tags...""",界面候选文本；纯内部标识、格式串可留空。
+text.e9ec30919b429796,CC Matches,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:13,PropertyDeclaration,"""CC Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.a0f0751f02ebe5cc,Start Time,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:16,PropertyDeclaration,"""Start Time""",界面候选文本；纯内部标识、格式串可留空。
+text.c9223bdb98636641,Arena,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:17,PropertyDeclaration,"""Arena""",界面候选文本；纯内部标识、格式串可留空。
+text.6eec0785961755b8,Job,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:18,PropertyDeclaration,"""Job""",界面候选文本；纯内部标识、格式串可留空。
+text.708388e353d6b19a,Queue,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:19,PropertyDeclaration,"""Queue""",界面候选文本；纯内部标识、格式串可留空。
+text.a4ef0c0f1b025da9,Duration,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:20,PropertyDeclaration,"""Duration""",界面候选文本；纯内部标识、格式串可留空。
+text.119a5ffdea231c96,Result,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:21,PropertyDeclaration,"""Result""",界面候选文本；纯内部标识、格式串可留空。
+text.d4658cccc5b5d936,RankAfter,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:22,PropertyDeclaration,"""RankAfter""",界面候选文本；纯内部标识、格式串可留空。
+text.a1bf5440dfa714ce,Tags,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:23,PropertyDeclaration,"""Tags""",界面候选文本；纯内部标识、格式串可留空。
+text.798ec037fd81a9b9,"$""{item.DutyStartTime.ToLocalTime():yyyy-MM-dd HH:mm}""",,PvpStats/Windows/List/CrystallineConflictMatchList.cs:34,ImGui.Text,"$""{item.DutyStartTime.ToLocalTime():yyyy-MM-dd HH:mm}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.dcea6b069b38930f,"$""{MatchHelper.GetArenaName((CrystallineConflictMap)item.Arena)}""",,PvpStats/Windows/List/CrystallineConflictMatchList.cs:37,ImGui.Text,"$""{MatchHelper.GetArenaName((CrystallineConflictMap)item.Arena)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.c7822be774aa336b,"$""{item.MatchType}""",,PvpStats/Windows/List/CrystallineConflictMatchList.cs:46,ImGui.Text,"$""{item.MatchType}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.e0c2bf0134365013,N/A,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:58,MethodDeclaration,"""N/A""",界面候选文本；纯内部标识、格式串可留空。
+text.192c5ce1141e292b,WIN,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:62; PvpStats/Windows/List/CrystallineConflictMatchList.cs:85,MethodDeclaration,"""WIN""",界面候选文本；纯内部标识、格式串可留空。
+text.0ecc07a45f842342,LOSS,,PvpStats/Windows/List/CrystallineConflictMatchList.cs:62; PvpStats/Windows/List/CrystallineConflictMatchList.cs:85,MethodDeclaration,"""LOSS""",界面候选文本；纯内部标识、格式串可留空。
+text.cc5c611b5ceaecd3,filterName,,PvpStats/Windows/List/JobStatsList.cs:54,ImGui.TableSetupColumn,"""filterName""",界面候选文本；纯内部标识、格式串可留空。
+text.408a1affe088bd69,"$""filters""",,PvpStats/Windows/List/JobStatsList.cs:55,ImGui.TableSetupColumn,"$""filters""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.be7156c0d524ba24,Include stats from:,,PvpStats/Windows/List/JobStatsList.cs:59,ImGui.TextUnformatted,"""Include stats from:""",界面候选文本；纯内部标识、格式串可留空。
+text.97287961afde5d37,Right-click table header for column options.,,PvpStats/Windows/List/JobStatsList.cs:65,ImGuiHelper.HelpMarker,"""Right-click table header for column options.""",界面候选文本；纯内部标识、格式串可留空。
+text.a6cc35c544590855,"$""##{GetHashCode()}-Table""",,PvpStats/Windows/List/FilteredList.cs:53,PropertyDeclaration,"$""##{GetHashCode()}-Table""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.18259e05f39c55e5,"$""Previous {PageSize}""",,PvpStats/Windows/List/FilteredList.cs:106,ImGui.Button,"$""Previous {PageSize}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.573b1ace2562d6c3,"$""Next {PageSize}""",,PvpStats/Windows/List/FilteredList.cs:117,ImGui.Button,"$""Next {PageSize}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.06d9b67e18e02445,"$""##{item.GetHashCode()}-selectable""",,PvpStats/Windows/List/FilteredList.cs:205,ImGui.Selectable,"$""##{item.GetHashCode()}-selectable""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8d4868afc355aaf3,"$""##{item!.GetHashCode()}--ContextMenu""",,PvpStats/Windows/List/FilteredList.cs:210,ImRaii.ContextPopupItem,"$""##{item!.GetHashCode()}--ContextMenu""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.3d3d1cb470532b3d,"$""{prop.Name}""",,PvpStats/Windows/List/StatsList.cs:55,"$""{prop.Name}"".GetHashCode","$""{prop.Name}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.431b7a524aa20c51,"$""{prop.Name}.{member2.Name}""",,PvpStats/Windows/List/StatsList.cs:64,"$""{prop.Name}.{member2.Name}"".GetHashCode","$""{prop.Name}.{member2.Name}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8e1b40bc1ba75f5e,"$""{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV""",,PvpStats/Windows/List/StatsList.cs:153,ImGui.Button,"$""{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.a9aee3db0652a38d,Copy CSV to clipboard,,PvpStats/Windows/List/StatsList.cs:165,ImGuiHelper.WrappedTooltip,"""Copy CSV to clipboard""",界面候选文本；纯内部标识、格式串可留空。
+text.1a325d58e51ebc69,Crystalline Conflict Tracker,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:22,ConstructorDeclaration,"""Crystalline Conflict Tracker""",界面候选文本；纯内部标识、格式串可留空。
+text.344f0c6a29d9f0b0,Matches,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:77,Tab,"""Matches""",界面候选文本；纯内部标识、格式串可留空。
+text.d695590aeba602fa,Summary,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:78,Tab,"""Summary""",界面候选文本；纯内部标识、格式串可留空。
+text.a7acc6fb20b2dd97,Records,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:83,Tab,"""Records""",界面候选文本；纯内部标识、格式串可留空。
+text.97af85bf370aba4f,Jobs,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:88,Tab,"""Jobs""",界面候选文本；纯内部标识、格式串可留空。
+text.c96dd13fffc2d9a8,Players,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:89,Tab,"""Players""",界面候选文本；纯内部标识、格式串可留空。
+text.255e7a8512d876a4,Credit,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:90,Tab,"""Credit""",界面候选文本；纯内部标识、格式串可留空。
+text.401e779d3fac7911,Profile,,PvpStats/Windows/Tracker/CCTrackerWindow.cs:95,Tab,"""Profile""",界面候选文本；纯内部标识、格式串可留空。
+text.f7a61118f83178f0,"$""{WindowName} refresh failed.""",,PvpStats/Windows/Tracker/TrackerWindow.cs:79,Plugin.Log.Error,"$""{WindowName} refresh failed.""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.58d1ffa1a6652dd9,"{0,-50}: {1,4} ms",,PvpStats/Windows/Tracker/TrackerWindow.cs:82; PvpStats/Windows/Tracker/TrackerWindow.cs:93,string.Format,"""{0,-50}: {1,4} ms""",界面候选文本；纯内部标识、格式串可留空。
+text.bbb0effb29bc3333,"$""{WindowName} refresh time""",,PvpStats/Windows/Tracker/TrackerWindow.cs:82,string.Format,"$""{WindowName} refresh time""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.bebff51c8fdafd06,"$""{WindowName} save config""",,PvpStats/Windows/Tracker/TrackerWindow.cs:93,string.Format,"$""{WindowName} save config""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.25d87805aa45f890,"$""collapsed. Position: ({_lastWindowPosition.X},{_lastWindowPosition.Y}) Size: ({_lastWindowSize.X},{_lastWindowSize.Y})""",,PvpStats/Windows/Tracker/TrackerWindow.cs:100,Plugin.Log.Debug,"$""collapsed. Position: ({_lastWindowPosition.X},{_lastWindowPosition.Y}) Size: ({_lastWindowSize.X},{_lastWindowSize.Y})""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.9dfc49c007061cf5,"$""un-collapsed window""",,PvpStats/Windows/Tracker/TrackerWindow.cs:131,Plugin.Log.Debug,"$""un-collapsed window""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b7c815042da3d5e4,"$""{WindowName} longest draw: {_longestDraw}""",,PvpStats/Windows/Tracker/TrackerWindow.cs:150,Plugin.Log.Debug,"$""{WindowName} longest draw: {_longestDraw}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.24311d97b4678eb8,filterName,,PvpStats/Windows/Tracker/TrackerWindow.cs:167,ImGui.TableSetupColumn,"""filterName""",界面候选文本；纯内部标识、格式串可留空。
+text.3a0d07a9439423b6,"$""filters""",,PvpStats/Windows/Tracker/TrackerWindow.cs:168,ImGui.TableSetupColumn,"$""filters""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.2e810f9f8ee142d9,"$""{filter.Name}:""",,PvpStats/Windows/Tracker/TrackerWindow.cs:177,MethodDeclaration,"$""{filter.Name}:""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.8cfab639ef88ec12,"$""{(CollapseFilters ? (char)FontAwesomeIcon.CaretDown : (char)FontAwesomeIcon.CaretUp)}""",,PvpStats/Windows/Tracker/TrackerWindow.cs:190,ImGui.Button,"$""{(CollapseFilters ? (char)FontAwesomeIcon.CaretDown : (char)FontAwesomeIcon.CaretUp)}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.b8f1bca5c85da0c0,"$""{(CollapseFilters ? ""Show filters"" : ""Hide filters"")}""",,PvpStats/Windows/Tracker/TrackerWindow.cs:199,ImGuiHelper.WrappedTooltip,"$""{(CollapseFilters ? ""Show filters"" : ""Hide filters"")}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.850b772e20c212b2,Show filters,,PvpStats/Windows/Tracker/TrackerWindow.cs:199,ImGuiHelper.WrappedTooltip,"""Show filters""",界面候选文本；纯内部标识、格式串可留空。
+text.850a60a55fae9b7b,Hide filters,,PvpStats/Windows/Tracker/TrackerWindow.cs:199,ImGuiHelper.WrappedTooltip,"""Hide filters""",界面候选文本；纯内部标识、格式串可留空。
+text.1224595f6332b852,Refresh Tab error,,PvpStats/Windows/Tracker/TrackerWindow.cs:207,Plugin.Log2.Error,"""Refresh Tab error""",界面候选文本；纯内部标识、格式串可留空。
+text.fcc06a3b8ee53d46,Tab Draw Error,,PvpStats/Windows/Tracker/TrackerWindow.cs:227,Plugin.Log2.Error,"""Tab Draw Error""",界面候选文本；纯内部标识、格式串可留空。
+text.e2af138f308ac5bd,changing tab to ,,PvpStats/Windows/Tracker/TrackerWindow.cs:241,Plugin.Log.Debug,"""changing tab to """,界面候选文本；纯内部标识、格式串可留空。
+text.e7e82766b7a3c543,"$""Setting size to: ({Size.Value.X},{Size.Value.Y})""",,PvpStats/Windows/Tracker/TrackerWindow.cs:282,Plugin.Log.Debug,"$""Setting size to: ({Size.Value.X},{Size.Value.Y})""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.660d38de0726ed18,"$""Setting position to: ({Position.Value.X},{Position.Value.Y})""",,PvpStats/Windows/Tracker/TrackerWindow.cs:293,Plugin.Log.Debug,"$""Setting position to: ({Position.Value.X},{Position.Value.Y})""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.1add6cb2d8661508,CC Records,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:15,PropertyDeclaration,"""CC Records""",界面候选文本；纯内部标识、格式串可留空。
+text.87f6c9ad07938ba0,Longest win streak,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:108,AddSuperlative,"""Longest win streak""",界面候选文本；纯内部标识、格式串可留空。
+text.96e4f2f5607e38a6,Longest loss streak,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:109,AddSuperlative,"""Longest loss streak""",界面候选文本；纯内部标识、格式串可留空。
+text.43de7e094b908100,Longest match,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:110,AddSuperlative,"""Longest match""",界面候选文本；纯内部标识、格式串可留空。
+text.f2ea816a8128adb0,Shortest match,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:111,AddSuperlative,"""Shortest match""",界面候选文本；纯内部标识、格式串可留空。
+text.97b59bcfa8a82183,Highest loser progress,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:112,AddSuperlative,"""Highest loser progress""",界面候选文本；纯内部标识、格式串可留空。
+text.38e78ab783aef813,Lowest winner progress,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:113,AddSuperlative,"""Lowest winner progress""",界面候选文本；纯内部标识、格式串可留空。
+text.4bca6cc1a15c62ec,Highest team kill advantage,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:114,AddSuperlative,"""Highest team kill advantage""",界面候选文本；纯内部标识、格式串可留空。
+text.d7f5329bb5ecdef2,Lowest team kill advantage,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:115,AddSuperlative,"""Lowest team kill advantage""",界面候选文本；纯内部标识、格式串可留空。
+text.69fda9ed56b4d6bc,Most kills,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:116,AddSuperlative,"""Most kills""",界面候选文本；纯内部标识、格式串可留空。
+text.4e275f3911bd4edc,Most deaths,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:117,AddSuperlative,"""Most deaths""",界面候选文本；纯内部标识、格式串可留空。
+text.6ac7b9aef4f51626,Most assists,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:118,AddSuperlative,"""Most assists""",界面候选文本；纯内部标识、格式串可留空。
+text.610a4abc7a57f1b5,Most damage dealt,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:119,AddSuperlative,"""Most damage dealt""",界面候选文本；纯内部标识、格式串可留空。
+text.edc7c95754a9981e,Most damage taken,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:120,AddSuperlative,"""Most damage taken""",界面候选文本；纯内部标识、格式串可留空。
+text.7670f6649fbdd7bf,Most HP restored,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:121,AddSuperlative,"""Most HP restored""",界面候选文本；纯内部标识、格式串可留空。
+text.2c19d23bc427ae9a,Longest time on crystal,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:122,AddSuperlative,"""Longest time on crystal""",界面候选文本；纯内部标识、格式串可留空。
+text.7306f0404883071a,Most kills per min,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:123,AddSuperlative,"""Most kills per min""",界面候选文本；纯内部标识、格式串可留空。
+text.e4bde374652abf14,Most deaths per min,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:124,AddSuperlative,"""Most deaths per min""",界面候选文本；纯内部标识、格式串可留空。
+text.2ab869bd76058df3,Most assists per min,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:125,AddSuperlative,"""Most assists per min""",界面候选文本；纯内部标识、格式串可留空。
+text.b45c0bce9b7e36e1,Most damage dealt per min,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:126,AddSuperlative,"""Most damage dealt per min""",界面候选文本；纯内部标识、格式串可留空。
+text.3dbe397e67ffc5e7,Most damage taken per min,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:127,AddSuperlative,"""Most damage taken per min""",界面候选文本；纯内部标识、格式串可留空。
+text.6a6c3b4da40c694d,Most HP restored per min,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:128,AddSuperlative,"""Most HP restored per min""",界面候选文本；纯内部标识、格式串可留空。
+text.76c3611b99ce317d,Longest time on crystal per min,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:129,AddSuperlative,"""Longest time on crystal per min""",界面候选文本；纯内部标识、格式串可留空。
+text.9c4fee8962cab14c,Time,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:137,ImGui.TableSetupColumn,"""Time""",界面候选文本；纯内部标识、格式串可留空。
+text.f2566fb8b75c0e46,Arena,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:138,ImGui.TableSetupColumn,"""Arena""",界面候选文本；纯内部标识、格式串可留空。
+text.acd94af491b443ec,Job,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:139,ImGui.TableSetupColumn,"""Job""",界面候选文本；纯内部标识、格式串可留空。
+text.a0e15a080ba8213a,Result,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:140,ImGui.TableSetupColumn,"""Result""",界面候选文本；纯内部标识、格式串可留空。
+text.e8b4d6947b3c8be4,"$""{match.DutyStartTime.ToLocalTime():yyyy-MM-dd HH:mm}""",,PvpStats/Windows/Records/CrystallineConflictRecords.cs:143,ImGui.Text,"$""{match.DutyStartTime.ToLocalTime():yyyy-MM-dd HH:mm}""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.2da882d94ad0f529,WIN,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:155,MethodDeclaration,"""WIN""",界面候选文本；纯内部标识、格式串可留空。
+text.fd397deed8163c92,LOSS,,PvpStats/Windows/Records/CrystallineConflictRecords.cs:155,MethodDeclaration,"""LOSS""",界面候选文本；纯内部标识、格式串可留空。
+text.6617e2daff0bc8f3,"$""Spectated""",,PvpStats/Windows/Records/CrystallineConflictRecords.cs:159,ImGui.Text,"$""Spectated""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.2eb507fa033d0d78,Records marked with an asterisk (*) not all matches are eligible for.,,PvpStats/Windows/Records/MatchRecords.cs:56,ImGuiHelper.HelpMarker,"""Records marked with an asterisk (*) not all matches are eligible for.""",界面候选文本；纯内部标识、格式串可留空。
+text.ed8756345e95d32c,title,,PvpStats/Windows/Records/MatchRecords.cs:69,ImGui.TableSetupColumn,"""title""",界面候选文本；纯内部标识、格式串可留空。
+text.c0118d6b45852d11,"$""value""",,PvpStats/Windows/Records/MatchRecords.cs:70,ImGui.TableSetupColumn,"$""value""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.a095f65c26626140,"$""examine""",,PvpStats/Windows/Records/MatchRecords.cs:71,ImGui.TableSetupColumn,"$""examine""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。
+text.d4a52b4cf0f0ddc8,"$""{FontAwesomeIcon.Search.ToIconString()}##{match.GetHashCode()}--ViewDetails""",,PvpStats/Windows/Records/MatchRecords.cs:86,ImGui.Button,"$""{FontAwesomeIcon.Search.ToIconString()}##{match.GetHashCode()}--ViewDetails""",界面候选文本；纯内部标识、格式串可留空。 保留插值表达式和格式说明。

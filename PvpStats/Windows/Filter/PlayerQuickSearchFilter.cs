@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using PvpStats.Helpers;
 using System;
 using System.Threading.Tasks;
@@ -21,10 +22,10 @@ internal class PlayerQuickSearchFilter : DataFilter {
     internal override void Draw() {
         string quickSearch = SearchText;
         ImGuiHelper.SetDynamicWidth(150f, 250f, 3f);
-        if(ImGui.InputTextWithHint("###playerQuickSearch", "Search...", ref quickSearch, 100)) {
+        if(ImGui.InputTextWithHint("###playerQuickSearch", ChineseText.Text("Search..."), ref quickSearch, 100)) {
             SearchText = quickSearch;
             //Refresh...
         }
-        ImGuiHelper.HelpMarker("Comma separate multiple players.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Comma separate multiple players."));
     }
 }

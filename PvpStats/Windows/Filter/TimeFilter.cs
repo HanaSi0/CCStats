@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Types;
@@ -74,7 +75,7 @@ public class TimeFilter : DataFilter {
         int patchRelationIndex = (int)PatchRelation;
         //ImGui.SetNextItemWidth(float.Min(ImGui.GetContentRegionAvail().X / 2f, ImGuiHelpers.GlobalScale * 125f));
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X / 2f);
-        if(ImGui.Combo($"##timeRangeCombo", ref statRangeToInt, Range, Range.Length)) {
+        if(ImGui.Combo($"##timeRangeCombo", ref statRangeToInt, Range.Select(x => x == "Custom" ? "自定义时间" : ChineseText.Text(x)).ToArray(), Range.Length)) {
             Task.Run(async () => {
                 StatRange = (TimeRange)statRangeToInt;
                 await Refresh();
@@ -88,7 +89,7 @@ public class TimeFilter : DataFilter {
                 ImGui.TableNextRow();
                 ImGui.TableNextColumn();
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Start:");
+                ImGui.Text(ChineseText.Text("Start:"));
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(ImGui.GetColumnWidth());
                 var startTime = StartTime.ToString();
@@ -104,7 +105,7 @@ public class TimeFilter : DataFilter {
                     }
                 }
                 ImGui.TableNextColumn();
-                ImGui.Text("End:");
+                ImGui.Text(ChineseText.Text("End:"));
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
                 var endTime = EndTime.ToString();
@@ -122,7 +123,7 @@ public class TimeFilter : DataFilter {
             }
         } else if(StatRange == TimeRange.Season) {
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X / 2);
-            if(ImGui.Combo($"##seasonRelationCombo", ref seasonRelationIndex, RelationRange, RelationRange.Length)) {
+            if(ImGui.Combo($"##seasonRelationCombo", ref seasonRelationIndex, RelationRange.Select(ChineseText.Text).ToArray(), RelationRange.Length)) {
                 Task.Run(async () => {
                     SeasonRelation = (TimeRelation)seasonRelationIndex;
                     await Refresh();
@@ -138,7 +139,7 @@ public class TimeFilter : DataFilter {
             }
         } else if(StatRange == TimeRange.Expansion) {
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X / 2);
-            if(ImGui.Combo($"##expansionRelationCombo", ref expansionRelationIndex, RelationRange, RelationRange.Length)) {
+            if(ImGui.Combo($"##expansionRelationCombo", ref expansionRelationIndex, RelationRange.Select(ChineseText.Text).ToArray(), RelationRange.Length)) {
                 Task.Run(async () => {
                     ExpansionRelation = (TimeRelation)expansionRelationIndex;
                     await Refresh();
@@ -146,7 +147,7 @@ public class TimeFilter : DataFilter {
             }
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-            if(ImGui.Combo($"##expansionCombo", ref expansionIndex, GamePeriod.Expansion.Select(x => x.Name).ToArray(), GamePeriod.Expansion.Count)) {
+            if(ImGui.Combo($"##expansionCombo", ref expansionIndex, GamePeriod.Expansion.Select(x => ChineseText.Text(x.Name)).ToArray(), GamePeriod.Expansion.Count)) {
                 Task.Run(async () => {
                     Expansion = expansionIndex;
                     await Refresh();
@@ -154,7 +155,7 @@ public class TimeFilter : DataFilter {
             }
         } else if(StatRange == TimeRange.Patch) {
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X / 2);
-            if(ImGui.Combo($"##patchRelationCombo", ref patchRelationIndex, RelationRange, RelationRange.Length)) {
+            if(ImGui.Combo($"##patchRelationCombo", ref patchRelationIndex, RelationRange.Select(ChineseText.Text).ToArray(), RelationRange.Length)) {
                 Task.Run(async () => {
                     PatchRelation = (TimeRelation)patchRelationIndex;
                     await Refresh();

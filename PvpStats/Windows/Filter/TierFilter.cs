@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using PvpStats.Types.Match;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ public class TierFilter : DataFilter {
         }
         var tiers = Enum.GetValues(typeof(ArenaTier)).Cast<ArenaTier>();
         foreach(var tier in tiers) {
-            _tierCombo.Add(tier.ToString());
+            _tierCombo.Add(ChineseText.EnumName(tier));
         }
     }
 
@@ -40,7 +41,7 @@ public class TierFilter : DataFilter {
             });
         }
         ImGui.SameLine();
-        ImGui.Text("to");
+        ImGui.Text(ChineseText.Text("to"));
         ImGui.SameLine();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
         if(ImGui.Combo($"##tierComboHigh", ref indexHigh, _tierCombo.ToArray(), _tierCombo.Count)) {

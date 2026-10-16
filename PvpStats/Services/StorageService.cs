@@ -1,4 +1,4 @@
-﻿using LiteDB;
+using LiteDB;
 using PvpStats.Types.Match;
 using PvpStats.Types.Match.Timeline;
 using PvpStats.Types.Player;
@@ -12,11 +12,7 @@ using System.Threading.Tasks;
 namespace PvpStats.Services;
 internal class StorageService {
     private const string CCTable = "ccmatch";
-    private const string FLTable = "flmatch";
-    private const string RWTable = "rwmatch";
     private const string CCTimelineTable = "cctimeline";
-    private const string FLTimelineTable = "fltimeline";
-    private const string RWTimelineTable = "rwtimeline";
     private const string AutoPlayerLinksTable = "playerlinks_auto";
     private const string ManualPlayerLinksTable = "playerlinks_manual";
 
@@ -66,11 +62,6 @@ internal class StorageService {
         ccMatchCollection.EnsureIndex(m => m.Arena);
         ccMatchCollection.EnsureIndex(m => m.IsBookmarked);
 
-        var flMatchCollection = GetFLMatches();
-        flMatchCollection.EnsureIndex(m => m.DutyStartTime);
-
-        var rwMatchCollection = GetRWMatches();
-        rwMatchCollection.EnsureIndex(m => m.DutyStartTime);
     }
 
     public void Dispose() {
@@ -100,49 +91,6 @@ internal class StorageService {
         await WriteToDatabase(() => GetCCMatches().Update(matches.Where(m => m.Id != null)));
     }
 
-    internal ILiteCollection<FrontlineMatch> GetFLMatches() {
-        return Database.GetCollection<FrontlineMatch>(FLTable);
-    }
-
-    internal async Task AddFLMatch(FrontlineMatch match) {
-        LogUpdate(match.Id.ToString());
-        await WriteToDatabase(() => GetFLMatches().Insert(match));
-    }
-
-    internal async Task AddFLMatches(IEnumerable<FrontlineMatch> matches) {
-        LogUpdate(null, matches.Count());
-        await WriteToDatabase(() => GetFLMatches().Insert(matches.Where(m => m.Id != null)));
-    }
-
-    internal async Task UpdateFLMatch(FrontlineMatch match) {
-        LogUpdate(match.Id.ToString());
-        await WriteToDatabase(() => GetFLMatches().Update(match));
-    }
-
-    internal async Task UpdateFLMatches(IEnumerable<FrontlineMatch> matches) {
-        LogUpdate(null, matches.Count());
-        await WriteToDatabase(() => GetFLMatches().Update(matches.Where(m => m.Id != null)));
-    }
-
-    internal ILiteCollection<RivalWingsMatch> GetRWMatches() {
-        return Database.GetCollection<RivalWingsMatch>(RWTable);
-    }
-
-    internal async Task AddRWMatch(RivalWingsMatch match) {
-        LogUpdate(match.Id.ToString());
-        await WriteToDatabase(() => GetRWMatches().Insert(match));
-    }
-
-    internal async Task AddRWMatches(IEnumerable<RivalWingsMatch> matches) {
-        LogUpdate(null, matches.Count());
-        await WriteToDatabase(() => GetRWMatches().Insert(matches.Where(m => m.Id != null)));
-    }
-
-    internal async Task UpdateRWMatch(RivalWingsMatch match) {
-        LogUpdate(match.Id.ToString());
-        await WriteToDatabase(() => GetRWMatches().Update(match));
-    }
-
     internal ILiteCollection<CrystallineConflictMatchTimeline> GetCCTimelines() {
         return Database.GetCollection<CrystallineConflictMatchTimeline>(CCTimelineTable);
     }
@@ -155,39 +103,6 @@ internal class StorageService {
     internal async Task UpdateCCTimeline(CrystallineConflictMatchTimeline timeline) {
         LogUpdate(timeline.Id.ToString());
         await WriteToDatabase(() => GetCCTimelines().Update(timeline));
-    }
-
-    internal ILiteCollection<FrontlineMatchTimeline> GetFLTimelines() {
-        return Database.GetCollection<FrontlineMatchTimeline>(FLTimelineTable);
-    }
-
-    internal async Task AddFLTimeline(FrontlineMatchTimeline timeline) {
-        LogUpdate(timeline.Id.ToString());
-        await WriteToDatabase(() => GetFLTimelines().Insert(timeline));
-    }
-
-    internal async Task UpdateFLTimeline(FrontlineMatchTimeline timeline) {
-        LogUpdate(timeline.Id.ToString());
-        await WriteToDatabase(() => GetFLTimelines().Update(timeline));
-    }
-
-    internal ILiteCollection<RivalWingsMatchTimeline> GetRWTimelines() {
-        return Database.GetCollection<RivalWingsMatchTimeline>(RWTimelineTable);
-    }
-
-    internal async Task AddRWTimeline(RivalWingsMatchTimeline timeline) {
-        LogUpdate(timeline.Id.ToString());
-        await WriteToDatabase(() => GetRWTimelines().Insert(timeline));
-    }
-
-    internal async Task UpdateRWTimeline(RivalWingsMatchTimeline timeline) {
-        LogUpdate(timeline.Id.ToString());
-        await WriteToDatabase(() => GetRWTimelines().Update(timeline));
-    }
-
-    internal async Task UpdateRWMatches(IEnumerable<RivalWingsMatch> matches) {
-        LogUpdate(null, matches.Count());
-        await WriteToDatabase(() => GetRWMatches().Update(matches.Where(m => m.Id != null)));
     }
 
     internal ILiteCollection<PlayerAliasLink> GetAutoLinks() {
