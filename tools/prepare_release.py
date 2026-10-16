@@ -10,25 +10,30 @@ from pathlib import Path
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--version', required=True)
 parser.add_argument('--check-index', action='store_true')
+parser.add_argument('--direct', action='store_true', help='Use the checked-in package until Release assets are available')
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
-package = root / 'PvpStats/bin/x64/Release/PvpStats/latest.zip'
+package = root / 'PvpStats/bin/x64/Release/CCStats/latest.zip'
 with zipfile.ZipFile(package) as archive:
     assert archive.testzip() is None, 'Corrupt ZIP'
     names = set(archive.namelist())
-    required = {'PvpStats.dll', 'PvpStats.json', 'LiteDB.dll', 'HtmlAgilityPack.dll', 'icon.png'}
+    required = {'CCStats.dll', 'CCStats.json', 'LiteDB.dll', 'HtmlAgilityPack.dll', 'icon.png'}
+    assert not {'PvpStats.dll', 'PvpStats.json'} & names, 'Upstream identity must not be shipped'
     assert required <= names, f'Missing files: {required - names}'
     assert not any('..' in Path(name).parts or name.startswith('/') for name in names)
     assert not any(Path(name).name in {'Dalamud.dll', 'FFXIVClientStructs.dll', 'Dalamud.Bindings.ImGui.dll'} for name in names), 'Host assemblies must not be shipped'
     assert archive.read('icon.png') == (root / 'images/icon.png').read_bytes(), 'Logo mismatch'
-    manifest = json.loads(archive.read('PvpStats.json'))
-assert manifest['InternalName'] == 'PvpStats'
+    manifest = json.loads(archive.read('CCStats.json'))
+assert manifest['InternalName'] == 'CCStats'
 assert manifest['Name'] == 'CCStats'
 assert manifest['AssemblyVersion'] == args.version + '.0', manifest['AssemblyVersion']
 assert manifest['DalamudApiLevel'] == 15
 assert manifest['RepoUrl'] == 'https://github.com/HanaSi0/CCStats'
 url = f'https://github.com/HanaSi0/CCStats/releases/download/v{args.version}/latest.zip'
 manifest.update(DownloadLinkInstall=url, DownloadLinkUpdate=url, DownloadLinkTesting=url)
+if args.direct:
+    url = f'https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v{args.version}/latest.zip'
+    manifest.update(DownloadLinkInstall=url, DownloadLinkUpdate=url, DownloadLinkTesting=url)
 index = json.dumps([manifest], ensure_ascii=False, indent=2) + '\n'
 index_path = root / 'repo.json'
 if args.check_index:

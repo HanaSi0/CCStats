@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 namespace PvpStats;
 
 public sealed class Plugin : IDalamudPlugin {
-    public string Name => "PvpStats";
+    public string Name => "CCStats";
 
     internal const string DatabaseName = "data.db";
 

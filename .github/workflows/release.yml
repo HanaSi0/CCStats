@@ -45,7 +45,7 @@ jobs:
           dotnet build PvpStats.sln -c Debug --no-restore -p:EnableWindowsTargeting=true
           dotnet restore tests/LocalizationChecks --locked-mode
           dotnet run --project tests/LocalizationChecks -c Release --no-restore
-          python3 tools/prepare_release.py --version "${RELEASE_TAG#v}" --check-index
+          python3 tools/prepare_release.py --version "${RELEASE_TAG#v}" --check-index --direct
       - name: Publish GitHub Release
         shell: bash
         env:

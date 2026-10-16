@@ -3,17 +3,17 @@
 基于 [wrath16/PvpStats](https://github.com/wrath16/PvpStats) 的水晶冲突专用版本。
 上游基线：`ba41904e9cdd2d3c4cb77800945a1a30c8f88715`，版本 `2.7.1.0`。
 原作者：SaMo。原项目采用 MIT 许可证，许可全文保留在 [LICENSE.txt](LICENSE.txt)。
-当前发布版本：`0.1.0`（首轮游戏内测试）。
+当前发布版本：`0.1.1`（修复国际服安装器搜索）。
 
 ## 安装与测试
 
-首次测试的直接安装库（安装包随源码托管，可在 Release 工作流尚未运行时使用）：
+兼容旧库链（与主库保持同步）：
 
 ```text
 https://raw.githubusercontent.com/HanaSi0/CCStats/main/repo-test.json
 ```
 
-正式 Release 库：
+推荐库链（安装包直接托管，不依赖 Release 附件）：
 
 在 Dalamud 设置 → 实验性 → 自定义插件库中添加：
 
@@ -22,16 +22,16 @@ https://raw.githubusercontent.com/HanaSi0/CCStats/main/repo.json
 ```
 
 保存后刷新插件安装器，搜索 **CCStats** 并安装，输入 `/ccstats` 打开。
-安装包与更新说明见 [Release 0.1.0](https://github.com/HanaSi0/CCStats/releases/tag/v0.1.0)。
+安装包与更新说明见 [0.1.1 更新说明](docs/release-notes/0.1.1.md)。
 本版本面向 **Dalamud API 15**；实际采集和 Hook 兼容性需要在目标客户端验证。
-若已安装上游 PvP Tracker，请先停用它；两个版本保留同一个内部名称 `PvpStats`，不能同时加载。替换前可备份原插件配置目录。
+若已安装上游 PvP Tracker，测试时请先停用它，避免 `/ccstats` 等指令冲突。本版使用独立标识 `CCStats` 和配置目录，不会改写原版的数据库；旧记录不会自动迁移。
 
 ## 当前范围
 
 - 保留水晶冲突的自动记录、结算、时间线、技能分析、筛选和统计。
 - 删除纷争前线和烈羽争锋的采集、数据模型、缓存、统计、界面、命令、专属配置及背景素材。
 - `/ccstats` 打开水晶冲突主窗口，`/lastmatch` 仅查询水晶冲突，`/pvpstatsconfig` 打开设置。
-- 为兼容既有水晶冲突记录，暂保留 `PvpStats` 程序集、内部名称和数据库集合名。
+- 内部标识与程序集使用独立的 `CCStats`，避免被国际服官方库同名保护过滤；保留原命名空间及数据库集合结构。
 - 不主动删除用户既有 `data.db` 中其他模式的历史记录；本版本不再读取、记录或展示它们。
 
 ## 翻译交接

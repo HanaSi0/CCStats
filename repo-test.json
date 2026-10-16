@@ -2,8 +2,8 @@
   {
     "Author": "HanaSi0 / SaMo",
     "Name": "CCStats",
-    "InternalName": "PvpStats",
-    "AssemblyVersion": "0.1.0.0",
+    "InternalName": "CCStats",
+    "AssemblyVersion": "0.1.1.0",
     "Description": "自动记录水晶冲突对局，查询战绩、完整结算、时间线、技能分析和各项胜率；支持中文、自定义主题、悬浮入口与国际服官方榜单缓存。",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/HanaSi0/CCStats",
@@ -18,10 +18,10 @@
     "LoadPriority": 0,
     "IconUrl": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/images/icon.png",
     "Punchline": "水晶冲突战绩记录、数据分析与国际服榜单。",
-    "Changelog": "0.1.0：水晶冲突专用版本；中文界面、圆角侧栏与自定义主题；新增悬浮入口、国际服四大区榜单；完整展示伤害、承伤、治疗、推车时间及胜率样本数。使用 /ccstats 打开。",
+    "Changelog": "0.1.1：使用独立的 CCStats 插件标识与程序集，修复国际服安装器将第三方同名插件过滤、搜索不到的问题。保留 0.1.0 全部功能。",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.1.0/latest.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.1.0/latest.zip",
-    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.1.0/latest.zip"
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.1.1/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.1.1/latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.1.1/latest.zip"
   }
 ]
