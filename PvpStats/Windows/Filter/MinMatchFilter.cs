@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using PvpStats.Helpers;
 using System;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ public class MinMatchFilter : DataFilter {
     internal override void Draw() {
         int minMatches = (int)MinMatches;
         ImGuiHelper.SetDynamicWidth(150f, 250f, 3f);
-        if(ImGui.SliderInt("Min. matches", ref minMatches, 1, 100)) {
+        if(ImGui.SliderInt(ChineseText.Label("Min. matches"), ref minMatches, 1, 100)) {
             Task.Run(async () => {
                 MinMatches = (uint)minMatches;
                 await Refresh();

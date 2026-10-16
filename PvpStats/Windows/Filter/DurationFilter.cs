@@ -1,3 +1,4 @@
+using PvpStats.Interface;
 using PvpStats.Localization;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -58,7 +59,7 @@ public class DurationFilter : DataFilter {
         }
         ImGui.TableNextColumn();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Undo.ToIconString()}")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Undo.ToIconString()}")) {
                 Task.Run(async () => {
                     DirectionIndex = 0;
                     Duration = TimeSpan.Zero;

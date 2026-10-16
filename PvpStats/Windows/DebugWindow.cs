@@ -1,3 +1,4 @@
+using PvpStats.Interface;
 #pragma warning disable
 #if DEBUG
 using Dalamud.Bindings.ImGui;
@@ -90,11 +91,11 @@ internal unsafe class DebugWindow : Window {
                         _idParams = results.ToArray();
                     }
 
-                    if(ImGui.Button("Print Text Nodes")) {
+                    if(ModernTheme.Button("Print Text Nodes")) {
                         _plugin.AtkNodeService.PrintTextNodes(_addon);
                     }
 
-                    if(ImGui.Button("GetNodeById")) {
+                    if(ModernTheme.Button("GetNodeById")) {
                         unsafe {
                             AtkUnitBase* addonNode = AtkStage.Instance()->RaptureAtkUnitManager->GetAddonByName(_addon);
                             if(uint.TryParse(_idChain, out uint result) && addonNode != null) {
@@ -106,7 +107,7 @@ internal unsafe class DebugWindow : Window {
 
                     }
 
-                    if(ImGui.Button("GetNodeByIDChain")) {
+                    if(ModernTheme.Button("GetNodeByIDChain")) {
                         unsafe {
                             var x = AtkNodeService.GetNodeByIDChain(_addon, _idParams);
                             _plugin.Log.Debug($"0x{new IntPtr(x).ToString("X8")}");
@@ -114,7 +115,7 @@ internal unsafe class DebugWindow : Window {
 
                     }
 
-                    if(ImGui.Button("Print ATKStage String data")) {
+                    if(ModernTheme.Button("Print ATKStage String data")) {
                         _plugin.AtkNodeService.PrintAtkStringArray();
                     }
 
@@ -124,7 +125,7 @@ internal unsafe class DebugWindow : Window {
                     //if(battleLog != null) {
                     //    var valueAddress = new IntPtr(battleLog->AtkValues);
                     //    ImGui.Text($"Battle Log Values Address: 0x{valueAddress:X2}");
-                    //    if(ImGui.Button("Copy")) {
+                    //    if(ModernTheme.Button("Copy")) {
                     //        ImGui.SetClipboardText($"{valueAddress:X2}");
                     //    }
                     //}
@@ -133,7 +134,7 @@ internal unsafe class DebugWindow : Window {
                     var agent = AgentModule.Instance()->GetAgentByInternalId(AgentId.PvPMKSIntroduction);
                     ImGui.Text($"Address: 0x{new IntPtr(agent):X2}");
                     ImGui.Text($"Active? {agent->IsAgentActive()}");
-                    if(ImGui.Button("dump intro agent")) {
+                    if(ModernTheme.Button("dump intro agent")) {
                         _plugin.Functions.CreateByteDump(new IntPtr(agent), 0x2000, "PvPMKSIntroduction");
                     }
                     ImGui.Separator();
@@ -166,11 +167,11 @@ internal unsafe class DebugWindow : Window {
                         //ImGui.TableNextColumn();
                         //ImGui.Text($"0x{new IntPtr(crystallineConflictDirector).ToString("X2")}");
                     }
-                    if(ImGui.Button("Copy ICD ptr")) {
+                    if(ModernTheme.Button("Copy ICD ptr")) {
                         ImGui.SetClipboardText(new IntPtr(instanceDirector).ToString("X2"));
                     }
 
-                    if(ImGui.Button("Print ICD Bytes")) {
+                    if(ModernTheme.Button("Print ICD Bytes")) {
                         _plugin.Functions.FindValue<byte>(0, (nint)instanceDirector, 0x3000, 0, true);
                         //var x = _plugin.Functions.GetRawInstanceContentDirector();
                         //_plugin.Log.Debug($"object size: {x.Length.ToString("X2")} bytes");
@@ -182,11 +183,11 @@ internal unsafe class DebugWindow : Window {
                         //}
                     }
 
-                    if(ImGui.Button("Create ICD Byte Dump")) {
+                    if(ModernTheme.Button("Create ICD Byte Dump")) {
                         _plugin.Functions.CreateByteDump((nint)instanceDirector, 0x10000, "ICD");
                     }
 
-                    if(ImGui.Button("Print Object Table")) {
+                    if(ModernTheme.Button("Print Object Table")) {
                         foreach(IPlayerCharacter pc in _plugin.ObjectTable.Where(o => o.ObjectKind is ObjectKind.Pc)) {
                             _plugin.Log.Debug($"0x{pc.GameObjectId.ToString("X2")} {pc.Name}");
                             //_plugin.Log.Debug($"team null? {isPlayerTeam is null} player team? {isPlayerTeam} is p member? {pc.StatusFlags.HasFlag(StatusFlags.PartyMember)} isSelf? {isSelf}");
@@ -226,7 +227,7 @@ internal unsafe class DebugWindow : Window {
             using(var tab = ImRaii.TabItem("Network Messages")) {
                 if(tab) {
                     if(_plugin.CCMatchManager is not null) {
-                        if(ImGui.Button("Clear opcodes")) {
+                        if(ModernTheme.Button("Clear opcodes")) {
                             _plugin.Functions._opCodeCount = new();
                         }
 
@@ -297,7 +298,7 @@ internal unsafe class DebugWindow : Window {
                         _plugin.DebugMode = debugMode;
                     }
 
-                    //if(ImGui.Button("Find shared accounts")) {
+                    //if(ModernTheme.Button("Find shared accounts")) {
                     //    Dictionary<ulong, PlayerAlias> accounts = new();
                     //    Dictionary<ulong, HashSet<PlayerAlias>> linkedAliases = new();
                     //    System.Threading.Tasks.Task.Run(() => {
@@ -319,13 +320,13 @@ internal unsafe class DebugWindow : Window {
                     //    });
                     //}
 
-                    if(ImGui.Button("Show all Duties")) {
+                    if(ModernTheme.Button("Show all Duties")) {
                         foreach(var duty in _plugin.DataManager.GetExcelSheet<ContentFinderCondition>()) {
                             _plugin.Log.Debug($"id: {duty.RowId} name: {duty.Name}");
                         }
                     }
 
-                    if(ImGui.Button("Show all Zones")) {
+                    if(ModernTheme.Button("Show all Zones")) {
                         foreach(var zone in _plugin.DataManager.GetExcelSheet<TerritoryType>()) {
                             _plugin.Log.Debug($"id: {zone.RowId} name: {zone.PlaceName.Value.Name}");
                         }
@@ -354,7 +355,7 @@ internal unsafe class DebugWindow : Window {
             }
         }
 
-        //if (ImGui.Button("test obj table")) {
+        //if (ModernTheme.Button("test obj table")) {
         //    _plugin.Log.Debug($"current player obj id: {_plugin.ClientState.LocalPlayer.ObjectId}");
         //    foreach (PlayerCharacter pc in _plugin.ObjectTable.Where(o => o.ObjectKind is ObjectKind.Player)) {
         //        _plugin.Log.Debug(string.Format("name: {0,-30} world: {1,-15} id:{2}", pc.Name, pc.HomeWorld.GameData.Name.ToString(), pc.ObjectId));

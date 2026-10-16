@@ -8,6 +8,19 @@ using PvpStats.Types;
 using PvpStats.Types.Match;
 using PvpStats.Types.Player;
 
+if(args.Length > 1 && args[0] == "--export-themes") {
+    var palettes = Enumerable.Range(0, PvpStats.Settings.ThemeConfiguration.PresetNames.Length).Select(i => {
+        var theme = PvpStats.Settings.ThemeConfiguration.Preset(i);
+        return typeof(PvpStats.Settings.ThemeConfiguration).GetProperties().Where(p => p.PropertyType == typeof(Vector4))
+            .ToDictionary(p => char.ToLowerInvariant(p.Name[0]) + p.Name[1..], p => {
+                var c = (Vector4)p.GetValue(theme)!;
+                return $"#{(int)MathF.Round(c.X*255):x2}{(int)MathF.Round(c.Y*255):x2}{(int)MathF.Round(c.Z*255):x2}";
+            });
+    }).ToArray();
+    File.WriteAllText(args[1], System.Text.Json.JsonSerializer.Serialize(new { names = PvpStats.Settings.ThemeConfiguration.PresetNames, palettes }));
+    return;
+}
+
 if(args.Length > 1 && args[0] == "--reparse-rankings") {
     await LiveRankingCapture.Reparse(args[1]);
     return;
@@ -114,7 +127,7 @@ Check(float.IsFinite(invalidTheme.Background.X) && invalidTheme.Background.Y == 
 Check(invalidTheme.Background.W == .35f && invalidTheme.Text.W == 1, "window opacity remains visible and foreground colors remain opaque");
 var partialTheme = System.Text.Json.JsonSerializer.Deserialize<PvpStats.Settings.ThemeConfiguration>("{}");
 Check(partialTheme != null && partialTheme.Accent == savedTheme.Accent, "older configuration missing palette fields receives defaults");
-for(var i = 0; i < 4; i++) {
+for(var i = 0; i < PvpStats.Settings.ThemeConfiguration.PresetNames.Length; i++) {
     var original = PvpStats.Settings.ThemeConfiguration.Preset(i);
     var roundtrip = System.Text.Json.JsonSerializer.Deserialize<PvpStats.Settings.ThemeConfiguration>(
         System.Text.Json.JsonSerializer.Serialize(original, new System.Text.Json.JsonSerializerOptions { IncludeFields = true }),
@@ -127,6 +140,7 @@ Check(WinRateLabel.Rate(0,0) == 0 && WinRateLabel.Format(0,0).StartsWith("—"),
 Check(WinRateLabel.Rate(0,5) == 0 && WinRateLabel.Format(0,5).Contains("0/5"), "zero wins with valid matches remains a real zero-rate sample");
 Check(WinRateLabel.Rate(5,0) == 1 && WinRateLabel.Format(5,0).Contains("5/5"), "all-win sample preserves its actual match count");
 Check(ChineseText.Text("Current Ranked Season:") == "当前段位赛赛季：" && ChineseText.Text("Current Rank: ") == "当前段位：" && ChineseText.Text("Highest Rank: ") == "最高段位：", "profile season and rank labels are translated");
+UiInteractionChecks.Run(Check);
 LegacyImportChecks.Run(Check);
 await LeaderboardChecks.Run(Check);
 await DailyRankingChecks.Run(Check);

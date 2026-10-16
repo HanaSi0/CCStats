@@ -20,6 +20,8 @@ public class Configuration : IPluginConfiguration {
     public bool? EnableTimelineCC { get; set; }
     public bool? EnableActionAnalyticsCC { get; set; }
 
+    public bool? LegacyImportChoice { get; set; }
+
     public int WindowLayoutVersion { get; set; }
 
     public int LeaderboardRegion { get; set; } = 0;

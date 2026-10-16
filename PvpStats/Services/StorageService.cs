@@ -64,6 +64,8 @@ internal class StorageService {
 
     }
 
+    internal bool LegacyAlreadyImported => LegacyDataImporter.PreviousImport(Database) != null;
+
     internal async Task<LegacyImportResult> ImportLegacy(string configDirectory) {
         await _dbLock.WaitAsync();
         try {

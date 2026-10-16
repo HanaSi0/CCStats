@@ -1,3 +1,4 @@
+using PvpStats.Interface;
 using PvpStats.Localization;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -144,7 +145,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
                 }
             }
         }
-        if(ImGui.Button(CollapseFilters ? "高级筛选###ToggleAdvancedFilters" : "收起筛选###ToggleAdvancedFilters")) {
+        if(ModernTheme.Button(CollapseFilters ? "高级筛选###ToggleAdvancedFilters" : "收起筛选###ToggleAdvancedFilters")) {
             CollapseFilters = !CollapseFilters;
             WindowConfig.FiltersCollapsed = CollapseFilters;
             Plugin.DataQueue.QueueDataOperation(Plugin.Configuration.Save);

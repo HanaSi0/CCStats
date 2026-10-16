@@ -23,6 +23,7 @@ internal static class LegacyImportChecks {
                 source.Checkpoint();
             }
             var before = SHA256.HashData(File.ReadAllBytes(sourcePath));
+            check(LegacyDataImporter.PreviousImport(target) == null && target.GetCollection("ccmatch").Count() == 0, "checking prior-import status does not import records before user consent");
             var result = LegacyDataImporter.Import(target, sourcePath);
             check(result.State == "Imported" && result.Matches == 1 && result.Timelines == 1 && result.Links == 1, "imports matches, timelines and alias links");
             check(target.GetCollection("ccmatch").FindById(id)["UnknownHistoricalField"]["Damage"] == 123456L, "raw BSON preserves unknown historical data");

@@ -171,7 +171,7 @@ internal class CrystallineConflictPlayerList : PlayerStatsList<CCPlayerJobStats,
         ImGui.SameLine(2f * ImGuiHelpers.GlobalScale);
         ImGui.TextUnformatted($"{item.Name}");
         if(ActiveLinks.ContainsKey(item)) {
-            string tooltipText = "Including stats for:\n\n";
+            string tooltipText = ChineseText.Text("Including stats for:\n\n");
             ActiveLinks[item].Where(x => x.Value > 0).ToList().ForEach(x => tooltipText += x + "\n");
             tooltipText = tooltipText.Substring(0, tooltipText.Length - 1);
             ImGuiHelper.WrappedTooltip(tooltipText);

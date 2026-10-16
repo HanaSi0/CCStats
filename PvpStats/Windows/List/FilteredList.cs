@@ -1,3 +1,4 @@
+using PvpStats.Interface;
 using PvpStats.Localization;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
@@ -105,11 +106,11 @@ internal abstract class FilteredList<T, U> : Refreshable<U> where T : notnull wh
             ImGui.TextDisabled($"共 {DataModel.Count:N0} 条  ·  第 {PageNumber + 1} / {pages} 页");
             ImGui.SameLine();
             using(var disabled = ImRaii.Disabled(PageNumber == 0)) {
-                if(ImGui.Button("上一页###PreviousPage")) RefreshQueue.QueueDataOperation(() => GoToPage(PageNumber - 1));
+                if(ModernTheme.Button("上一页###PreviousPage")) RefreshQueue.QueueDataOperation(() => GoToPage(PageNumber - 1));
             }
             ImGui.SameLine();
             using(var disabled = ImRaii.Disabled(PageNumber + 1 >= pages)) {
-                if(ImGui.Button("下一页###NextPage")) RefreshQueue.QueueDataOperation(() => GoToPage(PageNumber + 1));
+                if(ModernTheme.Button("下一页###NextPage")) RefreshQueue.QueueDataOperation(() => GoToPage(PageNumber + 1));
             }
         } finally {
             ReleaseLocks();

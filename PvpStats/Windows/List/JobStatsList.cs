@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Helpers;
@@ -56,13 +57,13 @@ internal abstract class JobStatsList<T, U> : StatsList<Job, T, U> where T : Play
 
                 ImGui.TableNextColumn();
                 ImGui.AlignTextToFramePadding();
-                ImGui.TextUnformatted("Include stats from:");
+                ImGui.TextUnformatted(ChineseText.Text("Include stats from:"));
                 ImGui.TableNextColumn();
                 StatSourceFilter.Draw();
             }
         }
         ImGui.AlignTextToFramePadding();
-        ImGuiHelper.HelpMarker("Right-click table header for column options.", false, true);
+        ImGuiHelper.HelpMarker(ChineseText.Text("Right-click table header for column options."), false, true);
         ImGui.SameLine();
         CSVButton();
     }

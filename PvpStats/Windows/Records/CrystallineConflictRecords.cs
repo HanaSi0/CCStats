@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Helpers;
@@ -134,10 +135,10 @@ internal class CrystallineConflictRecords : MatchRecords<CrystallineConflictMatc
         using(var table = ImRaii.Table("match", 4, ImGuiTableFlags.NoBordersInBody | ImGuiTableFlags.NoHostExtendX | ImGuiTableFlags.NoClip | ImGuiTableFlags.NoSavedSettings)) {
             if(table) {
                 var widthStyle = Plugin.Configuration.StretchScoreboardColumns ?? false ? ImGuiTableColumnFlags.WidthStretch : ImGuiTableColumnFlags.WidthFixed;
-                ImGui.TableSetupColumn("Time", widthStyle, ImGuiHelpers.GlobalScale * 110f);
-                ImGui.TableSetupColumn("Arena", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 155f);
-                ImGui.TableSetupColumn("Job", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 40f);
-                ImGui.TableSetupColumn("Result", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 40f);
+                ImGui.TableSetupColumn(ChineseText.Label("Time"), widthStyle, ImGuiHelpers.GlobalScale * 110f);
+                ImGui.TableSetupColumn(ChineseText.Label("Arena"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 155f);
+                ImGui.TableSetupColumn(ChineseText.Label("Job"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 40f);
+                ImGui.TableSetupColumn(ChineseText.Label("Result"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 40f);
 
                 ImGui.TableNextColumn();
                 ImGui.Text($"{match.DutyStartTime.ToLocalTime():yyyy-MM-dd HH:mm}");
@@ -148,15 +149,15 @@ internal class CrystallineConflictRecords : MatchRecords<CrystallineConflictMatc
                 ImGui.TableNextColumn();
                 if(!match.IsSpectated) {
                     var localPlayerJob = match.LocalPlayerTeamMember!.Job;
-                    ImGuiHelper.CenterAlignCursor(localPlayerJob.ToString() ?? "");
-                    ImGui.TextColored(Plugin.Configuration.GetJobColor(localPlayerJob), localPlayerJob.ToString());
+                    ImGuiHelper.CenterAlignCursor(ChineseText.EnumName(localPlayerJob));
+                    ImGui.TextColored(Plugin.Configuration.GetJobColor(localPlayerJob), ChineseText.EnumName(localPlayerJob));
                     ImGui.TableNextColumn();
                     var color = match.IsWin ? Plugin.Configuration.Colors.Win : match.IsLoss ? Plugin.Configuration.Colors.Loss : Plugin.Configuration.Colors.Other;
-                    var result = match.IsWin ? "WIN" : match.IsLoss ? "LOSS" : "???";
+                    var result = match.IsWin ? "胜利" : match.IsLoss ? "失败" : "未知";
                     ImGuiHelper.CenterAlignCursor(result);
                     ImGui.TextColored(color, result);
                 } else {
-                    ImGui.Text($"Spectated");
+                    ImGui.Text("观战");
                 }
             }
         }

@@ -73,21 +73,38 @@ internal class ConfigWindow : Window {
     }
 
     public override void OnClose() {
-        _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
+        _plugin.Configuration.Theme.Normalize();
+        _plugin.Configuration.Save();
         base.OnClose();
     }
 
-    public override void Draw() {
-        ModernTheme.Brand(_plugin, "设置", "界面、悬浮入口、玩家关联与性能");
-        using(var navigation = ImRaii.Child("SettingsNavigation", new Vector2(140f * ImGuiHelpers.GlobalScale, 0), true)) {
-            if(navigation) {
-                var sections = new[] { "界面与悬浮图标", "玩家关联", "性能与记录", "主题与配色" };
-                for(var i = 0; i < sections.Length; i++)
-                    if(ImGui.Selectable(sections[i] + "###SettingsSection" + i, _section == i)) _section = i;
-            }
+    public override void Draw() => DrawEmbedded(() => _plugin.WindowManager.CCTrackerWindow.ReturnFromSettings());
+
+    internal void DrawEmbedded(Action returnToMain) {
+        ImGui.TextColored(ModernTheme.Accent, "设置");
+        ImGui.SameLine();
+        if(ModernTheme.Button("保存###SaveAllSettings")) {
+            _plugin.Configuration.Theme.Normalize();
+            _plugin.Configuration.Save();
+            _savedTheme = _plugin.Configuration.Theme.Copy();
+            _themeStatus = "设置已保存";
         }
         ImGui.SameLine();
-        using var content = ImRaii.Child("SettingsContent", Vector2.Zero, true);
+        if(ModernTheme.Button("保存并返回###ExitSettings")) {
+            returnToMain();
+            return;
+        }
+        if(_themeStatus.Length > 0) { ImGui.SameLine(); ImGui.TextDisabled(_themeStatus); }
+        var sections = new[] { "界面与悬浮图标", "玩家关联", "性能与记录", "主题与配色" };
+        var columns = ImGui.GetContentRegionAvail().X < 600 * ImGuiHelpers.GlobalScale ? 2 : 4;
+        using(var tabs = ImRaii.Table("SettingsTabs", columns, ImGuiTableFlags.SizingStretchSame)) {
+            if(tabs) for(var i = 0; i < sections.Length; i++) {
+                ImGui.TableNextColumn();
+                if(ModernTheme.NavigationItem(sections[i] + "###SettingsSection" + i, _section == i, new Vector2(0, 32 * ImGuiHelpers.GlobalScale))) _section = i;
+            }
+        }
+        ImGui.Separator();
+        using var content = ImRaii.Child("SettingsContent" + _section, Vector2.Zero, true);
         if(!content) return;
         switch(_section) {
             case 1: DrawPlayerLinkSettings(); break;
@@ -101,10 +118,10 @@ internal class ConfigWindow : Window {
         ImGui.TextColored(ModernTheme.Accent, "主题与配色");
         ImGui.TextWrapped("颜色修改即时预览，关闭设置时自动保存；也可以主动保存或还原到上次保存的主题。");
         ImGui.Spacing();
-        var presets = new[] { "水晶冰蓝", "暮色紫晶", "翠绿森林", "清晨浅色" };
+        var presets = ThemeConfiguration.PresetNames;
         for(var i = 0; i < presets.Length; i++) {
-            if(i > 0) ImGui.SameLine();
-            if(ImGui.Button(presets[i] + "###ThemePreset" + i)) {
+            if(i % 3 != 0) ImGui.SameLine();
+            if(ModernTheme.Button(presets[i] + "###ThemePreset" + i)) {
                 _plugin.Configuration.Theme = ThemeConfiguration.Preset(i);
                 _themeStatus = "已预览：" + presets[i];
             }
@@ -115,7 +132,7 @@ internal class ConfigWindow : Window {
             (nameof(ThemeConfiguration.Surface), "输入框背景"), (nameof(ThemeConfiguration.Border), "边框与分隔线"),
             (nameof(ThemeConfiguration.Text), "主要文字"), (nameof(ThemeConfiguration.Muted), "次要文字"),
             (nameof(ThemeConfiguration.Accent), "主题强调色"), (nameof(ThemeConfiguration.Highlight), "重点数值"),
-            (nameof(ThemeConfiguration.Button), "按钮背景"), (nameof(ThemeConfiguration.Selection), "选中背景"),
+            (nameof(ThemeConfiguration.Button), "按钮背景"), (nameof(ThemeConfiguration.ButtonHovered), "按钮悬停"), (nameof(ThemeConfiguration.ButtonPressed), "按钮按下"), (nameof(ThemeConfiguration.Selection), "选中背景"),
             (nameof(ThemeConfiguration.TableHeader), "表格表头"), (nameof(ThemeConfiguration.TableAlternate), "交替行背景"),
         };
         var theme = _plugin.Configuration.Theme;
@@ -130,6 +147,9 @@ internal class ConfigWindow : Window {
                 _themeStatus = "正在预览自定义配色";
             }
         }
+        var animations = theme.EnableAnimations;
+        if(ImGui.Checkbox("启用交互动效###ThemeAnimations", ref animations)) theme.EnableAnimations = animations;
+        ImGui.TextWrapped("按钮悬停与按下颜色平滑过渡，文字自动选择高对比颜色。关闭动效后直接切换状态，窗口位置和尺寸不受影响。");
         var opacity = theme.Background.W;
         ImGui.SetNextItemWidth(240f * ImGuiHelpers.GlobalScale);
         if(ImGui.SliderFloat("窗口不透明度###ThemeOpacity", ref opacity, .35f, 1f, "%.2f")) {
@@ -141,19 +161,19 @@ internal class ConfigWindow : Window {
         ImGui.Spacing();
         ModernTheme.Card("ThemePreviewCard", "数值卡片预览", "62.5%", 240f * ImGuiHelpers.GlobalScale, theme.Highlight);
         ImGui.Spacing();
-        if(ImGui.Button("保存主题###SaveTheme")) {
+        if(ModernTheme.Button("保存主题###SaveTheme")) {
             theme.Normalize();
             _savedTheme = theme.Copy();
             _plugin.Configuration.Save();
             _themeStatus = "主题已保存";
         }
         ImGui.SameLine();
-        if(ImGui.Button("还原主题###RevertTheme")) {
+        if(ModernTheme.Button("还原主题###RevertTheme")) {
             _plugin.Configuration.Theme = _savedTheme.Copy();
             _themeStatus = "已还原到打开设置或上次保存时的主题";
         }
         ImGui.SameLine();
-        if(ImGui.Button("恢复默认主题###ResetTheme")) {
+        if(ModernTheme.Button("恢复默认主题###ResetTheme")) {
             _plugin.Configuration.Theme = new();
             _themeStatus = "已恢复水晶冰蓝主题";
         }
@@ -175,7 +195,7 @@ internal class ConfigWindow : Window {
             _plugin.Configuration.FloatingLauncherSize = launcherSize;
             _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
         }
-        if(ImGui.Button("重置悬浮图标位置###ResetFloatingLauncher")) {
+        if(ModernTheme.Button("重置悬浮图标位置###ResetFloatingLauncher")) {
             _plugin.WindowManager.Launcher.ResetPosition();
         }
         ImGui.TextDisabled("左键打开记录器，按住右键拖动；松开右键后保存位置。");
@@ -206,6 +226,10 @@ internal class ConfigWindow : Window {
         ImGui.Separator();
         ImGui.TextUnformatted("旧版数据导入");
         ImGui.TextWrapped(_plugin.LegacyImportStatus);
+        using(var disabled = ImRaii.Disabled(_plugin.LegacyImportBusy)) {
+            if(ModernTheme.Button("导入 PvP Tracker 战绩###ManualLegacyImport")) _plugin.ChooseLegacyImport(true);
+        }
+        ImGui.TextWrapped("仅导入水晶冲突记录、时间线和玩家关联；按 ID 去重，原数据库保留。请先停用原版插件。");
         bool colorScale = _plugin.Configuration.ColorScaleStats;
         if(ImGui.Checkbox(ChineseText.Label("Color scale stat values"), ref colorScale)) {
             _plugin.Configuration.ColorScaleStats = colorScale;
@@ -237,7 +261,7 @@ internal class ConfigWindow : Window {
             _plugin.Configuration.AnchorTeamNames = anchorTeamNames;
             _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
         }
-        ImGuiHelper.HelpMarker("Team stat rows will not be affected by sorting.", true, true);
+        ImGuiHelper.HelpMarker(ChineseText.Text("Team stat rows will not be affected by sorting."), true, true);
 
         //bool jobIconCells = _plugin.Configuration.JobIconCells ?? false;
         //if(ImGui.Checkbox("Show job icons in scoreboard", ref jobIconCells)) {
@@ -261,7 +285,7 @@ internal class ConfigWindow : Window {
         }
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Undo.ToIconString()}###teamAlphaReset")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Undo.ToIconString()}###teamAlphaReset")) {
                 _plugin.Configuration.TeamRowAlpha = new Configuration().TeamRowAlpha;
                 _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
             }
@@ -275,7 +299,7 @@ internal class ConfigWindow : Window {
         }
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Undo.ToIconString()}###playerAlphaReset")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Undo.ToIconString()}###playerAlphaReset")) {
                 _plugin.Configuration.PlayerRowAlpha = new Configuration().PlayerRowAlpha;
                 _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
             }
@@ -288,20 +312,20 @@ internal class ConfigWindow : Window {
     }
 
     private void DrawColorSettings() {
-        if(ImGui.Button(ChineseText.Label("Reset to Defaults"))) {
+        if(ModernTheme.Button(ChineseText.Label("Reset to Defaults"))) {
             _plugin.Configuration.Colors = new();
             //_plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
         }
 
         ImGui.SameLine();
 
-        if(ImGui.Button(ChineseText.Label("Revert Changes"))) {
+        if(ModernTheme.Button(ChineseText.Label("Revert Changes"))) {
             _plugin.DataQueue.QueueDataOperation(() => {
                 var cfgSaved = _plugin.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
                 _plugin.Configuration.Colors = cfgSaved.Colors;
             });
         }
-        ImGuiHelper.HelpMarker("Colors will lock in after this window is closed or a non-color setting is changed.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Colors will lock in after this window is closed or a non-color setting is changed."));
 
         using var table = ImRaii.Table("ColorSettingsTable", 3);
         if(!table) {
@@ -429,7 +453,7 @@ internal class ConfigWindow : Window {
                 _ = _plugin.WindowManager.RefreshAll(true);
             });
         }
-        ImGuiHelper.HelpMarker("Enable combining of player stats with different aliases linked with the same unique character or player.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Enable combining of player stats with different aliases linked with the same unique character or player."));
         bool autoLinking = _plugin.Configuration.EnableAutoPlayerLinking;
         if(ImGui.Checkbox(ChineseText.Label("Enable auto linking (requires PlayerTrack)"), ref autoLinking)) {
             _plugin.DataQueue.QueueDataOperation(() => {
@@ -439,8 +463,8 @@ internal class ConfigWindow : Window {
                 _ = _plugin.WindowManager.RefreshAll(true);
             });
         }
-        ImGuiHelper.HelpMarker("Use name change data from PlayerTrack to create player links.\n\n" +
-            "Does not work on your own character (for now).");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Use name change data from PlayerTrack to create player links.\n\n") +
+            ChineseText.Text("Does not work on your own character (for now)."));
         bool manualLinking = _plugin.Configuration.EnableManualPlayerLinking;
         if(ImGui.Checkbox(ChineseText.Label("Enable manual linking"), ref manualLinking)) {
             _plugin.DataQueue.QueueDataOperation(() => {
@@ -450,8 +474,8 @@ internal class ConfigWindow : Window {
                 _ = _plugin.WindowManager.RefreshAll(true);
             });
         }
-        ImGuiHelper.HelpMarker("Use the manual tab to create player links by hand or to track" +
-            " un-covered auto link scenarios such as personal character alias changes, track known alt characters or to override mistakes.\n\nEnter format as <player name> <home world>");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Use the manual tab to create player links by hand or to track") +
+            ChineseText.Text(" un-covered auto link scenarios such as personal character alias changes, track known alt characters or to override mistakes.\n\nEnter format as <player name> <home world>"));
         using(var tabBar = ImRaii.TabBar("LinksTabBar")) {
             using(var tab = ImRaii.TabItem(ChineseText.Label("Auto"))) {
                 if(tab) {
@@ -459,7 +483,7 @@ internal class ConfigWindow : Window {
                     if(!_ipcUpdateInProgress) {
                         disabledButton.Dispose();
                     }
-                    if(ImGui.Button(ChineseText.Label("Update Now"))) {
+                    if(ModernTheme.Button(ChineseText.Label("Update Now"))) {
                         Task.Run(async () => {
                             _ipcUpdateInProgress = true;
                             await _plugin.PlayerLinksService.BuildAutoLinksCache();
@@ -498,9 +522,9 @@ internal class ConfigWindow : Window {
             if(child) {
                 using(var table = ImRaii.Table("ManualLinksTable", 4, ImGuiTableFlags.NoSavedSettings)) {
                     if(table) {
-                        ImGui.TableSetupColumn("LinkedAlias", ImGuiTableColumnFlags.WidthStretch, 180f * ImGuiHelpers.GlobalScale);
-                        ImGui.TableSetupColumn("Verb", ImGuiTableColumnFlags.WidthFixed, 75f * ImGuiHelpers.GlobalScale);
-                        ImGui.TableSetupColumn("SourceAlias", ImGuiTableColumnFlags.WidthStretch, 180f * ImGuiHelpers.GlobalScale);
+                        ImGui.TableSetupColumn(ChineseText.Label("LinkedAlias"), ImGuiTableColumnFlags.WidthStretch, 180f * ImGuiHelpers.GlobalScale);
+                        ImGui.TableSetupColumn(ChineseText.Label("Verb"), ImGuiTableColumnFlags.WidthFixed, 75f * ImGuiHelpers.GlobalScale);
+                        ImGui.TableSetupColumn(ChineseText.Label("SourceAlias"), ImGuiTableColumnFlags.WidthStretch, 180f * ImGuiHelpers.GlobalScale);
                         ImGui.TableSetupColumn("Button", ImGuiTableColumnFlags.WidthFixed, 25f * ImGuiHelpers.GlobalScale);
                         try {
                             foreach(var link in ManualLinks) {
@@ -514,7 +538,7 @@ internal class ConfigWindow : Window {
                 }
             }
         }
-        if(ImGui.Button(ChineseText.Label("Save"))) {
+        if(ModernTheme.Button(ChineseText.Label("Save"))) {
             _plugin.DataQueue.QueueDataOperation(async () => {
                 //_plugin.Storage.SetManualLinks(ManualLinks, false);
 
@@ -539,7 +563,7 @@ internal class ConfigWindow : Window {
 
         ImGui.SameLine();
         ImGui.SetCursorPosX(ImGui.GetContentRegionMax().X - 60f * ImGuiHelpers.GlobalScale);
-        if(ImGui.Button(ChineseText.Label("Cancel"))) {
+        if(ModernTheme.Button(ChineseText.Label("Cancel"))) {
             _plugin.DataQueue.QueueDataOperation(async () => {
                 await Refresh();
             });
@@ -577,7 +601,7 @@ internal class ConfigWindow : Window {
 
         ImGui.TableNextColumn();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if(ImGui.InputTextWithHint($"###{playerLink.GetHashCode()}--CurrentAlias", "Enter main player", ref inputText1, 60)) {
+        if(ImGui.InputTextWithHint($"###{playerLink.GetHashCode()}--CurrentAlias", ChineseText.Text("Enter main player"), ref inputText1, 60)) {
             try {
                 playerLink.CurrentAlias = (PlayerAlias)inputText1;
             } catch {
@@ -594,7 +618,7 @@ internal class ConfigWindow : Window {
 
         ImGui.TableNextColumn();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if(ImGui.InputTextWithHint($"###{playerLink.GetHashCode()}--LinkedAlias", "Enter linked player", ref inputText2, 60)) {
+        if(ImGui.InputTextWithHint($"###{playerLink.GetHashCode()}--LinkedAlias", ChineseText.Text("Enter linked player"), ref inputText2, 60)) {
             try {
                 if(playerLink.LinkedAliases.Count <= 0) {
                     playerLink.LinkedAliases.Add((PlayerAlias)inputText2);
@@ -608,24 +632,24 @@ internal class ConfigWindow : Window {
         ImGui.TableNextColumn();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
             if(isNew) {
-                if(ImGui.Button($"{FontAwesomeIcon.Plus.ToIconString()}###{playerLink.GetHashCode()}--Button")) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Plus.ToIconString()}###{playerLink.GetHashCode()}--Button")) {
                     ManualLinks.Add(playerLink);
                     _newManualLink = new();
                 }
 
             } else {
-                if(ImGui.Button($"{FontAwesomeIcon.Trash.ToIconString()}###{playerLink.GetHashCode()}--Button")) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Trash.ToIconString()}###{playerLink.GetHashCode()}--Button")) {
                     ManualLinks.Remove(playerLink);
                 }
 
             }
         }
-        ImGuiHelper.WrappedTooltip(isNew ? "Add Link" : "Remove");
+        ImGuiHelper.WrappedTooltip(isNew ? ChineseText.Text("Add Link") : ChineseText.Text("Remove"));
     }
 
     private void DrawPerformanceSettings() {
         ImGui.TextColored(_plugin.Configuration.Colors.Header, ChineseText.Text("Match Caching"));
-        ImGuiHelper.HelpMarker("Enabling these options will cache your entire match history in memory. Can help with refresh performance at the cost of increased memory usage.", true);
+        ImGuiHelper.HelpMarker(ChineseText.Text("Enabling these options will cache your entire match history in memory. Can help with refresh performance at the cost of increased memory usage."), true);
 
         bool enableCachingCC = _plugin.Configuration.EnableDBCachingCC ?? true;
         if(ImGui.Checkbox(ChineseText.Label("Crystalline Conflict"), ref enableCachingCC)) {
@@ -640,8 +664,8 @@ internal class ConfigWindow : Window {
             });
         }
         ImGui.Separator();
-        ImGui.TextColored(_plugin.Configuration.Colors.Header, "Enhanced Tracking Features");
-        ImGuiHelper.HelpMarker("Disabling these features can help save disk space.");
+        ImGui.TextColored(_plugin.Configuration.Colors.Header, ChineseText.Text("Enhanced Tracking Features"));
+        ImGuiHelper.HelpMarker(ChineseText.Text("Disabling these features can help save disk space."));
 
         bool enableTimelineCC = _plugin.Configuration.EnableTimelineCC ?? true;
         if(ImGui.Checkbox(ChineseText.Label("Crystalline Conflict Timeline Tracking"), ref enableTimelineCC)) {

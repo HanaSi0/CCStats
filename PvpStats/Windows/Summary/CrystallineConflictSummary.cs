@@ -162,7 +162,7 @@ internal class CrystallineConflictSummary : Refreshable<CrystallineConflictMatch
         if(LocalPlayerStats.StatsAll.Matches > 0) {
             DrawResultTable();
         } else {
-            ImGui.TextDisabled("No matches for given filters.");
+            ImGui.TextDisabled(ChineseText.Text("No matches for given filters."));
         }
 
         if(LocalPlayerJobStats.Count > 0) {
@@ -173,14 +173,14 @@ internal class CrystallineConflictSummary : Refreshable<CrystallineConflictMatch
 
         if(LocalPlayerStats.StatsAll.Matches > 0) {
             ImGui.Separator();
-            ImGui.TextColored(Plugin.Configuration.Colors.Header, "Average Performance:");
-            ImGuiHelper.HelpMarker("1st row: average per match.\n2nd row: average per minute.\n3rd row: median team contribution per match.");
-            ImGui.Text("KDA: ");
+            ImGui.TextColored(Plugin.Configuration.Colors.Header, ChineseText.Text("Average Performance:"));
+            ImGuiHelper.HelpMarker(ChineseText.Text("1st row: average per match.\n2nd row: average per minute.\n3rd row: median team contribution per match."));
+            ImGui.Text(ChineseText.Text("KDA: "));
             ImGui.SameLine();
             ImGuiHelper.DrawColorScale((float)LocalPlayerStats.ScoreboardTotal.KDA, Plugin.Configuration.Colors.StatLow, Plugin.Configuration.Colors.StatHigh,
                 CrystallineConflictStatsManager.KDARange[0], CrystallineConflictStatsManager.KDARange[1], Plugin.Configuration.ColorScaleStats, LocalPlayerStats.ScoreboardTotal.KDA.ToString("0.00"));
             ImGui.SameLine();
-            ImGui.Text("Kill Participation Rate: ");
+            ImGui.Text(ChineseText.Text("Kill Participation Rate: "));
             ImGui.SameLine();
             ImGuiHelper.DrawColorScale((float)LocalPlayerStats.ScoreboardTotal.KillParticipationRate, Plugin.Configuration.Colors.StatLow, Plugin.Configuration.Colors.StatHigh,
                 CrystallineConflictStatsManager.KillParticipationRange[0], CrystallineConflictStatsManager.KillParticipationRange[1], Plugin.Configuration.ColorScaleStats, LocalPlayerStats.ScoreboardTotal.KillParticipationRate.ToString("P1"));
@@ -295,9 +295,9 @@ internal class CrystallineConflictSummary : Refreshable<CrystallineConflictMatch
             var cellPadding = ImGui.GetStyle().CellPadding.X;
             var stretchWidth = ImGui.GetContentRegionAvail().X - 55f * ImGuiHelpers.GlobalScale * (numColumns - 1) - cellPadding * 2 * numColumns;
             var maxWidth = 250f * ImGuiHelpers.GlobalScale - cellPadding * 2 + 2 * (55f * ImGuiHelpers.GlobalScale + cellPadding * 2);
-            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, Math.Min(stretchWidth, maxWidth));
-            ImGui.TableSetupColumn($"Matches", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
-            ImGui.TableSetupColumn($"Wins", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label("Name"), ImGuiTableColumnFlags.WidthFixed, Math.Min(stretchWidth, maxWidth));
+            ImGui.TableSetupColumn(ChineseText.Label($"Matches"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label($"Wins"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
             ImGui.TableSetupColumn("胜率 · 胜/有效场", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 230f);
             ImGui.TableNextColumn();
             ImGuiHelper.DrawTableHeader("Name", 0, false, true, offset);
@@ -333,10 +333,10 @@ internal class CrystallineConflictSummary : Refreshable<CrystallineConflictMatch
             var cellPadding = ImGui.GetStyle().CellPadding.X;
             var stretchWidth = ImGui.GetContentRegionAvail().X - 55f * ImGuiHelpers.GlobalScale * (numColumns - 1) - cellPadding * 2 * numColumns;
             var maxWidth = 250f * ImGuiHelpers.GlobalScale - cellPadding * 2 + (55f * ImGuiHelpers.GlobalScale + cellPadding * 2);
-            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, Math.Min(stretchWidth, maxWidth));
-            ImGui.TableSetupColumn($"Role", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
-            ImGui.TableSetupColumn($"Matches", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
-            ImGui.TableSetupColumn($"Wins", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label("Name"), ImGuiTableColumnFlags.WidthFixed, Math.Min(stretchWidth, maxWidth));
+            ImGui.TableSetupColumn(ChineseText.Label($"Role"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label($"Matches"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label($"Wins"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
             ImGui.TableSetupColumn("胜率 · 胜/有效场", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 230f);
 
             ImGui.TableNextColumn();
@@ -380,11 +380,11 @@ internal class CrystallineConflictSummary : Refreshable<CrystallineConflictMatch
             var cellPadding = ImGui.GetStyle().CellPadding.X;
             var stretchWidth = ImGui.GetContentRegionAvail().X - 55f * ImGuiHelpers.GlobalScale * (numColumns - 1) - cellPadding * 2 * numColumns;
             var maxWidth = 250f * ImGuiHelpers.GlobalScale - cellPadding * 2 + 1 * (55f * ImGuiHelpers.GlobalScale + cellPadding * 2);
-            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, Math.Min(stretchWidth, maxWidth));
-            ImGui.TableSetupColumn($"Favored Job", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
-            ImGui.TableSetupColumn($"Matches", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
-            ImGui.TableSetupColumn($"Wins", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
-            ImGui.TableSetupColumn($"Win Diff.", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label("Name"), ImGuiTableColumnFlags.WidthFixed, Math.Min(stretchWidth, maxWidth));
+            ImGui.TableSetupColumn(ChineseText.Label($"Favored Job"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label($"Matches"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label($"Wins"), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
+            ImGui.TableSetupColumn(ChineseText.Label($"Win Diff."), ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 55f);
             ImGui.TableSetupColumn("胜率 · 胜/有效场", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 230f);
 
             ImGui.TableNextColumn();

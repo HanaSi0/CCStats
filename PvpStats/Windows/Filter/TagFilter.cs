@@ -63,14 +63,14 @@ internal class TagFilter : DataFilter {
             }
         }
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X / 4);
-        if(ImGui.Combo("##TagLogic", ref logicIndex, _logicCombo, _logicCombo.Length)) {
+        if(ImGui.Combo("##TagLogic", ref logicIndex, new[] { "全部满足", "任一满足", "不全满足", "全部排除" }, _logicCombo.Length)) {
             Task.Run(async () => {
                 Logic = (TagLogic)logicIndex;
                 await Refresh();
             });
         }
         ImGui.SameLine();
-        if(ImGui.Checkbox("Partial matches", ref allowPartial)) {
+        if(ImGui.Checkbox(ChineseText.Label("Partial matches"), ref allowPartial)) {
             Task.Run(async () => {
                 AllowPartial = allowPartial;
                 await Refresh();

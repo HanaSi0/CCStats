@@ -1,4 +1,6 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using PvpStats.Interface;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
@@ -70,7 +72,7 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
         using(_ = ImRaii.PushFont(UiBuilder.IconFont)) {
             var color = Match.IsBookmarked ? Plugin.Configuration.Colors.Favorite : ImGuiColors.DalamudWhite;
             using(_ = ImRaii.PushColor(ImGuiCol.Text, color)) {
-                if(ImGui.Button($"{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch")) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch")) {
                     Match.IsBookmarked = !Match.IsBookmarked;
                     Plugin.DataQueue.QueueDataOperation(async () => {
                         await Cache.UpdateMatch(Match);
@@ -78,18 +80,18 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
                 }
             }
         }
-        ImGuiHelper.WrappedTooltip("Favorite match");
+        ImGuiHelper.WrappedTooltip(ChineseText.Text("Favorite match"));
 
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
             var color = !Match.Tags.IsNullOrEmpty() ? Plugin.Configuration.Colors.Favorite : ImGuiColors.DalamudWhite;
             using(_ = ImRaii.PushColor(ImGuiCol.Text, color)) {
-                if(ImGui.Button($"{FontAwesomeIcon.Tags.ToIconString()}##--Tags")) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Tags.ToIconString()}##--Tags")) {
                     ImGui.OpenPopup($"{Match.Id}--TagsPopup");
                 }
             }
         }
-        ImGuiHelper.WrappedTooltip("Set tags");
+        ImGuiHelper.WrappedTooltip(ChineseText.Text("Set tags"));
         Plugin.WindowManager.SetTagsPopup(Match, Cache, ref _popupOpen);
     }
 

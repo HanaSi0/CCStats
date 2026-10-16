@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Helpers;
@@ -77,7 +78,7 @@ public class StatSourceFilter : DataFilter, IEquatable<StatSourceFilter> {
 
             ImGui.TableNextColumn();
             bool allSelected = AllSelected;
-            if(ImGui.Checkbox($"Select All##{GetHashCode()}", ref allSelected)) {
+            if(ImGui.Checkbox(ChineseText.Label($"Select All##{GetHashCode()}"), ref allSelected)) {
                 Task.Run(async () => {
                     foreach(var category in FilterState) {
                         FilterState[category.Key] = allSelected;
@@ -88,19 +89,19 @@ public class StatSourceFilter : DataFilter, IEquatable<StatSourceFilter> {
             }
             ImGui.TableNextColumn();
             bool inheritFromPlayerFilter = InheritFromPlayerFilter;
-            if(ImGui.Checkbox($"Inherit from player filter##{GetHashCode()}", ref inheritFromPlayerFilter)) {
+            if(ImGui.Checkbox(ChineseText.Label($"Inherit from player filter##{GetHashCode()}"), ref inheritFromPlayerFilter)) {
                 Task.Run(async () => {
                     InheritFromPlayerFilter = inheritFromPlayerFilter;
                     await Refresh();
                 });
             }
-            ImGuiHelper.HelpMarker("Will only include stats for players who match all conditions of the player filter.");
+            ImGuiHelper.HelpMarker(ChineseText.Text("Will only include stats for players who match all conditions of the player filter."));
             ImGui.TableNextRow();
 
             foreach(var category in FilterState) {
                 ImGui.TableNextColumn();
                 bool filterState = category.Value;
-                if(ImGui.Checkbox($"{FilterNames[category.Key]}##{GetHashCode()}", ref filterState)) {
+                if(ImGui.Checkbox(ChineseText.Label($"{FilterNames[category.Key]}##{GetHashCode()}"), ref filterState)) {
                     Task.Run(async () => {
                         FilterState[category.Key] = filterState;
                         UpdateAllSelected();

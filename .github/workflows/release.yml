@@ -45,6 +45,8 @@ jobs:
           dotnet build PvpStats.sln -c Debug --no-restore -p:EnableWindowsTargeting=true
           dotnet restore tests/LocalizationChecks --locked-mode
           dotnet run --project tests/LocalizationChecks -c Release --no-restore
+          dotnet run --project tools/TermExporter -- PvpStats "$RUNNER_TEMP/ccstats-ui-audit.json"
+          python3 tools/audit_ui.py "$RUNNER_TEMP/ccstats-ui-audit.json"
           python3 tools/prepare_release.py --version "${RELEASE_TAG#v}" --check-index --direct
       - name: Publish GitHub Release
         shell: bash

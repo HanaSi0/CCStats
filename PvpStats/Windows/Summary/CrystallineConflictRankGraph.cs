@@ -87,7 +87,7 @@ internal class CrystallineConflictRankGraph : Refreshable<CrystallineConflictMat
         }
         try {
             if(RankData.Count <= 0) {
-                ImGui.TextDisabled("No ranked matches for given filters.");
+                ImGui.TextDisabled(ChineseText.Text("No ranked matches for given filters."));
                 return;
             }
 
@@ -110,7 +110,7 @@ internal class CrystallineConflictRankGraph : Refreshable<CrystallineConflictMat
                     axisFlags |= ImPlotAxisFlags.AutoFit;
                     _triggerFit = false;
                 }
-                ImPlot.SetupAxes("UTC Time", "", axisFlags, axisFlags);
+                ImPlot.SetupAxes(ChineseText.Text("UTC Time"), "", axisFlags, axisFlags);
 
                 ImPlot.SetupAxisScale(ImAxis.X1, ImPlotScale.Time);
 

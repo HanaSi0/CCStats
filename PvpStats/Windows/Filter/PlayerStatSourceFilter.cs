@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using PvpStats.Helpers;
 using System;
 using System.Linq;
@@ -41,13 +42,13 @@ public class PlayerStatSourceFilter : StatSourceFilter, IEquatable<PlayerStatSou
 
     internal override void Draw() {
         bool inheritFromPlayerFilter = InheritFromPlayerFilter;
-        if(ImGui.Checkbox($"Inherit from player filter##{GetHashCode()}", ref inheritFromPlayerFilter)) {
+        if(ImGui.Checkbox(ChineseText.Label($"Inherit from player filter##{GetHashCode()}"), ref inheritFromPlayerFilter)) {
             Task.Run(async () => {
                 InheritFromPlayerFilter = inheritFromPlayerFilter;
                 await Refresh();
             });
         }
-        ImGuiHelper.HelpMarker("Will only include stats for players who match all conditions of the player filter.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Will only include stats for players who match all conditions of the player filter."));
     }
 
     public bool Equals(PlayerStatSourceFilter? other) {

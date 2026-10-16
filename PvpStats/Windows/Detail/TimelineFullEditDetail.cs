@@ -1,3 +1,4 @@
+using PvpStats.Interface;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -48,7 +49,7 @@ internal class TimelineFullEditDetail<T> : Window where T : PvpMatchTimeline {
                 ImGui.InputTextMultiline("", ref _dataString, 999999, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y));
             }
         }
-        if(ImGui.Button("Save and close")) {
+        if(ModernTheme.Button("Save and close")) {
             _plugin.DataQueue.QueueDataOperation(async () => {
                 var returnValue = LiteDB.JsonSerializer.Deserialize(_dataString);
                 var x = BsonMapper.Global.Deserialize<T>(returnValue);

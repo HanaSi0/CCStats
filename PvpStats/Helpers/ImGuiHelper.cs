@@ -1,4 +1,6 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using PvpStats.Interface;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
@@ -61,7 +63,9 @@ internal static class ImGuiHelper {
     internal static void WrappedTooltip(string text, float width = 400f) {
         if(ImGui.IsItemHovered()) {
             using var tooltip = ImRaii.Tooltip();
-            ImGui.Text(WrappedString(text, width));
+            ImGui.PushTextWrapPos(ImGui.GetCursorPosX() + width * ImGuiHelpers.GlobalScale);
+            ImGui.TextWrapped(ChineseText.Text(text));
+            ImGui.PopTextWrapPos();
         }
     }
 
@@ -160,7 +164,7 @@ internal static class ImGuiHelper {
     internal static void CSVButton(string csv) {
         try {
             ImGui.PushFont(UiBuilder.IconFont);
-            if(ImGui.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
                 Task.Run(() => {
                     ImGui.SetClipboardText(csv);
                 });
@@ -168,16 +172,16 @@ internal static class ImGuiHelper {
         } finally {
             ImGui.PopFont();
         }
-        WrappedTooltip("Copy CSV to clipboard");
+        WrappedTooltip(ChineseText.Text("Copy CSV to clipboard"));
     }
 
     internal static void CSVButton(Action action) {
         using(_ = ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
                 action.Invoke();
             }
         }
-        WrappedTooltip("Copy CSV to clipboard");
+        WrappedTooltip(ChineseText.Text("Copy CSV to clipboard"));
     }
 
     internal static void FormattedCollapsibleHeader((string, float)[] columns, Action action) {
@@ -254,6 +258,7 @@ internal static class ImGuiHelper {
         ImGui.SetCursorPos(cursorBefore);
 
         if(!draw) return;
+        name = ChineseText.Text(name);
 
         void drawText(string text) {
             if(alignment == 2) {

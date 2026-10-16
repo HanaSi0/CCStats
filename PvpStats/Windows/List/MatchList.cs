@@ -1,3 +1,4 @@
+using PvpStats.Interface;
 using PvpStats.Localization;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
@@ -75,14 +76,14 @@ internal abstract class MatchList<T> : FilteredList<T, T> where T : PvpMatch {
         });
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Ban.ToIconString()}##CloseAllMatches")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Ban.ToIconString()}##CloseAllMatches")) {
                 Task.Run(_plugin.WindowManager.CloseAllMatchWindows);
             }
         }
         ImGuiHelper.WrappedTooltip(ChineseText.Text("Close all open match windows"));
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Tags.ToIconString()}##SetTags")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Tags.ToIconString()}##SetTags")) {
                 ImGui.OpenPopup("MultiTagsPopup");
             }
         }
@@ -106,13 +107,13 @@ internal abstract class MatchList<T> : FilteredList<T, T> where T : PvpMatch {
     protected override void ContextMenuItems(T item) {
         bool isBookmarked = item.IsBookmarked;
         string tags = item.Tags;
-        if(ImGui.MenuItem($"Favorite##{item!.GetHashCode()}--AddBookmark", ImU8String.Empty, isBookmarked)) {
+        if(ImGui.MenuItem(ChineseText.Label($"Favorite##{item!.GetHashCode()}--AddBookmark"), ImU8String.Empty, isBookmarked)) {
             item.IsBookmarked = !item.IsBookmarked;
             _plugin.DataQueue.QueueDataOperation(async () => {
                 await Cache.UpdateMatch(item);
             });
         }
-        if(ImGui.MenuItem($"Set tags##{item!.GetHashCode()}--SetTags")) {
+        if(ImGui.MenuItem(ChineseText.Label($"Set tags##{item!.GetHashCode()}--SetTags"))) {
             //_plugin.Log.Debug($"Opening tags popup {item.Id}--TagsPopup");
             ImGui.OpenPopup(_popupIds[item.Id]);
         }
@@ -153,10 +154,10 @@ internal abstract class MatchList<T> : FilteredList<T, T> where T : PvpMatch {
                     _tagOperation = (MultiTagOperation)_operationIndex;
                 }
                 string tagsText = "";
-                ImGuiHelper.HelpMarker("Comma-separate tags. Hit enter to save and close.\n\n'Append' will add all listed tags (if not present) to all matches.\n'Remove' will remove all listed tags (if present) from all matches.\n'Overwrite' will overwrite all tags on all matches with the listed tags.", false, true);
+                ImGuiHelper.HelpMarker(ChineseText.Text("Comma-separate tags. Hit enter to save and close.\n\n'Append' will add all listed tags (if not present) to all matches.\n'Remove' will remove all listed tags (if present) from all matches.\n'Overwrite' will overwrite all tags on all matches with the listed tags."), false, true);
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(200f * ImGuiHelpers.GlobalScale);
-                if(ImGui.InputTextWithHint("##TagsInput", "Enter tags...", ref tagsText, 500, ImGuiInputTextFlags.EnterReturnsTrue)) {
+                if(ImGui.InputTextWithHint("##TagsInput", ChineseText.Text("Enter tags..."), ref tagsText, 500, ImGuiInputTextFlags.EnterReturnsTrue)) {
                     ImGui.CloseCurrentPopup();
                     //not sure if this is fully thread-safe
                     _plugin.DataQueue.QueueDataOperation(async () => {

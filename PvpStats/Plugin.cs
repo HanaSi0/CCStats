@@ -23,6 +23,8 @@ namespace PvpStats;
 public sealed class Plugin : IDalamudPlugin {
     public string Name => "CCStats";
 
+    internal bool LegacyImportPending { get; private set; }
+    internal bool LegacyImportBusy { get; private set; }
     internal string LegacyImportStatus { get; private set; } = "正在检查 PvP Tracker 历史记录…";
 
     internal const string DatabaseName = "data.db";
@@ -213,19 +215,54 @@ public sealed class Plugin : IDalamudPlugin {
     }
 #endif
 
-    private async Task Initialize() {
+    internal void ChooseLegacyImport(bool import) {
+        Configuration.LegacyImportChoice = import;
+        Configuration.Save();
+        LegacyImportPending = false;
+        if(import) RequestLegacyImport();
+        else LegacyImportStatus = "已选择暂不导入；以后可在此处手动导入旧战绩。";
+    }
+
+    internal void RequestLegacyImport() {
+        if(LegacyImportBusy) return;
+        Configuration.LegacyImportChoice = true;
+        Configuration.Save();
+        LegacyImportPending = false;
+        LegacyImportBusy = true;
+        LegacyImportStatus = "正在导入旧版战绩…";
+        DataQueue.QueueDataOperation(() => ImportLegacyData(true));
+    }
+
+    private async Task ImportLegacyData(bool refreshViews) {
+        LegacyImportBusy = true;
         try {
             var imported = await Storage.ImportLegacy(PluginInterface.GetPluginConfigDirectory());
             LegacyImportStatus = imported.State switch {
                 "NotFound" => "未发现原版 PvP Tracker 数据库。",
-                "AlreadyImported" => $"此前已自动导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联。",
-                _ => $"已自动导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联；原版文件保留。",
+                "AlreadyImported" => $"此前已导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联。",
+                _ => $"已导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联；原版文件保留。",
             };
             PlayerLinksService.ReloadFromStorage();
+            if(refreshViews) {
+                if(Configuration.EnableDBCachingCC ?? true) CCCache.EnableCaching();
+                await WindowManager.RefreshAll();
+            }
             Log.Information(LegacyImportStatus);
         } catch(Exception e) {
             LegacyImportStatus = "旧数据导入未完成，未覆盖已有记录。请停用原版 PvP Tracker 后重新加载 CCStats 重试；详情见 Dalamud 日志。";
             Log.Error(e, "Failed to import PvP Tracker records; retry on next plugin load.");
+        }
+        LegacyImportBusy = false;
+    }
+
+    private async Task Initialize() {
+        if(Configuration.LegacyImportChoice == true || Storage.LegacyAlreadyImported) {
+            await ImportLegacyData(false);
+        } else {
+            var exists = File.Exists(LegacyDataImporter.SourcePath(PluginInterface.GetPluginConfigDirectory()));
+            LegacyImportPending = exists && Configuration.LegacyImportChoice == null;
+            LegacyImportStatus = !exists ? "未发现原版 PvP Tracker 数据库。" : LegacyImportPending
+                ? "发现原版战绩，等待首次打开时选择是否导入。" : "已选择暂不导入，可随时点击下方按钮手动导入。";
         }
 
         if(Configuration.EnableDBCachingCC ?? true) {

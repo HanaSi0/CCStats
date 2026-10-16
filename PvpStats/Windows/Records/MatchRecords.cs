@@ -1,4 +1,6 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using PvpStats.Interface;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -53,7 +55,7 @@ internal abstract class MatchRecords<T> : Refreshable<T> where T : PvpMatch {
     }
 
     public void Draw() {
-        ImGuiHelper.HelpMarker("Records marked with an asterisk (*) not all matches are eligible for.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Records marked with an asterisk (*) not all matches are eligible for."));
         ImGui.Separator();
         foreach(var match in Superlatives) {
             var x = match.Value;
@@ -73,7 +75,7 @@ internal abstract class MatchRecords<T> : Refreshable<T> where T : PvpMatch {
                 for(int i = 0; i < superlatives.Length; i++) {
                     ImGui.TableNextColumn();
                     ImGui.AlignTextToFramePadding();
-                    ImGui.TextColored(Plugin.Configuration.Colors.Header, superlatives[i] + ":");
+                    ImGui.TextColored(Plugin.Configuration.Colors.Header, ChineseText.Text(superlatives[i]) + "：");
                     ImGui.TableNextColumn();
                     ImGuiHelper.DrawNumericCell(values[i]);
                     //ImGui.Text(values[i]);
@@ -83,7 +85,7 @@ internal abstract class MatchRecords<T> : Refreshable<T> where T : PvpMatch {
                             //ImGuiHelper.CenterAlignCursor(FontAwesomeIcon.Search.ToIconString());
                             var buttonWidth = ImGui.GetStyle().FramePadding.X * 2 + ImGui.CalcTextSize(FontAwesomeIcon.Search.ToIconString()).X;
                             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (ImGui.GetColumnWidth() - buttonWidth) / 2f);
-                            if(ImGui.Button($"{FontAwesomeIcon.Search.ToIconString()}##{match.GetHashCode()}--ViewDetails")) {
+                            if(ModernTheme.Button($"{FontAwesomeIcon.Search.ToIconString()}##{match.GetHashCode()}--ViewDetails")) {
                                 Plugin.WindowManager.OpenMatchDetailsWindow(match);
                             }
                             var x = ImGui.CalcItemWidth();

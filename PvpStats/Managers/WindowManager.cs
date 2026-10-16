@@ -46,7 +46,7 @@ internal class WindowManager : IDisposable {
         ConfigWindow = new(plugin);
         Launcher = new(plugin);
         WindowSystem.AddWindow(CCTrackerWindow);
-        WindowSystem.AddWindow(ConfigWindow);
+        // Settings render inside the tracker; no second window is registered.
 
 #if DEBUG
         DebugWindow = new(plugin);
@@ -94,13 +94,20 @@ internal class WindowManager : IDisposable {
         WindowSystem.RemoveWindow(window);
     }
 
+    internal void ToggleCCWindow() {
+        if(CCTrackerWindow.IsOpen) CCTrackerWindow.OnClose();
+        CCTrackerWindow.IsOpen = !CCTrackerWindow.IsOpen;
+        if(CCTrackerWindow.IsOpen) CCTrackerWindow.BringToFront();
+    }
+
     internal void OpenCCWindow() {
         CCTrackerWindow.IsOpen = true;
         CCTrackerWindow.BringToFront();
     }
 
     internal void OpenConfigWindow() {
-        ConfigWindow.IsOpen = true;
+        CCTrackerWindow.ShowSettings();
+        OpenCCWindow();
     }
 
 

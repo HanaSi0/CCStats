@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Interface;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
@@ -51,7 +52,7 @@ internal class FullEditDetail<T> : Window where T : PvpMatch {
                 ImGui.InputTextMultiline("", ref _dataString, 999999, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y));
             }
         }
-        if(ImGui.Button("Save and close")) {
+        if(ModernTheme.Button("Save and close")) {
             _plugin.DataQueue.QueueDataOperation(async () => {
                 var returnValue = LiteDB.JsonSerializer.Deserialize(_dataString);
                 var x = BsonMapper.Global.Deserialize<T>(returnValue);

@@ -1,4 +1,5 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Utility;
 using PvpStats.Helpers;
 using PvpStats.Types.Display;
@@ -62,7 +63,7 @@ internal abstract class PlayerStatsList<T, U> : StatsList<PlayerAlias, T, U> whe
 
         int minMatches = (int)MinMatchFilter.MinMatches;
         ImGuiHelper.SetDynamicWidth(150f, 250f, 3f);
-        if(ImGui.SliderInt("Min. matches", ref minMatches, 1, 100)) {
+        if(ImGui.SliderInt(ChineseText.Label("Min. matches"), ref minMatches, 1, 100)) {
             MinMatchFilter.MinMatches = (uint)minMatches;
             //RefreshActive = true;
             RefreshQueue.QueueDataOperation(() => {
@@ -73,7 +74,7 @@ internal abstract class PlayerStatsList<T, U> : StatsList<PlayerAlias, T, U> whe
         ImGui.SameLine();
         string quickSearch = PlayerQuickSearchFilter.SearchText;
         ImGuiHelper.SetDynamicWidth(150f, 250f, 3f);
-        if(ImGui.InputTextWithHint("###playerQuickSearch", "Search...", ref quickSearch, 100)) {
+        if(ImGui.InputTextWithHint("###playerQuickSearch", ChineseText.Text("Search..."), ref quickSearch, 100)) {
             PlayerQuickSearchFilter.SearchText = quickSearch;
             //RefreshActive = true;
             RefreshQueue.QueueDataOperation(() => {
@@ -81,16 +82,16 @@ internal abstract class PlayerStatsList<T, U> : StatsList<PlayerAlias, T, U> whe
                 //RefreshActive = false;
             });
         }
-        ImGuiHelper.HelpMarker("Comma separate multiple players.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Comma separate multiple players."));
 
         ImGui.AlignTextToFramePadding();
-        ImGuiHelper.HelpMarker("Right-click table header for column options.", false, true);
+        ImGuiHelper.HelpMarker(ChineseText.Text("Right-click table header for column options."), false, true);
         ImGui.SameLine();
         //ImGuiHelper.CSVButton(ListCSV);
         CSVButton();
 
         ImGui.SameLine();
-        ImGui.TextUnformatted($"Total players:   {DataModel.Count}");
+        ImGui.TextUnformatted($"玩家总数：{DataModel.Count}");
     }
 
     protected void ApplyQuickFilters(uint minMatches, string searchText) {

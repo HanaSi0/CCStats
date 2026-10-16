@@ -36,7 +36,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         Impact = 1
     }
 
-    private static string[] SnapshotStyleOptions = ["On Cast", "On Impact"];
+    private static string[] SnapshotStyleOptions = ["施放时", "生效时"];
 
     //private Plugin _plugin;
     private CCTeamQuickFilter _teamQuickFilter;
@@ -310,7 +310,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             }
 
             //setup actions
-            _actionSelectionList.Add("ALL");
+            _actionSelectionList.Add("全部");
             foreach(var player in _players) {
                 _actionSelectionList.Add(player.Alias);
             }
@@ -692,7 +692,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         ImGui.SameLine();
         ImGui.Checkbox("显示队伍合计###showTeamRows", ref ShowTeamRows);
         ImGui.SameLine();
-        var restoreColumns = ImGui.Button("显示全部数据###ShowAllScoreboardColumns");
+        var restoreColumns = ModernTheme.Button("显示全部数据###ShowAllScoreboardColumns");
         ImGui.SameLine();
         _teamQuickFilter.Draw();
         ImGui.TextDisabled("推车时间为运送战术水晶时间；可横向滚动查看全部指标，点击表头排序。");
@@ -836,24 +836,24 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
     }
 
     private void DrawTimeline() {
-        if(ImGui.Button("Filters")) {
+        if(ModernTheme.Button("Filters")) {
             ImGui.OpenPopup($"{Match.Id}--TimelineFilterPopup");
         }
         FilterPopup();
         ImGui.SameLine();
         string quickSearch = _playerFilter.SearchText;
         ImGuiHelper.SetDynamicWidth(150f, 500f, 3f);
-        if(ImGui.InputTextWithHint("###playerQuickSearch", "Search for players and actions...", ref quickSearch, 100)) {
+        if(ImGui.InputTextWithHint("###playerQuickSearch", ChineseText.Text("Search for players and actions..."), ref quickSearch, 100)) {
             _playerFilter.SearchText = quickSearch;
             RefreshQueue.QueueDataOperation(() => {
                 ApplyTimelineFilters();
             });
         }
-        ImGuiHelper.HelpMarker("Comma separate multiple phrases.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Comma separate multiple phrases."));
         ImGui.SameLine();
         ImGui.SetNextItemWidth(120f * ImGuiHelpers.GlobalScale);
         var snapshotStyle = (int)_snapshotStyle;
-        if(ImGui.Combo("Action timing", ref snapshotStyle, SnapshotStyleOptions, SnapshotStyleOptions.Length)) {
+        if(ImGui.Combo(ChineseText.Label("Action timing"), ref snapshotStyle, SnapshotStyleOptions, SnapshotStyleOptions.Length)) {
             _snapshotStyle = (SnapshotStyle)snapshotStyle;
             if(_snapshotStyle == SnapshotStyle.Impact) {
                 foreach(var mEvent in _consolidatedEvents.Where(x => x is CombinedActionEvent)) {
@@ -867,11 +867,11 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             _consolidatedEvents.Sort();
             SetupTimelineTeamPoints();
         }
-        ImGuiHelper.HelpMarker("Affects the ordering of action events and which character snapshots are shown on hover.");
+        ImGuiHelper.HelpMarker(ChineseText.Text("Affects the ordering of action events and which character snapshots are shown on hover."));
 
         using var child = ImRaii.Child("timelineChild", ImGui.GetContentRegionAvail(), true);
         if(Match.DutyStartTime >= Match.MatchStartTime) {
-            ImGui.TextColored(ImGuiColors.DalamudRed, "Timeline incomplete due to duty joined in progress.");
+            ImGui.TextColored(ImGuiColors.DalamudRed, ChineseText.Text("Timeline incomplete due to duty joined in progress."));
         }
         using(var table = ImRaii.Table("timelineTable", 5)) {
             if(table) {
@@ -937,7 +937,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
                         ImGui.TableNextColumn();
                         var f1 = _eventFilters[typeof(GenericMatchEvent)];
-                        if(ImGui.Checkbox("Map Events", ref f1)) {
+                        if(ImGui.Checkbox(ChineseText.Label("Map Events"), ref f1)) {
                             _eventFilters[typeof(GenericMatchEvent)] = f1;
                             RefreshQueue.QueueDataOperation(() => {
                                 ApplyTimelineFilters();
@@ -945,7 +945,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         }
                         ImGui.TableNextColumn();
                         var f2 = _eventFilters[typeof(KnockoutEvent)];
-                        if(ImGui.Checkbox("Knockouts", ref f2)) {
+                        if(ImGui.Checkbox(ChineseText.Label("Knockouts"), ref f2)) {
                             _eventFilters[typeof(KnockoutEvent)] = f2;
                             RefreshQueue.QueueDataOperation(() => {
                                 ApplyTimelineFilters();
@@ -966,7 +966,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
                         ImGui.TableNextColumn();
                         var f4 = _killFilter;
-                        if(ImGui.Checkbox("Kills", ref f4)) {
+                        if(ImGui.Checkbox(ChineseText.Label("Kills"), ref f4)) {
                             _killFilter = f4;
                             RefreshQueue.QueueDataOperation(() => {
                                 ApplyTimelineFilters();
@@ -974,7 +974,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         }
                         ImGui.TableNextColumn();
                         var f5 = _deathFilter;
-                        if(ImGui.Checkbox("Deaths", ref f5)) {
+                        if(ImGui.Checkbox(ChineseText.Label("Deaths"), ref f5)) {
                             _deathFilter = f5;
                             RefreshQueue.QueueDataOperation(() => {
                                 ApplyTimelineFilters();
@@ -1023,7 +1023,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                     using(var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0f, ImGui.GetStyle().ItemSpacing.Y))) {
                         ImGui.TextColored(color, $"{ChineseText.EnumName(Match.MatchWinner)}");
                         ImGui.SameLine();
-                        ImGui.Text(" is victorious!");
+                        ImGui.Text(ChineseText.Text(" is victorious!"));
                     }
                 } else {
                     ImGui.Text(ChineseText.EnumName(CrystallineConflictMatchEvent.MatchEnded));
@@ -1032,19 +1032,19 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             case CrystallineConflictMatchEvent.SpecialEvent:
                 switch(Match.Arena) {
                     case CrystallineConflictMap.VolcanicHeart:
-                        ImGui.Text("Igneous matter spews forth!");
+                        ImGui.Text(ChineseText.Text("Igneous matter spews forth!"));
                         break;
                     case CrystallineConflictMap.CloudNine:
-                        ImGui.Text("The winds whip and churn!");
+                        ImGui.Text(ChineseText.Text("The winds whip and churn!"));
                         break;
                     case CrystallineConflictMap.ClockworkCastleTown:
-                        ImGui.Text("The pneumatic parade is underway!");
+                        ImGui.Text(ChineseText.Text("The pneumatic parade is underway!"));
                         break;
                     case CrystallineConflictMap.RedSands:
-                        ImGui.Text("The desert heat intensifies!");
+                        ImGui.Text(ChineseText.Text("The desert heat intensifies!"));
                         break;
                     default:
-                        ImGui.Text("A special map event has occurred.");
+                        ImGui.Text(ChineseText.Text("A special map event has occurred."));
                         break;
                 }
 
@@ -1065,7 +1065,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                 using(var style = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0f, ImGui.GetStyle().ItemSpacing.Y))) {
                     ImGui.TextColored(color, $"{ChineseText.EnumName(mEvent.Team)}");
                     ImGui.SameLine();
-                    ImGui.Text(" has breached the checkpoint.");
+                    ImGui.Text(ChineseText.Text(" has breached the checkpoint."));
                 }
                 break;
             default:
@@ -1094,11 +1094,11 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                 DrawPlayer(mEvent.CreditedKiller, false, mEvent.CreditedKillerSnapshot);
                 ImGui.SameLine();
             } else {
-                ImGui.Text($"A gentle breeze somehow ");
+                ImGui.Text("一阵微风竟然");
             }
         }
         ImGui.SameLine();
-        ImGui.Text(" knocked out ");
+        ImGui.Text(ChineseText.Text(" knocked out "));
         ImGui.SameLine();
         DrawPlayer(mEvent.Victim, false, mEvent.VictimSnapshot);
         ImGui.SameLine();
@@ -1130,12 +1130,12 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         ImGui.SameLine();
         if(mEvent.EffectTime != null) {
             if(_snapshotStyle == SnapshotStyle.Impact) {
-                ImGui.Text($" used ");
+                ImGui.Text("使用了");
             } else {
-                ImGui.Text($" cast ");
+                ImGui.Text("发动了");
             }
         } else {
-            ImGui.Text($" ghosted ");
+            ImGui.Text("未命中");
         }
         ImGui.SameLine();
         ImGui.Image(Plugin.WindowManager.GetTextureHandle(_actionIcons[mEvent.ActionId]), new Vector2(24 * ImGuiHelpers.GlobalScale));
@@ -1143,7 +1143,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         ImGui.Text($" {_actionNames[mEvent.ActionId]}");
         ImGui.SameLine();
         if(affectedPlayers.Count > 0) {
-            ImGui.Text(" on ");
+            ImGui.Text(ChineseText.Text(" on "));
             ImGui.SameLine();
             BattleCharaSnapshot? effectSnapshot = null;
             BattleCharaSnapshot? castSnapshot = null;
@@ -1221,7 +1221,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
     private void DrawGraphs() {
         //filters
 
-        ImGui.Checkbox("Knockouts", ref _knockoutIcons);
+        ImGui.Checkbox(ChineseText.Label("Knockouts"), ref _knockoutIcons);
         ImGui.SameLine();
         ImGui.Checkbox(ChineseText.Label("Limit Breaks"), ref _limitBreakIcons);
 
@@ -1255,7 +1255,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         ImPlot.SetupAxisLimitsConstraints(ImAxis.X1, 0, 900);
         ImPlot.SetupAxisLimitsConstraints(ImAxis.Y1, -100, 100);
 
-        ImPlot.SetupAxes("Match Time", "", ImPlotAxisFlags.None, ImPlotAxisFlags.None);
+        ImPlot.SetupAxes(ChineseText.Text("Match Time"), "", ImPlotAxisFlags.None, ImPlotAxisFlags.None);
         ImPlot.SetupLegend(ImPlotLocation.NorthWest, ImPlotLegendFlags.Horizontal | ImPlotLegendFlags.Outside);
 
         ImPlot.SetupAxisTicks(ImAxis.X1, ref _xAxisTicks[0], _xAxisTicks.Length, _xAxisLabels);
@@ -1373,7 +1373,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
 
     private void DrawCasts() {
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X * 0.25f);
-        if(ImGui.Combo("Source", ref _actionSelectionIndex, _actionSelectionList.ToArray(), _actionSelectionList.Count)) {
+        if(ImGui.Combo(ChineseText.Label("Source"), ref _actionSelectionIndex, _actionSelectionList.ToArray(), _actionSelectionList.Count)) {
             if(_actionSelectionIndex == 0) {
                 _actionSelectionPlayer = null;
                 _actionSelectionNameId = null;
@@ -1389,7 +1389,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             }
         }
         ImGui.SameLine();
-        if(ImGui.Checkbox("Combine related actions", ref _summarizeActions)) {
+        if(ImGui.Checkbox(ChineseText.Label("Combine related actions"), ref _summarizeActions)) {
 
         }
 
@@ -1398,7 +1398,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
             Dictionary<uint, FlattenedActionAnalytics>? totalAnalytics = null;
             if(_actionSelectionPlayer != null) {
                 if(!_filteredPlayerAnalytics?.TryGetValue(_actionSelectionPlayer, out totalAnalytics) ?? true) {
-                    ImGui.TextDisabled("No actions by actor.");
+                    ImGui.TextDisabled(ChineseText.Text("No actions by actor."));
                     //return;
                 } else {
                     if(_summarizeActions) {
@@ -1409,7 +1409,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                 }
             } else if(_actionSelectionNameId != null) {
                 if(!_filteredNameIdAnalytics?.TryGetValue((uint)_actionSelectionNameId, out totalAnalytics) ?? true) {
-                    ImGui.TextDisabled("No actions by actor.");
+                    ImGui.TextDisabled(ChineseText.Text("No actions by actor."));
                     //return;
                 } else {
                     DrawActionTable(totalAnalytics, _targetedNameIdActionAnalytics[_actionSelectionNameId ?? 0]);
@@ -1442,22 +1442,22 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
         using(var table = ImRaii.Table("playeCastsTable", 14, tableFlags)) {
             if(table) {
                 var widthStyle = Plugin.Configuration.StretchScoreboardColumns ?? false ? ImGuiTableColumnFlags.WidthStretch : ImGuiTableColumnFlags.WidthFixed;
-                ImGui.TableSetupColumn("Action", ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide, ImGuiHelpers.GlobalScale * 100f, 0);
-                ImGui.TableSetupColumn("Casts", widthStyle, ImGuiHelpers.GlobalScale * 52f, (uint)"Casts".GetHashCode());
-                ImGui.TableSetupColumn("Total Targets", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"Targets".GetHashCode());
-                ImGui.TableSetupColumn("Average Targets", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageTargets".GetHashCode());
-                ImGui.TableSetupColumn("Total Damage", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"Damage".GetHashCode());
-                ImGui.TableSetupColumn("Average Damage", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageDamage".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Action"), ImGuiTableColumnFlags.WidthStretch | ImGuiTableColumnFlags.NoHide, ImGuiHelpers.GlobalScale * 100f, 0);
+                ImGui.TableSetupColumn(ChineseText.Label("Casts"), widthStyle, ImGuiHelpers.GlobalScale * 52f, (uint)"Casts".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Total Targets"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"Targets".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Average Targets"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageTargets".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Total Damage"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"Damage".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Average Damage"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageDamage".GetHashCode());
                 //ImGui.TableSetupColumn("Total Reflect Damage", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"ReflectDamage".GetHashCode());
                 //ImGui.TableSetupColumn("Average Reflect Damage", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageReflectDamage".GetHashCode());
-                ImGui.TableSetupColumn("Total Heal", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"Heal".GetHashCode());
-                ImGui.TableSetupColumn("Average Heal", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageHeal".GetHashCode());
-                ImGui.TableSetupColumn("Total MP Drain", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"MPDrain".GetHashCode());
-                ImGui.TableSetupColumn("Average MP Drain", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageMPDrain".GetHashCode());
-                ImGui.TableSetupColumn("Total MP Gain", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"MPGain".GetHashCode());
-                ImGui.TableSetupColumn("Average MP Gain", widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageMPGain".GetHashCode());
-                ImGui.TableSetupColumn("Status Hits", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"StatusHits".GetHashCode());
-                ImGui.TableSetupColumn("Status Success Rate", widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"StatusEffectiveness".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Total Heal"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"Heal".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Average Heal"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageHeal".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Total MP Drain"), widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"MPDrain".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Average MP Drain"), widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageMPDrain".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Total MP Gain"), widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"MPGain".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Average MP Gain"), widthStyle | ImGuiTableColumnFlags.DefaultHide, ImGuiHelpers.GlobalScale * 65f, (uint)"AverageMPGain".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Status Hits"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"StatusHits".GetHashCode());
+                ImGui.TableSetupColumn(ChineseText.Label("Status Success Rate"), widthStyle, ImGuiHelpers.GlobalScale * 65f, (uint)"StatusEffectiveness".GetHashCode());
 
                 ImGui.TableSetupScrollFreeze(1, 1);
 
@@ -1536,15 +1536,15 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                     if(ImGui.TableNextColumn()) {
                         ImGui.AlignTextToFramePadding();
                         if(isUnknown) {
-                            ImGui.Text("UNKNOWN");
-                            ImGuiHelper.HelpMarker("This is calculated from discrepancies from the scoreboard and will includes DoTs, HoTs, reflected damage (e.g. Chiten), actions that land after the scoreboard calculates, " +
-                                "sources of damage/healing that the server does not tell the client about and data missing from incomplete match recordings." +
-                                "\n\nRESEARCH NOTES: " +
-                                "\n* Sacred Claim heals are attributed to the targeted players on the scoreboard. " +
-                                "\n* HoTs and DoTs will only be counted if the source player is alive. " +
-                                "\n* Medkits are not counted." +
-                                "\n* Sole Survivor is not counted. Also will count twice per proc for HP and MP gain." +
-                                "\n* Everlasting Flight heal will not have a source if the SMN dies before it expires.");
+                            ImGui.Text(ChineseText.Text("UNKNOWN"));
+                            ImGuiHelper.HelpMarker(ChineseText.Text("This is calculated from discrepancies from the scoreboard and will includes DoTs, HoTs, reflected damage (e.g. Chiten), actions that land after the scoreboard calculates, ") +
+                                ChineseText.Text("sources of damage/healing that the server does not tell the client about and data missing from incomplete match recordings.") +
+                                ChineseText.Text("\n\nRESEARCH NOTES: ") +
+                                ChineseText.Text("\n* Sacred Claim heals are attributed to the targeted players on the scoreboard. ") +
+                                ChineseText.Text("\n* HoTs and DoTs will only be counted if the source player is alive. ") +
+                                ChineseText.Text("\n* Medkits are not counted.") +
+                                ChineseText.Text("\n* Sole Survivor is not counted. Also will count twice per proc for HP and MP gain.") +
+                                ChineseText.Text("\n* Everlasting Flight heal will not have a source if the SMN dies before it expires."));
                         } else if(isMedkit) {
                             Plugin.WindowManager.DrawMedicineKit(new Vector2(24f * ImGuiHelpers.GlobalScale));
                             ImGui.SameLine();
@@ -1783,7 +1783,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                     var uvs = TextureHelper.GetMedicineKitUVs();
                     Plugin.WindowManager.DrawMedicineKit(new Vector2(24f * ImGuiHelpers.GlobalScale));
                     if(ImGui.IsItemHovered()) {
-                        ImGuiHelper.WrappedTooltip($"Medicine Kits");
+                        ImGuiHelper.WrappedTooltip("医疗道具包");
                     }
                 }
 

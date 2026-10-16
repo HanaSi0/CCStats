@@ -1,4 +1,6 @@
-﻿using Dalamud.Bindings.ImGui;
+using PvpStats.Localization;
+using PvpStats.Interface;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Helpers;
@@ -150,7 +152,7 @@ internal abstract class StatsList<T, U, V> : FilteredList<T, V> where T : notnul
 
     protected void CSVButton() {
         using(ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
+            if(ModernTheme.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
                 Task.Run(() => {
                     ListCSV = CSVHeader();
                     if(FullCSVRows) {
@@ -162,7 +164,7 @@ internal abstract class StatsList<T, U, V> : FilteredList<T, V> where T : notnul
                 });
             }
         }
-        ImGuiHelper.WrappedTooltip("Copy CSV to clipboard");
+        ImGuiHelper.WrappedTooltip(ChineseText.Text("Copy CSV to clipboard"));
     }
 
     protected override void PostColumnSetup() {

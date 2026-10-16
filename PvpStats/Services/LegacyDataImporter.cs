@@ -17,11 +17,15 @@ internal static class LegacyDataImporter {
     internal static string SourcePath(string configDirectory) =>
         Path.Combine(Directory.GetParent(Path.TrimEndingDirectorySeparator(Path.GetFullPath(configDirectory)))!.FullName, "PvpStats", "data.db");
 
+    internal static LegacyImportResult? PreviousImport(LiteDatabase destination) {
+        var previous = destination.GetCollection(MarkerCollection).FindById("PvpStats-watermark-v1");
+        return previous == null ? null : new("AlreadyImported", previous["Matches"].AsInt32, previous["Timelines"].AsInt32, previous["Links"].AsInt32);
+    }
+
     internal static LegacyImportResult Import(LiteDatabase destination, string sourcePath) {
         var markers = destination.GetCollection(MarkerCollection);
         const string marker = "PvpStats-watermark-v1";
-        if(markers.FindById(marker) is { } previous)
-            return new("AlreadyImported", previous["Matches"].AsInt32, previous["Timelines"].AsInt32, previous["Links"].AsInt32);
+        if(PreviousImport(destination) is { } previous) return previous;
         if(!File.Exists(sourcePath)) return new("NotFound");
 
         // Opening a locked or damaged database throws; caller reports and retries next load.

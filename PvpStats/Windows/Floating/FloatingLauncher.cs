@@ -62,7 +62,7 @@ internal sealed class FloatingLauncher {
                 ImGui.IsMouseDown(ImGuiMouseButton.Right));
             _plugin.Configuration.FloatingLauncherPosition = result.Position;
             if(result.SavePosition) _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
-            if(result.OpenWindow) _plugin.WindowManager.OpenCCWindow();
+            if(result.OpenWindow) _plugin.WindowManager.ToggleCCWindow();
             if(ImGui.IsItemHovered() && !_interaction.IsDragging) {
                 ImGuiHelperTooltip();
             }
@@ -73,6 +73,6 @@ internal sealed class FloatingLauncher {
 
     private static void ImGuiHelperTooltip() {
         using var tooltip = ImRaii.Tooltip();
-        ImGui.TextUnformatted("左键：打开水晶冲突记录器\n按住右键：拖动图标");
+        ImGui.TextUnformatted("左键：打开／关闭水晶冲突记录器\n按住右键：拖动图标");
     }
 }

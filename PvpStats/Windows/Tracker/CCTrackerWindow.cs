@@ -22,6 +22,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
 
     private List<CrystallineConflictMatch>? _overviewMatches;
     private int _overviewWins, _overviewPlayed;
+    private string _beforeSettings = "Matches";
     private CrystallineConflictMatch? _latestVisibleMatch;
 
     private readonly MatchSearchFilter _search;
@@ -102,6 +103,23 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         _averageDuration = timed == 0 ? TimeSpan.Zero : TimeSpan.FromTicks(ticks / timed);
     }
 
+    internal void ShowSettings() {
+        if(CurrentTab == "Settings") return;
+        _beforeSettings = CurrentTab.Length == 0 ? "Matches" : CurrentTab;
+        Plugin.WindowManager.ConfigWindow.OnOpen();
+        ChangeTab("Settings");
+    }
+
+    internal void ReturnFromSettings() {
+        Plugin.WindowManager.ConfigWindow.OnClose();
+        ChangeTab(_beforeSettings);
+    }
+
+    public override void OnClose() {
+        if(CurrentTab == "Settings") ReturnFromSettings();
+        base.OnClose();
+    }
+
     public override void PreDraw() {
         var screen = ImGui.GetMainViewport().WorkSize / ImGuiHelpers.GlobalScale;
         SizeConstraints = new() {
@@ -143,7 +161,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
                 Navigation("Profile", "个人资料");
                 ImGui.Separator();
                 using(var iconFont = ImRaii.PushFont(UiBuilder.IconFont)) {
-                    if(ImGui.Button(FontAwesomeIcon.Cog.ToIconString() + "###CCSettingsNav")) Plugin.WindowManager.OpenConfigWindow();
+                    if(ModernTheme.Button(FontAwesomeIcon.Cog.ToIconString() + "###CCSettingsNav")) Plugin.WindowManager.OpenConfigWindow();
                 }
                 if(ImGui.IsItemHovered()) ImGui.SetTooltip("设置");
             }
@@ -151,13 +169,25 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         ImGui.SameLine();
         using var workspace = ImRaii.Child("CCWorkspace", Vector2.Zero, false);
         if(!workspace) return;
+        if(Plugin.LegacyImportPending && CurrentTab != "Settings") {
+            ImGui.TextColored(ModernTheme.Accent, "发现 PvP Tracker 历史战绩");
+            ImGui.TextWrapped("是否导入旧版的水晶冲突对局、时间线和玩家关联？仅复制缺少的记录，不改写原文件或覆盖已有战绩。");
+            ImGui.Spacing();
+            ImGui.TextWrapped("选择后将不再提示。无论现在是否导入，以后都可以在设置 → 界面与悬浮图标 → 旧版数据导入中操作。");
+            ImGui.Spacing();
+            if(ModernTheme.Button("导入旧战绩###AcceptLegacyImport")) Plugin.ChooseLegacyImport(true);
+            ImGui.SameLine();
+            if(ModernTheme.Button("暂不导入###DeclineLegacyImport")) Plugin.ChooseLegacyImport(false);
+            return;
+        }
+        if(CurrentTab == "Settings") { Plugin.WindowManager.ConfigWindow.DrawEmbedded(ReturnFromSettings); return; }
         if(CurrentTab == "Leaderboard") { _leaderboard.Draw(); return; }
         DrawOverviewCards();
         ImGui.Spacing();
         ImGui.SetNextItemWidth(Math.Max(120, ImGui.GetContentRegionAvail().X - 92 * ImGuiHelpers.GlobalScale));
         _search.Draw();
         ImGui.SameLine();
-        if(ImGui.Button("清空###ClearMatchSearch")) _search.Clear();
+        if(ModernTheme.Button("清空###ClearMatchSearch")) _search.Clear();
         if(ImGui.IsItemHovered()) ImGui.SetTooltip("搜索支持多个关键词、双引号短语和 -排除词。");
         DrawQuickFilters();
         DrawFilters();
@@ -174,8 +204,11 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
     }
 
     private void Navigation(string key, string caption) {
-        if(ImGui.Selectable(caption + "###CCNav" + key, CurrentTab == key, ImGuiSelectableFlags.None,
-            new Vector2(0, 31f * ImGuiHelpers.GlobalScale))) ChangeTab(key);
+        if(ModernTheme.NavigationItem(caption + "###CCNav" + key, CurrentTab == key,
+            new Vector2(0, 31f * ImGuiHelpers.GlobalScale))) {
+            if(CurrentTab == "Settings") Plugin.WindowManager.ConfigWindow.OnClose();
+            ChangeTab(key);
+        }
     }
 
     private void DrawOverviewCards() {
@@ -196,8 +229,8 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
             ("段位赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Ranked), ("自定赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Custom) }) {
             var selected = item.Item2 == null ? mode.FilterState.Values.All(x => x)
                 : mode.FilterState.All(x => x.Value == (x.Key == item.Item2));
-            using var tint = ImRaii.PushColor(ImGuiCol.Button, selected ? ModernTheme.Selection : ModernTheme.Button);
-            if(ImGui.Button(item.Item1 + "###CCQuick" + item.Item1)) {
+            using var tint = ImRaii.PushColor(ImGuiCol.Button, selected ? ModernTheme.Selection : ModernTheme.ButtonBackground);
+            if(ModernTheme.Button(item.Item1 + "###CCQuick" + item.Item1)) {
                 foreach(var key in mode.FilterState.Keys.ToArray()) mode.FilterState[key] = item.Item2 == null || key == item.Item2;
                 mode.AllSelected = item.Item2 == null;
                 _ = Task.Run(() => Refresh());
@@ -211,7 +244,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
             _ = Task.Run(() => Refresh());
         }
         using(var disabled = ImRaii.Disabled(_latestVisibleMatch == null)) {
-            if(ImGui.Button("最近一场###CCLatestMatch") && _latestVisibleMatch != null) Plugin.WindowManager.OpenMatchDetailsWindow(_latestVisibleMatch);
+            if(ModernTheme.Button("最近一场###CCLatestMatch") && _latestVisibleMatch != null) Plugin.WindowManager.OpenMatchDetailsWindow(_latestVisibleMatch);
         }
     }
 
