@@ -65,4 +65,21 @@ function modernContrast(){for(const b of document.querySelectorAll('button')){
  const l=.2126*lin[0]+.7152*lin[1]+.0722*lin[2];b.style.color=(l+.05)/.05>=1.05/(l+.05)?'#000000':'#ffffff';
 }requestAnimationFrame(modernContrast)}requestAnimationFrame(modernContrast);render();
 </script>
-</html>
+<style>
+.shell{font-size:14px;line-height:1.55}
+.shell button,.shell input,.shell select,.shell td,.shell th,.shell small,.shell p,.shell label,.shell code,.shell h1,.shell h2,.shell h3,.shell b,.shell strong{font-size:14px!important;line-height:1.55!important}
+.shell h1,.shell h2,.shell h3{font-weight:600}
+.shell header{padding:18px 24px}.card{padding:16px 18px!important;min-height:72px!important}.card b{display:block;margin-top:8px!important;font-weight:600!important}
+.panel{padding:18px 20px}button{border-radius:7px!important;padding:8px 12px!important;transition:background-color .18s cubic-bezier(.2,.7,.3,1),border-color .18s ease,box-shadow .18s ease!important}
+button:active{transition-duration:.06s!important}#nav button{transition:background-color .18s ease,border-color .18s ease!important;transform:none!important}
+button:hover{box-shadow:0 0 0 1px var(--border)!important;transform:none!important}
+.shell .toolbar:has(button[onclick*="themePresets"]){display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.theme-grid{gap:0 24px!important}.settings-tabs{gap:8px}.settings-tabs button{min-height:36px}
+</style><script>
+function comfortRgb(hex){return hex.match(/[0-9a-f]{2}/gi).slice(0,3).map(x=>parseInt(x,16)/255)}
+function comfortLuminance(c){const n=c.map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return .2126*n[0]+.7152*n[1]+.0722*n[2]}
+function comfortRatio(a,b){a=comfortLuminance(a);b=comfortLuminance(b);return(Math.max(a,b)+.05)/(Math.min(a,b)+.05)}
+function comfortReadable(bg,fg){if(comfortRatio(bg,fg)>=4.6)return bg;const black=[0,0,0],white=[1,1,1],target=comfortRatio(black,fg)>comfortRatio(white,fg)?black:white;let low=0,high=1;for(let i=0;i<16;i++){let t=(low+high)/2,c=bg.map((v,k)=>v+(target[k]-v)*t);if(comfortRatio(c,fg)>=4.6)high=t;else low=t}return bg.map((v,k)=>v+(target[k]-v)*high)}
+const comfortOldPalette=applyPalette;applyPalette=function(){comfortOldPalette();let base=comfortRgb(userTheme.button),fg=comfortRgb(userTheme.text);if(comfortRatio(base,fg)<4.5)fg=comfortRatio(base,[0,0,0])>comfortRatio(base,[1,1,1])?[0,0,0]:[1,1,1];const rgb=v=>'rgb('+v.map(n=>Math.round(n*255)).join(',')+')';for(const key of ['button','buttonHovered','buttonPressed','selection'])document.documentElement.style.setProperty('--'+key,rgb(comfortReadable(comfortRgb(userTheme[key]),fg)));document.documentElement.style.setProperty('--comfort-button-text',rgb(fg))};applyPalette();
+modernContrast=function(){const color=getComputedStyle(document.documentElement).getPropertyValue('--comfort-button-text');for(const button of document.querySelectorAll('button'))button.style.color=color;requestAnimationFrame(modernContrast)};
+render();
+</script></html>

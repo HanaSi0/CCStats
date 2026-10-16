@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.1.3：新增 12 套主题、高对比按钮与可关闭的交互动效；设置改为主窗口内页面，提供保存并返回；悬浮图标支持开关主窗口；旧数据首次询问后导入，设置内可随时手动导入；补齐时间线、技能分析、纪录、筛选和设置中文。",
+  "Changelog": "0.1.4：统一正文、按钮、表格与数值卡片字号，移除卡片额外放大；留白与圆角随 Dalamud 缩放协调；按钮文字颜色在交互中保持稳定，按下更迅速、松开更平缓，导航选中状态柔和过渡；主题设置按网格对齐。",
   "Tags": [
     "pvp",
     "statistics"

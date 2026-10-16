@@ -36,7 +36,6 @@ internal class WindowManager : IDisposable {
     internal DebugWindow? DebugWindow { get; private set; }
 #endif
 
-    internal IFontHandle LargeFont { get; private set; }
 
     internal WindowManager(Plugin plugin) {
         _plugin = plugin;
@@ -53,7 +52,6 @@ internal class WindowManager : IDisposable {
         WindowSystem.AddWindow(DebugWindow);
 #endif
 
-        LargeFont = _plugin.PluginInterface.UiBuilder.FontAtlas.NewGameFontHandle(new GameFontStyle(GameFontFamily.Axis, 24f));
         _plugin.PluginInterface.UiBuilder.Draw += DrawUI;
         _plugin.PluginInterface.UiBuilder.OpenConfigUi += OpenConfigWindow;
         _plugin.PluginInterface.UiBuilder.OpenMainUi += OpenCCWindow;

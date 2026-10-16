@@ -139,6 +139,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
     }
 
     public override void DrawInternal() {
+        ImGui.SetWindowFontScale(1f);
         if(Plugin.Configuration.WindowLayoutVersion < 2) {
             SizeCondition = ImGuiCond.FirstUseEver;
             PositionCondition = ImGuiCond.FirstUseEver;

@@ -11,7 +11,10 @@ internal static class UiInteractionChecks {
             for(var hover = 0; hover <= 10; hover++) for(var pressed = 0; pressed <= 10; pressed++) {
                 foreach(var normal in new[] { p.Button, p.Selection, p.Panel }) {
                     var bg = Vector4.Lerp(Vector4.Lerp(normal, p.ButtonHovered, hover / 10f), p.ButtonPressed, pressed / 10f);
-                    accessible &= ThemeContrast.Ratio(bg, ThemeContrast.Foreground(bg, p.Text)) >= 4.5;
+                    var state = ThemeContrast.Interaction(normal, p.ButtonHovered, p.ButtonPressed, hover / 10f, pressed / 10f, p.Text);
+                    Vector4 Quantize(Vector4 c) => new(MathF.Round(c.X*255)/255, MathF.Round(c.Y*255)/255, MathF.Round(c.Z*255)/255, 1);
+                    accessible &= ThemeContrast.Ratio(Quantize(state.Background), Quantize(state.Foreground)) >= 4.5;
+                    accessible &= state.Foreground == ThemeContrast.Foreground(normal, p.Text);
                 }
             }
             check(accessible, "all animated button/selection states meet 4.5:1 text contrast in " + ThemeConfiguration.PresetNames[i]);
@@ -21,6 +24,7 @@ internal static class UiInteractionChecks {
         check(Math.Abs(Run(30)-Run(144)) < .0001, "animation timing is independent of refresh rate");
         check(ThemeContrast.Ease(.3f,1,.016f,false) == 1 && ThemeContrast.Ease(.8f,0,.016f,false) == 0, "reduced motion reaches hover and idle states immediately");
         check(ThemeContrast.Ease(0,1,0,true) == 0 && ThemeContrast.Ease(.5f,1,5,true) <= 1, "animation does not overshoot after a long frame");
+        check(ThemeContrast.Ease(0,1,1f/60,true,.025f) > ThemeContrast.Ease(0,1,1f/60,true,.10f), "press feedback responds faster than hover easing");
         var custom = new ThemeConfiguration { EnableAnimations = false, ButtonHovered = new(.2f,.8f,.5f,1) };
         var copy = custom.Copy(); custom.EnableAnimations = true;
         check(!copy.EnableAnimations && copy.ButtonHovered != new ThemeConfiguration().ButtonHovered, "saving/reverting preserves motion preference and custom interaction colors");

@@ -26,13 +26,14 @@ internal static class ModernTheme {
         private readonly IDisposable _styles;
         private readonly IDisposable _colors;
         internal Scope(ThemeConfiguration p) {
-            _styles = ImRaii.PushStyle(ImGuiStyleVar.WindowRounding, 16f)
-                .Push(ImGuiStyleVar.ChildRounding, 12f).Push(ImGuiStyleVar.FrameRounding, 8f)
-                .Push(ImGuiStyleVar.PopupRounding, 10f).Push(ImGuiStyleVar.TabRounding, 8f)
-                .Push(ImGuiStyleVar.ScrollbarRounding, 8f).Push(ImGuiStyleVar.WindowBorderSize, 1f)
-                .Push(ImGuiStyleVar.FrameBorderSize, 0f).Push(ImGuiStyleVar.WindowPadding, new Vector2(16, 14))
-                .Push(ImGuiStyleVar.FramePadding, new Vector2(10, 7)).Push(ImGuiStyleVar.ItemSpacing, new Vector2(10, 8))
-                .Push(ImGuiStyleVar.CellPadding, new Vector2(10, 8));
+            var scale = ImGuiHelpers.GlobalScale;
+            _styles = ImRaii.PushStyle(ImGuiStyleVar.WindowRounding, 12f * scale)
+                .Push(ImGuiStyleVar.ChildRounding, 10f * scale).Push(ImGuiStyleVar.FrameRounding, 7f * scale)
+                .Push(ImGuiStyleVar.PopupRounding, 9f * scale).Push(ImGuiStyleVar.TabRounding, 7f * scale)
+                .Push(ImGuiStyleVar.ScrollbarRounding, 7f * scale).Push(ImGuiStyleVar.WindowBorderSize, 1f)
+                .Push(ImGuiStyleVar.FrameBorderSize, 0f).Push(ImGuiStyleVar.WindowPadding, new Vector2(14, 12) * scale)
+                .Push(ImGuiStyleVar.FramePadding, new Vector2(10, 6) * scale).Push(ImGuiStyleVar.ItemSpacing, new Vector2(10, 8) * scale)
+                .Push(ImGuiStyleVar.CellPadding, new Vector2(9, 7) * scale);
             _colors = ImRaii.PushColor(ImGuiCol.WindowBg, p.Background).Push(ImGuiCol.ChildBg, p.Panel)
                 .Push(ImGuiCol.PopupBg, p.Panel).Push(ImGuiCol.Border, p.Border)
                 .Push(ImGuiCol.Text, p.Text).Push(ImGuiCol.TextDisabled, p.Muted)
@@ -60,20 +61,25 @@ internal static class ModernTheme {
     }
 
     private sealed class Interaction {
-        internal float Hover, Press;
+        internal float Hover, Press, Selected;
         internal bool WasHovered, WasPressed;
         internal int Frame;
     }
     private static readonly Dictionary<uint, Interaction> Interactions = new();
-    private static Interaction Animate(uint id) {
+    private static Interaction Animate(uint id, bool selected = false) {
         var frame = ImGui.GetFrameCount();
-        if(!Interactions.TryGetValue(id, out var state)) Interactions[id] = state = new();
-        // Do not replay stale hover/press states when a hidden page becomes visible again.
-        if(frame - state.Frame > 2) state.Hover = state.Press = 0;
-        state.Hover = ThemeContrast.Ease(state.Hover, state.WasHovered && frame - state.Frame <= 2 ? 1 : 0, ImGui.GetIO().DeltaTime, _palette.EnableAnimations);
-        state.Press = ThemeContrast.Ease(state.Press, state.WasPressed && frame - state.Frame <= 2 ? 1 : 0, ImGui.GetIO().DeltaTime, _palette.EnableAnimations);
+        if(!Interactions.TryGetValue(id, out var state)) Interactions[id] = state = new() { Frame = frame - 1, Selected = selected ? 1 : 0 };
+        var elapsed = frame == state.Frame ? 0 : ImGui.GetIO().DeltaTime;
+        if(frame - state.Frame > 2) {
+            state.Hover = state.Press = 0;
+            state.WasHovered = state.WasPressed = false;
+            state.Selected = selected ? 1 : 0;
+        }
+        state.Hover = ThemeContrast.Ease(state.Hover, state.WasHovered ? 1 : 0, elapsed, _palette.EnableAnimations, state.WasHovered ? .10f : .13f);
+        state.Press = ThemeContrast.Ease(state.Press, state.WasPressed ? 1 : 0, elapsed, _palette.EnableAnimations, state.WasPressed ? .025f : .11f);
+        state.Selected = ThemeContrast.Ease(state.Selected, selected ? 1 : 0, elapsed, _palette.EnableAnimations, .12f);
         state.Frame = frame;
-        if(Interactions.Count > 2048) {
+        if(Interactions.Count > 2048 && frame % 120 == 0) {
             foreach(var key in Interactions.Where(x => frame - x.Value.Frame > 120).Select(x => x.Key).ToArray()) Interactions.Remove(key);
             if(Interactions.Count > 4096) Interactions.Clear();
         }
@@ -89,8 +95,8 @@ internal static class ModernTheme {
         label = ChineseText.Label(label);
         var state = Animate(ImGui.GetID(label));
         var normal = ImGui.GetStyle().Colors[(int)ImGuiCol.Button];
-        var background = Vector4.Lerp(Vector4.Lerp(normal, _palette.ButtonHovered, state.Hover), _palette.ButtonPressed, state.Press);
-        var foreground = ThemeContrast.Foreground(background, ImGui.GetStyle().Colors[(int)ImGuiCol.Text]);
+        var (background, foreground) = ThemeContrast.Interaction(normal, _palette.ButtonHovered, _palette.ButtonPressed,
+            state.Hover, state.Press, ImGui.GetStyle().Colors[(int)ImGuiCol.Text]);
         using var colors = ImRaii.PushColor(ImGuiCol.Button, background).Push(ImGuiCol.ButtonHovered, background)
             .Push(ImGuiCol.ButtonActive, background).Push(ImGuiCol.Text, foreground);
         var clicked = small ? ImGui.SmallButton(label) : ImGui.Button(label, size);
@@ -98,23 +104,23 @@ internal static class ModernTheme {
         return clicked;
     }
     internal static bool NavigationItem(string label, bool selected, Vector2 size) {
-        var state = Animate(ImGui.GetID(label));
-        var background = Vector4.Lerp(selected ? _palette.Selection : _palette.Panel, _palette.ButtonHovered, state.Hover * .7f);
-        background = Vector4.Lerp(background, _palette.ButtonPressed, state.Press);
-        var foreground = ThemeContrast.Foreground(background, _palette.Text);
+        var state = Animate(ImGui.GetID(label), selected);
+        var normal = Vector4.Lerp(_palette.Panel, _palette.Selection, state.Selected);
+        var foreground = ThemeContrast.Foreground(_palette.Panel, _palette.Text);
+        var background = ThemeContrast.BackgroundForText(Vector4.Lerp(Vector4.Lerp(normal, _palette.ButtonHovered, state.Hover * .55f), _palette.ButtonPressed, state.Press * .65f), foreground);
         using var colors = ImRaii.PushColor(ImGuiCol.Header, background).Push(ImGuiCol.HeaderHovered, background)
             .Push(ImGuiCol.HeaderActive, background).Push(ImGuiCol.Text, foreground);
-        var clicked = ImGui.Selectable(label, selected || state.Hover > .01f, ImGuiSelectableFlags.None, size);
+        var clicked = ImGui.Selectable(label, selected || state.Hover > .01f || state.Selected > .01f, ImGuiSelectableFlags.None, size);
         Capture(state);
-        if(selected) {
+        if(state.Selected > .01f) {
             var a = ImGui.GetItemRectMin(); var b = ImGui.GetItemRectMax();
-            ImGui.GetWindowDrawList().AddRectFilled(a, new Vector2(a.X + 3 * ImGuiHelpers.GlobalScale, b.Y), ImGui.ColorConvertFloat4ToU32(_palette.Accent), 2);
+            ImGui.GetWindowDrawList().AddRectFilled(a, new Vector2(a.X + 3 * ImGuiHelpers.GlobalScale, b.Y), ImGui.ColorConvertFloat4ToU32(_palette.Accent with { W = state.Selected }), 2);
         }
         return clicked;
     }
 
     internal static void Brand(Plugin plugin, string title, string subtitle) {
-        var size = 44f * ImGuiHelpers.GlobalScale;
+        var size = 38f * ImGuiHelpers.GlobalScale;
         var path = Path.Combine(plugin.PluginInterface.AssemblyLocation.Directory!.FullName, "icon.png");
         ImGui.Image(plugin.TextureProvider.GetFromFile(path).GetWrapOrEmpty().Handle, new Vector2(size));
         ImGui.SameLine();
@@ -126,12 +132,12 @@ internal static class ModernTheme {
     }
 
     internal static void Card(string id, string caption, string value, float width, Vector4 color) {
-        using var card = ImRaii.Child(id, new Vector2(width, 78f * ImGuiHelpers.GlobalScale), true,
+        using var card = ImRaii.Child(id, new Vector2(width, Math.Max(72f * ImGuiHelpers.GlobalScale, 2 * ImGui.GetTextLineHeightWithSpacing() + 2 * ImGui.GetStyle().WindowPadding.Y)), true,
             ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse);
         if(!card) return;
-        ImGui.TextDisabled(caption);
-        ImGui.SetWindowFontScale(1.35f);
-        ImGui.TextColored(color, value);
         ImGui.SetWindowFontScale(1f);
+        ImGui.TextDisabled(caption);
+        ImGui.Spacing();
+        ImGui.TextColored(color, value);
     }
 }

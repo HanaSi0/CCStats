@@ -119,11 +119,14 @@ internal class ConfigWindow : Window {
         ImGui.TextWrapped("颜色修改即时预览，关闭设置时自动保存；也可以主动保存或还原到上次保存的主题。");
         ImGui.Spacing();
         var presets = ThemeConfiguration.PresetNames;
-        for(var i = 0; i < presets.Length; i++) {
-            if(i % 3 != 0) ImGui.SameLine();
-            if(ModernTheme.Button(presets[i] + "###ThemePreset" + i)) {
-                _plugin.Configuration.Theme = ThemeConfiguration.Preset(i);
-                _themeStatus = "已预览：" + presets[i];
+        var presetColumns = Math.Clamp((int)(ImGui.GetContentRegionAvail().X / (145 * ImGuiHelpers.GlobalScale)), 2, 4);
+        using(var grid = ImRaii.Table("ThemePresetGrid", presetColumns, ImGuiTableFlags.SizingStretchSame)) {
+            if(grid) for(var i = 0; i < presets.Length; i++) {
+                ImGui.TableNextColumn();
+                if(ModernTheme.Button(presets[i] + "###ThemePreset" + i, new Vector2(-1, 0))) {
+                    _plugin.Configuration.Theme = ThemeConfiguration.Preset(i);
+                    _themeStatus = "已预览：" + presets[i];
+                }
             }
         }
         ImGui.Separator();
@@ -136,20 +139,26 @@ internal class ConfigWindow : Window {
             (nameof(ThemeConfiguration.TableHeader), "表格表头"), (nameof(ThemeConfiguration.TableAlternate), "交替行背景"),
         };
         var theme = _plugin.Configuration.Theme;
-        foreach(var (name, label) in labels) {
-            var property = typeof(ThemeConfiguration).GetProperty(name)!;
-            var color = (Vector4)property.GetValue(theme)!;
-            ImGui.SetNextItemWidth(240f * ImGuiHelpers.GlobalScale);
-            if(ImGui.ColorEdit4(label + "###ThemeColor" + name, ref color,
-                ImGuiColorEditFlags.NoAlpha | ImGuiColorEditFlags.DisplayHex)) {
-                color.W = name == nameof(ThemeConfiguration.Background) ? theme.Background.W : 1f;
-                property.SetValue(theme, color);
-                _themeStatus = "正在预览自定义配色";
+        var colorColumns = ImGui.GetContentRegionAvail().X >= 630 * ImGuiHelpers.GlobalScale ? 2 : 1;
+        using(var colors = ImRaii.Table("ThemeColorGrid", colorColumns, ImGuiTableFlags.SizingStretchSame)) {
+            if(colors) foreach(var (name, label) in labels) {
+                ImGui.TableNextColumn();
+                var property = typeof(ThemeConfiguration).GetProperty(name)!;
+                var color = (Vector4)property.GetValue(theme)!;
+                ImGui.TextUnformatted(label);
+                ImGui.SetNextItemWidth(-1);
+                if(ImGui.ColorEdit4("###ThemeColor" + name, ref color,
+                    ImGuiColorEditFlags.NoAlpha | ImGuiColorEditFlags.DisplayHex)) {
+                    color.W = name == nameof(ThemeConfiguration.Background) ? theme.Background.W : 1f;
+                    property.SetValue(theme, color);
+                    _themeStatus = "正在预览自定义配色";
+                }
+                ImGui.Spacing();
             }
         }
         var animations = theme.EnableAnimations;
         if(ImGui.Checkbox("启用交互动效###ThemeAnimations", ref animations)) theme.EnableAnimations = animations;
-        ImGui.TextWrapped("按钮悬停与按下颜色平滑过渡，文字自动选择高对比颜色。关闭动效后直接切换状态，窗口位置和尺寸不受影响。");
+        ImGui.TextWrapped("按钮悬停轻缓渐入，按下快速响应，松开平缓恢复；文字颜色保持稳定。关闭动效后直接切换状态，窗口位置和尺寸不受影响。");
         var opacity = theme.Background.W;
         ImGui.SetNextItemWidth(240f * ImGuiHelpers.GlobalScale);
         if(ImGui.SliderFloat("窗口不透明度###ThemeOpacity", ref opacity, .35f, 1f, "%.2f")) {

@@ -54,6 +54,7 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
     }
 
     public override void Draw() {
+        ImGui.SetWindowFontScale(1f);
         SizeCondition = ImGuiCond.Once;
     }
 
