@@ -59,6 +59,12 @@ static class DailyRankingChecks {
                 await same.CheckDateAsync(jp);
                 check(sameHandler.Requests == 1, "same-day restart requests only the ranking date page and no other boards or pagination");
             }
+            var forcedHandler = new Handler(url => Fixture(url, "2026-10-16", 5000));
+            using(var forced = new LeaderboardService(Path.Combine(dir, jp.Key), forcedHandler, TimeSpan.Zero)) {
+                await forced.CheckDateAsync(jp, force:true);
+                check(forcedHandler.Requests==2 && forced.State.Snapshot?.Entries.All(e=>long.Parse(e.CharacterId)>5000)==true,
+                    "manual refresh fetches all pages even when the official day matches the cache");
+            }
             using(var next = new LeaderboardService(Path.Combine(dir, jp.Key), new Handler(url => Fixture(url, "2026-10-17", 10000)), TimeSpan.Zero)) {
                 await next.CheckDateAsync(jp);
                 check(next.State.Snapshot?.OfficialDate == new DateOnly(2026,10,17) && next.State.Snapshot.Entries.All(e => long.Parse(e.CharacterId) > 10000), "changed official day replaces the complete regional ranking");

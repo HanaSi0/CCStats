@@ -70,17 +70,12 @@ internal class ValidationManager {
 
             //plugin and game version added v2.1.11.0, 2024-10-16
 
-            Version? pluginVersion = null;
-            if(match.PluginVersion != null) {
-                pluginVersion = new Version(match.PluginVersion);
-            }
-
             DateTime gameVersionDate = match.GameVersionToDateTime() ?? DateTime.MinValue;
 
             //Match flag 0: Invalid director
             //start: game version 2025-05-17
             //fixed: v2.5.3.0
-            if(pluginVersion < new Version(2, 5, 3, 0) && gameVersionDate >= new DateTime(2025, 05, 17)) {
+            if(PvpStats.Helpers.MatchVersionPolicy.NeedsLegacyDirectorWarning(match.Recorder,match.PluginVersion,gameVersionDate)) {
                 match.Flags |= CCValidationFlag.InvalidDirector;
             }
         }

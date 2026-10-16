@@ -17,6 +17,8 @@ public class Configuration : IPluginConfiguration {
     public string LastPluginVersion { get; set; } = "0.0.0.0";
     public bool? EnableDBCachingCC { get; set; }
 
+    public bool EnableDetailedTelemetry { get; set; } = true;
+
     public bool? EnableTimelineCC { get; set; }
     public bool? EnableActionAnalyticsCC { get; set; }
 

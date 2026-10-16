@@ -140,6 +140,7 @@ Check(WinRateLabel.Rate(0,0) == 0 && WinRateLabel.Format(0,0).StartsWith("—"),
 Check(WinRateLabel.Rate(0,5) == 0 && WinRateLabel.Format(0,5).Contains("0/5"), "zero wins with valid matches remains a real zero-rate sample");
 Check(WinRateLabel.Rate(5,0) == 1 && WinRateLabel.Format(5,0).Contains("5/5"), "all-win sample preserves its actual match count");
 Check(ChineseText.Text("Current Ranked Season:") == "当前段位赛赛季：" && ChineseText.Text("Current Rank: ") == "当前段位：" && ChineseText.Text("Highest Rank: ") == "最高段位：", "profile season and rank labels are translated");
+DetailedTelemetryChecks.Run(Check);
 UiInteractionChecks.Run(Check);
 LegacyImportChecks.Run(Check);
 await LeaderboardChecks.Run(Check);

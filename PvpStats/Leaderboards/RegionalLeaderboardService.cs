@@ -28,9 +28,9 @@ public sealed class RegionalLeaderboardService : IDisposable {
     }
     public void SelectRegion(int index) => Interlocked.Exchange(ref _selected, Math.Clamp(index, 0, _regions.Length - 1));
     public Task CheckAtStartupAsync() => _startup.Value;
-    public Task CheckDateAsync(int index) {
+    public Task CheckDateAsync(int index, bool force = false) {
         index = Math.Clamp(index, 0, _regions.Length - 1);
-        return _regions[index].CheckDateAsync(RankingRegion.All[index]);
+        return _regions[index].CheckDateAsync(RankingRegion.All[index], force);
     }
     public Task ExportAsync(int index) => _regions[Math.Clamp(index, 0, _regions.Length - 1)].ExportAsync();
     public void Cancel() => _regions[SelectedRegion].Cancel();

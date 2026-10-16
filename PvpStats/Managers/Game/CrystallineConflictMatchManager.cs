@@ -1,4 +1,5 @@
 using Dalamud.Game;
+using PvpStats.Analysis;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
@@ -37,6 +38,9 @@ internal class CrystallineConflictMatchManager : IDisposable {
     private float _lastEventTimer;
     public Dictionary<uint, Dictionary<ushort, HashSet<uint>>>? _castTargets;
     private DateTime _lastUpdate;
+    private DateTime _lastMovementSample;
+    private readonly object _detailedLock = new();
+    private readonly HashSet<(uint Sequence,uint Target,int Index)> _recordedEffects = new();
     private DateTime _lastPrint = DateTime.MinValue;
 
     //p1 = director
@@ -129,6 +133,7 @@ internal class CrystallineConflictMatchManager : IDisposable {
                 TerritoryId = territoryId,
                 Arena = MatchHelper.GetArena(territoryId),
                 MatchType = MatchHelper.GetMatchType(dutyId),
+                Recorder = "CCStats",
                 PluginVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString(),
             };
             unsafe {
@@ -164,6 +169,21 @@ internal class CrystallineConflictMatchManager : IDisposable {
                 _currentMatchTimeline.NameIdTargetedStatusAnalytics = new();
             }
 
+            if(_plugin.Configuration.EnableDetailedTelemetry) {
+                _currentMatchTimeline ??= new();
+                _currentMatchTimeline.Detailed = new() { GameVersion = _currentMatch.GameVersion ?? "" };
+                _currentMatchTimeline.Kills ??= new();
+                _currentMatchTimeline.CrystalPosition ??= new();
+                // The shared timeline UI expects both teams even when only detailed recording is enabled.
+                _currentMatchTimeline.TeamProgress ??= new() {
+                    { CrystallineConflictTeamName.Astra, new() }, { CrystallineConflictTeamName.Umbra, new() },
+                };
+                _currentMatchTimeline.TeamMidProgress ??= new() {
+                    { CrystallineConflictTeamName.Astra, new() }, { CrystallineConflictTeamName.Umbra, new() },
+                };
+                _lastMovementSample = DateTime.MinValue;
+                lock(_detailedLock) _recordedEffects.Clear();
+            }
             _castTargets = [];
             _lastEventTimer = -1f;
             _scoreboardPayloadReceived = false;
@@ -409,6 +429,9 @@ internal class CrystallineConflictMatchManager : IDisposable {
                         Plugin.Log2.Debug($"{target?.Name} was hit by {actionEffect.Type} p0: {actionEffect.Param0} p1: {actionEffect.Param1} p2: {actionEffect.Param2} " +
                         $"p3: {actionEffect.Param3} p4: {actionEffect.Param4} value: {actionEffect.Value} amount: {amount}");
                     }
+                    RecordDetailedEffect(now, effectHeader->GlobalSequence, actionTargetId, j, actionId,
+                        actorAlias?.ToString() ?? "", targetAlias?.ToString() ?? "", (byte)actionEffect.Type, amount,
+                        isReflected, targetSnapshot, actor as IBattleChara, isPet);
                     switch((ActionEffectType)actionEffect.Type) {
                         case ActionEffectType.Damage:
                         case ActionEffectType.BlockedDamage:
@@ -727,6 +750,11 @@ internal class CrystallineConflictMatchManager : IDisposable {
         postMatch.MatchDuration = TimeSpan.FromSeconds(resultsPacket.MatchLength);
         _currentMatch.MatchEndTime = DateTime.UtcNow;
         _currentMatch.MatchStartTime = _currentMatch.MatchEndTime - postMatch.MatchDuration;
+        // The authoritative match start is only available in the results packet.
+        // Record while the duty is active, then trim countdown and post-match samples once.
+        if(_currentMatchTimeline?.Detailed is { } detailed && _currentMatch.MatchStartTime is { } start && _currentMatch.MatchEndTime is { } end) {
+            lock(_detailedLock) DetailedAnalysis.TrimToMatch(detailed,start,end);
+        }
 
         //set rank change
         postMatch.RankBefore = new() {
@@ -868,6 +896,82 @@ internal class CrystallineConflictMatchManager : IDisposable {
         return true;
     }
 
+    private int DetailedTeam(string alias) {
+        if(_currentMatch?.IntroPlayerInfo?.TryGetValue(alias, out var intro) == true) return (int)(intro.Team ?? CrystallineConflictTeamName.Unknown);
+        return (int?)_currentMatch?.Players.FirstOrDefault(p=>p.Alias.ToString()==alias)?.Team ?? 0;
+    }
+
+    private void RecordDetailedEffect(DateTime now, uint sequence, uint targetId, int index, uint actionId,
+        string actor, string target, byte type, uint amount, bool reflected, BattleCharaSnapshot snapshot, IBattleChara? actorCharacter, bool petSource) {
+        var data = _currentMatchTimeline?.Detailed;
+        if(data == null || _currentMatch?.IsCompleted != false || _scoreboardPayloadReceived) return;
+        if(type is not (3 or 4 or 5 or 6 or 14 or 20 or 55)) return;
+        lock(_detailedLock) {
+            if(data.Effects.Count >= 20000 || data.EstimatedBytes >= DetailedTelemetry.ByteBudget) { data.EffectsTruncated = true; return; }
+            if(sequence != 0 && !_recordedEffects.Add((sequence,targetId,index))) return;
+            var recipient = reflected ? actor : target;
+            if(recipient.Length == 0) return;
+            var needsSnapshot = DetailedAnalysis.IsDamage(type) && !reflected && snapshot.Statuses.Any(s=>s.StatusId is 3054 or 3673);
+            var actorStatuses = needsSnapshot ? actorCharacter?.StatusList.Select(s=>new EffectStatus { Id=s.StatusId, Param=s.Param, Remaining=s.RemainingTime }).ToList() ?? new() : new();
+            var targetStatuses = needsSnapshot ? snapshot.Statuses.Select(s=>new EffectStatus { Id=s.StatusId, Param=s.Param, Remaining=s.RemainingTime }).ToList() : new();
+            data.EstimatedBytes += 512 + (actorStatuses.Count + targetStatuses.Count)*192;
+            // Freeze the loaded client's descriptions with this match, once per ID. No rule evaluation during combat.
+            if(DetailedAnalysis.IsDamage(type) && !data.ActionDescriptions.ContainsKey(actionId)) {
+                try { data.ActionDescriptions[actionId] = _plugin.DataManager.GetExcelSheet<ActionTransient>().GetRow(actionId).Description.ToString(); } catch { data.ActionDescriptions[actionId] = ""; }
+                data.EstimatedBytes += 1024 + data.ActionDescriptions[actionId].Length*4;
+            }
+            foreach(var status in actorStatuses.Concat(targetStatuses)) {
+                if(!data.StatusDescriptions.ContainsKey(status.Id)) {
+                    try { data.StatusDescriptions[status.Id] = _plugin.DataManager.GetExcelSheet<Status>().GetRow(status.Id).Description.ToString(); } catch { data.StatusDescriptions[status.Id] = ""; }
+                    data.EstimatedBytes += 1024 + data.StatusDescriptions[status.Id].Length*4;
+                }
+            }
+            data.Effects.Add(new() {
+                Timestamp=now, Sequence=sequence, ActionId=actionId, Actor=actor, Target=recipient,
+                ActorTeam=DetailedTeam(actor), TargetTeam=DetailedTeam(recipient), Type=type, Amount=amount,
+                StatusId=type is 14 or 20 or 55 ? amount : 0,
+                GuardObserved=!reflected && snapshot.Statuses.Any(s=>s.StatusId is 3054 or 3673),
+                SelfReturn=reflected && type==4, SnapshotsCaptured=needsSnapshot && actorCharacter!=null, PetSource=petSource,
+                ShieldPercent=snapshot.ShieldPercents, ActorStatuses=actorStatuses, TargetStatuses=targetStatuses,
+            });
+        }
+    }
+
+    private unsafe void CaptureMovement(DateTime now, CrystallineConflictContentDirector* director) {
+        var data = _currentMatchTimeline?.Detailed;
+        if(data == null || _scoreboardPayloadReceived || _currentMatch?.IsCompleted != false || now-_lastMovementSample < TimeSpan.FromSeconds(.5)) return;
+        _lastMovementSample = now;
+        try {
+            if(data.MapSizeFactor == 0) try {
+                var map = _plugin.DataManager.GetExcelSheet<Map>().GetRow(_plugin.ClientState.MapId);
+                var id = map.Id.ToString();
+                data.MapId=map.RowId; data.MapSizeFactor=map.SizeFactor; data.MapOffsetX=map.OffsetX; data.MapOffsetY=map.OffsetY;
+                if(id.Length > 0) data.MapTexture=$"ui/map/{id}/{id.Replace("/", "")}_m.tex";
+            } catch { /* Keep recording loaded objects when map metadata is unavailable. */ }
+            var objects = _plugin.ObjectTable.OfType<IPlayerCharacter>().Where(p=>p.EntityId != 0 && p.EntityId != 0xE0000000).GroupBy(p=>p.EntityId).Select(g=>g.First()).ToArray();
+            var aliases = objects.ToDictionary(p=>p.EntityId,p=>new PlayerAlias(p.Name.ToString(),_plugin.DataManager.GetExcelSheet<World>().GetRow(p.HomeWorld.RowId).Name.ToString()).ToString());
+            var frame = new MovementFrame { Timestamp=now, CrystalProgress=director->CrystalPosition, AstraProgress=director->AstraProgress, UmbraProgress=director->UmbraProgress };
+            foreach(var player in objects) {
+                var alias = aliases[player.EntityId];
+                var team = DetailedTeam(alias);
+                if(team is not (1 or 2) || !float.IsFinite(player.Position.X) || !float.IsFinite(player.Position.Z)) continue;
+                frame.Players.Add(new() {
+                    Player=alias, Team=team, X=player.Position.X, Z=player.Position.Z, Heading=player.Rotation, HP=player.CurrentHp, MaxHP=player.MaxHp,
+                    Controls=player.StatusList.Where(s=>DetailedAnalysis.Controls.ContainsKey(s.StatusId)).Select(s=>new ObservedControl {
+                        StatusId=s.StatusId, Source=aliases.GetValueOrDefault(s.SourceId, ""), Remaining=s.RemainingTime,
+                    }).ToList(),
+                });
+            }
+            lock(_detailedLock) {
+                if(data.Frames.Count >= 2400 || data.EstimatedBytes >= DetailedTelemetry.ByteBudget) { data.FramesTruncated=true; return; }
+                data.EstimatedBytes += 256 + frame.Players.Sum(p=>384 + p.Controls.Count*192);
+                data.Frames.Add(frame);
+            }
+        } catch(Exception e) {
+            if(_plugin.DebugMode) _plugin.Log.Debug(e,"Detailed movement sample unavailable.");
+        }
+    }
+
     private unsafe void OnFrameworkUpdate(IFramework framework) {
         if(!IsMatchInProgress()) {
             return;
@@ -933,6 +1037,7 @@ internal class CrystallineConflictMatchManager : IDisposable {
             }
         }
 
+        CaptureMovement(now, director);
         if(_currentMatchTimeline != null) {
 
             //crystal position

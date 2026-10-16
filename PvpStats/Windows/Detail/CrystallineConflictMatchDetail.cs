@@ -57,6 +57,7 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
     private Vector2 _defaultCastsSize;
     private Vector2? _savedCastsSize;
     private bool _firstDraw = true;
+    private PvpStats.Windows.Analysis.DetailedCombatPanel? _detailedPanel;
     private static readonly (string Key, string Caption, float Width, uint Id, bool Required)[] ScoreboardColumns = [
         ("Name", "玩家", 150, 0, true), ("Home World", "所属服务器", 115, 1, false), ("Job", "职业", 90, 2, true),
         ("Kills", "击倒", 55, (uint)"Kills".GetHashCode(), false),
@@ -642,6 +643,13 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                             DrawScoreboard();
                         } else {
                             Flags &= ~ImGuiWindowFlags.AlwaysAutoResize;
+                        }
+                    }
+                    using(var tab = ImRaii.TabItem("细项分析与回放###Detailed")) {
+                        if(tab) {
+                            CurrentTab="Detailed";
+                            _detailedPanel ??= new(_timeline.Detailed);
+                            _detailedPanel.Draw(Match.IsCompleted,()=>Plugin.WindowManager.OpenReplay(Match,_timeline));
                         }
                     }
                     if(_timeline.Kills != null) {

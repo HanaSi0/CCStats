@@ -8,7 +8,6 @@ using PvpStats.Leaderboards;
 using System;
 using System.Linq;
 using System.Numerics;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -19,7 +18,8 @@ internal sealed class LeaderboardPage {
     private readonly Plugin _plugin;
     private int _sort, _page;
     private string _search = "", _viewSearch = "";
-    private RankingEntry? _selected;
+    private bool _pendingJump;
+    private string? _scrollTo;
     private RankingSnapshot? _viewSnapshot;
     private RankingEntry[] _view = [];
     private int _viewSort = -1;
@@ -42,14 +42,16 @@ internal sealed class LeaderboardPage {
             _plugin.Configuration.LeaderboardRegion = selectedRegion;
             _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
             _page = 0;
-            _selected = null;
+            _pendingJump = false;
+            _scrollTo = null;
             state = _service.State; snapshot = state.Snapshot;
         }
         var region = RankingRegion.All[selectedRegion];
         ImGui.SameLine();
         using(var disabled = ImRaii.Disabled(state.Busy)) {
-            if(ModernTheme.Button("检查官网日期###CheckRankingDate")) _ = Task.Run(() => _service.CheckDateAsync(selectedRegion));
+            if(ModernTheme.Button("手动抓取###CheckRankingDate")) _ = Task.Run(() => _service.CheckDateAsync(selectedRegion,force:true));
         }
+        if(ImGui.IsItemHovered()) ImGui.SetTooltip("重新抓取当前大区完整榜单（间隔至少 60 秒）。\n"+state.Message);
         if(state.Busy && _service.CanCancel) {
             ImGui.SameLine();
             if(ModernTheme.Button("取消抓取###CancelRanking")) _service.Cancel();
@@ -64,20 +66,28 @@ internal sealed class LeaderboardPage {
         if(snapshot == null) {
             ImGui.Separator();
             ImGui.TextWrapped($"暂无{region.Name}榜单缓存。检查完成后将在此显示。");
-            if(ModernTheme.Button("复制官方入口###CopyRankingRoot")) ImGui.SetClipboardText(LodestoneParser.Root(region.Site).AbsoluteUri);
             return;
         }
         ImGui.Separator();
         ImGui.SetNextItemWidth(340 * ImGuiHelpers.GlobalScale);
-        ImGui.InputTextWithHint("###RankingSearch", "搜索角色、服务器、榜单或原始字段…", ref _search, 256);
+        ImGui.InputTextWithHint("###RankingSearch", "搜索玩家、所属世界…", ref _search, 256);
         ImGui.SameLine();
         ImGui.SetNextItemWidth(160 * ImGuiHelpers.GlobalScale);
         var sorts = new[] { "官方名次", "积分从高到低", "胜场从高到低" };
         ImGui.Combo("###RankingSort", ref _sort, sorts, sorts.Length);
-        if(!ReferenceEquals(snapshot, _viewSnapshot)) _selected = null;
+        var local=_plugin.ObjectTable.LocalPlayer;
+        var localName=local?.Name.ToString()??"";
+        var localWorld=local?.HomeWorld.Value.Name.ToString()??"";
+        bool IsSelf(RankingEntry entry)=>RankingIdentity.Matches(entry,localName,localWorld);
+        var self=snapshot.Entries.FirstOrDefault(IsSelf);
+        using(var disabled=ImRaii.Disabled(self==null)) {
+            if(ModernTheme.Button("跳转到我###JumpToMyRanking")) { _search=""; _viewSearch="\0"; _pendingJump=true; }
+        }
+        ImGui.SameLine();
+        ImGui.TextDisabled(local==null?"登录角色后可定位自己的排名":self==null?"当前角色未出现在此大区已缓存榜单":$"我的排名：{self.Rank} · {self.CharacterName} · {localWorld}");
         if(!ReferenceEquals(snapshot, _viewSnapshot) || _viewSearch != _search || _viewSort != _sort) {
             var terms = MatchQuery.Parse(_search);
-            var rows = snapshot.Entries.Where(e => MatchQuery.Matches(e.CharacterName + " " + e.World + " " + e.Scope + " " + e.CharacterId + " " + e.RowText, terms));
+            var rows = snapshot.Entries.Where(e => MatchQuery.Matches(e.CharacterName + " " + e.World, terms));
             _view = (_sort switch {
                 1 => rows.OrderByDescending(e => Number(e.Rating, long.MinValue)),
                 2 => rows.OrderByDescending(e => Number(e.Victories, long.MinValue)),
@@ -85,23 +95,26 @@ internal sealed class LeaderboardPage {
             }).ToArray();
             _viewSnapshot = snapshot; _viewSearch = _search; _viewSort = _sort; _page = 0;
         }
-        using(var disabled = ImRaii.Disabled(state.Busy)) {
-            if(ModernTheme.Button("导出完整快照 ZIP###ExportRanking")) _ = Task.Run(() => _service.ExportAsync(selectedRegion));
+        if(_pendingJump) {
+            var index=Array.FindIndex(_view,IsSelf);
+            if(index>=0) { _page=index/100; _scrollTo=_view[index].CharacterId; }
+            _pendingJump=false;
         }
-        ImGui.SameLine();
-        if(ModernTheme.Button("复制筛选结果 CSV###CopyRankingCSV")) ImGui.SetClipboardText(LodestoneParser.Csv(_view));
         var pageCount = Math.Max(1, (_view.Length + 99) / 100);
         _page = Math.Clamp(_page, 0, pageCount - 1);
         using(var table = ImRaii.Table("OfficialRankingTable", 8, ImGuiTableFlags.ScrollX | ImGuiTableFlags.ScrollY
             | ImGuiTableFlags.RowBg | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.Resizable,
-            new Vector2(0, Math.Max(180, ImGui.GetContentRegionAvail().Y - (_selected == null ? 65 : 260) * ImGuiHelpers.GlobalScale)))) {
+            new Vector2(0, Math.Max(180, ImGui.GetContentRegionAvail().Y - 65 * ImGuiHelpers.GlobalScale)))) {
             if(table) {
                 foreach(var name in new[] { "名次", "玩家完整姓名", "服务器 / 数据中心", "段位", "积分 / 胜星", "胜场", "排名变化", "地区" })
                     ImGui.TableSetupColumn(name, ImGuiTableColumnFlags.WidthFixed, (name == "玩家完整姓名" ? 240 : name.StartsWith("服务器") ? 190 : 90) * ImGuiHelpers.GlobalScale);
                 ImGui.TableSetupScrollFreeze(2, 1); ImGui.TableHeadersRow();
                 foreach(var entry in _view.Skip(_page * 100).Take(100)) {
                     ImGui.TableNextRow(); ImGui.TableNextColumn();
-                    if(ImGui.Selectable(Display(entry.Rank) + "###Ranking" + entry.Scope + entry.CharacterId, _selected == entry, ImGuiSelectableFlags.SpanAllColumns)) _selected = entry;
+                    var isSelf=IsSelf(entry);
+                    if(isSelf) ImGui.TableSetBgColor(ImGuiTableBgTarget.RowBg1,ImGui.GetColorU32(ModernTheme.Selection));
+                    ImGui.TextUnformatted(Display(entry.Rank)+(isSelf?" · 我":""));
+                    if(_scrollTo==entry.CharacterId) { ImGui.SetScrollHereY(.5f); _scrollTo=null; }
                     foreach(var value in new[] { entry.CharacterName, entry.World, ChineseText.Text(LodestoneParser.CanonicalTier(entry.Tier)) + (entry.Division.Length > 0 ? " " + entry.Division : ""), entry.Rating, entry.Victories, entry.RankChange, region.Name }) {
                         ImGui.TableNextColumn(); ImGui.TextUnformatted(Display(value));
                         if(ImGui.IsItemHovered()) ImGui.SetTooltip(Display(value));
@@ -113,22 +126,5 @@ internal sealed class LeaderboardPage {
         using(var disabled = ImRaii.Disabled(_page == 0)) if(ModernTheme.Button("上一页###RankPrevious")) _page--;
         ImGui.SameLine();
         using(var disabled = ImRaii.Disabled(_page + 1 >= pageCount)) if(ModernTheme.Button("下一页###RankNext")) _page++;
-        if(_selected is { } selected) {
-            ImGui.Separator();
-            ImGui.TextColored(ModernTheme.Accent, selected.CharacterName + " · 完整公开字段"); ImGui.SameLine();
-            if(ModernTheme.SmallButton("复制完整姓名###CopyRankingName")) ImGui.SetClipboardText(selected.CharacterName);
-            ImGui.SameLine();
-            if(ModernTheme.SmallButton("复制角色 JSON###CopyRankingEntry")) ImGui.SetClipboardText(JsonSerializer.Serialize(selected, new JsonSerializerOptions { WriteIndented = true }));
-            ImGui.SameLine();
-            if(ModernTheme.SmallButton("复制角色链接###CopyRankingProfile")) ImGui.SetClipboardText(selected.ProfileUrl);
-            ImGui.SameLine();
-            if(ModernTheme.SmallButton("收起###CloseRankingEntry")) _selected = null;
-            using var fields = ImRaii.Child("RankingRawFields", new Vector2(0, 160 * ImGuiHelpers.GlobalScale), true);
-            if(fields) {
-                ImGui.TextWrapped("原始行：" + selected.RowText);
-                foreach(var pair in selected.RawFields) ImGui.TextWrapped(pair.Key + "：" + string.Join(" | ", pair.Value));
-                foreach(var url in selected.ImageUrls) ImGui.TextWrapped("图片：" + url);
-            }
-        }
     }
 }

@@ -44,6 +44,7 @@ internal class WindowManager : IDisposable {
         CCTrackerWindow = new(plugin);
         ConfigWindow = new(plugin);
         Launcher = new(plugin);
+        WindowChrome.Configure(CCTrackerWindow);
         WindowSystem.AddWindow(CCTrackerWindow);
         // Settings render inside the tracker; no second window is registered.
 
@@ -85,7 +86,15 @@ internal class WindowManager : IDisposable {
     }
 
     internal void AddWindow(Window window) {
+        WindowChrome.Configure(window);
         WindowSystem.AddWindow(window);
+    }
+
+    internal void OpenReplay(CrystallineConflictMatch match, PvpStats.Types.Match.Timeline.CrystallineConflictMatchTimeline timeline) {
+        var name="地图回放###CCReplay"+match.Id;
+        var existing=WindowSystem.Windows.FirstOrDefault(w=>w.WindowName==name);
+        if(existing!=null) { existing.IsOpen=true; existing.BringToFront(); return; }
+        AddWindow(new PvpStats.Windows.Replay.MatchReplayWindow(_plugin,match,timeline));
     }
 
     internal void RemoveWindow(Window window) {

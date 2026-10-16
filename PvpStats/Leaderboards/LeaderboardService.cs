@@ -50,8 +50,8 @@ public sealed class LeaderboardService : IDisposable {
         catch(Exception e) { State = new(false, "缓存无法加载，可重新抓取：" + e.Message, null); }
     }
     public void Cancel() { try { _operation?.Cancel(); } catch(ObjectDisposedException) { } }
-    public Task CheckDateAsync(RankingRegion region) => FetchAsync(region.Site, "", true, region, true);
-    public async Task FetchAsync(int site, string scope, bool allScopes, RankingRegion? region = null, bool checkDate = false) {
+    public Task CheckDateAsync(RankingRegion region, bool force = false) => FetchAsync(region.Site, "", true, region, true, force);
+    public async Task FetchAsync(int site, string scope, bool allScopes, RankingRegion? region = null, bool checkDate = false, bool force = false) {
         if(Volatile.Read(ref _disposed) != 0 || Interlocked.CompareExchange(ref _busy, 1, 0) != 0) return;
         try {
             await _load;
@@ -87,7 +87,7 @@ public sealed class LeaderboardService : IDisposable {
             var officialDate = seed?.OfficialDate;
             if(checkDate) {
                 if(officialDate == null) throw new FormatException("未识别到官网榜单更新日期，无法按天比较；保留原缓存。");
-                if(previous?.OfficialDate == officialDate && previous.RegionKey == region?.Key && previous.AllScopes && previous.SchemaVersion == RankingSnapshot.CurrentSchemaVersion) {
+                if(!force && previous?.OfficialDate == officialDate && previous.RegionKey == region?.Key && previous.AllScopes && previous.SchemaVersion == RankingSnapshot.CurrentSchemaVersion) {
                     State = new(false, $"{region!.Name}官网日期 {officialDate:yyyy-MM-dd} 与缓存一致，直接使用缓存。", previous);
                     return;
                 }

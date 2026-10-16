@@ -27,6 +27,7 @@ public abstract class PvpMatch : IEquatable<PvpMatch> {
     public uint TerritoryId { get; set; }
     public string? DataCenter { get; set; }
     public string? GameVersion { get; set; }
+    public string? Recorder { get; set; }
     public string? PluginVersion { get; set; }
 
     public ObjectId? TimelineId { get; set; }

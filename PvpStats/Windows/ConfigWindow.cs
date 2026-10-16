@@ -676,6 +676,12 @@ internal class ConfigWindow : Window {
         ImGui.TextColored(_plugin.Configuration.Colors.Header, ChineseText.Text("Enhanced Tracking Features"));
         ImGuiHelper.HelpMarker(ChineseText.Text("Disabling these features can help save disk space."));
 
+        var detailed = _plugin.Configuration.EnableDetailedTelemetry;
+        if(ImGui.Checkbox("细项与走位记录（新比赛生效）###DetailedTelemetry",ref detailed)) {
+            _plugin.Configuration.EnableDetailedTelemetry=detailed;
+            _plugin.Configuration.Save();
+        }
+        ImGui.TextWrapped("采集客户端已加载的本局玩家，包括镜头外模型；每 0.5 秒记录位置，并保存受击状态与效果。未加载对象不补位置。仅在对局详情点击按钮后，才使用本机进行细致推算。");
         bool enableTimelineCC = _plugin.Configuration.EnableTimelineCC ?? true;
         if(ImGui.Checkbox(ChineseText.Label("Crystalline Conflict Timeline Tracking"), ref enableTimelineCC)) {
             _plugin.Configuration.EnableTimelineCC = enableTimelineCC;
