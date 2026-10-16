@@ -202,33 +202,10 @@ internal class ConfigWindow : Window {
             _plugin.Configuration.CCWindowConfig.FilterHeight = (uint)filterHeight;
             _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
         }
-        bool filterHeightAdjust = _plugin.Configuration.AdjustWindowHeightOnFilterCollapse;
-        if(ImGui.Checkbox(ChineseText.Label("Offset window size when filters hidden"), ref filterHeightAdjust)) {
-            _plugin.Configuration.AdjustWindowHeightOnFilterCollapse = filterHeightAdjust;
-            _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
-        }
-        ImGuiHelper.HelpMarker("The height of the window will be offset by the height of the filter child whenever filters are shown or hidden.", true, true);
-        bool minimize = _plugin.Configuration.MinimizeWindow;
-        if(ImGui.Checkbox(ChineseText.Label("Shrink window on collapse"), ref minimize)) {
-            _plugin.Configuration.MinimizeWindow = minimize;
-            _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
-        }
-        bool minimizeDir = _plugin.Configuration.MinimizeDirectionLeft;
-        if(ImGui.Checkbox(ChineseText.Label("Anchor left-side of window on shrink"), ref minimizeDir)) {
-            _plugin.Configuration.MinimizeDirectionLeft = minimizeDir;
-            _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
-        }
-        ImGuiHelper.HelpMarker("Only applies to previous setting. Otherwise anchors on the right-side.", true, true);
-        bool saveTabSize = _plugin.Configuration.PersistWindowSizePerTab;
-        if(ImGui.Checkbox(ChineseText.Label("Save window size per tab"), ref saveTabSize)) {
-            _plugin.Configuration.PersistWindowSizePerTab = saveTabSize;
-            _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
-        }
-        bool resizeLeft = _plugin.Configuration.ResizeWindowLeft;
-        if(ImGui.Checkbox(ChineseText.Label("Resize window leftwards on tab switch"), ref resizeLeft)) {
-            _plugin.Configuration.ResizeWindowLeft = resizeLeft;
-            _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
-        }
+        ImGui.TextWrapped("主窗口各页面共用同一尺寸；可拖动窗口边缘调整，切页及收起筛选不会改变窗口大小。");
+        ImGui.Separator();
+        ImGui.TextUnformatted("旧版数据导入");
+        ImGui.TextWrapped(_plugin.LegacyImportStatus);
         bool colorScale = _plugin.Configuration.ColorScaleStats;
         if(ImGui.Checkbox(ChineseText.Label("Color scale stat values"), ref colorScale)) {
             _plugin.Configuration.ColorScaleStats = colorScale;

@@ -10,6 +10,7 @@
     <None Include="Fixtures/**" CopyToOutputDirectory="PreserveNewest" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <Compile Include="../../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />
+    <Compile Include="../../PvpStats/Services/LegacyDataImporter.cs" Link="LegacyDataImporter.cs" />
     <PackageReference Include="LiteDB" Version="5.0.16" />
     <Compile Include="../../PvpStats/Windows/Floating/LauncherInteraction.cs" Link="LauncherInteraction.cs" />
     <Compile Include="../../PvpStats/Localization/*.cs" Link="Localization/%(Filename)%(Extension)" />

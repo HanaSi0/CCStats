@@ -60,5 +60,12 @@
   "BEFORE": "之前",
   "SINCE": "自此起",
   "DURING": "期间",
-  "AFTER": "之后"
+  "AFTER": "之后",
+  "This data comes from SE's game servers.": "此页数据来自游戏服务器的当前角色 PvP 资料，与本地战绩记录分别统计。",
+  "Current Ranked Season:": "当前段位赛赛季：",
+  "Current Rank: ": "当前段位：",
+  "Highest Rank: ": "最高段位：",
+  "Matches: ": "比赛场数：",
+  "Wins: ": "胜场：",
+  "PvP profile unavailable": "当前无法读取角色 PvP 资料，请登录角色后重试。"
 }

@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.1.1：使用独立的 CCStats 插件标识与程序集，修复国际服安装器将第三方同名插件过滤、搜索不到的问题。保留 0.1.0 全部功能。",
+  "Changelog": "0.1.2：自动导入原版 PvP Tracker 的水晶冲突记录、时间线与玩家关联，按 ID 去重且保留原文件；修复侧栏切页将子窗口尺寸恢复到主窗口的问题，取消切页与筛选自动缩放。",
   "Tags": [
     "pvp",
     "statistics"

@@ -180,23 +180,6 @@ internal static class ImGuiHelper {
         WrappedTooltip("Copy CSV to clipboard");
     }
 
-    internal static void DonateButton() {
-        using(_ = ImRaii.PushFont(UiBuilder.IconFont)) {
-            var text = $"{FontAwesomeIcon.Star.ToIconString()}{FontAwesomeIcon.Copy.ToIconString()}";
-            using(_ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed)) {
-                if(ImGui.Button($"{FontAwesomeIcon.Heart.ToIconString()}##--Donate")) {
-                    Task.Run(() => {
-                        Process.Start(new ProcessStartInfo() {
-                            UseShellExecute = true,
-                            FileName = "https://ko-fi.com/samoxiv"
-                        });
-                    });
-                }
-            }
-        }
-        WrappedTooltip("Support the dev");
-    }
-
     internal static void FormattedCollapsibleHeader((string, float)[] columns, Action action) {
         List<string> formattedText = new();
         foreach(var column in columns) {

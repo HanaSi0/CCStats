@@ -635,7 +635,6 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         if(tab) {
                             if(CurrentTab != "Scoreboard") {
                                 Flags &= ~ImGuiWindowFlags.AlwaysAutoResize;
-                                SetWindowSize(_savedScoreboardSize ?? _defaultScoreboardSize);
                                 CurrentTab = "Scoreboard";
                             } else {
                                 _savedScoreboardSize = ImGui.GetWindowSize();
@@ -650,7 +649,6 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                             if(tab) {
                                 if(CurrentTab != "Timeline") {
                                     //SetWindowSize(new Vector2(SizeConstraints!.Value.MinimumSize.X, 600));
-                                    SetWindowSize(_savedTimelineSize ?? _defaultTimelineSize);
                                     CurrentTab = "Timeline";
                                 }
                                 _savedTimelineSize = ImGui.GetWindowSize();
@@ -662,7 +660,6 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         using(var tab = ImRaii.TabItem("推进曲线###Graphs")) {
                             if(tab) {
                                 if(CurrentTab != "Graphs") {
-                                    SetWindowSize(_savedGraphSize ?? _defaultGraphSize);
                                     CurrentTab = "Graphs";
                                 }
                                 _savedGraphSize = ImGui.GetWindowSize();
@@ -674,7 +671,6 @@ internal class CrystallineConflictMatchDetail : MatchDetail<CrystallineConflictM
                         using(var tab = ImRaii.TabItem("技能分析###Actions")) {
                             if(tab) {
                                 if(CurrentTab != "Actions") {
-                                    SetWindowSize(_savedCastsSize ?? _defaultCastsSize);
                                     CurrentTab = "Actions";
                                 }
                                 _savedCastsSize = ImGui.GetWindowSize();

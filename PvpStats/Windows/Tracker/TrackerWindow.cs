@@ -24,8 +24,6 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
     protected bool CollapseFilters;
     protected string CurrentTab = "";
 
-    private bool _firstDraw, _lastWindowCollapsed, _windowCollapsed;
-    private Vector2 _lastWindowSize, _lastWindowPosition, _savedWindowSize;
     private int _drawCycles;
     private float _longestDraw, _longestPreDraw;
 
@@ -94,50 +92,10 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
         Plugin.Log.Debug(string.Format("{0,-50}: {1,4} ms", $"{WindowName} save config", s1.ElapsedMilliseconds.ToString()));
     }
 
-    public override void PreDraw() {
-        //Plugin.Log.Debug($"predraw collapsed: {Collapsed}");
-        if(Plugin.Configuration.MinimizeWindow && _windowCollapsed && !_lastWindowCollapsed && _firstDraw) {
-#if DEBUG
-            Plugin.Log.Debug($"collapsed. Position: ({_lastWindowPosition.X},{_lastWindowPosition.Y}) Size: ({_lastWindowSize.X},{_lastWindowSize.Y})");
-#endif
-            if(!Plugin.Configuration.MinimizeDirectionLeft) {
-                SetWindowPosition(new Vector2(_lastWindowPosition.X + (_lastWindowSize.X - 425 * ImGuiHelpers.GlobalScale), _lastWindowPosition.Y));
-            }
-            SetWindowSize(new Vector2(425, _lastWindowSize.Y));
-            _savedWindowSize = _lastWindowSize / ImGuiHelpers.GlobalScale;
-        } else if(Plugin.Configuration.MinimizeWindow && !_windowCollapsed && _lastWindowCollapsed && _savedWindowSize != Vector2.Zero) {
-
-        } else if(_windowCollapsed) {
-            PositionCondition = ImGuiCond.Once;
-        }
-
-        _lastWindowCollapsed = _windowCollapsed;
-        _windowCollapsed = true;
-        base.PreDraw();
-    }
-
     public override void Draw() {
 #if DEBUG
-        Stopwatch s1 = new();
-        s1.Start();
+        var s1 = Stopwatch.StartNew();
 #endif
-        if(!ImGui.IsWindowCollapsed()) {
-            _firstDraw = true;
-        }
-        _windowCollapsed = false;
-        SizeCondition = ImGuiCond.Once;
-        PositionCondition = ImGuiCond.Once;
-        if(Plugin.Configuration.MinimizeWindow && _lastWindowCollapsed && _savedWindowSize != Vector2.Zero) {
-#if DEBUG
-            Plugin.Log.Debug($"un-collapsed window");
-#endif
-            if(!Plugin.Configuration.MinimizeDirectionLeft) {
-                SetWindowPosition(new Vector2(ImGui.GetWindowPos().X - (_savedWindowSize.X - 425) * ImGuiHelpers.GlobalScale, ImGui.GetWindowPos().Y));
-            }
-            SetWindowSize(_savedWindowSize);
-        }
-        _lastWindowSize = ImGui.GetWindowSize();
-        _lastWindowPosition = ImGui.GetWindowPos();
         DrawInternal();
 
 #if DEBUG
@@ -187,11 +145,9 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
             }
         }
         if(ImGui.Button(CollapseFilters ? "高级筛选###ToggleAdvancedFilters" : "收起筛选###ToggleAdvancedFilters")) {
-            var direction = CollapseFilters ? 1 : -1;
             CollapseFilters = !CollapseFilters;
             WindowConfig.FiltersCollapsed = CollapseFilters;
-            if(Plugin.Configuration.AdjustWindowHeightOnFilterCollapse)
-                SetWindowSize(new Vector2(ImGui.GetWindowSize().X, ImGui.GetWindowSize().Y + direction * WindowConfig.FilterHeight));
+            Plugin.DataQueue.QueueDataOperation(Plugin.Configuration.Save);
         }
     }
 
@@ -208,10 +164,6 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
     }
 
     protected unsafe void Tab(string name, Action action, bool refreshActive = false, double refreshProgress = 0f) {
-        var flags = ImGuiTabItemFlags.None;
-        if(Plugin.Configuration.ResizeWindowLeft) {
-            flags |= ImGuiTabItemFlags.Trailing;
-        }
         using var tab = ImRaii.TabItem(ChineseText.Label(name));
         if(tab) {
             ChangeTab(name);
@@ -230,65 +182,6 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
         }
     }
 
-    protected void ChangeTab(string tab) {
-        if(CurrentTab != tab) {
-#if DEBUG
-            if(Plugin.DebugMode) {
-                Plugin.Log.Debug("changing tab to " + tab);
-            }
-#endif
-            SaveTabSize(CurrentTab);
-            CurrentTab = tab;
-            if(Plugin.Configuration.PersistWindowSizePerTab) {
-                LoadTabSize(tab);
-            }
-        } else {
-            //SizeCondition = ImGuiCond.Once;
-            //PositionCondition = ImGuiCond.Once;
-        }
-    }
-
-    protected void SaveTabSize(string tab) {
-        if(tab != "") {
-            if(WindowConfig.TabWindowSizes.ContainsKey(tab)) {
-                WindowConfig.TabWindowSizes[tab] = ImGui.GetWindowSize() / ImGuiHelpers.GlobalScale;
-            } else {
-                WindowConfig.TabWindowSizes.Add(tab, ImGui.GetWindowSize() / ImGuiHelpers.GlobalScale);
-            }
-        }
-    }
-
-    protected void LoadTabSize(string tab) {
-        if(WindowConfig.TabWindowSizes.ContainsKey(tab)) {
-            var currentSize = ImGui.GetWindowSize();
-            var newSize = WindowConfig.TabWindowSizes[tab];
-            if(Plugin.Configuration.ResizeWindowLeft) {
-                var currentPos = ImGui.GetWindowPos();
-                SetWindowPosition(new Vector2(currentPos.X - (newSize.X - currentSize.X), currentPos.Y));
-            }
-            SetWindowSize(newSize);
-        }
-    }
-
-    protected void SetWindowSize(Vector2 size) {
-        SizeCondition = ImGuiCond.Always;
-        Size = size;
-#if DEBUG
-        if(Plugin.DebugMode) {
-            Plugin.Log.Debug($"Setting size to: ({Size.Value.X},{Size.Value.Y})");
-        }
-#endif
-        //_sizeChangeReset = true;
-    }
-
-    protected void SetWindowPosition(Vector2 pos) {
-        PositionCondition = ImGuiCond.Always;
-        Position = pos;
-#if DEBUG
-        if(Plugin.DebugMode) {
-            Plugin.Log.Debug($"Setting position to: ({Position.Value.X},{Position.Value.Y})");
-        }
-#endif
-        //_positionChangeReset = true;
-    }
+    // Called inside the navigation child: never read its size as the root window size.
+    protected void ChangeTab(string tab) => CurrentTab = tab;
 }

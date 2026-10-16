@@ -88,19 +88,7 @@ internal abstract class MatchList<T> : FilteredList<T, T> where T : PvpMatch {
         }
         ImGuiHelper.WrappedTooltip(ChineseText.Text("Set tags"));
         MultiTagPopup();
-        ImGui.SameLine();
-        using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
-            var style = ImGui.GetStyle();
-            ImGuiHelper.RightAlignCursor2(FontAwesomeIcon.Heart.ToIconString() + FontAwesomeIcon.Cog.ToIconString(), -4 * style.FramePadding.X - ImGui.GetStyle().ItemSpacing.X);
-        }
-        using(_ = ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ImGui.Button($"{FontAwesomeIcon.Cog.ToIconString()}##--OpenSettings")) {
-                _plugin.WindowManager.OpenConfigWindow();
-            }
-        }
-        ImGuiHelper.WrappedTooltip(ChineseText.Text("Settings"));
-        ImGui.SameLine();
-        ImGuiHelper.DonateButton();
+
     }
 
     public override void OpenItemDetail(T item) {

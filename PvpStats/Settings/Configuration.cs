@@ -20,6 +20,8 @@ public class Configuration : IPluginConfiguration {
     public bool? EnableTimelineCC { get; set; }
     public bool? EnableActionAnalyticsCC { get; set; }
 
+    public int WindowLayoutVersion { get; set; }
+
     public int LeaderboardRegion { get; set; } = 0;
 
     public bool ShowFloatingLauncher { get; set; } = true;
@@ -36,8 +38,8 @@ public class Configuration : IPluginConfiguration {
     public bool ShowBackgroundImage { get; set; } = true;
     public bool? StretchScoreboardColumns { get; set; }
     public bool SizeFiltersToFit { get; set; } = false;
-    public bool PersistWindowSizePerTab { get; set; } = true;
-    public bool MinimizeWindow { get; set; } = true;
+    public bool PersistWindowSizePerTab { get; set; } = false;
+    public bool MinimizeWindow { get; set; } = false;
     public bool MinimizeDirectionLeft { get; set; } = false;
     public bool ResizeWindowLeft { get; set; } = false;
     public bool AdjustWindowHeightOnFilterCollapse { get; set; } = false;

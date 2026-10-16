@@ -23,6 +23,8 @@ namespace PvpStats;
 public sealed class Plugin : IDalamudPlugin {
     public string Name => "CCStats";
 
+    internal string LegacyImportStatus { get; private set; } = "正在检查 PvP Tracker 历史记录…";
+
     internal const string DatabaseName = "data.db";
 
     private const string CCStatsCommandName = "/ccstats";
@@ -212,6 +214,20 @@ public sealed class Plugin : IDalamudPlugin {
 #endif
 
     private async Task Initialize() {
+        try {
+            var imported = await Storage.ImportLegacy(PluginInterface.GetPluginConfigDirectory());
+            LegacyImportStatus = imported.State switch {
+                "NotFound" => "未发现原版 PvP Tracker 数据库。",
+                "AlreadyImported" => $"此前已自动导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联。",
+                _ => $"已自动导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联；原版文件保留。",
+            };
+            PlayerLinksService.ReloadFromStorage();
+            Log.Information(LegacyImportStatus);
+        } catch(Exception e) {
+            LegacyImportStatus = "旧数据导入未完成，未覆盖已有记录。请停用原版 PvP Tracker 后重新加载 CCStats 重试；详情见 Dalamud 日志。";
+            Log.Error(e, "Failed to import PvP Tracker records; retry on next plugin load.");
+        }
+
         if(Configuration.EnableDBCachingCC ?? true) {
             CCCache.EnableCaching();
         }

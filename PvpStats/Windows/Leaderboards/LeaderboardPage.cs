@@ -57,10 +57,10 @@ internal sealed class LeaderboardPage {
         var date = snapshot?.OfficialDate?.ToString("yyyy-MM-dd") ?? "—";
         ImGui.TextUnformatted($"{region.Name}  ·  {date}  ·  {snapshot?.Entries.Length ?? 0} 名玩家");
         var failed = state.Message.Contains("失败") || state.Message.Contains("超时") || state.Message.Contains("取消");
-        var status = state.Busy ? "更新中…" : failed ? "检查未完成" : state.Message.Contains("一致") ? "已是最新" : snapshot == null ? "等待检查" : "本地榜单";
+        var status = state.Busy ? "更新中…" : failed ? "检查未完成" : state.Message.Contains("一致") ? "已是最新" : snapshot == null ? "等待检查" : "已缓存";
         if(ImGui.GetContentRegionAvail().X > 180 * ImGuiHelpers.GlobalScale) ImGui.SameLine();
-        ImGui.TextDisabled(status + " ⓘ");
-        if(ImGui.IsItemHovered()) ImGui.SetTooltip(state.Message + (snapshot != null ? "\n" + snapshot.RootUrl + "\n" + snapshot.Pages.FirstOrDefault()?.Season : ""));
+        ImGui.TextDisabled("来源");
+        if(ImGui.IsItemHovered()) ImGui.SetTooltip(status + "\n" + state.Message + (snapshot != null ? "\n" + snapshot.RootUrl + "\n" + snapshot.Pages.FirstOrDefault()?.Season : ""));
         if(snapshot == null) {
             ImGui.Separator();
             ImGui.TextWrapped($"暂无{region.Name}榜单缓存。检查完成后将在此显示。");

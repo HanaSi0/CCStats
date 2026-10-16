@@ -64,6 +64,15 @@ internal class StorageService {
 
     }
 
+    internal async Task<LegacyImportResult> ImportLegacy(string configDirectory) {
+        await _dbLock.WaitAsync();
+        try {
+            return LegacyDataImporter.Import(Database, LegacyDataImporter.SourcePath(configDirectory));
+        } finally {
+            _dbLock.Release();
+        }
+    }
+
     public void Dispose() {
         Database.Dispose();
     }

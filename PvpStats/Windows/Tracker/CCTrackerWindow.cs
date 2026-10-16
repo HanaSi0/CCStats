@@ -3,6 +3,7 @@ using PvpStats.Interface;
 using System;
 using System.Threading.Tasks;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Types.Match;
@@ -41,7 +42,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         //};
         //Flags = Flags | ImGuiWindowFlags.NoScrollbar;
 
-        Size = new Vector2(1240, 820);
+        Size = new Vector2(1100, 740);
         SizeCondition = ImGuiCond.FirstUseEver;
 
         _leaderboard = new(plugin);
@@ -101,28 +102,50 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         _averageDuration = timed == 0 ? TimeSpan.Zero : TimeSpan.FromTicks(ticks / timed);
     }
 
+    public override void PreDraw() {
+        var screen = ImGui.GetMainViewport().WorkSize / ImGuiHelpers.GlobalScale;
+        SizeConstraints = new() {
+            MinimumSize = new Vector2(Math.Min(800, Math.Max(300, screen.X - 40)), Math.Min(540, Math.Max(250, screen.Y - 60))),
+            MaximumSize = new Vector2(Math.Max(300, screen.X - 20), Math.Max(250, screen.Y - 20)),
+        };
+        // Repair sizes saved by old child-window navigation, once per installation.
+        if(Plugin.Configuration.WindowLayoutVersion < 2) {
+            var available = ImGui.GetMainViewport().WorkSize / ImGuiHelpers.GlobalScale;
+            Size = new Vector2(Math.Min(1100, Math.Max(300, available.X - 40)),
+                Math.Min(740, Math.Max(250, available.Y - 60)));
+            SizeCondition = ImGuiCond.Always;
+            Position = ImGui.GetMainViewport().WorkPos + new Vector2(20, 20) * ImGuiHelpers.GlobalScale;
+            PositionCondition = ImGuiCond.Always;
+        }
+        base.PreDraw();
+    }
+
     public override void DrawInternal() {
+        if(Plugin.Configuration.WindowLayoutVersion < 2) {
+            SizeCondition = ImGuiCond.FirstUseEver;
+            PositionCondition = ImGuiCond.FirstUseEver;
+            Plugin.Configuration.WindowLayoutVersion = 2;
+            Plugin.DataQueue.QueueDataOperation(Plugin.Configuration.Save);
+        }
         UpdateOverview();
         if(CurrentTab == "") ChangeTab("Matches");
         ModernTheme.Brand(Plugin, "CCStats", "水晶冲突 · 战绩与数据中心");
         var sidebarWidth = ImGuiHelpers.GlobalScale * 142;
         using(var sidebar = ImRaii.Child("CCNavigation", new Vector2(sidebarWidth, 0), true)) {
             if(sidebar) {
-                ImGui.TextDisabled("工作空间");
                 Navigation("Matches", "战绩查询");
                 Navigation("Summary", "数据概览");
                 Navigation("Credit", "段位趋势");
                 Navigation("Leaderboard", "榜单");
-                ImGui.Spacing();
-                ImGui.TextDisabled("深入分析");
                 Navigation("Jobs", "职业分析");
                 Navigation("Players", "玩家分析");
                 Navigation("Records", "个人纪录");
                 Navigation("Profile", "个人资料");
                 ImGui.Separator();
-                if(ImGui.Button("设置###CCSettingsNav", new Vector2(-1, 0))) Plugin.WindowManager.OpenConfigWindow();
-                ImGui.Spacing();
-                ImGui.TextDisabled("自动记录 · 本地保存");
+                using(var iconFont = ImRaii.PushFont(UiBuilder.IconFont)) {
+                    if(ImGui.Button(FontAwesomeIcon.Cog.ToIconString() + "###CCSettingsNav")) Plugin.WindowManager.OpenConfigWindow();
+                }
+                if(ImGui.IsItemHovered()) ImGui.SetTooltip("设置");
             }
         }
         ImGui.SameLine();

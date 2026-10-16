@@ -126,6 +126,8 @@ Check(WinRateLabel.Rate(12,8) == .6 && WinRateLabel.Format(12,8).Contains("12/20
 Check(WinRateLabel.Rate(0,0) == 0 && WinRateLabel.Format(0,0).StartsWith("—"), "empty win-rate samples show unavailable instead of NaN or a misleading rate");
 Check(WinRateLabel.Rate(0,5) == 0 && WinRateLabel.Format(0,5).Contains("0/5"), "zero wins with valid matches remains a real zero-rate sample");
 Check(WinRateLabel.Rate(5,0) == 1 && WinRateLabel.Format(5,0).Contains("5/5"), "all-win sample preserves its actual match count");
+Check(ChineseText.Text("Current Ranked Season:") == "当前段位赛赛季：" && ChineseText.Text("Current Rank: ") == "当前段位：" && ChineseText.Text("Highest Rank: ") == "最高段位：", "profile season and rank labels are translated");
+LegacyImportChecks.Run(Check);
 await LeaderboardChecks.Run(Check);
 await DailyRankingChecks.Run(Check);
 OfficialMarkupChecks.Run(Check);

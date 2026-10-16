@@ -3,6 +3,8 @@ using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using PvpStats.Helpers;
+using PvpStats.Localization;
+using System;
 using PvpStats.Types.Match;
 
 namespace PvpStats.Windows.Summary;
@@ -20,15 +22,19 @@ internal class CrystallineConflictPvPProfile {
 
     public unsafe void Draw() {
         var pvpProfile = PvPProfile.Instance();
-        ImGuiHelper.HelpMarker("This data comes from SE's game servers.", false);
-        ImGui.TextColored(_plugin.Configuration.Colors.Header, "Casual:");
+        ImGuiHelper.HelpMarker(ChineseText.Text("This data comes from SE's game servers."), false);
+        if(pvpProfile == null) {
+            ImGui.TextWrapped(ChineseText.Text("PvP profile unavailable"));
+            return;
+        }
+        ImGui.TextColored(_plugin.Configuration.Colors.Header, ChineseText.Text("Casual") + "：");
         if(pvpProfile != null) {
             using(ImRaii.PushId("casualTable")) {
                 DrawTable(pvpProfile->CrystallineConflictCasualMatches, pvpProfile->CrystallineConflictCasualMatchesWon);
             }
         }
         ImGui.Separator();
-        ImGui.TextColored(_plugin.Configuration.Colors.Header, "Current Ranked Season:");
+        ImGui.TextColored(_plugin.Configuration.Colors.Header, ChineseText.Text("Current Ranked Season:"));
         if(pvpProfile != null) {
             using(ImRaii.PushId("rankedTable")) {
                 DrawTable(pvpProfile->CrystallineConflictRankedMatches, pvpProfile->CrystallineConflictRankedMatchesWon);
@@ -37,9 +43,9 @@ internal class CrystallineConflictPvPProfile {
             using(var table = ImRaii.Table("rankTable", 2, ImGuiTableFlags.NoBordersInBody | ImGuiTableFlags.NoHostExtendX | ImGuiTableFlags.NoClip | ImGuiTableFlags.NoSavedSettings)) {
                 if(table) {
                     ImGui.TableSetupColumn("description", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 158f);
-                    ImGui.TableSetupColumn($"value", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 45f);
+                    ImGui.TableSetupColumn($"value", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 180f);
                     ImGui.TableNextColumn();
-                    ImGui.Text("Current Rank: ");
+                    ImGui.Text(ChineseText.Text("Current Rank: "));
                     ImGui.TableNextColumn();
                     PlayerRank curRank = new() {
                         Tier = (ArenaTier)pvpProfile->CrystallineConflictCurrentRank,
@@ -50,7 +56,7 @@ internal class CrystallineConflictPvPProfile {
 
                     ImGui.Text($"{curRank}");
                     ImGui.TableNextColumn();
-                    ImGui.Text("Highest Rank: ");
+                    ImGui.Text(ChineseText.Text("Highest Rank: "));
                     ImGui.TableNextColumn();
                     PlayerRank peakRank = new() {
                         Tier = (ArenaTier)pvpProfile->CrystallineConflictHighestRank,
@@ -68,22 +74,22 @@ internal class CrystallineConflictPvPProfile {
         using(var table = ImRaii.Table("table", 3, ImGuiTableFlags.NoBordersInBody | ImGuiTableFlags.NoHostExtendX | ImGuiTableFlags.NoClip | ImGuiTableFlags.NoSavedSettings)) {
             if(table) {
                 ImGui.TableSetupColumn("description", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 158f);
-                ImGui.TableSetupColumn($"value", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 45f);
-                ImGui.TableSetupColumn($"rate", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 45f);
+                ImGui.TableSetupColumn($"value", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 180f);
+                ImGui.TableSetupColumn($"rate", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 180f);
 
                 ImGui.TableNextColumn();
-                ImGui.Text("Matches: ");
+                ImGui.Text(ChineseText.Text("Matches: "));
                 ImGui.TableNextColumn();
                 ImGui.Text($"{matches.ToString("N0")}");
                 ImGui.TableNextColumn();
 
                 ImGui.TableNextColumn();
-                ImGui.Text("Wins: ");
+                ImGui.Text(ChineseText.Text("Wins: "));
                 ImGui.TableNextColumn();
                 ImGui.Text($"{wins.ToString("N0")}");
                 ImGui.TableNextColumn();
                 if(matches > 0) {
-                    ImGui.Text($"{string.Format("{0:P}", (double)wins / (matches))}");
+                    ImGui.TextUnformatted($"胜率：{WinRateLabel.Format(wins, Math.Max(0, matches - wins))}");
                 }
             }
         }

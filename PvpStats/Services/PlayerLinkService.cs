@@ -30,6 +30,12 @@ internal class PlayerLinkService {
         GetPreviousAliasesFunction = _plugin.PluginInterface.GetIpcSubscriber<((string, uint), (string, uint)[])[]>("PlayerTrack.GetAllPlayerNameWorldHistories");
     }
 
+    internal void ReloadFromStorage() {
+        ManualPlayerLinksCache = _plugin.Storage.GetManualLinks().Query().ToList();
+        AutoPlayerLinksCache = _plugin.Storage.GetAutoLinks().Query().ToList();
+        BuildLinkedAliases();
+    }
+
     internal void BuildLinkedAliases() {
         var unlinks = ManualPlayerLinksCache.Where(x => x.IsUnlink).ToList();
         var manualNoUnlink = ManualPlayerLinksCache.Where(x => !x.IsUnlink && x.CurrentAlias != null).ToList();
