@@ -7,6 +7,14 @@
 
 ## 安装与测试
 
+首次测试的直接安装库（安装包随源码托管，可在 Release 工作流尚未运行时使用）：
+
+```text
+https://raw.githubusercontent.com/HanaSi0/CCStats/main/repo-test.json
+```
+
+正式 Release 库：
+
 在 Dalamud 设置 → 实验性 → 自定义插件库中添加：
 
 ```text
