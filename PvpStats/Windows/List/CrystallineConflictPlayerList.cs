@@ -135,6 +135,7 @@ internal class CrystallineConflictPlayerList : PlayerStatsList<CCPlayerJobStats,
                     }
                 }
 
+                playerStatsEligible &= StatSourceFilter.Includes(match.IsSpectated,isLocalPlayer,isTeammate);
                 if(playerStatsEligible) {
                     //handle linked aliases
                     var alias = _plugin.PlayerLinksService.GetMainAlias(player.Alias);
@@ -152,10 +153,12 @@ internal class CrystallineConflictPlayerList : PlayerStatsList<CCPlayerJobStats,
                     _playerTeamContributions.TryAdd(alias, new());
                     _playerJobStatsLookup.TryAdd(alias, new());
                     _playerTimes.TryAdd(alias, new());
-                    if(remove) {
-                        _playerTimes[alias].RemoveTime(match.MatchDuration ?? TimeSpan.Zero);
-                    } else {
-                        _playerTimes[alias].AddTime(match.MatchDuration ?? TimeSpan.Zero);
+                    if(CrystallineConflictStatsManager.HasScoreboard(match,team.Value,player)) {
+                        if(remove) {
+                            _playerTimes[alias].RemoveTime(match.MatchDuration ?? TimeSpan.Zero);
+                        } else {
+                            _playerTimes[alias].AddTime(match.MatchDuration ?? TimeSpan.Zero);
+                        }
                     }
                     CrystallineConflictStatsManager.AddPlayerJobStat(_playerStats[alias], _playerTeamContributions[alias], match, team.Value, player, remove);
                     if(player.Job != null) {

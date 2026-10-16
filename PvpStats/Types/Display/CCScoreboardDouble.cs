@@ -14,11 +14,12 @@ public class CCScoreboardDouble : PvpScoreboardDouble, IEquatable<CCScoreboardDo
             var playerCCScoreboard = playerScoreboard as CCScoreboardTally;
             var teamCCScoreboard = teamScoreboard as CCScoreboardTally;
 
-            TimeOnCrystal = playerCCScoreboard!.TimeOnCrystal != TimeSpan.Zero ? playerCCScoreboard.TimeOnCrystal / teamCCScoreboard!.TimeOnCrystal : 0;
+            TimeOnCrystal = teamCCScoreboard!.TimeOnCrystal > TimeSpan.Zero ? playerCCScoreboard!.TimeOnCrystal / teamCCScoreboard.TimeOnCrystal : double.NaN;
         }
     }
 
     public static CCScoreboardDouble operator /(CCScoreboardDouble a, double b) {
+        if(!double.IsFinite(b) || b<=0) b=double.NaN;
         var c = (PvpScoreboardDouble)a / b;
         return new CCScoreboardDouble() {
             Kills = c.Kills,

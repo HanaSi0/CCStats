@@ -79,38 +79,41 @@ public class StatSourceFilter : DataFilter, IEquatable<StatSourceFilter> {
             ImGui.TableNextColumn();
             bool allSelected = AllSelected;
             if(ImGui.Checkbox(ChineseText.Label($"Select All##{GetHashCode()}"), ref allSelected)) {
-                Task.Run(async () => {
-                    foreach(var category in FilterState) {
-                        FilterState[category.Key] = allSelected;
-                    }
-                    AllSelected = allSelected;
-                    await Refresh();
-                });
+                foreach(var key in FilterState.Keys.ToArray()) FilterState[key]=allSelected;
+                AllSelected=allSelected;
+                RequestRefresh();
             }
             ImGui.TableNextColumn();
             bool inheritFromPlayerFilter = InheritFromPlayerFilter;
             if(ImGui.Checkbox(ChineseText.Label($"Inherit from player filter##{GetHashCode()}"), ref inheritFromPlayerFilter)) {
-                Task.Run(async () => {
-                    InheritFromPlayerFilter = inheritFromPlayerFilter;
-                    await Refresh();
-                });
+                InheritFromPlayerFilter=inheritFromPlayerFilter;
+                RequestRefresh();
             }
             ImGuiHelper.HelpMarker(ChineseText.Text("Will only include stats for players who match all conditions of the player filter."));
             ImGui.TableNextRow();
 
-            foreach(var category in FilterState) {
+            foreach(var category in FilterState.ToArray()) {
                 ImGui.TableNextColumn();
                 bool filterState = category.Value;
                 if(ImGui.Checkbox(ChineseText.Label($"{FilterNames[category.Key]}##{GetHashCode()}"), ref filterState)) {
-                    Task.Run(async () => {
-                        FilterState[category.Key] = filterState;
-                        UpdateAllSelected();
-                        await Refresh();
-                    });
+                    FilterState[category.Key]=filterState;
+                    UpdateAllSelected();
+                    RequestRefresh();
                 }
             }
         }
     }
+
+    private void RequestRefresh() {
+        _=Task.Run(async()=> {
+            try { await Refresh(); _plugin?.WindowManager.CCTrackerWindow.PersistFilters(); }
+            catch(Exception e) { _plugin?.Log.Error(e,"Statistics source refresh failed."); }
+        });
+    }
+
+    internal bool Includes(bool spectated,bool local,bool teammate) => new SourceSelection(
+        FilterState.GetValueOrDefault(StatSource.LocalPlayer),FilterState.GetValueOrDefault(StatSource.Teammate),
+        FilterState.GetValueOrDefault(StatSource.Opponent),FilterState.GetValueOrDefault(StatSource.Spectated)).Includes(spectated,local,teammate);
 
     public bool Equals(StatSourceFilter? other) {
         return FilterState.All(x => x.Value == other?.FilterState[x.Key]) && (InheritFromPlayerFilter == other?.InheritFromPlayerFilter);

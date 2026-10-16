@@ -118,6 +118,7 @@ internal partial class CrystallineConflictJobList : JobStatsList<CCPlayerJobStat
     protected override void ProcessMatch(CrystallineConflictMatch match, bool remove = false) {
         foreach(var team in match.Teams) {
             foreach(var player in team.Value.Players) {
+                if(player.Job is not { } job || !_jobStats.ContainsKey(job)) continue;
                 bool isLocalPlayer = player.Alias.Equals(match.LocalPlayer);
                 bool isTeammate = !match.IsSpectated && !isLocalPlayer && team.Key == match.LocalPlayerTeam!.TeamName;
                 bool isOpponent = !match.IsSpectated && !isLocalPlayer && !isTeammate;
@@ -139,22 +140,15 @@ internal partial class CrystallineConflictJobList : JobStatsList<CCPlayerJobStat
                     jobStatsEligible = false;
                 }
 
-                if(!StatSourceFilter.FilterState[StatSource.LocalPlayer] && isLocalPlayer) {
-                    jobStatsEligible = false;
-                } else if(!StatSourceFilter.FilterState[StatSource.Teammate] && isTeammate) {
-                    jobStatsEligible = false;
-                } else if(!StatSourceFilter.FilterState[StatSource.Opponent] && !isTeammate && !isLocalPlayer) {
-                    jobStatsEligible = false;
-                } else if(!StatSourceFilter.FilterState[StatSource.Spectated] && match.IsSpectated) {
-                    jobStatsEligible = false;
-                }
-                var job = (Job)player.Job!;
+                jobStatsEligible &= StatSourceFilter.Includes(match.IsSpectated,isLocalPlayer,isTeammate);
 
                 if(jobStatsEligible) {
-                    if(remove) {
-                        _jobTimes[job].RemoveTime(match.MatchDuration ?? TimeSpan.Zero);
-                    } else {
-                        _jobTimes[job].AddTime(match.MatchDuration ?? TimeSpan.Zero);
+                    if(CrystallineConflictStatsManager.HasScoreboard(match,team.Value,player)) {
+                        if(remove) {
+                            _jobTimes[job].RemoveTime(match.MatchDuration ?? TimeSpan.Zero);
+                        } else {
+                            _jobTimes[job].AddTime(match.MatchDuration ?? TimeSpan.Zero);
+                        }
                     }
                     CrystallineConflictStatsManager.AddPlayerJobStat(_jobStats[job], _jobTeamContributions[job], match, team.Value, player, remove);
                 }

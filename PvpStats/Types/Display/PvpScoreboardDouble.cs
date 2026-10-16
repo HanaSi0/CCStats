@@ -22,26 +22,27 @@ public class PvpScoreboardDouble : IEquatable<PvpScoreboardDouble> {
 
     //get rid of this
     public PvpScoreboardDouble(PvpScoreboard playerScoreboard, PvpScoreboard teamScoreboard) {
-        Kills = teamScoreboard.Kills != 0 ? (double)playerScoreboard.Kills / teamScoreboard.Kills : 0;
-        Deaths = teamScoreboard.Deaths != 0 ? (double)playerScoreboard.Deaths / teamScoreboard.Deaths : 0;
-        Assists = teamScoreboard.Assists != 0 ? (double)playerScoreboard.Assists / teamScoreboard.Assists : 0;
-        DamageDealt = teamScoreboard.DamageDealt != 0 ? (double)playerScoreboard.DamageDealt / teamScoreboard.DamageDealt : 0;
-        DamageTaken = teamScoreboard.DamageTaken != 0 ? (double)playerScoreboard.DamageTaken / teamScoreboard.DamageTaken : 0;
-        HPRestored = teamScoreboard.HPRestored != 0 ? (double)playerScoreboard.HPRestored / teamScoreboard.HPRestored : 0;
+        Kills = teamScoreboard.Kills != 0 ? (double)playerScoreboard.Kills / teamScoreboard.Kills : double.NaN;
+        Deaths = teamScoreboard.Deaths != 0 ? (double)playerScoreboard.Deaths / teamScoreboard.Deaths : double.NaN;
+        Assists = teamScoreboard.Assists != 0 ? (double)playerScoreboard.Assists / teamScoreboard.Assists : double.NaN;
+        DamageDealt = teamScoreboard.DamageDealt != 0 ? (double)playerScoreboard.DamageDealt / teamScoreboard.DamageDealt : double.NaN;
+        DamageTaken = teamScoreboard.DamageTaken != 0 ? (double)playerScoreboard.DamageTaken / teamScoreboard.DamageTaken : double.NaN;
+        HPRestored = teamScoreboard.HPRestored != 0 ? (double)playerScoreboard.HPRestored / teamScoreboard.HPRestored : double.NaN;
         KillsAndAssists = ((double)playerScoreboard.Kills + playerScoreboard.Assists) / (teamScoreboard.Kills + teamScoreboard.Assists);
     }
 
     public PvpScoreboardDouble(ScoreboardTally playerScoreboard, ScoreboardTally teamScoreboard) {
-        Kills = teamScoreboard.Kills != 0 ? (double)playerScoreboard.Kills / teamScoreboard.Kills : 0;
-        Deaths = teamScoreboard.Deaths != 0 ? (double)playerScoreboard.Deaths / teamScoreboard.Deaths : 0;
-        Assists = teamScoreboard.Assists != 0 ? (double)playerScoreboard.Assists / teamScoreboard.Assists : 0;
-        DamageDealt = teamScoreboard.DamageDealt != 0 ? (double)playerScoreboard.DamageDealt / teamScoreboard.DamageDealt : 0;
-        DamageTaken = teamScoreboard.DamageTaken != 0 ? (double)playerScoreboard.DamageTaken / teamScoreboard.DamageTaken : 0;
-        HPRestored = teamScoreboard.HPRestored != 0 ? (double)playerScoreboard.HPRestored / teamScoreboard.HPRestored : 0;
+        Kills = teamScoreboard.Kills != 0 ? (double)playerScoreboard.Kills / teamScoreboard.Kills : double.NaN;
+        Deaths = teamScoreboard.Deaths != 0 ? (double)playerScoreboard.Deaths / teamScoreboard.Deaths : double.NaN;
+        Assists = teamScoreboard.Assists != 0 ? (double)playerScoreboard.Assists / teamScoreboard.Assists : double.NaN;
+        DamageDealt = teamScoreboard.DamageDealt != 0 ? (double)playerScoreboard.DamageDealt / teamScoreboard.DamageDealt : double.NaN;
+        DamageTaken = teamScoreboard.DamageTaken != 0 ? (double)playerScoreboard.DamageTaken / teamScoreboard.DamageTaken : double.NaN;
+        HPRestored = teamScoreboard.HPRestored != 0 ? (double)playerScoreboard.HPRestored / teamScoreboard.HPRestored : double.NaN;
         KillsAndAssists = ((double)playerScoreboard.Kills + playerScoreboard.Assists) / (teamScoreboard.Kills + teamScoreboard.Assists);
     }
 
     public static PvpScoreboardDouble operator /(PvpScoreboardDouble a, double b) {
+        if(!double.IsFinite(b) || b<=0) b=double.NaN;
         return new PvpScoreboardDouble() {
             Kills = a.Kills / b,
             Deaths = a.Deaths / b,

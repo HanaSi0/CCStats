@@ -41,40 +41,16 @@ internal class CrystallineConflictStatsManager : StatsManager<CrystallineConflic
     }
 
     public static void IncrementAggregateStats(CCAggregateStats stats, CrystallineConflictMatch match, bool decrement = false) {
-        if(decrement) {
-            Interlocked.Decrement(ref stats.Matches);
-            if(match.IsWin) {
-                Interlocked.Decrement(ref stats.Wins);
-            } else if(match.IsLoss) {
-                Interlocked.Decrement(ref stats.Losses);
-            }
-        } else {
-            Interlocked.Increment(ref stats.Matches);
-            if(match.IsWin) {
-                Interlocked.Increment(ref stats.Wins);
-            } else if(match.IsLoss) {
-                Interlocked.Increment(ref stats.Losses);
-            }
-        }
+        EncounterStatistics.Adjust(stats,match.IsSpectated?null:EncounterStatistics.Outcome(match.MatchWinner,match.LocalPlayerTeam?.TeamName),decrement);
     }
 
     public static void IncrementAggregateStats(CCAggregateStats stats, CrystallineConflictMatch match, CrystallineConflictTeam team, CrystallineConflictPlayer player, bool decrement = false) {
-        if(decrement) {
-            Interlocked.Decrement(ref stats.Matches);
-            if(match.MatchWinner == team.TeamName) {
-                Interlocked.Decrement(ref stats.Wins);
-            } else if(match.MatchWinner != null) {
-                Interlocked.Decrement(ref stats.Losses);
-            }
-        } else {
-            Interlocked.Increment(ref stats.Matches);
-            if(match.MatchWinner == team.TeamName) {
-                Interlocked.Increment(ref stats.Wins);
-            } else if(match.MatchWinner != null) {
-                Interlocked.Increment(ref stats.Losses);
-            }
-        }
+        EncounterStatistics.Adjust(stats,EncounterStatistics.Outcome(match.MatchWinner,team.TeamName),decrement);
     }
+
+    public static bool HasScoreboard(CrystallineConflictMatch match,CrystallineConflictTeam team,CrystallineConflictPlayer player) =>
+        match.PostMatch?.Teams.TryGetValue(team.TeamName,out var result)==true && result.TeamStats!=null
+        && result.PlayerStats.Any(row=>row.Player?.Equals(player.Alias)==true);
 
     public static void AddPlayerJobStat(CCPlayerJobStats statsModel, ConcurrentDictionary<int, CCScoreboardDouble> teamContributions,
         CrystallineConflictMatch match, CrystallineConflictTeam team, CrystallineConflictPlayer player, bool remove = false) {
@@ -82,17 +58,12 @@ internal class CrystallineConflictStatsManager : StatsManager<CrystallineConflic
         bool isTeammate = !match.IsSpectated && !isLocalPlayer && team.TeamName == match.LocalPlayerTeam!.TeamName;
         bool isOpponent = !match.IsSpectated && !isLocalPlayer && !isTeammate;
 
-        IncrementAggregateStats(statsModel.StatsAll, match, team, player, remove);
-        if(!match.IsSpectated) {
-            if(isTeammate) {
-                IncrementAggregateStats(statsModel.StatsTeammate, match, remove);
-            } else if(isOpponent) {
-                IncrementAggregateStats(statsModel.StatsOpponent, match, remove);
-            }
-        }
+        var resolved=match.MatchWinner is CrystallineConflictTeamName.Astra or CrystallineConflictTeamName.Umbra;
+        EncounterStatistics.Add(statsModel,match.IsSpectated,isLocalPlayer,isTeammate,
+            resolved?match.MatchWinner==team.TeamName:null,resolved&&!match.IsSpectated?match.IsWin:null,remove);
 
         if(match.PostMatch != null) {
-            var teamPostMatch = match.PostMatch.Teams.FirstOrDefault(x => x.Key == team.TeamName).Value;
+            if(!match.PostMatch.Teams.TryGetValue(team.TeamName,out var teamPostMatch) || teamPostMatch.TeamStats==null) return;
             var playerPostMatch = teamPostMatch.PlayerStats.FirstOrDefault(x => x.Player?.Equals(player.Alias) ?? false);
             if(playerPostMatch != null) {
                 var playerScoreboard = playerPostMatch.ToScoreboard();
@@ -115,31 +86,7 @@ internal class CrystallineConflictStatsManager : StatsManager<CrystallineConflic
     }
 
     public static void SetScoreboardStats(CCPlayerJobStats stats, List<CCScoreboardDouble> teamContributions, TimeSpan time) {
-        var statMatches = teamContributions.Count;
-        //set average stats
-        stats.StatsPersonal.Matches = stats.StatsTeammate.Matches + stats.StatsOpponent.Matches;
-        stats.StatsPersonal.Wins = stats.StatsTeammate.Wins + stats.StatsOpponent.Wins;
-        stats.StatsPersonal.Losses = stats.StatsTeammate.Losses + stats.StatsOpponent.Losses;
-
-        stats.ScoreboardTotal.TimeOnCrystal = TimeSpan.FromTicks(stats.ScoreboardTotal.TimeOnCrystalTicks);
-        //subtract one to account for starting with size one
-        stats.ScoreboardTotal.Size = statMatches;
-
-        stats.ScoreboardPerMatch = (CCScoreboardDouble)stats.ScoreboardTotal / statMatches;
-        stats.ScoreboardPerMin = (CCScoreboardDouble)stats.ScoreboardTotal / time.TotalMinutes;
-
-        if(statMatches > 0) {
-            stats.ScoreboardContrib.Kills = teamContributions.OrderBy(x => x.Kills).ElementAt(statMatches / 2).Kills;
-            stats.ScoreboardContrib.Deaths = teamContributions.OrderBy(x => x.Deaths).ElementAt(statMatches / 2).Deaths;
-            stats.ScoreboardContrib.Assists = teamContributions.OrderBy(x => x.Assists).ElementAt(statMatches / 2).Assists;
-            stats.ScoreboardContrib.DamageDealt = teamContributions.OrderBy(x => x.DamageDealt).ElementAt(statMatches / 2).DamageDealt;
-            stats.ScoreboardContrib.DamageTaken = teamContributions.OrderBy(x => x.DamageTaken).ElementAt(statMatches / 2).DamageTaken;
-            stats.ScoreboardContrib.HPRestored = teamContributions.OrderBy(x => x.HPRestored).ElementAt(statMatches / 2).HPRestored;
-            stats.ScoreboardContrib.TimeOnCrystal = teamContributions.OrderBy(x => x.TimeOnCrystal).ElementAt(statMatches / 2).TimeOnCrystal;
-            stats.ScoreboardContrib.KillsAndAssists = teamContributions.OrderBy(x => x.KillsAndAssists).ElementAt(statMatches / 2).KillsAndAssists;
-        } else {
-            stats.ScoreboardContrib = new();
-        }
+        ScoreboardSummary.Update(stats,teamContributions,time);
     }
 
     protected List<CrystallineConflictMatch> ApplyFilter(MatchSearchFilter filter, List<CrystallineConflictMatch> matches) {

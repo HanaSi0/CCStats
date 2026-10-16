@@ -7,6 +7,17 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../PvpStats/Helpers/EncounterStatistics.cs" Link="EncounterStatistics.cs" />
+    <Compile Include="../../PvpStats/Helpers/ScoreboardSummary.cs" Link="ScoreboardSummary.cs" />
+    <Compile Include="../../PvpStats/Types/Display/CCPlayerJobStats.cs" Link="CCPlayerJobStats.cs" />
+    <Compile Include="../../PvpStats/Types/Display/CCAggregateStats.cs" Link="CCAggregateStats.cs" />
+    <Compile Include="../../PvpStats/Types/Display/AggregateStats.cs" Link="AggregateStats.cs" />
+    <Compile Include="../../PvpStats/Types/Display/PlayerJobStats.cs" Link="PlayerJobStats.cs" />
+    <Compile Include="../../PvpStats/Types/Display/ScoreboardTally.cs" Link="ScoreboardTally.cs" />
+    <Compile Include="../../PvpStats/Types/Display/CCScoreboardTally.cs" Link="CCScoreboardTally.cs" />
+    <Compile Include="../../PvpStats/Types/Display/CCScoreboardDouble.cs" Link="CCScoreboardDouble.cs" />
+    <Compile Include="../../PvpStats/Types/Display/PvpScoreboardDouble.cs" Link="PvpScoreboardDouble.cs" />
+    <Compile Include="../../PvpStats/Types/Match/PvpScoreboard.cs" Link="PvpScoreboard.cs" />
     <None Include="Fixtures/**" CopyToOutputDirectory="PreserveNewest" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <Compile Include="../../PvpStats/Analysis/*.cs" Link="Analysis/%(Filename)%(Extension)" />

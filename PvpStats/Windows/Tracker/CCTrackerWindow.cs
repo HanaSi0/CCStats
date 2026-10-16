@@ -206,6 +206,8 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         }
     }
 
+    internal void PersistFilters() => SaveFilters();
+
     private void DrawJobsPage() {
         var scale=ImGuiHelpers.GlobalScale;
         // Keep the controls bounded; the grid owns the remaining height at every window size.
