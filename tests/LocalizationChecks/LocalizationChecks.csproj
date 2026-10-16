@@ -17,6 +17,7 @@
     <Compile Include="../../PvpStats/Localization/*.cs" Link="Localization/%(Filename)%(Extension)" />
     <Compile Include="../../PvpStats/Interface/ThemeContrast.cs" Link="ThemeContrast.cs" />
     <Compile Include="../../PvpStats/Settings/ThemeConfiguration.cs" Link="ThemeConfiguration.cs" />
+    <Compile Include="../../PvpStats/Helpers/StatDisplay.cs" Link="StatDisplay.cs" />
     <Compile Include="../../PvpStats/Helpers/WinRateLabel.cs" Link="WinRateLabel.cs" />
     <Compile Include="../../PvpStats/Helpers/MatchQuery.cs" Link="MatchQuery.cs" />
     <Compile Include="../../PvpStats/Helpers/MatchVersionPolicy.cs" Link="MatchVersionPolicy.cs" />

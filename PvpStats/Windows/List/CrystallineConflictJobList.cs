@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace PvpStats.Windows.List;
-internal class CrystallineConflictJobList : JobStatsList<CCPlayerJobStats, CrystallineConflictMatch> {
+internal partial class CrystallineConflictJobList : JobStatsList<CCPlayerJobStats, CrystallineConflictMatch> {
 
     public override string Name => "CC Jobs";
     protected override string TableId => "###CCJobStatsTable";

@@ -140,6 +140,10 @@ Check(WinRateLabel.Rate(0,0) == 0 && WinRateLabel.Format(0,0).StartsWith("—"),
 Check(WinRateLabel.Rate(0,5) == 0 && WinRateLabel.Format(0,5).Contains("0/5"), "zero wins with valid matches remains a real zero-rate sample");
 Check(WinRateLabel.Rate(5,0) == 1 && WinRateLabel.Format(5,0).Contains("5/5"), "all-win sample preserves its actual match count");
 Check(ChineseText.Text("Current Ranked Season:") == "当前段位赛赛季：" && ChineseText.Text("Current Rank: ") == "当前段位：" && ChineseText.Text("Highest Rank: ") == "最高段位：", "profile season and rank labels are translated");
+Check(StatDisplay.Number(double.NaN)=="—" && StatDisplay.Number(double.PositiveInfinity)=="—" && StatDisplay.Number(0,false)=="—", "job metrics distinguish unavailable data from valid zero");
+Check(StatDisplay.Number(0)=="0" && StatDisplay.Duration(0)=="0:00" && StatDisplay.Duration(3661)=="61:01", "job totals preserve real zero and durations longer than an hour");
+Check(StatDisplay.Duration(double.NaN)=="—" && StatDisplay.Duration(double.PositiveInfinity)=="—" && StatDisplay.Duration(-1)=="—", "invalid job durations never throw or show NaN");
+Check(StatDisplay.CardColumns(610,1)==1 && StatDisplay.CardColumns(640,1)==2 && StatDisplay.CardColumns(1000,1)==3 && StatDisplay.CardColumns(1280,2)==2, "job card grid keeps readable minimum widths across scaling");
 DetailedTelemetryChecks.Run(Check);
 UiInteractionChecks.Run(Check);
 LegacyImportChecks.Run(Check);

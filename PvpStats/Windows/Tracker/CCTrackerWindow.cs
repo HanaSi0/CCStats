@@ -22,6 +22,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
 
     private List<CrystallineConflictMatch>? _overviewMatches;
     private int _overviewWins, _overviewPlayed;
+    private bool _jobFiltersExpanded;
     private string _beforeSettings = "Matches";
     private CrystallineConflictMatch? _latestVisibleMatch;
 
@@ -183,6 +184,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         }
         if(CurrentTab == "Settings") { Plugin.WindowManager.ConfigWindow.DrawEmbedded(ReturnFromSettings); return; }
         if(CurrentTab == "Leaderboard") { _leaderboard.Draw(); return; }
+        if(CurrentTab == "Jobs") { DrawJobsPage(); return; }
         DrawOverviewCards();
         ImGui.Spacing();
         ImGui.SetNextItemWidth(Math.Max(120, ImGui.GetContentRegionAvail().X - 92 * ImGuiHelpers.GlobalScale));
@@ -202,6 +204,28 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
             case "Profile": DrawPanel("ProfileContent", _profile.Draw, false, 0); break;
             default: DrawPanel("MatchesContent", _matches.Draw, _matches.RefreshActive, _matches.RefreshProgress); break;
         }
+    }
+
+    private void DrawJobsPage() {
+        var scale=ImGuiHelpers.GlobalScale;
+        // Keep the controls bounded; the grid owns the remaining height at every window size.
+        using(var header=ImRaii.Table("JobPageHeader",2,ImGuiTableFlags.SizingStretchSame)) {
+            if(header) {
+                ImGui.TableNextColumn();
+                if(ModernTheme.Button(_jobFiltersExpanded?"收起对局筛选###JobMatchFilters":"对局筛选###JobMatchFilters",new(-1,38*scale))) _jobFiltersExpanded=!_jobFiltersExpanded;
+                ImGui.TableNextColumn();
+                if(ModernTheme.Button(_jobs.ShowDetailedTable?"职业图标视图###JobView":"完整数据表###JobView",new(-1,38*scale))) _jobs.ShowDetailedTable=!_jobs.ShowDetailedTable;
+            }
+        }
+        if(_jobFiltersExpanded) {
+            using var filters=ImRaii.Child("JobMatchFiltersPanel",new(0,Math.Min(240*scale,ImGui.GetContentRegionAvail().Y*.35f)),true);
+            if(filters) {
+                ImGui.SetNextItemWidth(-1); _search.Draw();
+                DrawQuickFilters(); DrawFilters();
+            }
+        }
+        ImGui.Spacing();
+        DrawPanel("JobCardsContent",_jobs.DrawCards,_jobs.RefreshActive,_jobs.RefreshProgress);
     }
 
     private void Navigation(string key, string caption) {

@@ -212,6 +212,7 @@ internal static class ImGuiHelper {
     }
 
     internal static void DrawNumericCell(string value, float extra = 0f, Vector4? color = null) {
+        if(double.TryParse(value,out var numeric) && !double.IsFinite(numeric)) { value="—"; color=null; }
         RightAlignCursor2(value, extra);
         //ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2 * ImGui.GetStyle().ItemSpacing.X);
         if(color != null) {
@@ -223,6 +224,8 @@ internal static class ImGuiHelper {
     }
 
     internal static void DrawNumericCell(float value, Vector4 colorMin, Vector4 colorMax, float minValue, float maxValue, bool colorEnabled, string format = "0.00", float extra = 0f) {
+        if(!float.IsFinite(value)) { DrawNumericCell("—",extra); return; }
+        colorEnabled &= float.IsFinite(minValue) && float.IsFinite(maxValue) && maxValue>minValue;
         var outputString = value.ToString(format);
         RightAlignCursor2(outputString, extra);
         //ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2 * ImGui.GetStyle().ItemSpacing.X);
@@ -235,6 +238,8 @@ internal static class ImGuiHelper {
     }
 
     internal static void DrawNumericCell(string display, float value, Vector4 colorMin, Vector4 colorMax, float minValue, float maxValue, bool colorEnabled, float extra = 0f) {
+        if(!float.IsFinite(value)) { DrawNumericCell("—",extra); return; }
+        colorEnabled &= float.IsFinite(minValue) && float.IsFinite(maxValue) && maxValue>minValue;
         RightAlignCursor2(display, extra);
         //ImGui.SetCursorPosX(ImGui.GetCursorPosX() + 2 * ImGui.GetStyle().ItemSpacing.X);
         if(colorEnabled) {

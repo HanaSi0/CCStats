@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.1：精简介绍与更新说明。",
+  "Changelog": "0.2.2：职业图标卡片、按钮布局与空数据优化。",
   "Tags": [
     "pvp",
     "statistics"
