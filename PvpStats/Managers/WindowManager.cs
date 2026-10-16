@@ -29,6 +29,8 @@ internal class WindowManager : IDisposable {
 
     private WindowSystem WindowSystem;
     private Plugin _plugin;
+    private readonly UiWorkQueue _uiWork=new();
+    internal void PostUi(Action action) => _uiWork.Post(action);
     internal CCTrackerWindow CCTrackerWindow { get; private set; }
     internal FloatingLauncher Launcher { get; private set; }
     internal ConfigWindow ConfigWindow { get; private set; }
@@ -59,12 +61,14 @@ internal class WindowManager : IDisposable {
         _plugin.ClientState.Login += OnLogin;
     }
     private void DrawUI() {
+        _uiWork.Drain(e=>_plugin.Log.Error(e,"Queued UI operation failed."));
         using var theme = ModernTheme.Apply(_plugin.Configuration.Theme);
         WindowSystem.Draw();
         Launcher.Draw();
     }
 
     public void Dispose() {
+        _uiWork.Dispose();
         WindowSystem.RemoveAllWindows();
         _plugin.PluginInterface.UiBuilder.Draw -= DrawUI;
         _plugin.PluginInterface.UiBuilder.OpenConfigUi -= OpenConfigWindow;

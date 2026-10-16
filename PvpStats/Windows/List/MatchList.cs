@@ -66,18 +66,19 @@ internal abstract class MatchList<T> : FilteredList<T, T> where T : PvpMatch {
 
     protected override void PreChildDraw() {
         ImGuiHelper.CSVButton(() => {
-            Task.Run(() => {
-                ListCSV = CSVHeader();
-                foreach(var row in DataModel) {
-                    ListCSV += CSVRow(row);
-                }
-                ImGui.SetClipboardText(ListCSV);
+            var rows=DataModel.ToArray();
+            var header=CSVHeader();
+            _=Task.Run(()=> {
+                try {
+                    var csv=header+string.Concat(rows.Select(CSVRow));
+                    _plugin.WindowManager.PostUi(()=> { ListCSV=csv; ImGui.SetClipboardText(csv); });
+                } catch(Exception e) { _plugin.Log.Error(e,"Match CSV copy failed."); }
             });
         });
         ImGui.SameLine();
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
             if(ModernTheme.Button($"{FontAwesomeIcon.Ban.ToIconString()}##CloseAllMatches")) {
-                Task.Run(_plugin.WindowManager.CloseAllMatchWindows);
+                _plugin.WindowManager.CloseAllMatchWindows();
             }
         }
         ImGuiHelper.WrappedTooltip(ChineseText.Text("Close all open match windows"));

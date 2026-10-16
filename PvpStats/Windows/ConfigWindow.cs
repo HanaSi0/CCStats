@@ -207,7 +207,7 @@ internal class ConfigWindow : Window {
         if(ModernTheme.Button("重置悬浮图标位置###ResetFloatingLauncher")) {
             _plugin.WindowManager.Launcher.ResetPosition();
         }
-        ImGui.TextDisabled("左键打开记录器，按住右键拖动；松开右键后保存位置。");
+        ImGui.TextDisabled("左键打开／关闭记录器，按住右键拖动；松开右键后保存位置。");
         ImGui.Separator();
 
 

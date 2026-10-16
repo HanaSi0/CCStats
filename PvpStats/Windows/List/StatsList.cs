@@ -112,7 +112,8 @@ internal abstract class StatsList<T, U, V> : FilteredList<T, V> where T : notnul
         DataModelUntruncated = direction == ImGuiSortDirection.Ascending ? DataModelUntruncated.OrderBy(comparator!).ToList() : DataModelUntruncated.OrderByDescending(comparator!).ToList();
     }
 
-    protected string CSVRow(T key) {
+    protected string CSVRow(T key, IReadOnlyDictionary<T,U>? snapshot = null) {
+        var stats=(snapshot??StatsModel)[key];
         string csv = "";
         foreach(var col in Columns) {
             if(typeof(T) == typeof(PlayerAlias)) {
@@ -136,12 +137,12 @@ internal abstract class StatsList<T, U, V> : FilteredList<T, V> where T : notnul
             //find property
             (var p1, var p2) = GetStatsPropertyFromId(col.Id);
             if(p1 != null && p2 == null) {
-                csv += p1.GetValue(StatsModel[key]);
+                csv += p1.GetValue(stats);
             } else if(p1 != null && p2 != null) {
                 if(p2 is PropertyInfo) {
-                    csv += (p2 as PropertyInfo)!.GetValue(p1.GetValue(StatsModel[key]));
+                    csv += (p2 as PropertyInfo)!.GetValue(p1.GetValue(stats));
                 } else if(p2 is FieldInfo) {
-                    csv += (p2 as FieldInfo)!.GetValue(p1.GetValue(StatsModel[key]));
+                    csv += (p2 as FieldInfo)!.GetValue(p1.GetValue(stats));
                 }
             }
             csv += ",";
@@ -150,21 +151,27 @@ internal abstract class StatsList<T, U, V> : FilteredList<T, V> where T : notnul
         return csv;
     }
 
+    private bool _copyingCsv;
     protected void CSVButton() {
-        using(ImRaii.PushFont(UiBuilder.IconFont)) {
+        using(ImRaii.PushFont(UiBuilder.IconFont))
+        using(var disabled=ImRaii.Disabled(_copyingCsv||RefreshActive)) {
             if(ModernTheme.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
-                Task.Run(() => {
-                    ListCSV = CSVHeader();
-                    if(FullCSVRows) {
-                        DataModel.ForEach((x) => ListCSV += CSVRow(x));
-                    } else {
-                        CurrentPage.ForEach((x) => ListCSV += CSVRow(x));
+                var model=StatsModel.ToDictionary();
+                var keys=(FullCSVRows?DataModel:CurrentPage).Where(model.ContainsKey).ToArray();
+                var header=CSVHeader();
+                _copyingCsv=true;
+                _=Task.Run(()=> {
+                    try {
+                        var csv=header+string.Concat(keys.Select(key=>CSVRow(key,model)));
+                        _plugin.WindowManager.PostUi(()=> { try { ListCSV=csv; ImGui.SetClipboardText(csv); } finally { _copyingCsv=false; } });
+                    } catch(Exception e) {
+                        _plugin.Log.Error(e,"Statistics CSV copy failed.");
+                        _plugin.WindowManager.PostUi(()=>_copyingCsv=false);
                     }
-                    ImGui.SetClipboardText(ListCSV);
                 });
             }
         }
-        ImGuiHelper.WrappedTooltip(ChineseText.Text("Copy CSV to clipboard"));
+        ImGuiHelper.WrappedTooltip(_copyingCsv?"正在生成 CSV……":ChineseText.Text("Copy CSV to clipboard"));
     }
 
     protected override void PostColumnSetup() {

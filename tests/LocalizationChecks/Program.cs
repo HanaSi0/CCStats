@@ -144,6 +144,7 @@ Check(StatDisplay.Number(double.NaN)=="—" && StatDisplay.Number(double.Positiv
 Check(StatDisplay.Number(0)=="0" && StatDisplay.Duration(0)=="0:00" && StatDisplay.Duration(3661)=="61:01", "job totals preserve real zero and durations longer than an hour");
 Check(StatDisplay.Duration(double.NaN)=="—" && StatDisplay.Duration(double.PositiveInfinity)=="—" && StatDisplay.Duration(-1)=="—", "invalid job durations never throw or show NaN");
 Check(StatDisplay.CardColumns(610,1)==1 && StatDisplay.CardColumns(640,1)==2 && StatDisplay.CardColumns(1000,1)==3 && StatDisplay.CardColumns(1280,2)==2, "job card grid keeps readable minimum widths across scaling");
+await StabilityChecks.Run(Check);
 StatisticsChecks.Run(Check);
 DetailedTelemetryChecks.Run(Check);
 UiInteractionChecks.Run(Check);

@@ -44,9 +44,8 @@ internal abstract class PlayerStatsList<T, U> : StatsList<PlayerAlias, T, U> whe
             await ProcessMatches(matches);
         } else {
             MatchesTotal = removals.Count + additions.Count;
-            var removeTask = ProcessMatches(removals, true);
-            var addTask = ProcessMatches(additions);
-            await Task.WhenAll([removeTask, addTask]);
+            await ProcessMatches(removals,true);
+            await ProcessMatches(additions);
         }
         PostRefresh(matches, additions, removals);
         _matches = matches;

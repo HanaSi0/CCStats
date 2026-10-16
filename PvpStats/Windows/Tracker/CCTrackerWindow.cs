@@ -92,7 +92,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         if(ReferenceEquals(_overviewMatches, matches)) return;
         _overviewMatches = matches;
         _overviewWins = _overviewPlayed = 0;
-        _latestVisibleMatch = matches.FirstOrDefault(x => x.IsCompleted && !x.IsDeleted && !x.IsQuarantined);
+        _latestVisibleMatch = matches.Where(x => x.IsCompleted && !x.IsDeleted && !x.IsQuarantined).MaxBy(x=>x.DutyStartTime);
         long ticks = 0;
         var timed = 0;
         foreach(var match in matches) {
@@ -196,13 +196,13 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         DrawFilters();
         ImGui.Spacing();
         switch(CurrentTab) {
-            case "Summary": DrawPanel("SummaryContent", _summary.Draw, _summary.RefreshActive, _summary.RefreshProgress); break;
-            case "Records": DrawPanel("RecordsContent", _records.Draw, _records.RefreshActive, _records.RefreshProgress); break;
-            case "Jobs": DrawPanel("JobsContent", _jobs.Draw, _jobs.RefreshActive, _jobs.RefreshProgress); break;
-            case "Players": DrawPanel("PlayersContent", _players.Draw, _players.RefreshActive, _players.RefreshProgress); break;
-            case "Credit": DrawPanel("CreditContent", _credit.Draw, _credit.RefreshActive, _credit.RefreshProgress); break;
+            case "Summary": DrawPanel("SummaryContent", _summary.Draw, _summary.RefreshActive, _summary.RefreshProgress,_summary.RefreshFailures); break;
+            case "Records": DrawPanel("RecordsContent", _records.Draw, _records.RefreshActive, _records.RefreshProgress,_records.RefreshFailures); break;
+            case "Jobs": DrawPanel("JobsContent", _jobs.Draw, _jobs.RefreshActive, _jobs.RefreshProgress,_jobs.RefreshFailures); break;
+            case "Players": DrawPanel("PlayersContent", _players.Draw, _players.RefreshActive, _players.RefreshProgress,_players.RefreshFailures); break;
+            case "Credit": DrawPanel("CreditContent", _credit.Draw, _credit.RefreshActive, _credit.RefreshProgress,_credit.RefreshFailures); break;
             case "Profile": DrawPanel("ProfileContent", _profile.Draw, false, 0); break;
-            default: DrawPanel("MatchesContent", _matches.Draw, _matches.RefreshActive, _matches.RefreshProgress); break;
+            default: DrawPanel("MatchesContent", _matches.Draw, _matches.RefreshActive, _matches.RefreshProgress,_matches.RefreshFailures); break;
         }
     }
 
@@ -223,11 +223,11 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
             using var filters=ImRaii.Child("JobMatchFiltersPanel",new(0,Math.Min(240*scale,ImGui.GetContentRegionAvail().Y*.35f)),true);
             if(filters) {
                 ImGui.SetNextItemWidth(-1); _search.Draw();
-                DrawQuickFilters(); DrawFilters();
+                DrawQuickFilters(); ImGui.Separator(); DrawFilterFields();
             }
         }
         ImGui.Spacing();
-        DrawPanel("JobCardsContent",_jobs.DrawCards,_jobs.RefreshActive,_jobs.RefreshProgress);
+        DrawPanel("JobCardsContent",_jobs.DrawCards,_jobs.RefreshActive,_jobs.RefreshProgress,_jobs.RefreshFailures);
     }
 
     private void Navigation(string key, string caption) {
@@ -251,33 +251,36 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
     }
 
     private void DrawQuickFilters() {
-        var mode = MatchFilters.OfType<MatchTypeFilter>().First();
-        foreach(var item in new[] { ("全部", (CrystallineConflictMatchType?)null), ("练习赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Casual),
-            ("段位赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Ranked), ("自定赛", (CrystallineConflictMatchType?)CrystallineConflictMatchType.Custom) }) {
-            var selected = item.Item2 == null ? mode.FilterState.Values.All(x => x)
-                : mode.FilterState.All(x => x.Value == (x.Key == item.Item2));
-            using var tint = ImRaii.PushColor(ImGuiCol.Button, selected ? ModernTheme.Selection : ModernTheme.ButtonBackground);
-            if(ModernTheme.Button(item.Item1 + "###CCQuick" + item.Item1)) {
-                foreach(var key in mode.FilterState.Keys.ToArray()) mode.FilterState[key] = item.Item2 == null || key == item.Item2;
-                mode.AllSelected = item.Item2 == null;
-                _ = Task.Run(() => Refresh());
+        var scale=ImGuiHelpers.GlobalScale;
+        var mode=MatchFilters.OfType<MatchTypeFilter>().First();
+        var modes=new[] { ("全部",(CrystallineConflictMatchType?)null),("练习赛",(CrystallineConflictMatchType?)CrystallineConflictMatchType.Casual),
+            ("段位赛",(CrystallineConflictMatchType?)CrystallineConflictMatchType.Ranked),("自定赛",(CrystallineConflictMatchType?)CrystallineConflictMatchType.Custom) };
+        var width=Math.Max(1,(ImGui.GetContentRegionAvail().X-3*ImGui.GetStyle().ItemSpacing.X)/4);
+        for(var i=0;i<modes.Length;i++) {
+            if(i>0)ImGui.SameLine();
+            var item=modes[i];
+            var selected=item.Item2==null?mode.FilterState.Values.All(x=>x):mode.FilterState.All(x=>x.Value==(x.Key==item.Item2));
+            using var tint=ImRaii.PushColor(ImGuiCol.Button,selected?ModernTheme.Selection:ModernTheme.ButtonBackground);
+            if(ModernTheme.Button(item.Item1+"###CCQuick"+item.Item1,new(width,34*scale))) {
+                foreach(var key in mode.FilterState.Keys.ToArray()) mode.FilterState[key]=item.Item2==null || key==item.Item2;
+                mode.AllSelected=item.Item2==null;
+                _=Task.Run(()=>Refresh());
             }
-            ImGui.SameLine();
         }
-        var bookmark = MatchFilters.OfType<BookmarkFilter>().First();
-        var onlyFavorites = bookmark.BookmarkedOnly;
-        if(ImGui.Checkbox("仅收藏###CCQuickFavorites", ref onlyFavorites)) {
-            bookmark.BookmarkedOnly = onlyFavorites;
-            _ = Task.Run(() => Refresh());
-        }
-        using(var disabled = ImRaii.Disabled(_latestVisibleMatch == null)) {
-            if(ModernTheme.Button("最近一场###CCLatestMatch") && _latestVisibleMatch != null) Plugin.WindowManager.OpenMatchDetailsWindow(_latestVisibleMatch);
+        var bookmark=MatchFilters.OfType<BookmarkFilter>().First();
+        var onlyFavorites=bookmark.BookmarkedOnly;
+        ImGui.AlignTextToFramePadding();
+        if(ImGui.Checkbox("仅收藏###CCQuickFavorites",ref onlyFavorites)) { bookmark.BookmarkedOnly=onlyFavorites; _=Task.Run(()=>Refresh()); }
+        ImGui.SameLine();
+        using(var disabled=ImRaii.Disabled(_latestVisibleMatch==null)) {
+            if(ModernTheme.Button("最近一场###CCLatestMatch",new(120*scale,32*scale))&&_latestVisibleMatch!=null) Plugin.WindowManager.OpenMatchDetailsWindow(_latestVisibleMatch);
         }
     }
 
-    private void DrawPanel(string id, Action draw, bool refreshing, double progress) {
+    private void DrawPanel(string id, Action draw, bool refreshing, double progress, int failures=0) {
         using var panel = ImRaii.Child(id, Vector2.Zero, false);
         if(!panel) return;
+        if(!refreshing&&failures>0) ImGui.TextWrapped($"有 {failures} 条记录未能完成统计，当前结果可能不完整；详情见日志。");
         try { draw(); }
         catch(Exception e) {
             if(!refreshing) {

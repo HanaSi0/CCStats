@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.3：修复统计范围、个人统计、平均数据与中位数。",
+  "Changelog": "0.2.4：优化筛选布局、复制操作与历史统计刷新稳定性。",
   "Tags": [
     "pvp",
     "statistics"

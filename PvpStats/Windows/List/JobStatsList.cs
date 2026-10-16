@@ -35,9 +35,8 @@ internal abstract class JobStatsList<T, U> : StatsList<Job, T, U> where T : Play
             await ProcessMatches(matches);
         } else {
             MatchesTotal = removals.Count + additions.Count;
-            var removeTask = ProcessMatches(removals, true);
-            var addTask = ProcessMatches(additions);
-            await Task.WhenAll([removeTask, addTask]);
+            await ProcessMatches(removals,true);
+            await ProcessMatches(additions);
         }
         PostRefresh(matches, additions, removals);
         _matches = matches;

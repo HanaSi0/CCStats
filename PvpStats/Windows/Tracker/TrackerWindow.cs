@@ -73,7 +73,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
 
             await Task.WhenAll([
                 Task.Run(SaveFilters),
-                .. refreshTasks.Select(x => x.Result),
+                .. refreshTasks.Select(x => x.Unwrap()),
             ]);
         } catch {
             Plugin.Log.Error($"{WindowName} refresh failed.");
@@ -116,38 +116,31 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
 
     public abstract void DrawInternal();
 
+    protected void DrawFilterFields() {
+        using var table=ImRaii.Table("FilterTable",2,ImGuiTableFlags.BordersInnerV|ImGuiTableFlags.BordersInnerH);
+        if(!table)return;
+        ImGui.TableSetupColumn("filterName",ImGuiTableColumnFlags.WidthFixed,110*ImGuiHelpers.GlobalScale);
+        ImGui.TableSetupColumn("filters",ImGuiTableColumnFlags.WidthStretch);
+        foreach(var filter in MatchFilters) {
+            if(filter is MatchSearchFilter)continue;
+            ImGui.TableNextColumn(); ImGui.AlignTextToFramePadding();
+            if(filter.HelpMessage!=null) { ImGuiHelper.HelpMarker(filter.HelpMessage,false); ImGui.SameLine(); }
+            ImGui.TextUnformatted(ChineseText.Text(filter.Name)+"：");
+            ImGui.TableNextColumn(); filter.Draw();
+        }
+    }
+
     protected void DrawFilters() {
         if(!CollapseFilters) {
-            using var child = ImRaii.Child("FilterChild",
-            new Vector2(ImGui.GetContentRegionAvail().X, WindowConfig.FilterHeight),
-            true, ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.AlwaysVerticalScrollbar);
-            if(child) {
-                using var table = ImRaii.Table("FilterTable", 2, ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.BordersInnerH);
-                if(!table) return;
-                ImGui.TableSetupColumn("filterName", ImGuiTableColumnFlags.WidthFixed, ImGuiHelpers.GlobalScale * 110f);
-                ImGui.TableSetupColumn($"filters", ImGuiTableColumnFlags.WidthStretch);
-                foreach(var filter in MatchFilters) {
-                    if(filter is MatchSearchFilter) continue;
-                    ImGui.TableNextColumn();
-
-                    if(filter.HelpMessage != null) {
-                        ImGui.AlignTextToFramePadding();
-                        ImGuiHelper.HelpMarker(filter.HelpMessage, false);
-                        ImGui.SameLine();
-                    }
-                    string nameText = $"{ChineseText.Text(filter.Name)}：";
-                    ImGuiHelper.RightAlignCursor2(nameText, -5f * ImGuiHelpers.GlobalScale);
-                    ImGui.AlignTextToFramePadding();
-                    //ImGui.SetCursorPosX(ImGui.GetCursorPosX() + float.Max(0, 16f - 4f * ImGuiHelpers.GlobalScale));
-                    ImGui.TextUnformatted(nameText);
-                    ImGui.TableNextColumn();
-                    filter.Draw();
-                }
-            }
+            var height=ViewLayout.FilterHeight(ImGui.GetContentRegionAvail().Y,WindowConfig.FilterHeight,ImGuiHelpers.GlobalScale);
+            if(height>=40*ImGuiHelpers.GlobalScale) {
+                using var child=ImRaii.Child("FilterChild",new Vector2(0,height),true,ImGuiWindowFlags.AlwaysVerticalScrollbar);
+                if(child)DrawFilterFields();
+            } else ImGui.TextDisabled("请扩大窗口或收起筛选，以便查看数据。");
         }
-        if(ModernTheme.Button(CollapseFilters ? "高级筛选###ToggleAdvancedFilters" : "收起筛选###ToggleAdvancedFilters")) {
-            CollapseFilters = !CollapseFilters;
-            WindowConfig.FiltersCollapsed = CollapseFilters;
+        if(ModernTheme.Button(CollapseFilters?"高级筛选###ToggleAdvancedFilters":"收起筛选###ToggleAdvancedFilters")) {
+            CollapseFilters=!CollapseFilters;
+            WindowConfig.FiltersCollapsed=CollapseFilters;
             Plugin.DataQueue.QueueDataOperation(Plugin.Configuration.Save);
         }
     }

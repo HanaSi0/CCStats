@@ -1,5 +1,6 @@
 ﻿using PvpStats.Types.Match;
 using PvpStats.Utility;
+using PvpStats.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,6 +16,8 @@ internal abstract class Refreshable<T> where T : PvpMatch {
     protected DataQueue RefreshQueue { get; private set; } = new();
 
     public bool RefreshActive { get; set; }
+    public int RefreshFailures { get; protected set; }
+    private readonly object _progressLock=new();
 
     private double _refreshProgress;
     public double RefreshProgress {
@@ -55,6 +58,7 @@ internal abstract class Refreshable<T> where T : PvpMatch {
         var task = RefreshQueue.QueueDataOperation(async () => {
             RefreshActive = true;
             MatchesProcessed = 0;
+            RefreshFailures=0;
             RefreshProgress = 0;
             Stopwatch s1 = Stopwatch.StartNew();
             try {
@@ -66,7 +70,7 @@ internal abstract class Refreshable<T> where T : PvpMatch {
                 RefreshActive = false;
             }
         });
-        await task.Result;
+        await task.Unwrap();
     }
 
     //full refresh
@@ -82,28 +86,21 @@ internal abstract class Refreshable<T> where T : PvpMatch {
             await ProcessMatches(matches);
         } else {
             MatchesTotal = removals.Count + additions.Count;
-            var removeTask = ProcessMatches(removals, true);
-            var addTask = ProcessMatches(additions);
-            await Task.WhenAll([removeTask, addTask]);
+            await ProcessMatches(removals,true);
+            await ProcessMatches(additions);
         }
         PostRefresh(matches, additions, removals);
         _matches = matches;
     }
 
     protected virtual async Task ProcessMatches(List<T> matches, bool remove = false) {
-        List<Task> matchTasks = [];
-        matches.ForEach(x => {
-            var t = new Task(() => {
-                ProcessMatch(x, remove);
-                RefreshProgress = (float)MatchesProcessed++ / MatchesTotal;
-            });
-            matchTasks.Add(t);
-            t.Start();
-        });
-        try {
-            await Task.WhenAll(matchTasks);
-        } catch(Exception e) {
-            Plugin.Log2.Error(e, "Process Match Error");
-        }
+        var failures=await RefreshBatch.Run(matches,match=>ProcessMatch(match,remove),
+            e=>Plugin.Log2.Error(e,"Skipping a record that failed statistics processing."),()=> {
+                lock(_progressLock) {
+                    MatchesProcessed++;
+                    RefreshProgress=MatchesTotal>0?(double)MatchesProcessed/MatchesTotal:1;
+                }
+            },Math.Clamp(Environment.ProcessorCount/2,1,2));
+        RefreshFailures+=failures;
     }
 }

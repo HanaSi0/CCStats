@@ -165,9 +165,7 @@ internal static class ImGuiHelper {
         try {
             ImGui.PushFont(UiBuilder.IconFont);
             if(ModernTheme.Button($"{FontAwesomeIcon.Copy.ToIconString()}##--CopyCSV")) {
-                Task.Run(() => {
-                    ImGui.SetClipboardText(csv);
-                });
+                ImGui.SetClipboardText(csv);
             }
         } finally {
             ImGui.PopFont();
