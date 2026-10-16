@@ -1,12 +1,12 @@
 {
   "Author": "HanaSi0 / SaMo",
   "Name": "CCStats",
-  "Punchline": "水晶冲突战绩记录、数据分析与国际服榜单。",
-  "Description": "自动记录水晶冲突对局，查询战绩、完整结算、时间线、技能分析和各项胜率；支持中文、自定义主题、悬浮入口与国际服官方榜单缓存。",
+  "Punchline": "水晶冲突战绩工具。",
+  "Description": "记录和查询水晶冲突战绩，支持数据分析、地图回放与国际服榜单。",
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.0：新增客户端已加载玩家的走位采样、地图回放、减员与水晶相对推进；每局手动在本机进行细项统计和防御减伤条件估算，保存双方状态快照，规则不足的事件不计入估算。统一标题栏图标与操作。榜单改为纯浏览，登录角色高亮及一键定位，支持启动检查与手动完整抓取。",
+  "Changelog": "0.2.1：精简介绍与更新说明。",
   "Tags": [
     "pvp",
     "statistics"

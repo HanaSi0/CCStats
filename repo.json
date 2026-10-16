@@ -3,8 +3,8 @@
     "Author": "HanaSi0 / SaMo",
     "Name": "CCStats",
     "InternalName": "CCStats",
-    "AssemblyVersion": "0.2.0.0",
-    "Description": "自动记录水晶冲突对局，查询战绩、完整结算、时间线、技能分析和各项胜率；支持中文、自定义主题、悬浮入口与国际服官方榜单缓存。",
+    "AssemblyVersion": "0.2.1.0",
+    "Description": "记录和查询水晶冲突战绩，支持数据分析、地图回放与国际服榜单。",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/HanaSi0/CCStats",
     "Tags": [
@@ -17,11 +17,11 @@
     "CanUnloadAsync": false,
     "LoadPriority": 0,
     "IconUrl": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/images/icon.png",
-    "Punchline": "水晶冲突战绩记录、数据分析与国际服榜单。",
-    "Changelog": "0.2.0：新增客户端已加载玩家的走位采样、地图回放、减员与水晶相对推进；每局手动在本机进行细项统计和防御减伤条件估算，保存双方状态快照，规则不足的事件不计入估算。统一标题栏图标与操作。榜单改为纯浏览，登录角色高亮及一键定位，支持启动检查与手动完整抓取。",
+    "Punchline": "水晶冲突战绩工具。",
+    "Changelog": "0.2.1：精简介绍与更新说明。",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.0/latest.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.0/latest.zip",
-    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.0/latest.zip"
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.1/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.1/latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.1/latest.zip"
   }
 ]
