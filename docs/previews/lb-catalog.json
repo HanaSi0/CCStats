@@ -809,7 +809,7 @@
             "shape": "Cone",
             "anchor": "Source",
             "size": 8.0,
-            "width": 90.0,
+            "width": 180.0,
             "benefit": false,
             "duration": 1.25,
             "reference": true

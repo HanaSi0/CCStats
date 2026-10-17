@@ -1,0 +1,165 @@
+{
+  "received_date": "2026-10-17",
+  "source": "User-supplied summary of ActionEffectRange, including reported author measurements. Source plugin last updated November 2023; no current-build angle measurement supplied.",
+  "entries": [
+    {
+      "action_id": 29428,
+      "user_supplied_name": "扇舞",
+      "radius": 15,
+      "angle_degrees": 90,
+      "evidence": "historical_measurement",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 15,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29547,
+      "user_supplied_name": "束缚挥割",
+      "radius": 8,
+      "angle_degrees": 180,
+      "evidence": "historical_measurement",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29548,
+      "user_supplied_name": "夜游魂钐割",
+      "radius": 8,
+      "angle_degrees": 180,
+      "evidence": "historical_measurement",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29083,
+      "user_supplied_name": "原初的怒号",
+      "radius": 12,
+      "angle_degrees": 90,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 12,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29404,
+      "user_supplied_name": "霰弹枪",
+      "radius": 12,
+      "angle_degrees": 90,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 12,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29406,
+      "user_supplied_name": "毒菌冲击",
+      "radius": 12,
+      "angle_degrees": 90,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 12,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29530,
+      "user_supplied_name": "奥义斩浪",
+      "radius": 8,
+      "angle_degrees": 120,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29531,
+      "user_supplied_name": "回返斩浪",
+      "radius": 8,
+      "angle_degrees": 120,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 41577,
+      "user_supplied_name": "残心",
+      "radius": 8,
+      "angle_degrees": 120,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 41456,
+      "user_supplied_name": "断首处刑",
+      "radius": 8,
+      "angle_degrees": 120,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 29671,
+      "user_supplied_name": "山崩",
+      "radius": 8,
+      "angle_degrees": 120,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 41430,
+      "user_supplied_name": "强盾猛击",
+      "radius": 8,
+      "angle_degrees": 120,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    },
+    {
+      "action_id": 41451,
+      "user_supplied_name": "介毒之术",
+      "radius": 8,
+      "angle_degrees": 120,
+      "evidence": "heuristic",
+      "current_version_measurement_confirmed": false,
+      "local_client_table_cast_type": 3,
+      "local_client_table_effect_range": 8,
+      "radius_matches_local_table": true
+    }
+  ],
+  "cross": {
+    "action_id": 41498,
+    "single_arm_length": 15,
+    "full_strip_length": 30,
+    "strip_width": 6,
+    "nominal_union_area": 324,
+    "center_anchor_verified": false,
+    "automatic_hitbox_inflation": false
+  },
+  "policy": [
+    "Historical measured angles remain references for the current game build.",
+    "Heuristic angles are not promoted to verified rules.",
+    "Nominal geometry does not add target hitbox radius to the visual area.",
+    "No ActionEffect entry is not proof of a miss: line of sight, target immunity, packet completeness, death and observation timing may differ.",
+    "Machina/Rival Wings entries are excluded from the Crystalline Conflict catalog."
+  ]
+}

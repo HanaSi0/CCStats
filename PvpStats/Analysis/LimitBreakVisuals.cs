@@ -79,7 +79,7 @@ public static class LimitBreakVisuals {
         new(41500,28,LbShape.Circle,LbAnchor.Target,5),new(41501,28,LbShape.Circle,LbAnchor.Source,15,Benefit:true),
         new(41508,33,LbShape.Circle,LbAnchor.Target,5),
         new(29543,39,LbShape.Single,LbAnchor.Target,1),new(29544,39,LbShape.Single,LbAnchor.Target,1),
-        new(29548,39,LbShape.Cone,LbAnchor.Source,8,90,Reference:true),new(29554,39,LbShape.Circle,LbAnchor.Target,5),new(41458,39,LbShape.Circle,LbAnchor.Target,5),
+        new(29548,39,LbShape.Cone,LbAnchor.Source,8,180,Reference:true),new(29554,39,LbShape.Circle,LbAnchor.Target,5),new(41458,39,LbShape.Circle,LbAnchor.Target,5),
         new(39169,41,LbShape.Circle,LbAnchor.Target,5),new(39170,41,LbShape.Circle,LbAnchor.Target,5),new(39171,41,LbShape.Circle,LbAnchor.Target,5),new(39172,41,LbShape.Circle,LbAnchor.Target,5),new(39173,41,LbShape.Circle,LbAnchor.Target,5),
         new(39179,41,LbShape.Circle,LbAnchor.Target,5),new(39180,41,LbShape.Circle,LbAnchor.Target,5),new(39181,41,LbShape.Circle,LbAnchor.Target,5),new(39182,41,LbShape.Circle,LbAnchor.Target,5),
         new(41467,23,LbShape.Circle,LbAnchor.Target,5),

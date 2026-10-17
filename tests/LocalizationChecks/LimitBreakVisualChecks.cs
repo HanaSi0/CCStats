@@ -32,6 +32,10 @@ internal static class LimitBreakVisualChecks {
         check(ReplayCrystalHud.Progress(375)==.375f&&ReplayCrystalHud.Position(500)==.25f,"HUD uses director tenths of a percent and signed crystal position");
         check(ReplayCrystalHud.Progress(null)==null&&ReplayCrystalHud.Position(null)==null&&ReplayCrystalHud.Checkpoint(100)==1,"HUD retains unavailable observations and actual checkpoint clear progress");
         check(ReplayCrystalHud.Progress(1001)==null&&ReplayCrystalHud.Position(-1001)==null,"invalid progress never becomes a fabricated endpoint");
+        var lemure=rules.Single(r=>r.ActionId==29548);
+        geometry.Clear();LimitBreakVisuals.Draw(geometry,lemure,Vector3.Zero,0,Vector3.Zero,(_,_)=>0);
+        var fan=geometry.Vertices.ToArray();
+        check(fan.Min(v=>v.Position.X)<-7.9f&&fan.Max(v=>v.Position.X)>7.9f&&fan.Min(v=>v.Position.Z)>-.14f,"historical Lemure Slice reference covers the forward semicircle rather than a narrow quarter-circle");
         var persistent=rules.Single(r=>r.ActionId==29401);
         check(LimitBreakVisuals.Opacity(persistent,e,start.AddSeconds(2))==.4f,"persistent effects settle to faint background");
         check(LimitBreakVisuals.Opacity(whm,e,start.AddSeconds(-1))==0,"future skills have no visual");

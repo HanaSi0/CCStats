@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.19：修复首次打开战绩加载；新增二维水晶进度条、LB 展开动效与狙击准星，修正范围，强化红蓝队辨识。",
+  "Changelog": "0.2.20：依据用户提供的历史实测资料，将夜游魂钐割扇形修正为 180°，仍标参考；包含首次加载、水晶 HUD、LB 动效及队伍辨识更新。",
   "Tags": [
     "pvp",
     "statistics"

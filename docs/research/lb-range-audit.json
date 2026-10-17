@@ -579,12 +579,13 @@
       "name": "技能 29548",
       "shape": "Cone",
       "display_size": 8.0,
-      "display_width": 90.0,
+      "display_width": 180,
       "client_cast_type": 3,
       "client_effect_range": 8,
       "client_width": 0,
       "reference": true,
-      "benefit": false
+      "benefit": false,
+      "angle_evidence": "User-reported historical author measurement; current-build confirmation pending"
     },
     {
       "job": "钐镰客",
@@ -1086,6 +1087,7 @@
     "WHM allied aura 30m and Bard aura 30m come from official descriptions; action damage metadata is not substituted for them.",
     "Dragoon inner 5m is an official doubled-damage region inside outer 10m.",
     "Eventide uses native total rectangle length 30m, not 30m in each direction; centered split remains a reference.",
-    "Cone angles, cross orientation and exact effective collision boundaries remain unverified; reference flag retained."
+    "Cone angles, cross orientation and exact effective collision boundaries remain unverified; reference flag retained.",
+    "29548 uses a 180-degree historical reference; its current-build server angle is not asserted verified."
   ]
 }
