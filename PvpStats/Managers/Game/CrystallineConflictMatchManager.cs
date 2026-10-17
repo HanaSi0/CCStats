@@ -187,6 +187,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             }
             _castTargets = [];
             _lastEventTimer = -1f;
+            _environmentCasts.Clear();_lastEnvironmentCastPoll=DateTime.MinValue;
             _scoreboardPayloadReceived = false;
             _plugin.Log.Information($"starting new match on {_currentMatch.Arena}");
             _plugin.DataQueue.QueueDataOperation(async () => {
@@ -324,7 +325,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
                 }
             }
 
-            if(actor is IBattleNpc environment && !isPet) CaptureEnvironmentAction(now,environment,actionId,effectHeader->GlobalSequence);
+            if(actor is IBattleNpc environment && !isPet) CaptureEnvironmentAction(now,environment,actionId,effectHeader->GlobalSequence,targetPos!=null?*targetPos:null);
 
             string? actorWorld = null;
             PlayerAlias? actorAlias = null;
@@ -1066,6 +1067,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             }
         }
 
+        try { CaptureEnvironmentCasts(now); }catch(Exception e) { _plugin.Log.Debug(e,"Environment cast sample unavailable."); }
         CaptureMovement(now, director);
         if(_currentMatchTimeline != null) {
 
@@ -1137,10 +1139,14 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
 
             //check for map event
             try {
+                if(director->EventTimer>0f&&director->EventTimer<=5f&&_lastEventTimer>5f)
+                    RecordReplayMapEvent(new() { Timestamp=now,Label="地图计时器预警",MapWide=true,Kind=ReplayMapEventKind.TimerWarning,ExpectedEndTime=now.AddSeconds(director->EventTimer) });
                 if(director->EventTimer != -1f && director->EventTimer <= 0f && _lastEventTimer > 0f) {
                     Plugin.Log2.Debug("Map event detected!");
                     _currentMatchTimeline.MapEvents?.Add(new(now, CrystallineConflictMatchEvent.SpecialEvent));
-                    RecordReplayMapEvent(new() { Timestamp=now,Label="地图机制触发（地图计时器）",MapWide=true });
+                    var warning=_currentMatchTimeline.Detailed?.MapMechanics.LastOrDefault(e=>e.Kind==ReplayMapEventKind.TimerWarning&&e.Timestamp<=now&&e.ExpectedEndTime>=now.AddSeconds(-2));
+                    if(warning!=null)warning.ResolvedAt=now;
+                    RecordReplayMapEvent(new() { Timestamp=now,Label="地图计时器触发",MapWide=true,Kind=ReplayMapEventKind.TimerTriggered });
                 }
                 _lastEventTimer = director->EventTimer;
             } catch(Exception e) {

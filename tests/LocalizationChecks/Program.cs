@@ -153,6 +153,7 @@ MovementReplayChecks.Run(Check);
 ReplayUpgradeChecks.Run(Check);
 MovementCompatibilityChecks.Run(Check);
 Replay3DChecks.Run(Check);
+ReplayCameraMechanicChecks.Run(Check);
 await StabilityChecks.Run(Check);
 StatisticsChecks.Run(Check);
 DetailedTelemetryChecks.Run(Check);

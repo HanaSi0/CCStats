@@ -96,9 +96,22 @@ public sealed class ReplayMapEvent {
     public uint SourceEntityId { get; set; }
     public uint Sequence { get; set; }
     public bool MapWide { get; set; }
+    public ReplayMapEventKind Kind { get; set; }
     public float? X { get; set; }
+    public float? Y { get; set; }
     public float? Z { get; set; }
+    public float? Heading { get; set; }
+    public float? TargetX { get; set; }
+    public float? TargetY { get; set; }
+    public float? TargetZ { get; set; }
+    public DateTime? ObservedUntil { get; set; }
+    public DateTime? ExpectedEndTime { get; set; }
+    public DateTime? ResolvedAt { get; set; }
+    public byte ClientCastType { get; set; }
+    public int ClientEffectRange { get; set; }
+    public int ClientXAxisModifier { get; set; }
 }
+public enum ReplayMapEventKind { ActionResolved, CastObserved, TimerWarning, TimerTriggered }
 public sealed class ObservedControl {
     public uint StatusId { get; set; }
     public string Source { get; set; } = "";

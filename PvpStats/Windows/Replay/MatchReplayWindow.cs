@@ -38,7 +38,7 @@ internal sealed partial class MatchReplayWindow : Window, IDisposable {
         _duration=Math.Max(1,(float)((match.MatchEndTime ?? _data.Frames.LastOrDefault()?.Timestamp ?? _origin)-_origin).TotalSeconds);
         Size=ViewLayout.ClampWindow((threeD?plugin.Configuration.Replay3DWindowSize:plugin.Configuration.ReplayWindowSize)??(threeD?new Vector2(1440,920):new Vector2(1120,800)),ImGui.GetMainViewport().WorkSize/ImGuiHelpers.GlobalScale); SizeCondition=ImGuiCond.FirstUseEver;
         SizeConstraints=new() { MinimumSize=threeD?new(1050,680):new(800,580), MaximumSize=new(2400,1800) };
-        if(threeD) { _min=Vector2.Zero;_span=Vector2.One;IsOpen=true;return; }
+        if(threeD) { Flags|=ImGuiWindowFlags.NoScrollWithMouse;_min=Vector2.Zero;_span=Vector2.One;IsOpen=true;return; }
         var points=_data.Frames.SelectMany(f=>f.Players).Where(p=>float.IsFinite(p.X)&&float.IsFinite(p.Z)).ToArray();
         _min=points.Length==0 ? new(-100,-100) : new(points.Min(p=>p.X)-10,points.Min(p=>p.Z)-10);
         var max=points.Length==0 ? new Vector2(100,100) : new Vector2(points.Max(p=>p.X)+10,points.Max(p=>p.Z)+10);

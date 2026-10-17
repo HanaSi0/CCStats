@@ -83,8 +83,8 @@ internal sealed partial class MatchReplayWindow {
             if(entries.Length==0)ImGui.TextDisabled("暂无事件记录");
             foreach(var entry in entries) {
                 using var entryId=ImRaii.PushId(_data.MapMechanics.IndexOf(entry));
-                if(ImGui.Selectable($"{(entry.Timestamp-_origin):mm\\:ss} · {entry.Label}###Mechanic")) { _seconds=Math.Clamp((float)(entry.Timestamp-_origin).TotalSeconds,0,_duration);_playing=false; }
-                if(ImGui.IsItemHovered())ImGui.SetTooltip(entry.Label+"\n"+(entry.MapWide?"地图计时器触发记录；不推测作用范围或持续时间。":"环境对象动作；标记为来源坐标，未确认作用范围。\n技能 ID "+entry.ActionId+" · 对象名称 ID "+entry.SourceNameId));
+                if(ImGui.Selectable($"{(entry.Timestamp-_origin):mm\\:ss} · {ReplayMechanicObservation.Caption(entry,entry.Timestamp)}###Mechanic")) { _seconds=Math.Clamp((float)(entry.Timestamp-_origin).TotalSeconds,0,_duration);_playing=false; }
+                if(ImGui.IsItemHovered())ImGui.SetTooltip(entry.Label+"\n"+ReplayMechanicObservation.SourceDescription(entry));
             }
         }
         ImGui.TableNextColumn(); ImGui.TextUnformatted("最近减员");
@@ -134,18 +134,19 @@ internal sealed partial class MatchReplayWindow {
         }
     }
     private void DrawMechanics(ImDrawListPtr draw,Func<Vector2,Vector2> at,Vector2 origin,float side,DateTime now,float scale,bool hovered) {
-        var entries=_data.MapMechanics.Where(e=>e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3)).ToArray();
+        var entries=ReplayMechanicObservation.Active(_data.MapMechanics,now).ToArray();
         var global=entries.LastOrDefault(e=>e.MapWide);
         if(global!=null || (_timeline.MapEvents?.Any(e=>e.Type==CrystallineConflictMatchEvent.SpecialEvent&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3))??false)) {
             draw.AddRect(origin,origin+new Vector2(side),ImGui.GetColorU32(ModernTheme.Gold),0,ImDrawFlags.None,3*scale);
             draw.AddRectFilled(origin,origin+new Vector2(side,30*scale),ImGui.GetColorU32(new Vector4(.05f,.05f,.08f,.94f)));
-            draw.AddText(origin+new Vector2(8*scale),ImGui.GetColorU32(ModernTheme.Gold),"地图机制触发 · 计时器观测");
+            draw.AddText(origin+new Vector2(8*scale),ImGui.GetColorU32(ModernTheme.Gold),global!=null?ReplayMechanicObservation.Caption(global,now):"地图计时器触发");
         }
         foreach(var entry in entries.Where(e=>!e.MapWide&&e.X.HasValue&&e.Z.HasValue)) {
             var uv=Uv(new PlayerPosition { X=entry.X!.Value,Z=entry.Z!.Value }); if(!InMap(uv))continue;
             var point=at(uv);var d=8*scale;var color=ImGui.GetColorU32(ModernTheme.Gold);
             draw.AddTriangleFilled(point+new Vector2(0,-d),point+new Vector2(d,d),point+new Vector2(-d,d),color);
-            if(hovered&&Vector2.Distance(ImGui.GetMousePos(),point)<12*scale)ImGui.SetTooltip(entry.Label+"\n环境动作来源位置；未确认作用范围。");
+            draw.AddText(point+new Vector2(10*scale,-8*scale),color,ReplayMechanicObservation.Caption(entry,now));
+            if(hovered&&Vector2.Distance(ImGui.GetMousePos(),point)<12*scale)ImGui.SetTooltip(ReplayMechanicObservation.SourceDescription(entry));
         }
     }
 }

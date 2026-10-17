@@ -19,8 +19,9 @@ internal sealed partial class MatchReplayWindow {
     private readonly ReplaySceneGeometry _scene=new();
     private bool _disposed,_cameraDirty=true,_followPlayer;
     private string _renderError="";
-    private Vector3 _target3D;
-    private float _yaw3D=.65f,_pitch3D=.85f,_distance3D=190,_radius3D=5;
+    private readonly ReplayOrbitCamera _orbitCamera=new();
+    private int _dragButton=-1;
+    private float _radius3D=5;
     private double _renderAt=-1;
     private float _renderSeconds=-1;
     private Matrix4x4 _projection3D;
@@ -30,8 +31,8 @@ internal sealed partial class MatchReplayWindow {
     private bool _renderFollow;
     private void Reset3DCamera() {
         if(_mesh==null)return;
-        _target3D=(_mesh.Min+_mesh.Max)/2;_target3D.Y=1;
-        _yaw3D=.65f;_pitch3D=.85f;_distance3D=Math.Clamp(Math.Max(_mesh.Max.X-_mesh.Min.X,_mesh.Max.Z-_mesh.Min.Z)*1.05f,70,300);_cameraDirty=true;
+        var target=(_mesh.Min+_mesh.Max)/2;target.Y=1;
+        _orbitCamera.Reset(target,Math.Clamp(Math.Max(_mesh.Max.X-_mesh.Min.X,_mesh.Max.Z-_mesh.Min.Z)*1.05f,70,300));_cameraDirty=true;
     }
     private void Draw3D() {
         var scale=ImGuiHelpers.GlobalScale;
@@ -45,6 +46,11 @@ internal sealed partial class MatchReplayWindow {
         ImGui.SameLine();if(ModernTheme.SmallButton("上一帧###Replay3DPrev")) { StepFrame(-1);_cameraDirty=true; }
         ImGui.SameLine();if(ModernTheme.SmallButton("下一帧###Replay3DNext")) { StepFrame(1);_cameraDirty=true; }
         ImGui.SameLine();ImGui.Checkbox("跟随选中玩家###Replay3DFollow",ref _followPlayer);
+        ImGui.SameLine();ImGui.SetNextItemWidth(105*scale);int mouseMode=_plugin.Configuration.Replay3DOrbitOnLeft?1:0;
+        if(ImGui.Combo("###Replay3DMouseMode",ref mouseMode,new[]{"左键平移","左键旋转"},2)) {
+            _plugin.Configuration.Replay3DOrbitOnLeft=mouseMode==1;_orbitCamera.EndDrag();_dragButton=-1;_plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save);
+        }
+        if(ImGui.IsItemHovered())ImGui.SetTooltip(_plugin.Configuration.Replay3DOrbitOnLeft?"左键旋转，右键平移；滚轮以鼠标位置缩放。":"左键平移，右键旋转；滚轮以鼠标位置缩放。");
         if(_playing) { _seconds=Math.Min(_duration,_seconds+ImGui.GetIO().DeltaTime*new[]{.5f,1,2,4}[_speed]);if(_seconds>=_duration)_playing=false; }
         ImGui.SetNextItemWidth(-1);if(ImGui.SliderFloat("###Replay3DTime",ref _seconds,0,_duration,"%.2f 秒")) { _playing=false;_cameraDirty=true; }
         ImGui.TextUnformatted($"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss} · {_data.Frames.Count:N0} 帧 · 目标采样 {1/_data.SampleIntervalSeconds:F0} 次/秒");
@@ -77,15 +83,23 @@ internal sealed partial class MatchReplayWindow {
         ImGui.InvisibleButton("###Replay3DViewport",size,ImGuiButtonFlags.MouseButtonLeft|ImGuiButtonFlags.MouseButtonRight);
         var hovered=ImGui.IsItemHovered();var io=ImGui.GetIO();
         if(_selected!=_renderSelected||_followPlayer!=_renderFollow)_cameraDirty=true;
-        if(hovered&&io.MouseWheel!=0) { _distance3D=Math.Clamp(_distance3D*MathF.Pow(.85f,io.MouseWheel),12,600);_cameraDirty=true; }
-        if(hovered&&ImGui.IsMouseDragging(ImGuiMouseButton.Left)) { _yaw3D-=io.MouseDelta.X*.008f;_pitch3D=Math.Clamp(_pitch3D+io.MouseDelta.Y*.008f,.12f,1.52f);_cameraDirty=true; }
-        if(hovered&&ImGui.IsMouseDragging(ImGuiMouseButton.Right)) {
-            var right=new Vector3(MathF.Cos(_yaw3D),0,-MathF.Sin(_yaw3D));var ahead=new Vector3(MathF.Sin(_yaw3D),0,MathF.Cos(_yaw3D));
-            _target3D+=(-io.MouseDelta.X*right+io.MouseDelta.Y*ahead)*(_distance3D/Math.Max(100,size.Y));_cameraDirty=true;_followPlayer=false;
+        var mouse=ImGui.GetMousePos()-origin;
+        if(ImGui.IsItemActivated()) {
+            _dragButton=ImGui.IsMouseDown(ImGuiMouseButton.Left)?0:1;
+            bool orbit=_plugin.Configuration.Replay3DOrbitOnLeft? _dragButton==0:_dragButton==1;
+            _orbitCamera.BeginDrag(orbit,mouse,size);
         }
-        if(_followPlayer&&frame?.Players.FirstOrDefault(p=>p.Player==_selected) is {} followed)_target3D=World(followed);
-        var eye=_target3D+new Vector3(MathF.Sin(_yaw3D)*MathF.Cos(_pitch3D),MathF.Sin(_pitch3D),MathF.Cos(_yaw3D)*MathF.Cos(_pitch3D))*_distance3D;
-        var projection=Matrix4x4.CreateLookAt(eye,_target3D,Vector3.UnitY)*Matrix4x4.CreatePerspectiveFieldOfView(.82f,size.X/size.Y,.2f,3000);
+        if(_dragButton>=0&&ImGui.IsItemActive()&&ImGui.IsMouseDragging((ImGuiMouseButton)_dragButton)) {
+            _followPlayer=false;
+            _cameraDirty|=_orbitCamera.Drag(mouse,size);
+        }
+        if(_dragButton>=0&&(!ImGui.IsMouseDown((ImGuiMouseButton)_dragButton)||!ImGui.IsItemActive())) { _orbitCamera.EndDrag();_dragButton=-1; }
+        if(hovered&&io.MouseWheel!=0)_orbitCamera.Zoom(io.MouseWheel,mouse,size);
+        _cameraDirty|=_orbitCamera.Update(io.DeltaTime,size);
+        if(_followPlayer&&!_orbitCamera.Dragging&&frame?.Players.FirstOrDefault(p=>p.Player==_selected) is {} followed) {
+            var target=World(followed);if(target!=_orbitCamera.Target&&_renderSeconds==_seconds)_cameraDirty=true;_orbitCamera.Target=target;
+        }
+        var projection=_orbitCamera.ViewProjection(size);
         try {
             _renderer??=new ReplayGpuRenderer(_plugin.PluginInterface.UiBuilder.DeviceHandle,_mesh);
             float ratio=Math.Min(1,Math.Min(1280/size.X,900/size.Y));int width=Math.Max(64,(int)(size.X*ratio)),height=Math.Max(64,(int)(size.Y*ratio));
@@ -109,8 +123,17 @@ internal sealed partial class MatchReplayWindow {
                     ImGui.SetTooltip(player.Player+"\n"+(job.HasValue?PlayerJobHelper.GetNameFromJob(job.Value):"职业未知"));
                 }
             }
-            if(_showMechanics&&(_data.MapMechanics.Any(e=>e.MapWide&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3))||_timeline.MapEvents?.Any(e=>e.Type==PvpStats.Types.Match.CrystallineConflictMatchEvent.SpecialEvent&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3))==true))
-                draw.AddText(origin+new Vector2(10),ImGui.GetColorU32(ModernTheme.Gold),"地图机制触发 · 计时器观测");
+            if(_showMechanics) {
+                var active=ReplayMechanicObservation.Active(_data.MapMechanics,now).ToArray();
+                var global=active.LastOrDefault(e=>e.MapWide);
+                if(global!=null)draw.AddText(origin+new Vector2(10),ImGui.GetColorU32(ModernTheme.Gold),ReplayMechanicObservation.Caption(global,now));
+                else if(_timeline.MapEvents?.Any(e=>e.Type==PvpStats.Types.Match.CrystallineConflictMatchEvent.SpecialEvent&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3))==true)
+                    draw.AddText(origin+new Vector2(10),ImGui.GetColorU32(ModernTheme.Gold),"地图计时器触发");
+                foreach(var entry in active.Where(e=>!e.MapWide&&e.X.HasValue&&e.Z.HasValue)) {
+                    var point=new Vector3(entry.X!.Value,Height(entry.X.Value,entry.Y,entry.Z!.Value)+2.2f,entry.Z.Value);
+                    if(Project3D(point,origin,size,out var at))draw.AddText(at,ImGui.GetColorU32(ModernTheme.Gold),ReplayMechanicObservation.Caption(entry,now));
+                }
+            }
             } finally { draw.PopClipRect(); }
         } catch(Exception e) { _renderError="三维渲染初始化失败，可重试或使用二维回放。";_plugin.Log.Error(e,"Experimental 3D replay failed.");_renderer?.DisposeAfterFrame(_plugin.PluginInterface.UiBuilder);_renderer=null; }
     }
@@ -139,8 +162,8 @@ internal sealed partial class MatchReplayWindow {
             var at=World(crystal);_scene.Diamond(at+new Vector3(0,.5f,0),1.4f,5.5f,ReplaySceneGeometry.Rgba(.25f,.75f,1));
             _scene.Ring(at+new Vector3(0,.08f,0),_radius3D,.15f,ReplaySceneGeometry.Rgba(.3f,.85f,1));
         }
-        if(_showMechanics)foreach(var e in _data.MapMechanics.Where(e=>!e.MapWide&&e.X.HasValue&&e.Z.HasValue&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3))) {
-            var at=new Vector3(e.X!.Value,_mesh!.EstimatedHeight(e.X.Value,e.Z!.Value),e.Z!.Value);_scene.Diamond(at,.65f,2,ReplaySceneGeometry.Rgba(1,.8f,.2f));
+        if(_showMechanics)foreach(var e in ReplayMechanicObservation.Active(_data.MapMechanics,now).Where(e=>!e.MapWide&&e.X.HasValue&&e.Z.HasValue)) {
+            var at=new Vector3(e.X!.Value,Height(e.X.Value,e.Y,e.Z!.Value),e.Z!.Value);_scene.Diamond(at,.65f,2,ReplaySceneGeometry.Rgba(1,.8f,.2f));
         }
         foreach(var death in _timeline.Kills?.Where(k=>k.Timestamp<=now&&k.Timestamp>=now.AddSeconds(-3))??[]) {
             var p=DetailedAnalysis.FrameAt(_data,death.Timestamp)?.Players.FirstOrDefault(p=>p.Player==death.Victim.ToString());if(p==null)continue;var at=World(p)+new Vector3(0,.1f,0);

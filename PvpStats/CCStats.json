@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.12：新增七张精简地图的实验性 3D 回放，复用走位记录；展示棋子、职业、血量、状态、水晶轨迹与事件。",
+  "Changelog": "0.2.13：重做 3D 地图拖动，默认左键平移、右键旋转，光标位置平滑缩放；补充环境读条与计时器观测。",
   "Tags": [
     "pvp",
     "statistics"
