@@ -3,7 +3,7 @@
     "Author": "HanaSi0 / SaMo",
     "Name": "CCStats",
     "InternalName": "CCStats",
-    "AssemblyVersion": "0.2.14.0",
+    "AssemblyVersion": "0.2.15.0",
     "Description": "记录和查询水晶冲突战绩，支持数据分析、地图回放与国际服榜单。",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/HanaSi0/CCStats",
@@ -18,10 +18,10 @@
     "LoadPriority": 0,
     "IconUrl": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/images/icon.png",
     "Punchline": "水晶冲突战绩工具。",
-    "Changelog": "0.2.14 测试版：设置新增狼狱 LB 采集，支持位置、朝向、状态、本人及召唤物动作记录，按职业保存和批量导出 ZIP。",
+    "Changelog": "0.2.15：3D 回放加入全部职业 LB 与主要后续技能范围；即时效果短暂淡出，持续效果使用淡色；增强玩家朝向箭头。",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.14/latest.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.14/latest.zip",
-    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.14/latest.zip"
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.15/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.15/latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.15/latest.zip"
   }
 ]

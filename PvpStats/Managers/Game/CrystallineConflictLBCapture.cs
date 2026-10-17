@@ -1,0 +1,50 @@
+using System;
+using System.Linq;
+using System.Numerics;
+using System.Collections.Generic;
+using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Objects.SubKinds;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using PvpStats.Analysis;
+namespace PvpStats.Managers.Game;
+internal partial class CrystallineConflictMatchManager {
+    private unsafe void RecordLBSkill(DateTime now,uint sourceId,string actor,Vector3* ground,ActionEffectHandler.Header* header,ActionEffectHandler.TargetEffects* effects,GameObjectId* trail) {
+        var data=_currentMatchTimeline?.Detailed;
+        if(data==null||_currentMatch?.IsCompleted!=false||_scoreboardPayloadReceived||header->ActionType!=1||!LimitBreakVisuals.Contains(header->SpellId))return;
+        var source=_plugin.ObjectTable.SearchByEntityId(sourceId) as IBattleChara;
+        if(source==null||!LimitBreakVisuals.Finite(source.Position))return;
+        var entry=new ReplaySkillEvent { Timestamp=now,ActionId=header->SpellId,Sequence=header->GlobalSequence,Variation=header->AnimationVariation,Actor=actor,
+            X=source.Position.X,Y=source.Position.Y,Z=source.Position.Z,Heading=source.Rotation,Resolved=header->AnimationVariation!=0 };
+        // Ground coordinates are meaningful only for designated-location spells. PCT field is placed at the caster's feet.
+        if(entry.ActionId==39215) { entry.GroundX=source.Position.X;entry.GroundY=source.Position.Y;entry.GroundZ=source.Position.Z; }
+        else if(entry.ActionId is 29266 or 29267 or 29673 or 29678 && ground!=null&&LimitBreakVisuals.Finite(*ground)) {
+            entry.GroundX=ground->X;entry.GroundY=ground->Y;entry.GroundZ=ground->Z;
+        }
+        IBattleChara? primary=null;
+        var statusIds=new HashSet<uint>();
+        if(trail!=null&&effects!=null)for(int i=0;i<Math.Min((int)header->NumTargets,32);i++) {
+            var id=(uint)(trail[i]&uint.MaxValue);
+            var target=_plugin.ObjectTable.SearchByEntityId(id) as IBattleChara;
+            // Prefer the selected target only if actually present in this packet. Never use an unrelated current selection.
+            if(target!=null&&(primary==null||id==(uint)source.TargetObjectId)&&id!=sourceId)primary=target;
+            for(int j=0;j<8;j++) {
+                var effect=effects[i].Effects[j];
+                if((effect.Type==15&&(effect.Param4&128)!=0)||(effect.Type is 14 or 15 && id==sourceId))statusIds.Add(effect.Value);
+                if(effect.Type is 3 or 4)entry.Resolved=true;
+            }
+        }
+        if(primary!=null&&LimitBreakVisuals.Finite(primary.Position)) {
+            entry.TargetX=primary.Position.X;entry.TargetY=primary.Position.Y;entry.TargetZ=primary.Position.Z;
+            if(primary is IPlayerCharacter player)entry.TargetPlayer=player.Name+" "+player.HomeWorld.Value.Name.ToString();
+        }
+        entry.SelfStatusIds=statusIds.ToList();
+        var row=_plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(entry.ActionId);
+        entry.ClientCastType=row.CastType;entry.ClientEffectRange=row.EffectRange;entry.ClientWidth=row.XAxisModifier;
+        lock(_detailedLock) {
+            if(data.ReplaySkills.Count>=8192||data.EstimatedBytes>=DetailedTelemetry.ByteBudget) { data.ReplaySkillsTruncated=true;return; }
+            data.ReplaySkills.Add(entry);
+            data.EstimatedBytes+=512+(entry.Actor.Length+entry.TargetPlayer.Length)*4+entry.SelfStatusIds.Count*8;
+        }
+    }
+}

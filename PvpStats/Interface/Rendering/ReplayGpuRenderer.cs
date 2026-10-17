@@ -24,6 +24,8 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
     private ID3D11InputLayout* _layout;
     private ID3D11RasterizerState* _raster;
     private ID3D11DepthStencilState* _depthState;
+    private ID3D11DepthStencilState* _overlayDepth;
+    private ID3D11BlendState* _overlayBlend;
     private ID3D11Texture2D* _color;
     private ID3D11Texture2D* _depth;
     private ID3D11RenderTargetView* _target;
@@ -61,7 +63,7 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
             fixed(uint* i=mesh.Indices) _mapIndices=Buffer((uint)(mesh.Indices.Length*sizeof(uint)),D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER,i);
             _dynamic=Buffer(MaxDynamicVertices*16,D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER,null,true);
             _camera=Buffer(64,D3D11_BIND_FLAG.D3D11_BIND_CONSTANT_BUFFER,null,true);
-            const string shader="cbuffer Camera:register(b0){row_major float4x4 ViewProjection;} struct V{float3 p:POSITION;float4 c:COLOR;};struct P{float4 p:SV_POSITION;float4 c:COLOR;};P VS(V v){P o;o.p=mul(float4(v.p,1),ViewProjection);o.c=v.c;return o;} float4 PS(P p):SV_TARGET{return float4(p.c.rgb,1);}";
+            const string shader="cbuffer Camera:register(b0){row_major float4x4 ViewProjection;} struct V{float3 p:POSITION;float4 c:COLOR;};struct P{float4 p:SV_POSITION;float4 c:COLOR;};P VS(V v){P o;o.p=mul(float4(v.p,1),ViewProjection);o.c=v.c;return o;} float4 PS(P p):SV_TARGET{return p.c;}";
             ID3DBlob* vs=null;ID3DBlob* ps=null;
             try {
                 vs=Compile(shader,"VS","vs_4_0");ps=Compile(shader,"PS","ps_4_0");
@@ -79,6 +81,13 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
             depth.StencilReadMask=depth.StencilWriteMask=255;
             depth.FrontFace=depth.BackFace=new() { StencilFailOp=D3D11_STENCIL_OP.D3D11_STENCIL_OP_KEEP,StencilDepthFailOp=D3D11_STENCIL_OP.D3D11_STENCIL_OP_KEEP,StencilPassOp=D3D11_STENCIL_OP.D3D11_STENCIL_OP_KEEP,StencilFunc=D3D11_COMPARISON_FUNC.D3D11_COMPARISON_ALWAYS };
             ID3D11DepthStencilState* ds=null;Check(device->CreateDepthStencilState(&depth,&ds));_depthState=ds;
+            depth.DepthWriteMask=D3D11_DEPTH_WRITE_MASK.D3D11_DEPTH_WRITE_MASK_ZERO;
+            ds=null;Check(device->CreateDepthStencilState(&depth,&ds));_overlayDepth=ds;
+            D3D11_BLEND_DESC blend=new();
+            blend.RenderTarget[0]=new D3D11_RENDER_TARGET_BLEND_DESC { BlendEnable=1,
+                SrcBlend=D3D11_BLEND.D3D11_BLEND_SRC_ALPHA,DestBlend=D3D11_BLEND.D3D11_BLEND_INV_SRC_ALPHA,BlendOp=D3D11_BLEND_OP.D3D11_BLEND_OP_ADD,
+                SrcBlendAlpha=D3D11_BLEND.D3D11_BLEND_ONE,DestBlendAlpha=D3D11_BLEND.D3D11_BLEND_INV_SRC_ALPHA,BlendOpAlpha=D3D11_BLEND_OP.D3D11_BLEND_OP_ADD,RenderTargetWriteMask=15 };
+            ID3D11BlendState* bs=null;Check(device->CreateBlendState(&blend,&bs));_overlayBlend=bs;
         } catch { Dispose();throw; }
     }
     private static ID3DBlob* Compile(string source,string entry,string target) {
@@ -114,15 +123,16 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
             Width=width;Height=height;
         } catch { ReleaseTargets();throw; }
     }
-    internal void Render(Matrix4x4 viewProjection,ReadOnlySpan<ReplayVertex> dynamicVertices) {
+    internal void Render(Matrix4x4 viewProjection,ReadOnlySpan<ReplayVertex> dynamicVertices,ReadOnlySpan<ReplayVertex> overlays) {
         ObjectDisposedException.ThrowIf(_disposed,this);
         if(_target==null)return;
-        if(dynamicVertices.Length>MaxDynamicVertices)throw new InvalidOperationException("回放动态图形容量超限。");
+        if(dynamicVertices.Length+overlays.Length>MaxDynamicVertices)throw new InvalidOperationException("回放动态图形容量超限。");
         var ctx=_deferred;ctx->ClearState();D3D11_MAPPED_SUBRESOURCE mapped;
         Check(ctx->Map((ID3D11Resource*)_camera,0,D3D11_MAP.D3D11_MAP_WRITE_DISCARD,0,&mapped));*(Matrix4x4*)mapped.pData=viewProjection;ctx->Unmap((ID3D11Resource*)_camera,0);
-        if(dynamicVertices.Length>0) {
+        if(dynamicVertices.Length+overlays.Length>0) {
             Check(ctx->Map((ID3D11Resource*)_dynamic,0,D3D11_MAP.D3D11_MAP_WRITE_DISCARD,0,&mapped));
-            fixed(ReplayVertex* v=dynamicVertices) System.Buffer.MemoryCopy(v,mapped.pData,MaxDynamicVertices*16,dynamicVertices.Length*16);ctx->Unmap((ID3D11Resource*)_dynamic,0);
+            fixed(ReplayVertex* v=dynamicVertices) System.Buffer.MemoryCopy(v,mapped.pData,MaxDynamicVertices*16,dynamicVertices.Length*16);
+            fixed(ReplayVertex* v=overlays) System.Buffer.MemoryCopy(v,(byte*)mapped.pData+dynamicVertices.Length*16,(MaxDynamicVertices-dynamicVertices.Length)*16,overlays.Length*16);ctx->Unmap((ID3D11Resource*)_dynamic,0);
         }
         float* clear=stackalloc float[] {.035f,.05f,.085f,1};ctx->ClearRenderTargetView(_target,clear);ctx->ClearDepthStencilView(_depthView,(uint)D3D11_CLEAR_FLAG.D3D11_CLEAR_DEPTH,1,0);
         var target=_target;ctx->OMSetRenderTargets(1,&target,_depthView);ctx->OMSetDepthStencilState(_depthState,0);
@@ -131,6 +141,10 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
         ctx->VSSetShader(_vs,null,0);ctx->PSSetShader(_ps,null,0);var camera=_camera;ctx->VSSetConstantBuffers(0,1,&camera);
         uint stride=16,offset=0;var buffer=_mapVertices;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->IASetIndexBuffer(_mapIndices,DXGI_FORMAT.DXGI_FORMAT_R32_UINT,0);ctx->DrawIndexed(_indexCount,0,0);
         if(dynamicVertices.Length>0) { buffer=_dynamic;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->Draw((uint)dynamicVertices.Length,0); }
+        if(overlays.Length>0) {
+            ctx->OMSetDepthStencilState(_overlayDepth,0);ctx->OMSetBlendState(_overlayBlend,null,uint.MaxValue);
+            buffer=_dynamic;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->Draw((uint)overlays.Length,(uint)dynamicVertices.Length);
+        }
         ID3D11CommandList* command=null;
         try { Check(ctx->FinishCommandList(0,&command));_immediate->ExecuteCommandList(command,1); }
         finally { Release(ref command); }
@@ -139,6 +153,6 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
     public void Dispose() {
         if(_disposed)return;_disposed=true;
         if(_deferred!=null)_deferred->ClearState();ReleaseTargets();
-        Release(ref _mapVertices);Release(ref _mapIndices);Release(ref _dynamic);Release(ref _camera);Release(ref _vs);Release(ref _ps);Release(ref _layout);Release(ref _raster);Release(ref _depthState);Release(ref _deferred);Release(ref _immediate);Release(ref _device);
+        Release(ref _mapVertices);Release(ref _mapIndices);Release(ref _dynamic);Release(ref _camera);Release(ref _vs);Release(ref _ps);Release(ref _layout);Release(ref _raster);Release(ref _depthState);Release(ref _overlayDepth);Release(ref _overlayBlend);Release(ref _deferred);Release(ref _immediate);Release(ref _device);
     }
 }

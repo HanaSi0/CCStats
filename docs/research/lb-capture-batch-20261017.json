@@ -1,0 +1,347 @@
+{
+  "archive_sha256": "bd65f1f0220361ea736ea01de00334c2867aec458ed2c89e1fc5bb856d161455",
+  "source": "User-provided Wolves Den capture; no character names or entity IDs retained in this report.",
+  "sessions": [
+    {
+      "job_id": 24,
+      "job_name": "白魔法师",
+      "frames": 261,
+      "action_events": 2,
+      "observed_seconds": 9.654,
+      "observed_position_hz": 26.93,
+      "max_frame_gap_ms": 45.66,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 29230,
+          "name": "ハート・オブ・パーゲーション",
+          "castType": 4,
+          "effectRange": 40,
+          "xAxisModifier": 6,
+          "range": 40
+        }
+      ],
+      "lb_action_ids": [
+        29230
+      ]
+    },
+    {
+      "job_id": 32,
+      "job_name": "暗黑骑士",
+      "frames": 494,
+      "action_events": 4,
+      "observed_seconds": 18.097,
+      "observed_position_hz": 27.24,
+      "max_frame_gap_ms": 42.91,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 29097,
+          "name": "イーブンタイド",
+          "castType": 4,
+          "effectRange": 30,
+          "xAxisModifier": 6,
+          "range": 0
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 41437,
+          "name": "ディセスティーム",
+          "castType": 4,
+          "effectRange": 10,
+          "xAxisModifier": 4,
+          "range": 10
+        }
+      ],
+      "lb_action_ids": [
+        29097
+      ]
+    },
+    {
+      "job_id": 39,
+      "job_name": "钐镰客",
+      "frames": 490,
+      "action_events": 16,
+      "observed_seconds": 18.572,
+      "observed_position_hz": 26.33,
+      "max_frame_gap_ms": 42.91,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 29553,
+          "name": "レムール・テネブレー",
+          "castType": 2,
+          "effectRange": 10,
+          "xAxisModifier": 0,
+          "range": 0
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 29543,
+          "name": "ヴォイドリーパー",
+          "castType": 1,
+          "effectRange": 0,
+          "xAxisModifier": 0,
+          "range": 5
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 29544,
+          "name": "クロスリーパー",
+          "castType": 1,
+          "effectRange": 0,
+          "xAxisModifier": 0,
+          "range": 5
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 29548,
+          "name": "レムールサイズ",
+          "castType": 3,
+          "effectRange": 8,
+          "xAxisModifier": 0,
+          "range": 8
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 29554,
+          "name": "コムニオ",
+          "castType": 2,
+          "effectRange": 5,
+          "xAxisModifier": 0,
+          "range": 25
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 41458,
+          "name": "ペルフェクティオ",
+          "castType": 2,
+          "effectRange": 5,
+          "xAxisModifier": 0,
+          "range": 25
+        }
+      ],
+      "lb_action_ids": [
+        29553
+      ]
+    },
+    {
+      "job_id": 42,
+      "job_name": "绘灵法师",
+      "frames": 585,
+      "action_events": 5,
+      "observed_seconds": 22.071,
+      "observed_position_hz": 26.46,
+      "max_frame_gap_ms": 42.63,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 39215,
+          "name": "ウォール・オブ・ファット",
+          "castType": 2,
+          "effectRange": 8,
+          "xAxisModifier": 0,
+          "range": 0
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 39216,
+          "name": "スタープリズム",
+          "castType": 2,
+          "effectRange": 5,
+          "xAxisModifier": 0,
+          "range": 25
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 39217,
+          "name": "スタープリズム",
+          "castType": 2,
+          "effectRange": 30,
+          "xAxisModifier": 0,
+          "range": 100
+        }
+      ],
+      "lb_action_ids": [
+        39215
+      ]
+    },
+    {
+      "job_id": 34,
+      "job_name": "武士",
+      "frames": 168,
+      "action_events": 2,
+      "observed_seconds": 6.723,
+      "observed_position_hz": 24.84,
+      "max_frame_gap_ms": 45.14,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 29537,
+          "name": "斬鉄剣",
+          "castType": 2,
+          "effectRange": 5,
+          "xAxisModifier": 0,
+          "range": 20
+        }
+      ],
+      "lb_action_ids": [
+        29537
+      ]
+    },
+    {
+      "job_id": 22,
+      "job_name": "龙骑士",
+      "frames": 263,
+      "action_events": 4,
+      "observed_seconds": 9.912,
+      "observed_position_hz": 26.43,
+      "max_frame_gap_ms": 42.51,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 29497,
+          "name": "スカイハイ",
+          "castType": 1,
+          "effectRange": 0,
+          "xAxisModifier": 0,
+          "range": 0
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 29498,
+          "name": "スカイシャッター",
+          "castType": 2,
+          "effectRange": 10,
+          "xAxisModifier": 0,
+          "range": 0
+        }
+      ],
+      "lb_action_ids": [
+        29497,
+        29498
+      ]
+    },
+    {
+      "job_id": 31,
+      "job_name": "机工士",
+      "frames": 186,
+      "action_events": 2,
+      "observed_seconds": 7.132,
+      "observed_position_hz": 25.94,
+      "max_frame_gap_ms": 41.34,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 29415,
+          "name": "魔弾の射手",
+          "castType": 1,
+          "effectRange": 0,
+          "xAxisModifier": 0,
+          "range": 50
+        }
+      ],
+      "lb_action_ids": [
+        29415
+      ]
+    },
+    {
+      "job_id": 23,
+      "job_name": "吟游诗人",
+      "frames": 871,
+      "action_events": 4,
+      "observed_seconds": 35.021,
+      "observed_position_hz": 24.84,
+      "max_frame_gap_ms": 132.26,
+      "metadata": [
+        {
+          "kind": "actionMetadata",
+          "actionId": 29401,
+          "name": "英雄のファンタジア",
+          "castType": 1,
+          "effectRange": 0,
+          "xAxisModifier": 0,
+          "range": 0
+        },
+        {
+          "kind": "actionMetadata",
+          "actionId": 41467,
+          "name": "英雄のアンコール",
+          "castType": 2,
+          "effectRange": 5,
+          "xAxisModifier": 0,
+          "range": 25
+        }
+      ],
+      "lb_action_ids": [
+        29401
+      ]
+    }
+  ],
+  "total_frames": 3318,
+  "total_action_events": 39,
+  "unique_actions": 18,
+  "covered_jobs": 8,
+  "missing_jobs": [
+    {
+      "id": 19,
+      "name": "骑士"
+    },
+    {
+      "id": 21,
+      "name": "战士"
+    },
+    {
+      "id": 37,
+      "name": "绝枪战士"
+    },
+    {
+      "id": 28,
+      "name": "学者"
+    },
+    {
+      "id": 33,
+      "name": "占星术士"
+    },
+    {
+      "id": 40,
+      "name": "贤者"
+    },
+    {
+      "id": 20,
+      "name": "武僧"
+    },
+    {
+      "id": 30,
+      "name": "忍者"
+    },
+    {
+      "id": 41,
+      "name": "蝰蛇剑士"
+    },
+    {
+      "id": 38,
+      "name": "舞者"
+    },
+    {
+      "id": 25,
+      "name": "黑魔法师"
+    },
+    {
+      "id": 27,
+      "name": "召唤师"
+    },
+    {
+      "id": 35,
+      "name": "赤魔法师"
+    }
+  ],
+  "limitations": [
+    "Single release or central dummy hit does not verify AoE boundary, linear width convention or cone angle.",
+    "Recipient status-effect packet entries can represent application attempts or resistance; do not assume all crowd control succeeds on training dummies.",
+    "Zero ground target coordinates observed in non-ground-targeted actions must not be treated as an actual world-origin impact.",
+    "WHM first sample duplicated from earlier upload; not a second independent trial.",
+    "Some post-LB statuses remain at capture stop; durations are right-censored, not shortened effects.",
+    "BRD self-centered buff radius requires official descriptions or party-member tests; action metadata radius zero is not evidence of no party aura."
+  ]
+}

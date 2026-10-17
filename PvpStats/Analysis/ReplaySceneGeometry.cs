@@ -8,7 +8,7 @@ public sealed class ReplaySceneGeometry {
     private readonly List<ReplayVertex> _vertices=new(16384);
     public ReadOnlySpan<ReplayVertex> Vertices => System.Runtime.InteropServices.CollectionsMarshal.AsSpan(_vertices);
     public void Clear()=>_vertices.Clear();
-    public static uint Rgba(float r,float g,float b) => (uint)(Math.Clamp(r,0,1)*255)|((uint)(Math.Clamp(g,0,1)*255)<<8)|((uint)(Math.Clamp(b,0,1)*255)<<16)|0xff000000;
+    public static uint Rgba(float r,float g,float b,float alpha=1) => (uint)(Math.Clamp(r,0,1)*255)|((uint)(Math.Clamp(g,0,1)*255)<<8)|((uint)(Math.Clamp(b,0,1)*255)<<16)|((uint)(Math.Clamp(alpha,0,1)*255)<<24);
     public void Triangle(Vector3 a,Vector3 b,Vector3 c,uint color) { _vertices.Add(new(a,color));_vertices.Add(new(b,color));_vertices.Add(new(c,color)); }
     public void Ribbon(Vector3 a,Vector3 b,float width,uint color) {
         var axis=b-a;var right=new Vector3(-axis.Z,0,axis.X);if(right.LengthSquared()<.00001f)return;
@@ -46,7 +46,14 @@ public sealed class ReplaySceneGeometry {
         if(dead) { Ribbon(at+new Vector3(-.7f,.25f,-.7f),at+new Vector3(.7f,.25f,.7f),.22f,Rgba(1,.2f,.2f));Ribbon(at+new Vector3(-.7f,.25f,.7f),at+new Vector3(.7f,.25f,-.7f),.22f,Rgba(1,.2f,.2f));return; }
         Cylinder(at+new Vector3(0,.2f,0),.5f,1.3f,color);Diamond(at+new Vector3(0,1.45f,0),.58f,1.25f,color);
         var direction=new Vector3(MathF.Sin(heading),0,MathF.Cos(heading));var side=new Vector3(direction.Z,0,-direction.X);
-        var ground=at+new Vector3(0,.1f,0);Triangle(ground+direction*2,ground+direction*.9f+side*.4f,ground+direction*.9f-side*.4f,color);
+        var ground=at+new Vector3(0,.16f,0);
+        // Bright arrow outside the pawn silhouette, with a dark backing and visible shaft.
+        var outline=Rgba(.025f,.03f,.05f);var arrow=Rgba(1,.9f,.4f);
+        Triangle(ground+direction*3.25f,ground+direction*1.55f+side*.8f,ground+direction*1.55f-side*.8f,outline);
+        Ribbon(ground+direction*.85f,ground+direction*2.05f,.48f,outline);
+        var raised=ground+new Vector3(0,.025f,0);
+        Triangle(raised+direction*3.05f,raised+direction*1.7f+side*.57f,raised+direction*1.7f-side*.57f,arrow);
+        Ribbon(raised+direction*1,raised+direction*2,.25f,arrow);
         if(selected)Ring(ground,1.25f,.15f,Rgba(1,.8f,.25f));
     }
 }

@@ -17,6 +17,9 @@ internal sealed partial class MatchReplayWindow {
     private ReplayMapMesh? _mesh;
     private ReplayGpuRenderer? _renderer;
     private readonly ReplaySceneGeometry _scene=new();
+    private readonly ReplaySceneGeometry _lbOverlay=new();
+    private bool _showLB=true;
+    private System.Collections.Generic.List<ReplaySkillEvent>? _lbEvents;
     private bool _disposed,_cameraDirty=true,_followPlayer;
     private string _renderError="";
     private readonly ReplayOrbitCamera _orbitCamera=new();
@@ -56,6 +59,8 @@ internal sealed partial class MatchReplayWindow {
         ImGui.TextUnformatted($"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss} · {_data.Frames.Count:N0} 帧 · 目标采样 {1/_data.SampleIntervalSeconds:F0} 次/秒");
         ImGui.SameLine();ImGui.Checkbox("水晶轨迹###Replay3DTrail",ref _showCrystalTrail);if(ImGui.IsItemEdited())_cameraDirty=true;
         ImGui.SameLine();ImGui.Checkbox("地图事件###Replay3DEvents",ref _showMechanics);if(ImGui.IsItemEdited())_cameraDirty=true;
+        ImGui.SameLine();if(ImGui.Checkbox("极限技范围###Replay3DLB",ref _showLB))_cameraDirty=true;
+        if(ImGui.IsItemHovered())ImGui.SetTooltip("浅蓝为增益，浅红为伤害或控制；即时效果短暂淡出，持续区域保留淡色。扇形角度、南十字宽度及黄昏双向长度为参考；旧记录缺少落点时不补画。");
         ImGui.SameLine();ImGui.SetNextItemWidth(76*scale);if(ImGui.DragFloat("水晶参考圈###Replay3DRadius",ref _radius3D,.1f,1,12,"%.1f"))_cameraDirty=true;
         if(ImGui.IsItemHovered())ImGui.SetTooltip("参考半径默认 5 游戏单位，尚未验证为服务器实际判定半径。");
         if(_data.MovementDownsampled)ImGui.TextDisabled("此记录已降低采样密度；不补造缺失观测。");
@@ -105,7 +110,7 @@ internal sealed partial class MatchReplayWindow {
             float ratio=Math.Min(1,Math.Min(1280/size.X,900/size.Y));int width=Math.Max(64,(int)(size.X*ratio)),height=Math.Max(64,(int)(size.Y*ratio));
             if(_renderer.Width!=width||_renderer.Height!=height) { _renderer.Resize(width,height);_cameraDirty=true; }
             if(_cameraDirty||!_has3DFrame||(_renderSeconds!=_seconds&&ImGui.GetTime()-_renderAt>=1.0/30)) {
-                Build3DScene(frame,now);_renderer.Render(projection,_scene.Vertices);_renderAt=ImGui.GetTime();_renderSeconds=_seconds;_projection3D=projection;_renderedFrame=frame;_has3DFrame=true;_cameraDirty=false;_renderSelected=_selected;_renderFollow=_followPlayer;
+                Build3DScene(frame,now);BuildLBOverlay(frame,now);_renderer.Render(projection,_scene.Vertices,_lbOverlay.Vertices);_renderAt=ImGui.GetTime();_renderSeconds=_seconds;_projection3D=projection;_renderedFrame=frame;_has3DFrame=true;_cameraDirty=false;_renderSelected=_selected;_renderFollow=_followPlayer;
             }
             var draw=ImGui.GetWindowDrawList();draw.AddImage(_renderer.Texture,origin,origin+size);
             draw.PushClipRect(origin,origin+size,true);
@@ -168,6 +173,45 @@ internal sealed partial class MatchReplayWindow {
         foreach(var death in _timeline.Kills?.Where(k=>k.Timestamp<=now&&k.Timestamp>=now.AddSeconds(-3))??[]) {
             var p=DetailedAnalysis.FrameAt(_data,death.Timestamp)?.Players.FirstOrDefault(p=>p.Player==death.Victim.ToString());if(p==null)continue;var at=World(p)+new Vector3(0,.1f,0);
             _scene.Ribbon(at+new Vector3(-1,0,-1),at+new Vector3(1,0,1),.3f,ReplaySceneGeometry.Rgba(1,.15f,.2f));_scene.Ribbon(at+new Vector3(-1,0,1),at+new Vector3(1,0,-1),.3f,ReplaySceneGeometry.Rgba(1,.15f,.2f));
+        }
+    }
+    private void BuildLBOverlay(MovementFrame? frame,DateTime now) {
+        _lbOverlay.Clear();if(!_showLB)return;
+        if(_lbEvents==null) {
+            _lbEvents=new(_data.ReplaySkills);
+            // Legacy timelines lack exact cast poses and ground destinations. Only use a nearby, past recorded pose.
+            foreach(var action in (_timeline.LimitBreakCasts??[]).Concat(_timeline.LimitBreakEffects??[])) {
+                if(_data.ReplaySkills.Any(e=>e.ActionId==action.ActionId&&e.Actor==action.Actor.ToString()&&Math.Abs((e.Timestamp-action.Timestamp).TotalSeconds)<2))continue;
+                if(action.NameIdActor.HasValue)continue; // Pet position cannot be replaced with its owner's position.
+                var observed=DetailedAnalysis.FrameAt(_data,action.Timestamp);
+                if(observed==null||action.Timestamp<observed.Timestamp||(action.Timestamp-observed.Timestamp).TotalSeconds>_data.FrameGapSeconds)continue;
+                var player=observed.Players.FirstOrDefault(p=>p.Player==action.Actor.ToString());if(player==null)continue;
+                var e=new ReplaySkillEvent { Timestamp=action.Timestamp,ActionId=action.ActionId,Actor=action.Actor.ToString(),
+                    X=player.X,Y=Height(player.X,player.Y,player.Z),Z=player.Z,Heading=player.Heading,LegacyEstimate=true,Resolved=action.Variation!=0 };
+                if(action.PlayerTargets.Count==1) {
+                    var target=observed.Players.FirstOrDefault(p=>p.Player==action.PlayerTargets[0].ToString());
+                    if(target!=null) { e.TargetX=target.X;e.TargetY=Height(target.X,target.Y,target.Z);e.TargetZ=target.Z;e.TargetPlayer=target.Player; }
+                }
+                _lbEvents.Add(e);
+            }
+            _lbEvents.Sort((a,b)=>a.Timestamp.CompareTo(b.Timestamp));
+        }
+        foreach(var (e,rule) in LimitBreakVisuals.Active(_lbEvents,frame,now)) {
+            if(!LimitBreakVisuals.Center(rule,e,out var at))continue;
+            var source=new Vector3(e.X,e.Y,e.Z);
+            if(!e.Resolved&&rule.Shape==LbShape.Single) {
+                var caster=frame?.Players.FirstOrDefault(p=>p.Player==e.Actor);if(caster!=null)source=World(caster);
+                var target=frame?.Players.FirstOrDefault(p=>p.Player==e.TargetPlayer);if(target!=null)at=World(target);
+            }
+            float opacity=LimitBreakVisuals.Opacity(rule,e,now);if(opacity<=0)continue;
+            if(rule.Anchor==LbAnchor.Source&&rule.Duration>1.5f) {
+                var moving=frame?.Players.FirstOrDefault(p=>p.Player==e.Actor);
+                if(moving==null)continue;at=World(moving);
+            }
+            // Skill footprints use one consistent caster/impact elevation offset, draped to mesh height for slopes.
+            var terrainOffset=at.Y-(_mesh?.EstimatedHeight(at.X,at.Z)??0);
+            LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity);
+            if(_lbOverlay.Vertices.Length>65000)break;
         }
     }
     public void Dispose() {

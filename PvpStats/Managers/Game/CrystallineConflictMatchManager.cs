@@ -517,6 +517,8 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
                 }
             }
 
+            if(actorAlias != null) RecordLBSkill(now,casterEntityId,actorAlias.ToString(),targetPos,effectHeader,effectArray,effectTrail);
+
             if(CombatHelper.IsLimitBreak(actionId) && actionEvent != null) {
                 if(!_plugin.DebugMode) {
                     Plugin.Log2.Debug($"{actor?.Name} cast {spell.Name} {actionId} targets: {targets} display: {effectHeader->ActionType} " +

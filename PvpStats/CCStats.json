@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.14 测试版：设置新增狼狱 LB 采集，支持位置、朝向、状态、本人及召唤物动作记录，按职业保存和批量导出 ZIP。",
+  "Changelog": "0.2.15：3D 回放加入全部职业 LB 与主要后续技能范围；即时效果短暂淡出，持续效果使用淡色；增强玩家朝向箭头。",
   "Tags": [
     "pvp",
     "statistics"
