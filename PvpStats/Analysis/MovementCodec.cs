@@ -6,18 +6,19 @@ using System.Linq;
 using System.Text;
 namespace PvpStats.Analysis;
 public static class MovementCodec {
-    public const int MaxFrames=24000;
-    public const int RawBudget=16*1024*1024;
+    public const int MaxFrames=36000;
+    public const int RawBudget=24*1024*1024;
     public static byte[] Encode(IReadOnlyList<MovementFrame> frames) {
         if(frames.Count>MaxFrames)throw new InvalidDataException("Too many movement frames.");
         using var raw=new MemoryStream();
         using(var w=new BinaryWriter(raw,Encoding.UTF8,true)) {
-            w.Write(0x43434D31); w.Write(frames.Count);
+            w.Write(0x43434D32); w.Write(frames.Count);
             var names=frames.SelectMany(f=>f.Players).SelectMany(p=>new[]{p.Player}.Concat(p.Controls.Select(s=>s.Source))).Where(s=>s.Length>0).Distinct().ToArray();
             if(names.Length>512)throw new InvalidDataException("Too many identities.");
             var indices=names.Select((s,i)=>(s,i)).ToDictionary(p=>p.s,p=>(ushort)p.i);
             w.Write((ushort)names.Length); foreach(var name in names) { if(name.Length>256)throw new InvalidDataException("Identity too long."); w.Write(name); }
             var origin=frames.FirstOrDefault()?.Timestamp??DateTime.UnixEpoch; w.Write(origin.ToBinary());
+            var snapshots=new Dictionary<string,PlayerPosition>();
             foreach(var f in frames) {
                 if(f.Players.Count>10)throw new InvalidDataException("Invalid player count.");
                 w.Write(f.Timestamp.Ticks-origin.Ticks); w.Write(f.CrystalProgress); w.Write(f.AstraProgress); w.Write(f.UmbraProgress);
@@ -27,11 +28,20 @@ public static class MovementCodec {
                     if(p.Controls.Count>32)throw new InvalidDataException("Too many control statuses.");
                     w.Write(indices[p.Player]); w.Write((byte)p.Team); w.Write(p.X); w.Write(p.Z); w.Write(p.Heading); w.Write(p.HP); w.Write(p.MaxHP); w.Write((byte)p.Controls.Count);
                     foreach(var s in p.Controls) { w.Write(s.StatusId); w.Write(indices.GetValueOrDefault(s.Source,ushort.MaxValue)); w.Write(s.Remaining); }
+                    w.Write(p.ClassJobId);
+                    var changed=!snapshots.TryGetValue(p.Player,out var prior) || prior.StatusTimestamp!=p.StatusTimestamp || (p.Statuses.Count>0&&!ReferenceEquals(prior.Statuses,p.Statuses)) || prior.Statuses.Count!=p.Statuses.Count;
+                    w.Write(changed);
+                    if(changed) {
+                        if(p.Statuses.Count>60)throw new InvalidDataException("Too many replay statuses.");
+                        w.Write(p.StatusTimestamp.ToBinary()); w.Write((byte)p.Statuses.Count);
+                        foreach(var status in p.Statuses) { w.Write(status.Id); w.Write(status.Param); w.Write(status.Remaining); }
+                        snapshots[p.Player]=p;
+                    }
                 }
             }
         }
         if(raw.Length>RawBudget)throw new InvalidDataException("Movement payload is too large.");
-        using var output=new MemoryStream(); using(var zip=new GZipStream(output,CompressionLevel.Fastest,true)) raw.WriteTo(zip);
+        using var output=new MemoryStream(); using(var zip=new GZipStream(output,CompressionLevel.Optimal,true)) raw.WriteTo(zip);
         return output.ToArray();
     }
     public static List<MovementFrame> Decode(byte[] packed) {
@@ -39,7 +49,10 @@ public static class MovementCodec {
         using var raw=new MemoryStream(); var buffer=new byte[8192]; int read;
         while((read=zip.Read(buffer))>0) { if(raw.Length+read>RawBudget)throw new InvalidDataException("Movement payload is too large."); raw.Write(buffer,0,read); }
         raw.Position=0; using var r=new BinaryReader(raw,Encoding.UTF8);
-        if(r.ReadInt32()!=0x43434D31)throw new InvalidDataException("Unsupported movement payload.");
+        var magic=r.ReadInt32();
+        if(magic!=0x43434D31&&magic!=0x43434D32)throw new InvalidDataException("Unsupported movement payload.");
+        var extended=magic==0x43434D32;
+        var snapshots=new Dictionary<string,PlayerPosition>();
         var count=r.ReadInt32(); if(count<0||count>MaxFrames)throw new InvalidDataException("Invalid frame count.");
         var namesCount=r.ReadUInt16(); if(namesCount>512)throw new InvalidDataException("Invalid roster count.");
         var names=new string[namesCount]; for(int i=0;i<names.Length;i++) { names[i]=r.ReadString(); if(names[i].Length>256)throw new InvalidDataException("Identity too long."); }
@@ -53,6 +66,17 @@ public static class MovementCodec {
                 var p=new PlayerPosition { Player=Name(r.ReadUInt16()),Team=r.ReadByte(),X=r.ReadSingle(),Z=r.ReadSingle(),Heading=r.ReadSingle(),HP=r.ReadUInt32(),MaxHP=r.ReadUInt32() };
                 var controls=r.ReadByte(); if(controls>32)throw new InvalidDataException("Invalid status count.");
                 for(int k=0;k<controls;k++)p.Controls.Add(new() { StatusId=r.ReadUInt32(),Source=Name(r.ReadUInt16()),Remaining=r.ReadSingle() });
+                if(extended) {
+                    p.ClassJobId=r.ReadUInt32();
+                    if(r.ReadBoolean()) {
+                        p.StatusTimestamp=DateTime.FromBinary(r.ReadInt64()); var statuses=r.ReadByte();
+                        if(statuses>60)throw new InvalidDataException("Invalid replay status count.");
+                        for(int k=0;k<statuses;k++)p.Statuses.Add(new() { Id=r.ReadUInt32(),Param=r.ReadUInt16(),Remaining=r.ReadSingle() });
+                        snapshots[p.Player]=p;
+                    } else if(snapshots.TryGetValue(p.Player,out var previous)) {
+                        p.StatusTimestamp=previous.StatusTimestamp; p.Statuses=previous.Statuses;
+                    } else throw new InvalidDataException("Missing replay status snapshot.");
+                }
                 f.Players.Add(p);
             }
             if(frames.Count>0 && f.Timestamp<frames[^1].Timestamp)throw new InvalidDataException("Unordered movement samples.");

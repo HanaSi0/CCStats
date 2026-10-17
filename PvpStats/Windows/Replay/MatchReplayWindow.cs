@@ -15,7 +15,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PvpStats.Windows.Replay;
-internal sealed class MatchReplayWindow : Window {
+internal sealed partial class MatchReplayWindow : Window {
     private readonly Plugin _plugin;
     private readonly CrystallineConflictMatch _match;
     private readonly CrystallineConflictMatchTimeline _timeline;
@@ -24,7 +24,7 @@ internal sealed class MatchReplayWindow : Window {
     private readonly float _duration;
     private readonly Vector2 _min, _span;
     private readonly MapCamera _camera=new();
-    private bool _showInfo=true;
+    private bool _showInfo=true, _showCrystalTrail=true, _showMechanics=true;
     private Vector2 _lastWindowSize;
     private float _seconds;
     private int _speed = 1;
@@ -41,7 +41,7 @@ internal sealed class MatchReplayWindow : Window {
         var max=points.Length==0 ? new Vector2(100,100) : new Vector2(points.Max(p=>p.X)+10,points.Max(p=>p.Z)+10);
         var extent=Math.Max(max.X-_min.X,max.Y-_min.Y);
         _span=new(Math.Max(1,extent));
-        _camera.Fit(points.Select(Uv));
+        _camera.Fit(points.Select(Uv).Concat(_data.Frames.Where(f=>f.Crystal!=null).Select(f=>Uv(new PlayerPosition { X=f.Crystal!.X,Z=f.Crystal.Z }))));
         IsOpen=true;
     }
     public override void PreDraw() => WindowChrome.Constrain(this);
@@ -70,15 +70,22 @@ internal sealed class MatchReplayWindow : Window {
         ImGui.SameLine(); if(ModernTheme.Button("重置视角###MapFit"))_camera.Reset();
         ImGui.SameLine(); if(ModernTheme.Button("完整地图###MapFull"))_camera.FullMap();
         ImGui.SameLine(); ImGui.TextDisabled($"{_camera.Zoom:F1}× · 滚轮缩放，左键拖动地图");
+        ImGui.Checkbox("水晶轨迹###CrystalTrail",ref _showCrystalTrail); ImGui.SameLine();
+        ImGui.Checkbox("地图事件###MapMechanics",ref _showMechanics);
+        ImGui.SameLine(); if(ModernTheme.SmallButton("上一帧###ReplayPrevious"))StepFrame(-1);
+        ImGui.SameLine(); if(ModernTheme.SmallButton("下一帧###ReplayNext"))StepFrame(1);
         if(_playing) { _seconds=Math.Min(_duration,_seconds+ImGui.GetIO().DeltaTime*new[]{.5f,1,2,4}[_speed]); if(_seconds>=_duration)_playing=false; }
         ImGui.SetNextItemWidth(-1);
-        if(ImGui.SliderFloat("###ReplayTime",ref _seconds,0,_duration,"%.1f 秒")) _playing=false;
+        if(ImGui.SliderFloat("###ReplayTime",ref _seconds,0,_duration,"%.2f 秒")) _playing=false;
         var now=_origin.AddSeconds(_seconds);
         ImGui.TextUnformatted($"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss}  ·  {_data.Frames.Count:N0} 帧");
         var frame=DetailedAnalysis.FrameAt(_data,now);
         var available=ImGui.GetContentRegionAvail();
-        var side=Math.Max(100*scale,Math.Min(available.X-(_showInfo?Math.Min(260*scale,available.X*.28f)+16*scale:0),available.Y-46*scale));
-        using(var canvas=ImRaii.Child("ReplayMap",new Vector2(side+8*scale,0),false)) {
+        var flank=_showInfo?Math.Clamp(available.X*.22f,150*scale,220*scale):0;
+        var mapWidth=Math.Max(1,available.X-(_showInfo?2*(flank+ImGui.GetStyle().ItemSpacing.X):0));
+        var side=Math.Max(1,Math.Min(mapWidth,available.Y-46*scale));
+        if(_showInfo) { DrawTeamPanel(1,frame,now,new Vector2(flank,0)); ImGui.SameLine(); }
+        using(var canvas=ImRaii.Child("ReplayMap",new Vector2(mapWidth,0),false)) {
             if(canvas) {
                 var origin=ImGui.GetCursorScreenPos(); var draw=ImGui.GetWindowDrawList();
                 ImGui.InvisibleButton("###ReplayCanvas",new Vector2(side));
@@ -97,6 +104,8 @@ internal sealed class MatchReplayWindow : Window {
                     draw.AddLine(At(new Vector2(i/8f,0)),At(new Vector2(i/8f,1)),color);
                     draw.AddLine(At(new Vector2(0,i/8f)),At(new Vector2(1,i/8f)),color);
                 }
+                if(_showCrystalTrail) DrawCrystalTrail(draw,At,now,scale);
+                if(_showMechanics) DrawMechanics(draw,At,origin,side,now,scale,hovered);
                 if(frame!=null) {
                     if(_selected.Length>0) {
                         PlayerPosition? previous=null; DateTime? previousTime=null;
@@ -113,11 +122,20 @@ internal sealed class MatchReplayWindow : Window {
                         var uv=Uv(p); if(!InMap(uv))continue;
                         var at=At(uv);
                         var color=p.HP==0?new Vector4(.55f,.55f,.58f,1):p.Team==1?new Vector4(.20f,.75f,1,1):new Vector4(1,.35f,.42f,1);
-                        draw.AddCircleFilled(at,5*scale,ImGui.GetColorU32(color));
-                        draw.AddLine(at,at+new Vector2(MathF.Sin(p.Heading),MathF.Cos(p.Heading))*12*scale,ImGui.GetColorU32(color),1.5f*scale);
-                        if(p.Player==_selected)draw.AddCircle(at,9*scale,ImGui.GetColorU32(ModernTheme.Gold),0,2*scale);
-                        if(Vector2.Distance(ImGui.GetMousePos(),at)<10*scale && hovered) {
-                            ImGui.SetTooltip($"{p.Player}\n体力 {p.HP:N0}/{p.MaxHP:N0}\n世界坐标 {p.X:F1}, {p.Z:F1}");
+                        draw.AddCircleFilled(at,10*scale,ImGui.GetColorU32(color));
+                        var job=ReplayJob(p);
+                        if(job is {} knownJob&&TextureHelper.JobIcons.TryGetValue(knownJob,out var jobIcon)) {
+                            var half=new Vector2(8*scale);
+                            draw.AddImage(_plugin.WindowManager.GetTextureHandle(jobIcon),at-half,at+half);
+                            if(p.HP==0)draw.AddRectFilled(at-half,at+half,ImGui.GetColorU32(new Vector4(.15f,.15f,.18f,.7f)));
+                        }
+                        // Direction extends outside the icon so it remains readable at small sizes.
+                        var heading=new Vector2(MathF.Sin(p.Heading),MathF.Cos(p.Heading));
+                        draw.AddLine(at+heading*11*scale,at+heading*20*scale,ImGui.GetColorU32(new Vector4(.03f,.03f,.05f,1)),4*scale);
+                        draw.AddLine(at+heading*11*scale,at+heading*20*scale,ImGui.GetColorU32(color),2*scale);
+                        if(p.Player==_selected)draw.AddCircle(at,12*scale,ImGui.GetColorU32(ModernTheme.Gold),0,2*scale);
+                        if(Vector2.Distance(ImGui.GetMousePos(),at)<12*scale && hovered) {
+                            ImGui.SetTooltip($"{p.Player}\n{(job.HasValue?PlayerJobHelper.GetNameFromJob(job.Value):"职业未知")}\n体力 {p.HP:N0}/{p.MaxHP:N0}\n世界坐标 {p.X:F1}, {p.Z:F1}");
                             if(ImGui.IsMouseClicked(ImGuiMouseButton.Left))_selected=p.Player;
                         }
                     }
@@ -139,38 +157,16 @@ internal sealed class MatchReplayWindow : Window {
                     draw.AddLine(at-delta,at+delta,color,2*scale);draw.AddLine(at+new Vector2(-delta.X,delta.Y),at+new Vector2(delta.X,-delta.Y),color,2*scale);
                 }
                 draw.PopClipRect();
-                ImGui.TextWrapped(loaded ? "蓝：星极队 · 红：灵极队 · 金色菱形：战术水晶 · 十字：相邻采样的减员位置。" : "地图纹理未加载，当前为坐标网格；有地图参数时按真实地图坐标定位，否则为相对坐标示意。");
+                ImGui.TextWrapped(loaded ? "蓝圈：星极队 · 红圈：灵极队 · 职业图标外短线：朝向 · 金线：水晶轨迹 · 三角：环境动作来源（保留 3 秒）。" : "地图纹理未加载，当前为坐标网格；有地图参数时按真实地图坐标定位，否则为相对坐标示意。");
                 if(frame==null)ImGui.TextColored(ModernTheme.Gold,"当前时点没有可用位置采样，不显示推测位置。");
             }
         }
-        if(!_showInfo)return;
-        ImGui.SameLine();
-        using var panel=ImRaii.Child("ReplayEvents",Vector2.Zero,true);
-        if(!panel)return;
-        ImGui.TextWrapped($"已加载并识别角色：{frame?.Players.Count??0}/10");
-        foreach(var team in new[]{1,2}) {
-            var observed=frame?.Players.Where(p=>p.Team==team).ToArray()??[];
-            var expected=_match.Players.Count(p=>(int?)p.Team==team);
-            ImGui.TextWrapped($"{(team==1?"星极队":"灵极队")}  存活 {observed.Count(p=>p.HP>0)} · 倒地 {observed.Count(p=>p.HP==0)} · 未知 {Math.Max(0,expected-observed.Length)}");
-        }
-        ImGui.Separator();
-        ImGui.TextWrapped(frame?.Crystal is {} observedCrystal?$"水晶坐标：{observedCrystal.X:F1}, {observedCrystal.Z:F1}":"此时点未采集到战术水晶坐标；旧记录无法补抓。");
-        var crystal=frame?.CrystalProgress ?? _timeline.CrystalPosition?.LastOrDefault(p=>p.Timestamp<=now)?.Points;
-        ImGui.TextUnformatted("水晶相对推进（非地图坐标）");
-        if(crystal.HasValue) ImGui.ProgressBar(Math.Clamp((crystal.Value/10f+100)/200,0,1),new Vector2(-1,0),$"{crystal.Value/10f:F1}%");
-        else ImGui.TextDisabled("此时点未保存水晶进度。");
-        if(frame!=null)ImGui.TextWrapped($"星极 {frame.AstraProgress/10f:F1}% · 灵极 {frame.UmbraProgress/10f:F1}%");
-        ImGui.Separator();ImGui.TextUnformatted("选择角色查看最近 10 秒采样轨迹");
-        foreach(var player in _match.Players) {
-            var alias=player.Alias.ToString(); if(ImGui.Selectable(alias+"###ReplayPlayer"+alias,_selected==alias))_selected=alias;
-            if(ImGui.IsItemHovered())ImGui.SetTooltip(alias);
-        }
-        ImGui.Separator();ImGui.TextUnformatted("最近减员");
-        foreach(var death in (_timeline.Kills??[]).Where(k=>k.Timestamp<=now).OrderByDescending(k=>k.Timestamp).Take(6))
-            ImGui.TextWrapped($"{(death.Timestamp-_origin):mm\\:ss}  {death.Victim}  ←  {death.CreditedKiller?.ToString()??"未归因"}");
-        ImGui.Separator();
-        using(var disabled=ImRaii.Disabled(_exporting)) if(ModernTheme.Button("导出观测记录###ExportReplay"))Export();
-        ImGui.TextWrapped(_exportStatus);
+        if(_showInfo) { ImGui.SameLine(); DrawTeamPanel(2,frame,now,new Vector2(flank,0)); }
+    }
+    private void StepFrame(int direction) {
+        var time=ReplayObservation.Step(_data,_origin.AddSeconds(_seconds),direction);
+        if(time.HasValue)_seconds=Math.Clamp((float)(time.Value-_origin).TotalSeconds,0,_duration);
+        _playing=false;
     }
     private void Export() {
         _exporting=true;_exportStatus="正在导出…";
@@ -179,7 +175,7 @@ internal sealed class MatchReplayWindow : Window {
             try {
                 var payload=new { MatchId=_match.Id.ToString(), _match.TerritoryId, StartUtc=_origin, _match.MatchEndTime, Telemetry=_data,
                     Knockouts=_timeline.Kills?.Select(k=>new { k.Timestamp,Victim=k.Victim.ToString(),Killer=k.CreditedKiller?.ToString() }),
-                    CrystalProgress=_timeline.CrystalPosition };
+                    CrystalProgress=_timeline.CrystalPosition, MapEvents=_timeline.MapEvents };
                 Directory.CreateDirectory(Path.GetDirectoryName(path)!);
                 await File.WriteAllTextAsync(path,JsonSerializer.Serialize(payload,new JsonSerializerOptions { WriteIndented=true }));
                 _exportStatus="已导出："+path;

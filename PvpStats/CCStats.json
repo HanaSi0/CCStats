@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.6：紧凑布局与小按钮，固定结算表头；职业分析默认本人，支持搜索和选择其他玩家。",
+  "Changelog": "0.2.7：回放增加职业图标与朝向、水晶轨迹、双方血量与完整状态；新增环境动作记录和地图事件提示。",
   "Tags": [
     "pvp",
     "statistics"

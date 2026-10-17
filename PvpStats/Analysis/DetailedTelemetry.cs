@@ -46,6 +46,9 @@ public sealed class DetailedTelemetry {
             PackedFrames=MovementCodec.Encode(_frames);
         }
     }
+    public Dictionary<uint, ReplayStatusInfo> ReplayStatuses { get; set; } = new();
+    public List<ReplayMapEvent> MapMechanics { get; set; } = new();
+    public bool MapMechanicsTruncated { get; set; }
     public List<ObservedEffect> Effects { get; set; } = new();
 }
 public sealed class MovementFrame {
@@ -70,6 +73,29 @@ public sealed class PlayerPosition {
     public uint HP { get; set; }
     public uint MaxHP { get; set; }
     public List<ObservedControl> Controls { get; set; } = new();
+    public uint ClassJobId { get; set; }
+    public DateTime StatusTimestamp { get; set; }
+    public List<ReplayBuff> Statuses { get; set; } = new();
+}
+public sealed class ReplayBuff {
+    public uint Id { get; set; }
+    public ushort Param { get; set; }
+    public float Remaining { get; set; }
+}
+public sealed class ReplayStatusInfo {
+    public string Name { get; set; } = "";
+    public uint Icon { get; set; }
+}
+public sealed class ReplayMapEvent {
+    public DateTime Timestamp { get; set; }
+    public string Label { get; set; } = "";
+    public uint ActionId { get; set; }
+    public uint SourceNameId { get; set; }
+    public uint SourceEntityId { get; set; }
+    public uint Sequence { get; set; }
+    public bool MapWide { get; set; }
+    public float? X { get; set; }
+    public float? Z { get; set; }
 }
 public sealed class ObservedControl {
     public uint StatusId { get; set; }

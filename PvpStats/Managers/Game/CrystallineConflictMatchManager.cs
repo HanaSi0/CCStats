@@ -29,7 +29,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace PvpStats.Managers.Game;
-internal class CrystallineConflictMatchManager : IDisposable {
+internal partial class CrystallineConflictMatchManager : IDisposable {
 
     private Plugin _plugin;
     private CrystallineConflictMatch? _currentMatch;
@@ -171,7 +171,7 @@ internal class CrystallineConflictMatchManager : IDisposable {
 
             if(_plugin.Configuration.EnableDetailedTelemetry) {
                 _currentMatchTimeline ??= new();
-                _currentMatchTimeline.Detailed = new() { Version=3,SampleIntervalSeconds=.05,GameVersion = _currentMatch.GameVersion ?? "" };
+                _currentMatchTimeline.Detailed = new() { Version=4,SampleIntervalSeconds=1d/30,GameVersion = _currentMatch.GameVersion ?? "" };
                 _currentMatchTimeline.Kills ??= new();
                 _currentMatchTimeline.CrystalPosition ??= new();
                 // The shared timeline UI expects both teams even when only detailed recording is enabled.
@@ -323,6 +323,8 @@ internal class CrystallineConflictMatchManager : IDisposable {
                     isPet = true;
                 }
             }
+
+            if(actor is IBattleNpc environment && !isPet) CaptureEnvironmentAction(now,environment,actionId,effectHeader->GlobalSequence);
 
             string? actorWorld = null;
             PlayerAlias? actorAlias = null;
@@ -966,14 +968,32 @@ internal class CrystallineConflictMatchManager : IDisposable {
                 if(team is not (1 or 2) || !float.IsFinite(player.Position.X) || !float.IsFinite(player.Position.Z)) continue;
                 frame.Players.Add(new() {
                     Player=alias, Team=team, X=player.Position.X, Z=player.Position.Z, Heading=player.Rotation, HP=player.CurrentHp, MaxHP=player.MaxHp,
+                    ClassJobId=player.ClassJob.RowId, StatusTimestamp=now,
+                    Statuses=player.StatusList.Where(s=>s.StatusId!=0).Take(60).OrderBy(s=>s.StatusId).ThenBy(s=>s.Param).Select(s=>new ReplayBuff { Id=s.StatusId,Param=s.Param,Remaining=s.RemainingTime }).ToList(),
                     Controls=player.StatusList.Where(s=>DetailedAnalysis.Controls.ContainsKey(s.StatusId)).Select(s=>new ObservedControl {
                         StatusId=s.StatusId, Source=aliases.GetValueOrDefault(s.SourceId, ""), Remaining=s.RemainingTime,
                     }).ToList(),
                 });
             }
+            foreach(var player in frame.Players) {
+                var prior=data.Frames.LastOrDefault()?.Players.FirstOrDefault(p=>p.Player==player.Player);
+                if(prior!=null&&ReplayObservation.ReuseStatuses(prior,player,now)) {
+                    player.Statuses=prior.Statuses; player.StatusTimestamp=prior.StatusTimestamp;
+                }
+                foreach(var status in player.Statuses) if(!data.ReplayStatuses.ContainsKey(status.Id)) {
+                    try { var row=_plugin.DataManager.GetExcelSheet<Status>().GetRow(status.Id);
+                        data.ReplayStatuses[status.Id]=new() { Name=PvpStats.Localization.ChineseText.StatusName(status.Id,row.Name.ToString()),Icon=row.Icon };
+                    } catch { data.ReplayStatuses[status.Id]=new() { Name=$"状态 {status.Id}" }; }
+                }
+            }
             lock(_detailedLock) {
-                if(data.Frames.Count >= MovementCodec.MaxFrames || data.MovementBytesEstimate >= MovementCodec.RawBudget-16384) { data.FramesTruncated=true; return; }
-                data.MovementBytesEstimate += 32 + frame.Players.Sum(p=>24 + p.Controls.Count*10);
+                if(data.Frames.Count >= MovementCodec.MaxFrames || data.MovementBytesEstimate >= MovementCodec.RawBudget-16384) {
+                    // Preserve the whole match when the recording budget is reached.
+                    var retained=data.Frames.Where((f,i)=>i%2==0).ToList();
+                    data.Frames=retained; data.MovementBytesEstimate/=2;
+                    data.SampleIntervalSeconds*=2; data.MovementDownsampled=true;
+                }
+                data.MovementBytesEstimate += 48 + frame.Players.Sum(p=>40 + p.Controls.Count*10 + (p.StatusTimestamp==now?p.Statuses.Count*10+10:0));
                 data.Frames.Add(frame);
             }
         } catch(Exception e) {
@@ -1120,6 +1140,7 @@ internal class CrystallineConflictMatchManager : IDisposable {
                 if(director->EventTimer != -1f && director->EventTimer <= 0f && _lastEventTimer > 0f) {
                     Plugin.Log2.Debug("Map event detected!");
                     _currentMatchTimeline.MapEvents?.Add(new(now, CrystallineConflictMatchEvent.SpecialEvent));
+                    RecordReplayMapEvent(new() { Timestamp=now,Label="地图机制触发（地图计时器）",MapWide=true });
                 }
                 _lastEventTimer = director->EventTimer;
             } catch(Exception e) {
