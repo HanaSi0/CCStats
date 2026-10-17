@@ -33,7 +33,7 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
     private ID3D11ShaderResourceView* _view;
     private ID3D11DepthStencilView* _depthView;
     private readonly uint _indexCount,_opaqueIndexCount;
-    private const int MaxDynamicVertices=120_000;
+    internal const int MaxDynamicVertices=400_000;
     internal int Width { get; private set; }
     internal int Height { get; private set; }
     internal uint SampleCount { get; private set; } = 1;

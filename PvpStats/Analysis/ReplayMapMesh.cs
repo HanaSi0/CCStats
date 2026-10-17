@@ -64,7 +64,20 @@ public sealed class ReplayMapMesh {
             }
         }
     }
+    // Standable floors for decals and missing heights; null when the walk resource is unavailable.
+    public ReplayWalkGrid? Walk { get; private set; }
+    public void Attach(ReplayWalkGrid walk) { Walk=walk; }
     public float EstimatedHeight(float x,float z) {
+        if(Walk!=null&&Walk.Around(x,z,null,3,out var floor))return floor;
+        return EstimatedDisplayHeight(x,z);
+    }
+    // Floor nearest a known elevation (a summon, caster or effect height); falls back to the display surface.
+    public float SurfaceHeight(float x,float z,float reference) {
+        if(Walk!=null&&float.IsFinite(reference)&&Walk.Around(x,z,reference,3,out var floor))return floor;
+        return EstimatedHeight(x,z);
+    }
+    // Highest upward display surface; may be a wall or rock top. Used only without a walk grid.
+    public float EstimatedDisplayHeight(float x,float z) {
         int ix=(int)MathF.Floor((x-_groundMin.X)/Cell),iz=(int)MathF.Floor((z-_groundMin.Y)/Cell);
         if(ix>=0&&ix<256&&iz>=0&&iz<256&&float.IsFinite(_ground[iz*256+ix]))return _ground[iz*256+ix];
         return 0;
@@ -91,8 +104,17 @@ public sealed class ReplayMapMesh {
     };
     public static ReplayMapMesh LoadEmbedded(uint territory) {
         var key=MapKey(territory)??throw new InvalidDataException("此区域尚未提供三维地图。");
-        using var stream=typeof(ReplayMapMesh).Assembly.GetManifestResourceStream("PvpStats.Resources.ReplayMaps."+key+".ccmap.gz")
-            ??throw new FileNotFoundException("三维地图资源缺失。");
-        return Read(stream);
+        ReplayMapMesh mesh;
+        using(var stream=typeof(ReplayMapMesh).Assembly.GetManifestResourceStream("PvpStats.Resources.ReplayMaps."+key+".ccmap.gz")
+            ??throw new FileNotFoundException("三维地图资源缺失。"))mesh=Read(stream);
+        // Without a valid grid, footprints fall back to draping over the display surface.
+        if(LoadEmbeddedWalk(territory) is {} walk)mesh.Attach(walk);
+        return mesh;
+    }
+    public static ReplayWalkGrid? LoadEmbeddedWalk(uint territory) {
+        var key=MapKey(territory);if(key==null)return null;
+        using var stream=typeof(ReplayMapMesh).Assembly.GetManifestResourceStream("PvpStats.Resources.ReplayMaps."+key+".ccwalk.gz");
+        if(stream==null)return null;
+        try { return ReplayWalkGrid.Read(stream); } catch(Exception e) when(e is InvalidDataException or EndOfStreamException) { return null; }
     }
 }

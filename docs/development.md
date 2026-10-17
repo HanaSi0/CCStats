@@ -116,3 +116,17 @@ dotnet run --project tests/LocalizationChecks -c Release --no-build -- --capture
 网页详情预览展示 10 名玩家与双方合计，伤害、承伤、治疗和推车秒数使用示例记录；地图/职业/模式/玩家胜率文字从对应示例源记录计算，浏览器检查验证数值一致，并验证队伍合计和贡献占比切换。`docs/ui-match-detail-preview.png` 与 `docs/ui-winrate-preview.png` 为对应截图。正式 ImGui 界面仍需游戏内检查。
 
 比赛类型汇总复用现有 `IncrementAggregateStats`，随同一批筛选记录增删并刷新；百分比和胜负计数保持相同口径。
+
+## 回放范围贴地与地图精修
+
+`ReplayWalkGrid` 读取每张地图的 `.ccwalk.gz` 可站立地面网格；`ReplayGroundDecal` 把技能和地图机制的平面范围（凸多边形）按格裁剪到该网格，每格取与事件高度最接近的地面层，相邻格高差在 0.6 内时共享角点高度。整格落在范围内且共面的连续格合并为一条长条。没有网格时（测试或资源缺失）退回旧的按高度函数铺设。
+
+重新生成资源：
+
+```bash
+pip install -r tools/requirements-map-build.txt
+git show v1.0.5:PvpStats/Resources/ReplayMaps/red-sands.ccmap.gz > /tmp/maps-1.0.5/red-sands.ccmap.gz  # 七张均需 1.0.5 版本
+python3 tools/refine_replay_maps.py --input /tmp/maps-1.0.5 --output PvpStats/Resources/ReplayMaps
+```
+
+精修工具只接受 1.0.5 的逐面 4 位颜色资源，输入已精修的资源会直接报错。`ReplayWalkChecks` 覆盖坑洞裁剪、桥上/桥下分层、行合并、台阶与墙高差、损坏资源拒绝，以及赤土红沙广场护盾范围全部落在可站立地面上。

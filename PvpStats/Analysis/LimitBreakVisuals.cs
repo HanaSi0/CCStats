@@ -138,46 +138,41 @@ public static class LimitBreakVisuals {
         if(elapsed>=rule.Duration)return 0;
         return rule.Duration>1.5f ? (elapsed<.5f?1:.4f) : elapsed<.45f?1:Math.Clamp((rule.Duration-elapsed)/(rule.Duration-.45f),0,1);
     }
-    public static void Draw(ReplaySceneGeometry geometry,LbVisualRule rule,Vector3 at,float heading,Vector3 source,Func<float,float,float> height,float fade=1,float reveal=1) {
+    public const float GroundLift=.22f;
+    public static void Draw(ReplaySceneGeometry geometry,LbVisualRule rule,Vector3 at,float heading,Vector3 source,Func<float,float,float> height,float fade=1,float reveal=1)=>
+        Draw(geometry,rule,at,heading,source,ReplayGroundDecal.Draped(height,GroundLift),fade,reveal);
+    // Footprints are ground decals; with a walk grid they cover only standable floor near the cast's elevation.
+    public static void Draw(ReplaySceneGeometry geometry,LbVisualRule rule,Vector3 at,float heading,Vector3 source,ReplayGroundDecal ground,float fade=1,float reveal=1) {
         reveal=Math.Clamp(reveal,0,1);if(reveal<=0)return;
         var alpha=(rule.Reference ? .32f : .42f)*Math.Clamp(fade,0,1);
         var color=rule.Benefit?ReplaySceneGeometry.Rgba(.2f,.65f,1,alpha):ReplaySceneGeometry.Rgba(1,.2f,.25f,alpha);
         var edge=rule.Benefit?ReplaySceneGeometry.Rgba(.25f,.85f,1,Math.Max(.45f,.95f*fade)):ReplaySceneGeometry.Rgba(1,.38f,.18f,Math.Max(.45f,.95f*fade));
-        Vector3 Ground(Vector3 p)=>new(p.X,height(p.X,p.Z)+.22f,p.Z);
-        void Tri(Vector3 a,Vector3 b,Vector3 c)=>geometry.Triangle(Ground(a),Ground(b),Ground(c),color);
-        void Border(Vector3 a,Vector3 b) {
-            var side=new Vector3(b.Z-a.Z,0,a.X-b.X);if(side.LengthSquared()<.00001f)return;
-            side=Vector3.Normalize(side)*.13f;
-            geometry.Triangle(Ground(a-side),Ground(a+side),Ground(b+side),edge);
-            geometry.Triangle(Ground(a-side),Ground(b+side),Ground(b-side),edge);
+        static Vector2 Flat(Vector3 p)=>new(p.X,p.Z);
+        static Vector2 Dir(float angle)=>new(MathF.Sin(angle),MathF.Cos(angle));
+        void Border(Vector2 a,Vector2 b)=>ground.Line(geometry,a,b,.26f,edge);
+        var center=Flat(at);var forward=Dir(heading);var side=new Vector2(forward.Y,-forward.X);
+        void Rect(Vector2 middle,Vector2 f,float front,float back,float width) {
+            var right=new Vector2(f.Y,-f.X)*width/2;var a=middle-f*back;var b=middle+f*front;
+            ground.Quad(geometry,a-right,a+right,b+right,b-right,color);
+            Border(a-right,b-right);Border(a+right,b+right);Border(a-right,a+right);Border(b-right,b+right);
         }
-        var forward=Forward(heading);var side=new Vector3(forward.Z,0,-forward.X);
-        void Rect(Vector3 center,Vector3 f,float front,float back,float width) {
-            var right=new Vector3(f.Z,0,-f.X)*width/2;
-            // Subdivide long strips to follow approximate ground height instead of clipping through slopes.
-            int pieces=Math.Max(1,(int)MathF.Ceiling((front+back)/2));
-            for(int i=0;i<pieces;i++) {
-                var a=center+f*(-back+(front+back)*i/pieces);var b=center+f*(-back+(front+back)*(i+1)/pieces);
-                Tri(a-right,a+right,b+right);Tri(a-right,b+right,b-right);
-                Border(a-right,b-right);Border(a+right,b+right);
-                if(i==0)Border(a-right,a+right);if(i==pieces-1)Border(b-right,b+right);
-            }
+        if(rule.Shape is LbShape.Line or LbShape.DoubleLine) { Rect(center,forward,rule.Size*reveal*(rule.Shape==LbShape.DoubleLine?.5f:1),rule.Shape==LbShape.DoubleLine?rule.Size*reveal*.5f:0,rule.Width);return; }
+        if(rule.Shape==LbShape.Cross) { Rect(center,forward,rule.Size*reveal,rule.Size*reveal,rule.Width);Rect(center,side,rule.Size*reveal,rule.Size*reveal,rule.Width);return; }
+        if(rule.Shape==LbShape.Single) {
+            var tether=center-Flat(source);var length=tether.Length();
+            if(length>.001f)Rect((center+Flat(source))/2,tether/length,length/2,length/2,.45f);
         }
-        if(rule.Shape is LbShape.Line or LbShape.DoubleLine) { Rect(at,forward,rule.Size*reveal*(rule.Shape==LbShape.DoubleLine?.5f:1),rule.Shape==LbShape.DoubleLine?rule.Size*reveal*.5f:0,rule.Width);return; }
-        if(rule.Shape==LbShape.Cross) { Rect(at,forward,rule.Size*reveal,rule.Size*reveal,rule.Width);Rect(at,side,rule.Size*reveal,rule.Size*reveal,rule.Width);return; }
-        if(rule.Shape==LbShape.Single) { Rect((at+source)/2,Vector3.Normalize(new Vector3(at.X-source.X,0,at.Z-source.Z)+new Vector3(.000001f,0,0)),Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,.45f); }
         float radius=(rule.Shape is LbShape.Single or LbShape.Self?1:rule.Size)*reveal;
-        float arc=rule.Shape==LbShape.Cone?rule.Width*MathF.PI/180:MathF.Tau;
-        float angle=rule.Shape==LbShape.Cone?heading-arc/2:0;
-        for(int ring=0;ring<Math.Max(1,(int)MathF.Ceiling(radius/2));ring++) {
-            int rings=Math.Max(1,(int)MathF.Ceiling(radius/2));float inner=radius*ring/rings,outer=radius*(ring+1)/rings;
-            for(int i=0;i<64;i++) {
-                var a=Forward(angle+arc*i/64);var b=Forward(angle+arc*(i+1)/64);
-                Tri(at+a*inner,at+a*outer,at+b*outer);Tri(at+a*inner,at+b*outer,at+b*inner);
-                if(ring==rings-1)Border(at+a*outer,at+b*outer);
-                if(rule.Shape==LbShape.Cone&&i==0)Border(at+a*inner,at+a*outer);
-                if(rule.Shape==LbShape.Cone&&i==63)Border(at+b*inner,at+b*outer);
-            }
-        }
+        if(radius<=0)return;
+        bool cone=rule.Shape==LbShape.Cone;
+        float arc=cone?Math.Clamp(rule.Width,1,180)*MathF.PI/180:MathF.Tau;
+        float angle=cone?heading-arc/2:0;
+        // A cone of at most 180 degrees and a full disk are both convex polygons.
+        Span<Vector2> outline=stackalloc Vector2[66];int count=0;
+        if(cone)outline[count++]=center;
+        for(int i=0;i<(cone?65:64);i++)outline[count++]=center+Dir(angle+arc*i/64)*radius;
+        ground.Fill(geometry,outline[..count],color);
+        for(int i=0;i<64;i++)Border(center+Dir(angle+arc*i/64)*radius,center+Dir(angle+arc*(i+1)/64)*radius);
+        if(cone) { Border(center,center+Dir(angle)*radius);Border(center,center+Dir(angle+arc)*radius); }
     }
 }

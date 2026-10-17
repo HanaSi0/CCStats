@@ -32,6 +32,7 @@ internal sealed partial class MatchReplayWindow {
     private MovementFrame? _renderedFrame;
     private bool _has3DFrame;
     private string _renderSelected="";
+    private const int MechanicVertexBudget=90_000,OverlayVertexBudget=240_000;
     private bool _renderFollow;
     private static string ReplayJobInitial(Job? job) => job switch {
         Job.PLD=>"骑",Job.WAR=>"战",Job.DRK=>"暗",Job.GNB=>"枪",
@@ -119,7 +120,11 @@ internal sealed partial class MatchReplayWindow {
             float ratio=Math.Min(1,Math.Min(1280/size.X,900/size.Y));int width=Math.Max(64,(int)(size.X*ratio)),height=Math.Max(64,(int)(size.Y*ratio));
             if(_renderer.Width!=width||_renderer.Height!=height) { _renderer.Resize(width,height);_cameraDirty=true; }
             if(_cameraDirty||!_has3DFrame||(_renderSeconds!=_seconds&&ImGui.GetTime()-_renderAt>=1.0/30)) {
-                Build3DScene(frame,now);BuildLBOverlay(frame,now);_renderer.Render(projection,_scene.Vertices,_lbOverlay.Vertices);_renderAt=ImGui.GetTime();_renderSeconds=_seconds;_projection3D=projection;_renderedFrame=frame;_has3DFrame=true;_cameraDirty=false;_renderSelected=_selected;_renderFollow=_followPlayer;
+                Build3DScene(frame,now);BuildLBOverlay(frame,now);
+                // Render rejects oversized dynamic buffers; drop trailing overlay triangles instead of failing the view.
+                var overlay=_lbOverlay.Vertices;var room=Math.Max(0,ReplayGpuRenderer.MaxDynamicVertices-_scene.Vertices.Length);
+                if(overlay.Length>room)overlay=overlay[..(room-room%3)];
+                _renderer.Render(projection,_scene.Vertices.Length>ReplayGpuRenderer.MaxDynamicVertices?_scene.Vertices[..(ReplayGpuRenderer.MaxDynamicVertices-ReplayGpuRenderer.MaxDynamicVertices%3)]:_scene.Vertices,overlay);_renderAt=ImGui.GetTime();_renderSeconds=_seconds;_projection3D=projection;_renderedFrame=frame;_has3DFrame=true;_cameraDirty=false;_renderSelected=_selected;_renderFollow=_followPlayer;
             }
             var draw=ImGui.GetWindowDrawList();draw.AddImage(_renderer.Texture,origin,origin+size);
             draw.PushClipRect(origin,origin+size,true);
@@ -202,9 +207,10 @@ internal sealed partial class MatchReplayWindow {
         _lbOverlay.Clear();
         if(_showMechanics)foreach(var visual in MapMechanicVisuals.Active(_data.MapMechanics,_match.TerritoryId,now)) {
             var recordedY=visual.Rule.Ground?visual.Event.TargetY:visual.Event.Y;
+            var reference=recordedY??_mesh?.EstimatedHeight(visual.Center.X,visual.Center.Z)??visual.Center.Y;
             var offset=recordedY.HasValue?visual.Center.Y-(_mesh?.EstimatedHeight(visual.Center.X,visual.Center.Z)??visual.Center.Y):0;
-            MapMechanicVisuals.Draw(_lbOverlay,visual,now,(x,z)=>(_mesh?.EstimatedHeight(x,z)??visual.Center.Y)+offset);
-            if(_lbOverlay.Vertices.Length>12000)break;
+            MapMechanicVisuals.Draw(_lbOverlay,visual,now,Ground(reference,MapMechanicVisuals.GroundLift,(x,z)=>(_mesh?.EstimatedHeight(x,z)??visual.Center.Y)+offset));
+            if(_lbOverlay.Vertices.Length>MechanicVertexBudget)break;
         }
         if(!_showLB) { AddGuardBubbles(frame,now);return; }
         if(_lbEvents==null) {
@@ -241,12 +247,15 @@ internal sealed partial class MatchReplayWindow {
             }
             // Skill footprints use one consistent caster/impact elevation offset, draped to mesh height for slopes.
             var terrainOffset=at.Y-(_mesh?.EstimatedHeight(at.X,at.Z)??0);
-            LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity,LimitBreakVisuals.Reveal(e,now));
-            if(_lbOverlay.Vertices.Length>48000)break;
+            LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,Ground(at.Y,LimitBreakVisuals.GroundLift,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset),opacity,LimitBreakVisuals.Reveal(e,now));
+            if(_lbOverlay.Vertices.Length>OverlayVertexBudget)break;
         }
-        ReplaySummons.Draw(_lbOverlay,ReplaySummons.Resolve(_data.SummonFrames,_lbEvents,now),_lbEvents,frame,now,(x,y,z)=>_mesh?.EstimatedHeight(x,z)??y);
+        ReplaySummons.Draw(_lbOverlay,ReplaySummons.Resolve(_data.SummonFrames,_lbEvents,now),_lbEvents,frame,now,(x,y,z)=>_mesh?.SurfaceHeight(x,z,y)??y);
         AddGuardBubbles(frame,now);
     }
+    // Footprints follow standable floor near the event's own elevation; without a walk grid they drape as before.
+    private ReplayGroundDecal Ground(float reference,float lift,Func<float,float,float> fallback) =>
+        _mesh?.Walk is {} walk&&float.IsFinite(reference)?ReplayGroundDecal.Walkable(walk,reference,lift):ReplayGroundDecal.Draped(fallback,lift);
     private void AddGuardBubbles(MovementFrame? frame,DateTime now) {
         if(frame==null)return;
         foreach(var player in frame.Players.Where(p=>ReplaySceneGeometry.GuardVisible(p,now)).Take(10)) {
