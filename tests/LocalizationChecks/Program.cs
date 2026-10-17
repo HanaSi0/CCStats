@@ -156,6 +156,7 @@ Replay3DChecks.Run(Check);
 ReplayCameraMechanicChecks.Run(Check);
 LBCaptureChecks.Run(Check);
 LimitBreakVisualChecks.Run(Check);
+ReplaySummonChecks.Run(Check);
 AdvancedCombatChecks.Run(Check);
 await StartupRefreshChecks.Run(Check);
 await StabilityChecks.Run(Check);

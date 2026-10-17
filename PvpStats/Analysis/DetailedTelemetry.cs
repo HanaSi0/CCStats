@@ -49,6 +49,8 @@ public sealed class DetailedTelemetry {
     public Dictionary<uint, ReplayStatusInfo> ReplayStatuses { get; set; } = new();
     public List<ReplayMapEvent> MapMechanics { get; set; } = new();
     public bool MapMechanicsTruncated { get; set; }
+    public List<ReplaySummonFrame> SummonFrames { get; set; } = new();
+    public bool SummonsTruncated { get; set; }
     public List<ReplaySkillEvent> ReplaySkills { get; set; } = new();
     public bool ReplaySkillsTruncated { get; set; }
     public List<ObservedEffect> Effects { get; set; } = new();
@@ -168,6 +170,7 @@ public static class DetailedAnalysis {
     public static void TrimToMatch(DetailedTelemetry data, DateTime start, DateTime end) {
         data.Frames.RemoveAll(frame=>frame.Timestamp<start || frame.Timestamp>end);
         data.Effects.RemoveAll(effect=>effect.Timestamp<start || effect.Timestamp>end);
+        data.SummonFrames.RemoveAll(frame=>frame.Timestamp<start || frame.Timestamp>end);
         data.ReplaySkills.RemoveAll(skill=>skill.Timestamp<start || skill.Timestamp>end);
     }
     public static MovementFrame? FrameAt(DetailedTelemetry data, DateTime time) {

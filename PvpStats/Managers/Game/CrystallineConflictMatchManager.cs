@@ -964,6 +964,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             foreach(var p in objects) if(!_movementAliases.ContainsKey(p.EntityId))
                 _movementAliases[p.EntityId]=new PlayerAlias(p.Name.ToString(),_plugin.DataManager.GetExcelSheet<World>().GetRow(p.HomeWorld.RowId).Name.ToString()).ToString();
             var aliases=_movementAliases;
+            RecordSummons(now);
             var frame = new MovementFrame { Timestamp=now, CrystalProgress=director->CrystalPosition, AstraProgress=director->AstraProgress, UmbraProgress=director->UmbraProgress };
             // BNpcName 11350 is the game's "tactical crystal", independent of client language.
             var crystals=_plugin.ObjectTable.OfType<IBattleNpc>().Where(n=>n.NameId==11350 && float.IsFinite(n.Position.X)&&float.IsFinite(n.Position.Z)).ToArray();

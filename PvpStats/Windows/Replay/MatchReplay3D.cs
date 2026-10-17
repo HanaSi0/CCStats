@@ -251,6 +251,7 @@ internal sealed partial class MatchReplayWindow {
             LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity,LimitBreakVisuals.Reveal(e,now));
             if(_lbOverlay.Vertices.Length>48000)break;
         }
+        ReplaySummons.Draw(_lbOverlay,ReplaySummons.At(_data.SummonFrames,now),_lbEvents,frame,now,(x,y,z)=>Height(x,y,z));
         AddGuardBubbles(frame,now);
     }
     private void AddGuardBubbles(MovementFrame? frame,DateTime now) {

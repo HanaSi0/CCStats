@@ -28,6 +28,9 @@ public sealed class ReplaySkillEvent {
     public byte ClientCastType { get; set; }
     public int ClientEffectRange { get; set; }
     public int ClientWidth { get; set; }
+    public bool PetSource { get; set; }
+    public uint SourceEntityId { get; set; }
+    public List<ReplaySummonTarget> SummonTargets { get; set; } = new();
     public List<uint> SelfStatusIds { get; set; } = new();
 }
 public static class LimitBreakVisuals {

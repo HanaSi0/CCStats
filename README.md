@@ -1,4 +1,4 @@
-# CCStats 1.0.1
+# CCStats 1.0.2
 
 **让每一场水晶冲突，都有迹可循。**
 
@@ -8,6 +8,7 @@ CCStats 正式发布。由 **HanaSi0** 开发与维护，将对局数据记录�
 
 - **记录每一局**：胜负、段位、造成伤害、受到伤害、治疗量与推车时间，支持筛选与历史战绩查询。
 - **走进 3D 回放**：精简地图、鲜亮红蓝棋子、单字职业简称与朝向；通过时间轴、逐帧、变速和自由视角查看对局。
+- **召唤物独立呈现**：LB 召唤物使用空中占位符、持续索敌波纹，以及紫色攻击／薄荷绿增益连线。
 - **看清关键时刻**：双方血量与状态、水晶位置和行进轨迹、二维推进进度，以及已记录的 LB 和地图事件。
 - **发现自己的表现**：职业与玩家分析、地图胜率、个人纪录，以及按需计算的高级数据。
 - **随时查看榜单**：国际服官方榜单、大区切换、本机角色高亮与快速定位。
@@ -25,7 +26,7 @@ https://raw.githubusercontent.com/HanaSi0/CCStats/main/repo.json
 
 搜索 **CCStats** 安装，输入 `/ccstats` 打开。支持 Dalamud API 15。已使用 `repo-test.json` 的用户无需换库，两个入口均提供正式版。
 
-[下载 1.0.1](https://github.com/HanaSi0/CCStats/releases/tag/v1.0.1) · [更新说明](docs/release-notes/1.0.1.md) · [开发文档](docs/development.md)
+[下载 1.0.2](https://github.com/HanaSi0/CCStats/releases/tag/v1.0.2) · [更新说明](docs/release-notes/1.0.2.md) · [开发文档](docs/development.md)
 
 ## 致谢与许可
 
