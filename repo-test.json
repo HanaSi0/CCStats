@@ -3,7 +3,7 @@
     "Author": "HanaSi0 / SaMo",
     "Name": "CCStats",
     "InternalName": "CCStats",
-    "AssemblyVersion": "0.2.7.0",
+    "AssemblyVersion": "0.2.8.0",
     "Description": "记录和查询水晶冲突战绩，支持数据分析、地图回放与国际服榜单。",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/HanaSi0/CCStats",
@@ -18,10 +18,10 @@
     "LoadPriority": 0,
     "IconUrl": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/images/icon.png",
     "Punchline": "水晶冲突战绩工具。",
-    "Changelog": "0.2.7：回放增加职业图标与朝向、水晶轨迹、双方血量与完整状态；新增环境动作记录和地图事件提示。",
+    "Changelog": "0.2.8：回放地图居中，队员固定分行；状态图标下显示倒计时，移除状态悬停弹窗与常驻图例，事件和导出移至地图下方。",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.7/latest.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.7/latest.zip",
-    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.7/latest.zip"
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.8/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.8/latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.8/latest.zip"
   }
 ]

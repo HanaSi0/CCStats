@@ -83,10 +83,15 @@ internal sealed partial class MatchReplayWindow : Window {
         var available=ImGui.GetContentRegionAvail();
         var flank=_showInfo?Math.Clamp(available.X*.22f,150*scale,220*scale):0;
         var mapWidth=Math.Max(1,available.X-(_showInfo?2*(flank+ImGui.GetStyle().ItemSpacing.X):0));
-        var side=Math.Max(1,Math.Min(mapWidth,available.Y-46*scale));
+        var logHeight=_showReplayLog?Math.Min(160*scale,available.Y*.3f):0;
+        var innerMapWidth=Math.Max(1,mapWidth-2*ImGui.GetStyle().WindowPadding.X);
+        var mapHeight=Math.Max(1,available.Y-logHeight-ImGui.GetFrameHeightWithSpacing()-24*scale);
+        var side=Math.Max(1,Math.Min(innerMapWidth,mapHeight));
         if(_showInfo) { DrawTeamPanel(1,frame,now,new Vector2(flank,0)); ImGui.SameLine(); }
         using(var canvas=ImRaii.Child("ReplayMap",new Vector2(mapWidth,0),false)) {
             if(canvas) {
+                var mapStart=ImGui.GetCursorPos();
+                ImGui.SetCursorPos(mapStart+new Vector2(Math.Max(0,(ImGui.GetContentRegionAvail().X-side)/2),Math.Max(0,(mapHeight-side)/2)));
                 var origin=ImGui.GetCursorScreenPos(); var draw=ImGui.GetWindowDrawList();
                 ImGui.InvisibleButton("###ReplayCanvas",new Vector2(side));
                 var hovered=ImGui.IsItemHovered();
@@ -157,8 +162,9 @@ internal sealed partial class MatchReplayWindow : Window {
                     draw.AddLine(at-delta,at+delta,color,2*scale);draw.AddLine(at+new Vector2(-delta.X,delta.Y),at+new Vector2(delta.X,-delta.Y),color,2*scale);
                 }
                 draw.PopClipRect();
-                ImGui.TextWrapped(loaded ? "蓝圈：星极队 · 红圈：灵极队 · 职业图标外短线：朝向 · 金线：水晶轨迹 · 三角：环境动作来源（保留 3 秒）。" : "地图纹理未加载，当前为坐标网格；有地图参数时按真实地图坐标定位，否则为相对坐标示意。");
-                if(frame==null)ImGui.TextColored(ModernTheme.Gold,"当前时点没有可用位置采样，不显示推测位置。");
+                ImGui.SetCursorPos(mapStart+new Vector2(0,mapHeight+ImGui.GetStyle().ItemSpacing.Y));
+                if(!loaded) draw.AddText(origin+new Vector2(8*scale),ImGui.GetColorU32(ModernTheme.Gold),_data.MapSizeFactor>0?"地图纹理未加载 · 坐标网格":"相对坐标示意");
+                DrawReplayLog(now,logHeight);
             }
         }
         if(_showInfo) { ImGui.SameLine(); DrawTeamPanel(2,frame,now,new Vector2(flank,0)); }

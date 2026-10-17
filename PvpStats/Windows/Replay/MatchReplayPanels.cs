@@ -33,11 +33,17 @@ internal sealed partial class MatchReplayWindow {
         var observedTeam=frame?.Players.Where(p=>p.Team==team).ToArray()??[];
         var total=_match.Players.Count(p=>(int?)p.Team==team);
         ImGui.TextDisabled($"存活 {observedTeam.Count(p=>p.HP>0)} · 倒地 {observedTeam.Count(p=>p.HP==0)} · 未知 {Math.Max(0,total-observedTeam.Length)}");
-        if(frame!=null)ImGui.TextDisabled($"推进 {(team==1?frame.AstraProgress:frame.UmbraProgress)/10f:F1}%");
-        foreach(var player in _match.Players.Where(p=>(int?)p.Team==team)) {
+        if(frame!=null&&ImGui.IsItemHovered())ImGui.SetTooltip($"推进 {(team==1?frame.AstraProgress:frame.UmbraProgress)/10f:F1}%");
+        var members=_match.Players.Where(p=>(int?)p.Team==team).ToArray();
+        var rowHeight=Math.Max(1,(ImGui.GetContentRegionAvail().Y-ImGui.GetStyle().ItemSpacing.Y*Math.Max(0,members.Length-1))/Math.Max(1,members.Length));
+        foreach(var player in members) {
             var alias=player.Alias.ToString();
             var observed=frame?.Players.FirstOrDefault(p=>p.Player==alias);
             using var id=ImRaii.PushId(alias);
+            using var rowPadding=ImRaii.PushStyle(ImGuiStyleVar.WindowPadding,Vector2.Zero);
+            using var row=ImRaii.Child("ReplayMember",new Vector2(0,rowHeight),false,ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoScrollWithMouse);
+            if(!row)continue;
+            using var compact=ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing,new Vector2(4,2)*scale);
             var job=observed==null?player.Job:ReplayJob(observed);
             if(job is {} known&&TextureHelper.JobIcons.TryGetValue(known,out var icon)) {
                 ImGui.Image(_plugin.WindowManager.GetTextureHandle(icon),new Vector2(22*scale));
@@ -50,40 +56,63 @@ internal sealed partial class MatchReplayWindow {
             else {
                 using(var tint=ImRaii.PushColor(ImGuiCol.PlotHistogram,color))
                     ImGui.ProgressBar(observed.MaxHP>0?Math.Clamp((float)observed.HP/observed.MaxHP,0,1):0,new Vector2(-1,Math.Max(18*scale,ImGui.GetTextLineHeight())),observed.MaxHP>0?$"{observed.HP:N0} / {observed.MaxHP:N0}":"血量上限未知");
-                if(observed.HP==0)ImGui.TextDisabled("倒地");
+                if(observed.HP==0&&ImGui.IsItemHovered())ImGui.SetTooltip("倒地");
                 if(_data.Version<4)ImGui.TextDisabled("旧记录未保存完整状态");
-                else DrawBuffs(observed,now);
+                else {
+                    using var buffs=ImRaii.Child("ReplayMemberBuffs",new Vector2(0,Math.Max(1,ImGui.GetContentRegionAvail().Y)),false);
+                    if(buffs)DrawBuffs(observed,now);
+                }
             }
-            ImGui.Separator();
         }
-        if(team!=2)return;
-        ImGui.TextUnformatted("地图事件");
+    }
+    private bool _showReplayLog;
+    private void DrawReplayLog(DateTime now,float height) {
+        if(ModernTheme.SmallButton(_showReplayLog?"收起回放记录###ReplayLogToggle":"地图事件与减员###ReplayLogToggle"))_showReplayLog=!_showReplayLog;
+        ImGui.SameLine();
+        using(var disabled=ImRaii.Disabled(_exporting)) if(ModernTheme.SmallButton("导出观测记录###ExportReplay"))Export();
+        if(_exportStatus.Length>0&&ImGui.IsItemHovered())ImGui.SetTooltip(_exportStatus);
+        if(!_showReplayLog)return;
+        using var log=ImRaii.Child("ReplayLog",new Vector2(0,Math.Max(1,height)),true);
+        if(!log)return;
         if(_data.MapMechanicsTruncated)ImGui.TextColored(ModernTheme.Gold,"环境事件达到记录上限。");
-        if(_showMechanics) {
-            foreach(var entry in _data.MapMechanics.Where(e=>e.Timestamp<=now).OrderByDescending(e=>e.Timestamp).Take(5)) {
-                if(ImGui.Selectable($"{(entry.Timestamp-_origin):mm\\:ss} · {entry.Label}###Mechanic"+entry.Timestamp.Ticks)) { _seconds=Math.Clamp((float)(entry.Timestamp-_origin).TotalSeconds,0,_duration);_playing=false; }
-                if(ImGui.IsItemHovered())ImGui.SetTooltip(entry.MapWide?"地图计时器触发记录；不推测作用范围或持续时间。":"环境对象动作；标记为来源坐标，未确认作用范围。\n技能 ID "+entry.ActionId+" · 对象名称 ID "+entry.SourceNameId);
+        using var columns=ImRaii.Table("ReplayLogColumns",2,ImGuiTableFlags.SizingStretchSame);
+        if(!columns)return;
+        ImGui.TableNextColumn(); ImGui.TextUnformatted("地图事件");
+        using(var events=ImRaii.Child("ReplayMapEventList",Vector2.Zero,false)) if(events) {
+            var entries=_data.MapMechanics.Where(e=>e.Timestamp<=now).OrderByDescending(e=>e.Timestamp).ToArray();
+            if(entries.Length==0)ImGui.TextDisabled("暂无事件记录");
+            foreach(var entry in entries) {
+                using var entryId=ImRaii.PushId(_data.MapMechanics.IndexOf(entry));
+                if(ImGui.Selectable($"{(entry.Timestamp-_origin):mm\\:ss} · {entry.Label}###Mechanic")) { _seconds=Math.Clamp((float)(entry.Timestamp-_origin).TotalSeconds,0,_duration);_playing=false; }
+                if(ImGui.IsItemHovered())ImGui.SetTooltip(entry.Label+"\n"+(entry.MapWide?"地图计时器触发记录；不推测作用范围或持续时间。":"环境对象动作；标记为来源坐标，未确认作用范围。\n技能 ID "+entry.ActionId+" · 对象名称 ID "+entry.SourceNameId));
             }
-            if(_data.MapMechanics.Count==0)ImGui.TextDisabled("未保存环境动作；旧记录仅显示已有地图触发。");
         }
-        ImGui.TextUnformatted("最近减员");
-        foreach(var death in (_timeline.Kills??[]).Where(k=>k.Timestamp<=now).OrderByDescending(k=>k.Timestamp).Take(3))
-            ImGui.TextWrapped($"{(death.Timestamp-_origin):mm\\:ss} · {death.Victim}");
-        using(var disabled=ImRaii.Disabled(_exporting)) if(ModernTheme.Button("导出观测记录###ExportReplay"))Export();
-        ImGui.TextWrapped(_exportStatus);
+        ImGui.TableNextColumn(); ImGui.TextUnformatted("最近减员");
+        using(var deaths=ImRaii.Child("ReplayKnockoutList",Vector2.Zero,false)) if(deaths) {
+            var entries=(_timeline.Kills??[]).Where(k=>k.Timestamp<=now).OrderByDescending(k=>k.Timestamp).ToArray();
+            if(entries.Length==0)ImGui.TextDisabled("暂无减员记录");
+            foreach(var death in entries)ImGui.TextWrapped($"{(death.Timestamp-_origin):mm\\:ss} · {death.Victim}");
+        }
     }
     private void DrawBuffs(PlayerPosition player,DateTime now) {
         var scale=ImGuiHelpers.GlobalScale;
         var statuses=player.Statuses.Where(s=>s.Remaining<=0||ReplayObservation.Remaining(s,player.StatusTimestamp,now)>0).ToArray();
-        var columns=Math.Max(1,(int)((ImGui.GetContentRegionAvail().X+4*scale)/(24*scale)));
+        const float iconSize=20;
+        var columns=Math.Max(1,(int)((ImGui.GetContentRegionAvail().X+4*scale)/(28*scale)));
         for(int i=0;i<statuses.Length;i++) {
             var status=statuses[i];
             if(i%columns!=0)ImGui.SameLine(0,4*scale);
             using var id=ImRaii.PushId(i);
+            using var group=ImRaii.Group();
             _data.ReplayStatuses.TryGetValue(status.Id,out var info);
-            if(info?.Icon>0)ImGui.Image(_plugin.WindowManager.GetTextureHandle(info.Icon),new Vector2(20*scale));
-            else ImGui.Button("?###Buff",new Vector2(20*scale));
-            if(ImGui.IsItemHovered())ImGui.SetTooltip($"{info?.Name??("状态 "+status.Id)}\n"+(status.Remaining>0?$"剩余 {ReplayObservation.Remaining(status,player.StatusTimestamp,now):F1} 秒":"无倒计时")+$"\n状态参数 {status.Param} · ID {status.Id}");
+            if(info?.Icon>0)ImGui.Image(_plugin.WindowManager.GetTextureHandle(info.Icon),new Vector2(iconSize*scale));
+            else ImGui.Button("?###Buff",new Vector2(iconSize*scale));
+            var label=status.Remaining>0?Math.Ceiling(ReplayObservation.Remaining(status,player.StatusTimestamp,now)).ToString("0"):"—";
+            var fontSize=ImGui.GetFontSize()*.72f;
+            var textWidth=ImGui.CalcTextSize(label).X*.72f;
+            var origin=ImGui.GetCursorScreenPos();
+            ImGui.GetWindowDrawList().AddText(ImGui.GetFont(),fontSize,origin+new Vector2(Math.Max(0,(iconSize*scale-textWidth)/2),0),ImGui.GetColorU32(ImGuiCol.Text),label);
+            ImGui.Dummy(new Vector2(Math.Max(iconSize*scale,textWidth),fontSize));
         }
         if(statuses.Length==0)ImGui.TextDisabled("无已记录状态");
     }

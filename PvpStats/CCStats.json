@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.7：回放增加职业图标与朝向、水晶轨迹、双方血量与完整状态；新增环境动作记录和地图事件提示。",
+  "Changelog": "0.2.8：回放地图居中，队员固定分行；状态图标下显示倒计时，移除状态悬停弹窗与常驻图例，事件和导出移至地图下方。",
   "Tags": [
     "pvp",
     "statistics"
