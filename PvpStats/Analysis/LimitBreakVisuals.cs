@@ -31,7 +31,9 @@ public sealed class ReplaySkillEvent {
     public List<uint> SelfStatusIds { get; set; } = new();
 }
 public static class LimitBreakVisuals {
-    // Official PvP guide snapshot 2026-10-17 + client Action metadata. Unpublished angles/cross widths are references.
+    // Only the 28 PvP ActionCategory=15 actions from the 2026-10-13 client snapshot.
+    // Ordinary actions granted by an LB and pet actions outside that category are excluded.
+    // Unpublished angles/cross layouts remain references.
     public static readonly IReadOnlyList<LbVisualRule> Rules = new LbVisualRule[] {
         new(29069,19,LbShape.Circle,LbAnchor.Source,15,Benefit:true),
         new(29069,19,LbShape.Self,LbAnchor.Source,1,Benefit:true,Duration:10,StatusId:1302),
@@ -66,28 +68,12 @@ public static class LimitBreakVisuals {
         new(29415,31,LbShape.Single,LbAnchor.Target,1),
         new(29432,38,LbShape.Circle,LbAnchor.Source,15),
         new(29662,25,LbShape.Self,LbAnchor.Source,1,Benefit:true,Duration:30),
-        new(29673,27,LbShape.Circle,LbAnchor.Ground,15),new(29675,27,LbShape.Circle,LbAnchor.Source,15),
-        new(29678,27,LbShape.Circle,LbAnchor.Ground,15,Benefit:true),new(29680,27,LbShape.Circle,LbAnchor.Source,15,Benefit:true),
+        new(29673,27,LbShape.Circle,LbAnchor.Ground,15),
+        new(29678,27,LbShape.Circle,LbAnchor.Ground,15,Benefit:true),
         new(41498,35,LbShape.Cross,LbAnchor.Target,15,6,Reference:true),
         new(41498,35,LbShape.Cross,LbAnchor.Target,15,6,Benefit:true,Reference:true),
         new(39215,42,LbShape.Circle,LbAnchor.Source,8),
         new(39215,42,LbShape.Circle,LbAnchor.Ground,8,Benefit:true,Duration:15),
-        // LB-granted follow-ups. A rule never creates an event; the action must actually be recorded.
-        new(29071,19,LbShape.Circle,LbAnchor.Target,5),new(29072,19,LbShape.Circle,LbAnchor.Target,5),new(29073,19,LbShape.Circle,LbAnchor.Target,5),
-        new(29078,21,LbShape.Single,LbAnchor.Target,1),new(41433,21,LbShape.Circle,LbAnchor.Source,10),new(41437,32,LbShape.Line,LbAnchor.Source,10,4),
-        new(41434,32,LbShape.Single,LbAnchor.Target,1),new(41435,32,LbShape.Single,LbAnchor.Target,1),new(41436,32,LbShape.Single,LbAnchor.Target,1),
-        new(41500,28,LbShape.Circle,LbAnchor.Target,5),new(41501,28,LbShape.Circle,LbAnchor.Source,15,Benefit:true),
-        new(41508,33,LbShape.Circle,LbAnchor.Target,5),
-        new(29543,39,LbShape.Single,LbAnchor.Target,1),new(29544,39,LbShape.Single,LbAnchor.Target,1),
-        new(29548,39,LbShape.Cone,LbAnchor.Source,8,180,Reference:true),new(29554,39,LbShape.Circle,LbAnchor.Target,5),new(41458,39,LbShape.Circle,LbAnchor.Target,5),
-        new(39169,41,LbShape.Circle,LbAnchor.Target,5),new(39170,41,LbShape.Circle,LbAnchor.Target,5),new(39171,41,LbShape.Circle,LbAnchor.Target,5),new(39172,41,LbShape.Circle,LbAnchor.Target,5),new(39173,41,LbShape.Circle,LbAnchor.Target,5),
-        new(39179,41,LbShape.Circle,LbAnchor.Target,5),new(39180,41,LbShape.Circle,LbAnchor.Target,5),new(39181,41,LbShape.Circle,LbAnchor.Target,5),new(39182,41,LbShape.Circle,LbAnchor.Target,5),
-        new(41467,23,LbShape.Circle,LbAnchor.Target,5),
-        new(29651,25,LbShape.Circle,LbAnchor.Target,5),new(29655,25,LbShape.Circle,LbAnchor.Target,5),new(41480,25,LbShape.Circle,LbAnchor.Target,5),new(41481,25,LbShape.Circle,LbAnchor.Target,5),
-        new(41484,27,LbShape.Circle,LbAnchor.Target,5),new(41485,27,LbShape.Circle,LbAnchor.Target,5),
-        new(29665,27,LbShape.Single,LbAnchor.Target,1),new(29666,27,LbShape.Single,LbAnchor.Target,1,Benefit:true),
-        new(29676,27,LbShape.Single,LbAnchor.Target,1),new(29681,27,LbShape.Single,LbAnchor.Target,1),
-        new(39216,42,LbShape.Circle,LbAnchor.Target,5),new(39217,42,LbShape.Circle,LbAnchor.Source,30,Benefit:true)
     };
     private static readonly HashSet<uint> Ids=Rules.Select(r=>r.ActionId).ToHashSet();
     public static bool Contains(uint id)=>Ids.Contains(id);

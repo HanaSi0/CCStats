@@ -33,57 +33,6 @@
             "reference": false
           }
         ]
-      },
-      {
-        "id": 29071,
-        "name": "信念之剑",
-        "rules": [
-          {
-            "id": 29071,
-            "job": 19,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29072,
-        "name": "真理之剑",
-        "rules": [
-          {
-            "id": 29072,
-            "job": 19,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29073,
-        "name": "英勇之剑",
-        "rules": [
-          {
-            "id": 29073,
-            "job": 19,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
       }
     ]
   },
@@ -121,40 +70,6 @@
             "reference": false
           }
         ]
-      },
-      {
-        "id": 29078,
-        "name": "技能 29078",
-        "rules": [
-          {
-            "id": 29078,
-            "job": 21,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41433,
-        "name": "技能 41433",
-        "rules": [
-          {
-            "id": 41433,
-            "job": 21,
-            "shape": "Circle",
-            "anchor": "Source",
-            "size": 10.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
       }
     ]
   },
@@ -189,74 +104,6 @@
             "width": 0,
             "benefit": true,
             "duration": 10.0,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41437,
-        "name": "技能 41437",
-        "rules": [
-          {
-            "id": 41437,
-            "job": 32,
-            "shape": "Line",
-            "anchor": "Source",
-            "size": 10.0,
-            "width": 4.0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41434,
-        "name": "绯红乱",
-        "rules": [
-          {
-            "id": 41434,
-            "job": 32,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41435,
-        "name": "报应",
-        "rules": [
-          {
-            "id": 41435,
-            "job": 32,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41436,
-        "name": "戮山",
-        "rules": [
-          {
-            "id": 41436,
-            "job": 32,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
             "reference": false
           }
         ]
@@ -395,40 +242,6 @@
             "reference": false
           }
         ]
-      },
-      {
-        "id": 41500,
-        "name": "技能 41500",
-        "rules": [
-          {
-            "id": 41500,
-            "job": 28,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41501,
-        "name": "技能 41501",
-        "rules": [
-          {
-            "id": 41501,
-            "job": 28,
-            "shape": "Circle",
-            "anchor": "Source",
-            "size": 15.0,
-            "width": 0,
-            "benefit": true,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
       }
     ]
   },
@@ -471,23 +284,6 @@
             "shape": "Circle",
             "anchor": "Source",
             "size": 15.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41508,
-        "name": "技能 41508",
-        "rules": [
-          {
-            "id": 41508,
-            "job": 33,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
             "width": 0,
             "benefit": false,
             "duration": 1.25,
@@ -764,91 +560,6 @@
             "reference": false
           }
         ]
-      },
-      {
-        "id": 29543,
-        "name": "缢杀",
-        "rules": [
-          {
-            "id": 29543,
-            "job": 39,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29544,
-        "name": "绞决",
-        "rules": [
-          {
-            "id": 29544,
-            "job": 39,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29548,
-        "name": "技能 29548",
-        "rules": [
-          {
-            "id": 29548,
-            "job": 39,
-            "shape": "Cone",
-            "anchor": "Source",
-            "size": 8.0,
-            "width": 180.0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": true
-          }
-        ]
-      },
-      {
-        "id": 29554,
-        "name": "技能 29554",
-        "rules": [
-          {
-            "id": 29554,
-            "job": 39,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41458,
-        "name": "技能 41458",
-        "rules": [
-          {
-            "id": 41458,
-            "job": 39,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
       }
     ]
   },
@@ -886,159 +597,6 @@
             "reference": false
           }
         ]
-      },
-      {
-        "id": 39169,
-        "name": "祖灵之牙一式",
-        "rules": [
-          {
-            "id": 39169,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39170,
-        "name": "祖灵之牙二式",
-        "rules": [
-          {
-            "id": 39170,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39171,
-        "name": "祖灵之牙三式",
-        "rules": [
-          {
-            "id": 39171,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39172,
-        "name": "祖灵之牙四式",
-        "rules": [
-          {
-            "id": 39172,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39173,
-        "name": "技能 39173",
-        "rules": [
-          {
-            "id": 39173,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39179,
-        "name": "祖灵之尾一式",
-        "rules": [
-          {
-            "id": 39179,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39180,
-        "name": "祖灵之尾二式",
-        "rules": [
-          {
-            "id": 39180,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39181,
-        "name": "祖灵之尾三式",
-        "rules": [
-          {
-            "id": 39181,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39182,
-        "name": "祖灵之尾四式",
-        "rules": [
-          {
-            "id": 39182,
-            "job": 41,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
       }
     ]
   },
@@ -1062,23 +620,6 @@
             "width": 0,
             "benefit": true,
             "duration": 30.0,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41467,
-        "name": "技能 41467",
-        "rules": [
-          {
-            "id": 41467,
-            "job": 23,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
             "reference": false
           }
         ]
@@ -1160,74 +701,6 @@
             "reference": false
           }
         ]
-      },
-      {
-        "id": 29651,
-        "name": "技能 29651",
-        "rules": [
-          {
-            "id": 29651,
-            "job": 25,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29655,
-        "name": "技能 29655",
-        "rules": [
-          {
-            "id": 29655,
-            "job": 25,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41480,
-        "name": "技能 41480",
-        "rules": [
-          {
-            "id": 41480,
-            "job": 25,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41481,
-        "name": "技能 41481",
-        "rules": [
-          {
-            "id": 41481,
-            "job": 25,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
       }
     ]
   },
@@ -1236,9 +709,7 @@
     "name": "召唤师",
     "roots": [
       29673,
-      29675,
-      29678,
-      29680
+      29678
     ],
     "actions": [
       {
@@ -1259,23 +730,6 @@
         ]
       },
       {
-        "id": 29675,
-        "name": "百万核爆",
-        "rules": [
-          {
-            "id": 29675,
-            "job": 27,
-            "shape": "Circle",
-            "anchor": "Source",
-            "size": 15.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
         "id": 29678,
         "name": "召唤不死鸟",
         "rules": [
@@ -1287,125 +741,6 @@
             "size": 15.0,
             "width": 0,
             "benefit": true,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29680,
-        "name": "不死鸟之翼",
-        "rules": [
-          {
-            "id": 29680,
-            "job": 27,
-            "shape": "Circle",
-            "anchor": "Source",
-            "size": 15.0,
-            "width": 0,
-            "benefit": true,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41484,
-        "name": "技能 41484",
-        "rules": [
-          {
-            "id": 41484,
-            "job": 27,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 41485,
-        "name": "技能 41485",
-        "rules": [
-          {
-            "id": 41485,
-            "job": 27,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29665,
-        "name": "技能 29665",
-        "rules": [
-          {
-            "id": 29665,
-            "job": 27,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29666,
-        "name": "技能 29666",
-        "rules": [
-          {
-            "id": 29666,
-            "job": 27,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": true,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29676,
-        "name": "技能 29676",
-        "rules": [
-          {
-            "id": 29676,
-            "job": 27,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 29681,
-        "name": "技能 29681",
-        "rules": [
-          {
-            "id": 29681,
-            "job": 27,
-            "shape": "Single",
-            "anchor": "Target",
-            "size": 1.0,
-            "width": 0,
-            "benefit": false,
             "duration": 1.25,
             "reference": false
           }
@@ -1454,9 +789,7 @@
     "id": 42,
     "name": "绘灵法师",
     "roots": [
-      39215,
-      39216,
-      39217
+      39215
     ],
     "actions": [
       {
@@ -1483,40 +816,6 @@
             "width": 0,
             "benefit": true,
             "duration": 15.0,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39216,
-        "name": "星空构想",
-        "rules": [
-          {
-            "id": 39216,
-            "job": 42,
-            "shape": "Circle",
-            "anchor": "Target",
-            "size": 5.0,
-            "width": 0,
-            "benefit": false,
-            "duration": 1.25,
-            "reference": false
-          }
-        ]
-      },
-      {
-        "id": 39217,
-        "name": "星空构想",
-        "rules": [
-          {
-            "id": 39217,
-            "job": 42,
-            "shape": "Circle",
-            "anchor": "Source",
-            "size": 30.0,
-            "width": 0,
-            "benefit": true,
-            "duration": 1.25,
             "reference": false
           }
         ]

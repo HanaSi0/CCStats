@@ -7,7 +7,7 @@ internal static class LimitBreakVisualChecks {
         var jobs=new uint[]{19,21,32,37,24,28,33,40,20,22,30,34,39,41,23,31,38,25,27,35,42};
         check(jobs.All(id=>rules.Any(r=>r.JobId==id)),"all 21 PvP jobs have LB visual rules");
         check(rules.All(r=>r.Size>0&&float.IsFinite(r.Size)&&r.Duration>0&&r.Duration<=30),"LB catalog has finite bounded geometry and lifetimes");
-        check(new uint[]{29069,29083,29097,29130,29131,29469,29230,41502,29255,29266,29267,29485,29497,29498,29499,29515,29516,29537,29553,39190,29401,29415,29432,29662,29673,29675,29678,29680,41498,39215}.All(LimitBreakVisuals.Contains),"every existing LB enum ID is covered, including pet effects");
+        check(new uint[]{29069,29083,29097,29130,29131,29469,29230,41502,29255,29266,29267,29485,29497,29498,29499,29515,29516,29537,29553,39190,29401,29415,29432,29662,29673,29678,41498,39215}.ToHashSet().SetEquals(rules.Select(r=>r.ActionId)),"visual catalog contains exactly the 28 PvP limit-break-category IDs");
         var start=new DateTime(2026,10,17,0,0,0,DateTimeKind.Utc);
         var whm=rules.Single(r=>r.ActionId==29230&&!r.Benefit);
         var e=new ReplaySkillEvent {Timestamp=start,Actor="Player World",ActionId=29230,X=10,Y=0,Z=20,Heading=0,Resolved=true};
@@ -32,10 +32,7 @@ internal static class LimitBreakVisualChecks {
         check(ReplayCrystalHud.Progress(375)==.375f&&ReplayCrystalHud.Position(500)==.25f,"HUD uses director tenths of a percent and signed crystal position");
         check(ReplayCrystalHud.Progress(null)==null&&ReplayCrystalHud.Position(null)==null&&ReplayCrystalHud.Checkpoint(100)==1,"HUD retains unavailable observations and actual checkpoint clear progress");
         check(ReplayCrystalHud.Progress(1001)==null&&ReplayCrystalHud.Position(-1001)==null,"invalid progress never becomes a fabricated endpoint");
-        var lemure=rules.Single(r=>r.ActionId==29548);
-        geometry.Clear();LimitBreakVisuals.Draw(geometry,lemure,Vector3.Zero,0,Vector3.Zero,(_,_)=>0);
-        var fan=geometry.Vertices.ToArray();
-        check(fan.Min(v=>v.Position.X)<-7.9f&&fan.Max(v=>v.Position.X)>7.9f&&fan.Min(v=>v.Position.Z)>-.14f,"historical Lemure Slice reference covers the forward semicircle rather than a narrow quarter-circle");
+        check(!LimitBreakVisuals.Contains(29548)&&!LimitBreakVisuals.Contains(29428)&&!LimitBreakVisuals.Contains(29675),"ordinary, LB-granted and pet actions outside category 15 do not trigger replay effects");
         var persistent=rules.Single(r=>r.ActionId==29401);
         check(LimitBreakVisuals.Opacity(persistent,e,start.AddSeconds(2))==.4f,"persistent effects settle to faint background");
         check(LimitBreakVisuals.Opacity(whm,e,start.AddSeconds(-1))==0,"future skills have no visual");

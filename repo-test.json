@@ -3,7 +3,7 @@
     "Author": "HanaSi0 / SaMo",
     "Name": "CCStats",
     "InternalName": "CCStats",
-    "AssemblyVersion": "0.2.20.0",
+    "AssemblyVersion": "0.2.21.0",
     "Description": "记录和查询水晶冲突战绩，支持数据分析、地图回放与国际服榜单。",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/HanaSi0/CCStats",
@@ -20,8 +20,8 @@
     "Punchline": "水晶冲突战绩工具。",
     "Changelog": "0.2.20：依据用户提供的历史实测资料，将夜游魂钐割扇形修正为 180°，仍标参考；包含首次加载、水晶 HUD、LB 动效及队伍辨识更新。",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.20/latest.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.20/latest.zip",
-    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.20/latest.zip"
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.21/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.21/latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.21/latest.zip"
   }
 ]

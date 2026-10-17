@@ -1,0 +1,40 @@
+{
+  "snapshot": "2026-10-13",
+  "filter": {
+    "IsPvP": true,
+    "ActionCategory": 15
+  },
+  "count": 28,
+  "action_ids": [
+    29069,
+    29083,
+    29097,
+    29130,
+    29131,
+    29230,
+    29255,
+    29266,
+    29267,
+    29401,
+    29415,
+    29432,
+    29469,
+    29485,
+    29497,
+    29498,
+    29499,
+    29515,
+    29516,
+    29537,
+    29553,
+    29662,
+    29673,
+    29678,
+    39190,
+    39215,
+    41498,
+    41502
+  ],
+  "scope": "Only the 28 categorized PvP limit breaks, including categorized follow-ups. Ordinary LB-granted and pet actions outside category 15 are excluded.",
+  "circle_center": "CastType 2 alone does not determine self targeting. Use range and target restrictions: zero-range self-only circles are anchored to the caster; target circles to the observed target; ground circles to the observed destination."
+}
