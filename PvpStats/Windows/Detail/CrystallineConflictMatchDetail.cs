@@ -399,21 +399,20 @@ internal partial class CrystallineConflictMatchDetail : MatchDetail<CrystallineC
         ImGui.Checkbox("显示队伍合计###showTeamRows", ref ShowTeamRows);
         ImGui.SameLine();
         var restoreColumns = ModernTheme.Button("显示全部数据###ShowAllScoreboardColumns");
-        ImGui.SameLine();
         _teamQuickFilter.Draw();
-        ImGui.TextDisabled("推车时间为运送战术水晶时间；可横向滚动查看全部指标，点击表头排序。");
+        if(ImGui.IsItemHovered()) ImGui.SetTooltip("推车时间为运送战术水晶时间；可横向滚动查看全部指标，点击表头排序。");
 
         var tableFlags = ImGuiTableFlags.Sortable | ImGuiTableFlags.Hideable | ImGuiTableFlags.Reorderable
-            | ImGuiTableFlags.ScrollX | ImGuiTableFlags.Resizable | ImGuiTableFlags.RowBg
+            | ImGuiTableFlags.ScrollX | ImGuiTableFlags.ScrollY | ImGuiTableFlags.Resizable | ImGuiTableFlags.RowBg
             | ImGuiTableFlags.BordersInnerV | ImGuiTableFlags.NoSavedSettings | ImGuiTableFlags.PadOuterX;
-        using var table = ImRaii.Table($"postmatchplayers##{Match.Id}", ScoreboardColumns.Length, tableFlags);
+        using var table = ImRaii.Table($"postmatchplayers##{Match.Id}", ScoreboardColumns.Length, tableFlags, new Vector2(0,Math.Max(1,ImGui.GetContentRegionAvail().Y)));
         if(!table) return;
         foreach(var column in ScoreboardColumns) {
             var flags = ImGuiTableColumnFlags.WidthFixed;
             if(column.Required) flags |= ImGuiTableColumnFlags.NoHide;
             ImGui.TableSetupColumn(column.Caption + "###" + column.Key, flags, column.Width * ImGuiHelpers.GlobalScale, column.Id);
         }
-        ImGui.TableSetupScrollFreeze(3, 0);
+        ImGui.TableSetupScrollFreeze(3, 1);
         if(restoreColumns) for(var i = 0; i < ScoreboardColumns.Length; i++) ImGui.TableSetColumnEnabled(i, true);
         foreach(var column in ScoreboardColumns) {
             if(ImGui.TableNextColumn()) ImGuiHelper.DrawTableHeader(column.Caption, column.Id <= 1 ? 0 : column.Id == 2 ? 1 : 2, true, false);

@@ -9,14 +9,18 @@ namespace PvpStats.Windows.Detail;
 internal partial class CrystallineConflictMatchDetail {
     private void DrawDetailPages() {
         var scale=ImGuiHelpers.GlobalScale;
-        var pages=new[]{("Scoreboard","结算数据"),("Detailed","细项分析与回放"),("Timeline","事件时间线"),("Graphs","推进曲线"),("Actions","技能分析")};
+        var pages=new[]{("Scoreboard","结算数据"),("Detailed","细项回放"),("Timeline","事件时间线"),("Graphs","推进曲线"),("Actions","技能分析")};
         if(!pages.Any(p=>p.Item1==CurrentTab))CurrentTab="Scoreboard";
-        using(var navigation=ImRaii.Table("MatchPages",ImGui.GetContentRegionAvail().X>=900*scale?5:3,ImGuiTableFlags.SizingStretchSame)) {
-            if(navigation) foreach(var page in pages) {
-                ImGui.TableNextColumn();
-                using var tint=ImRaii.PushColor(ImGuiCol.Button,CurrentTab==page.Item1?ModernTheme.Selection:ModernTheme.ButtonBackground);
-                if(ModernTheme.Button(page.Item2+"###DetailPage"+page.Item1,new Vector2(-1,36*scale)))CurrentTab=page.Item1;
-            }
+        var available=ImGui.GetContentRegionAvail().X;
+        var used=0f;
+        foreach(var page in pages) {
+            var width=ImGui.CalcTextSize(page.Item2).X+24*scale;
+            if(used>0 && used+ImGui.GetStyle().ItemSpacing.X+width<=available) {
+                ImGui.SameLine(); used+=ImGui.GetStyle().ItemSpacing.X;
+            } else used=0;
+            using var tint=ImRaii.PushColor(ImGuiCol.Button,CurrentTab==page.Item1?ModernTheme.Selection:ModernTheme.ButtonBackground);
+            if(ModernTheme.Button(page.Item2+"###DetailPage"+page.Item1,new Vector2(width,28*scale)))CurrentTab=page.Item1;
+            used+=width;
         }
         using var content=ImRaii.Child("MatchPageContent",Vector2.Zero,false);
         if(!content)return;

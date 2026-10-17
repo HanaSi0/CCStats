@@ -25,10 +25,12 @@ internal abstract class JobStatsList<T, U> : StatsList<Job, T, U> where T : Play
         PlayerFilter = playerFilter;
     }
 
+    protected virtual bool AdditionalFilterChanged => false;
+
     protected override async Task RefreshInner(List<U> matches, List<U> additions, List<U> removals) {
         bool statFilterChange = !StatSourceFilter.Equals(_lastJobStatSourceFilter);
         bool playerFilterChange = StatSourceFilter!.InheritFromPlayerFilter && !PlayerFilter.Equals(_lastPlayerFilter);
-        if(removals.Count * 2 >= _matches.Count || statFilterChange || playerFilterChange) {
+        if(removals.Count * 2 >= _matches.Count || statFilterChange || playerFilterChange || AdditionalFilterChanged) {
             //force full build
             Reset();
             MatchesTotal = matches.Count;

@@ -107,6 +107,8 @@ internal partial class CrystallineConflictJobList : JobStatsList<CCPlayerJobStat
     }
 
     protected override void PostRefresh(List<CrystallineConflictMatch> matches, List<CrystallineConflictMatch> additions, List<CrystallineConflictMatch> removals) {
+        _knownPlayers=matches.SelectMany(m=>m.Teams.Values.SelectMany(t=>t.Players)).Select(p=>p.Alias.FullName).Distinct().OrderBy(n=>n).ToArray();
+        _lastSelectedPlayer=_analysisPlayer;
         foreach(var jobStat in _jobStats) {
             CrystallineConflictStatsManager.SetScoreboardStats(jobStat.Value, _jobTeamContributions[jobStat.Key].Values.ToList(), _jobTimes[jobStat.Key].ToTimeSpan());
         }
@@ -120,27 +122,10 @@ internal partial class CrystallineConflictJobList : JobStatsList<CCPlayerJobStat
             foreach(var player in team.Value.Players) {
                 if(player.Job is not { } job || !_jobStats.ContainsKey(job)) continue;
                 bool isLocalPlayer = player.Alias.Equals(match.LocalPlayer);
-                bool isTeammate = !match.IsSpectated && !isLocalPlayer && team.Key == match.LocalPlayerTeam!.TeamName;
-                bool isOpponent = !match.IsSpectated && !isLocalPlayer && !isTeammate;
-                bool jobStatsEligible = true;
-                bool nameMatch = player.Alias.FullName.Contains(PlayerFilter.PlayerNamesRaw, StringComparison.OrdinalIgnoreCase);
-                if(_plugin.Configuration.EnablePlayerLinking && !nameMatch) {
-                    nameMatch = _plugin.PlayerLinksService.GetAllLinkedAliases(PlayerFilter.PlayerNamesRaw).Contains(player.Alias);
-                }
-                bool sideMatch = PlayerFilter.TeamStatus == TeamStatus.Any
-                    || PlayerFilter.TeamStatus == TeamStatus.Teammate && isTeammate
-                    || PlayerFilter.TeamStatus == TeamStatus.Opponent && isOpponent;
-                bool jobMatch = PlayerFilter.AnyJob || PlayerFilter.PlayerJob == player.Job;
-                if(!nameMatch || !sideMatch || !jobMatch) {
-                    if(StatSourceFilter.InheritFromPlayerFilter) {
-                        jobStatsEligible = false;
-                    }
-                }
-                if(player.Job == null) {
-                    jobStatsEligible = false;
-                }
 
-                jobStatsEligible &= StatSourceFilter.Includes(match.IsSpectated,isLocalPlayer,isTeammate);
+                // A selected player is matched by full name and world; the default follows
+                // the local participant stored on each match, including older characters.
+                bool jobStatsEligible = JobPlayerSelection.Includes(_analysisPlayer,player.Alias.FullName,isLocalPlayer);
 
                 if(jobStatsEligible) {
                     if(CrystallineConflictStatsManager.HasScoreboard(match,team.Value,player)) {

@@ -34,10 +34,10 @@ internal static class ModernTheme {
                 .Push(ImGuiStyleVar.ChildRounding, 10f * scale).Push(ImGuiStyleVar.FrameRounding, 7f * scale)
                 .Push(ImGuiStyleVar.PopupRounding, 9f * scale).Push(ImGuiStyleVar.TabRounding, 7f * scale)
                 .Push(ImGuiStyleVar.ScrollbarRounding, 7f * scale).Push(ImGuiStyleVar.WindowBorderSize, 1f)
-                .Push(ImGuiStyleVar.FrameBorderSize, 0f).Push(ImGuiStyleVar.WindowPadding, new Vector2(14, 12) * scale)
-                .Push(ImGuiStyleVar.FramePadding, new Vector2(10, 6) * scale).Push(ImGuiStyleVar.ItemSpacing, new Vector2(10, 8) * scale)
-                .Push(ImGuiStyleVar.ItemInnerSpacing, new Vector2(10, 6) * scale)
-                .Push(ImGuiStyleVar.CellPadding, new Vector2(9, 7) * scale);
+                .Push(ImGuiStyleVar.FrameBorderSize, 0f).Push(ImGuiStyleVar.WindowPadding, new Vector2(8, 5) * scale)
+                .Push(ImGuiStyleVar.FramePadding, new Vector2(8, 4) * scale).Push(ImGuiStyleVar.ItemSpacing, new Vector2(8, 5) * scale)
+                .Push(ImGuiStyleVar.ItemInnerSpacing, new Vector2(8, 4) * scale)
+                .Push(ImGuiStyleVar.CellPadding, new Vector2(6, 3) * scale);
             _colors = ImRaii.PushColor(ImGuiCol.WindowBg, p.Background).Push(ImGuiCol.ChildBg, p.Panel)
                 .Push(ImGuiCol.PopupBg, p.Panel).Push(ImGuiCol.Border, p.Border)
                 .Push(ImGuiCol.Text, p.Text).Push(ImGuiCol.TextDisabled, p.Muted)

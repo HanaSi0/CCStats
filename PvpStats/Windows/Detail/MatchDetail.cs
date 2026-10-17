@@ -29,7 +29,7 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
     private bool _popupOpen = false;
     private Vector2 _lastWindowSize;
 
-    public MatchDetail(Plugin plugin, MatchCacheService<T> cache, T match) : base($"Match Details: {match.Id}") {
+    public MatchDetail(Plugin plugin, MatchCacheService<T> cache, T match) : base($"比赛详情###Match Details: {match.Id}") {
         Plugin = plugin;
         Cache = cache;
         Match = match;
@@ -68,14 +68,14 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
     protected void DrawFunctions() {
         var scale=Dalamud.Interface.Utility.ImGuiHelpers.GlobalScale;
         using(var font=ImRaii.PushFont(UiBuilder.IconFont)) {
-            if(ModernTheme.Button(FontAwesomeIcon.Copy.ToIconString()+"###CopyMatch",new Vector2(36*scale))) ImGui.SetClipboardText(CSV);
+            if(ModernTheme.Button(FontAwesomeIcon.Copy.ToIconString()+"###CopyMatch",new Vector2(28*scale))) ImGui.SetClipboardText(CSV);
         }
         ImGuiHelper.WrappedTooltip("复制对局数据");
         ImGui.SameLine();
         using(_ = ImRaii.PushFont(UiBuilder.IconFont)) {
             var color = Match.IsBookmarked ? Plugin.Configuration.Colors.Favorite : ImGuiColors.DalamudWhite;
             using(_ = ImRaii.PushColor(ImGuiCol.Text, color)) {
-                if(ModernTheme.Button($"{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch",new Vector2(36*scale))) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch",new Vector2(28*scale))) {
                     Match.IsBookmarked = !Match.IsBookmarked;
                     Plugin.DataQueue.QueueDataOperation(async () => {
                         await Cache.UpdateMatch(Match);
@@ -89,7 +89,7 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
             var color = !Match.Tags.IsNullOrEmpty() ? Plugin.Configuration.Colors.Favorite : ImGuiColors.DalamudWhite;
             using(_ = ImRaii.PushColor(ImGuiCol.Text, color)) {
-                if(ModernTheme.Button($"{FontAwesomeIcon.Tags.ToIconString()}##--Tags",new Vector2(36*scale))) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Tags.ToIconString()}##--Tags",new Vector2(28*scale))) {
                     ImGui.OpenPopup($"{Match.Id}--TagsPopup");
                 }
             }

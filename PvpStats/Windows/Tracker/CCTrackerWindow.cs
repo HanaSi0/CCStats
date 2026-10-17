@@ -212,9 +212,9 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         using(var header=ImRaii.Table("JobPageHeader",2,ImGuiTableFlags.SizingStretchSame)) {
             if(header) {
                 ImGui.TableNextColumn();
-                if(ModernTheme.Button(_jobFiltersExpanded?"收起对局筛选###JobMatchFilters":"对局筛选###JobMatchFilters",new(-1,38*scale))) _jobFiltersExpanded=!_jobFiltersExpanded;
+                if(ModernTheme.Button(_jobFiltersExpanded?"收起对局筛选###JobMatchFilters":"对局筛选###JobMatchFilters",new(-1,28*scale))) _jobFiltersExpanded=!_jobFiltersExpanded;
                 ImGui.TableNextColumn();
-                if(ModernTheme.Button(_jobs.ShowDetailedTable?"职业图标视图###JobView":"完整数据表###JobView",new(-1,38*scale))) _jobs.ShowDetailedTable=!_jobs.ShowDetailedTable;
+                if(ModernTheme.Button(_jobs.ShowDetailedTable?"职业图标视图###JobView":"完整数据表###JobView",new(-1,28*scale))) _jobs.ShowDetailedTable=!_jobs.ShowDetailedTable;
             }
         }
         if(_jobFiltersExpanded) {
@@ -264,7 +264,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
             var item=modes[i];
             var selected=item.Item2==null?mode.FilterState.Values.All(x=>x):mode.FilterState.All(x=>x.Value==(x.Key==item.Item2));
             using var tint=ImRaii.PushColor(ImGuiCol.Button,selected?ModernTheme.Selection:ModernTheme.ButtonBackground);
-            if(ModernTheme.Button(item.Item1+"###CCQuick"+item.Item1,new(width,34*scale))) {
+            if(ModernTheme.Button(item.Item1+"###CCQuick"+item.Item1,new(width,28*scale))) {
                 foreach(var key in mode.FilterState.Keys.ToArray()) mode.FilterState[key]=item.Item2==null || key==item.Item2;
                 mode.AllSelected=item.Item2==null;
                 _=Task.Run(()=>Refresh());

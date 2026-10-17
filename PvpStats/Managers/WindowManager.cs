@@ -131,7 +131,7 @@ internal class WindowManager : IDisposable {
 #endif
 
     //internal void OpenMatchDetailsWindow(CrystallineConflictMatch match) {
-    //    var windowName = $"Match Details: {match.Id}";
+    //    var windowName = $"比赛详情###Match Details: {match.Id}";
     //    var window = WindowSystem.Windows.Where(w => w.WindowName == windowName).FirstOrDefault();
     //    if(window is not null) {
     //        window.BringToFront();
@@ -145,7 +145,7 @@ internal class WindowManager : IDisposable {
     //}
 
     internal void OpenMatchDetailsWindow(PvpMatch match) {
-        var windowName = $"Match Details: {match.Id}";
+        var windowName = $"比赛详情###Match Details: {match.Id}";
         var window = WindowSystem.Windows.Where(w => w.WindowName == windowName).FirstOrDefault();
         if(window is not null) {
             window.BringToFront();
@@ -165,7 +165,7 @@ internal class WindowManager : IDisposable {
     }
 
     internal void CloseAllMatchWindows() {
-        var windows = WindowSystem.Windows.Where(w => w.WindowName.StartsWith("Match Details: ", StringComparison.OrdinalIgnoreCase));
+        var windows = WindowSystem.Windows.Where(w => w.WindowName.StartsWith("比赛详情###Match Details: ", StringComparison.OrdinalIgnoreCase));
         foreach(var window in windows) {
             window.IsOpen = false;
         }

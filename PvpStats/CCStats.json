@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.5：重构详情与窗口缩放，修复空曲线页面异常；提高走位采样，放大地图并记录水晶坐标。",
+  "Changelog": "0.2.6：紧凑布局与小按钮，固定结算表头；职业分析默认本人，支持搜索和选择其他玩家。",
   "Tags": [
     "pvp",
     "statistics"

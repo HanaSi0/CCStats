@@ -11,6 +11,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
+using PvpStats.Types.Match;
 
 namespace PvpStats.Windows.List;
 internal partial class CrystallineConflictJobList {
@@ -19,15 +21,9 @@ internal partial class CrystallineConflictJobList {
     internal void DrawCards() {
         if(ShowDetailedTable) { Draw(); return; }
         var scale=ImGuiHelpers.GlobalScale;
-        // All primary controls share two equal columns and comfortable hit areas.
-        using(var padding=ImRaii.PushStyle(ImGuiStyleVar.FramePadding,new Vector2(10,10)*scale))
         using(var toolbar=ImRaii.Table("JobCardsToolbar",2,ImGuiTableFlags.SizingStretchSame)) {
             if(toolbar) {
-                ImGui.TableNextColumn();
-                var enabled=StatSourceFilter.FilterState.Where(p=>p.Value).Select(p=>p.Key).ToArray();
-                var source=enabled.Length==4?"全部角色":enabled.Length==0?"未选择统计来源":string.Join("、",enabled.Select(p=>p switch { StatSource.LocalPlayer=>"我自己",StatSource.Teammate=>"队友",StatSource.Opponent=>"对手",_=>"观战" }));
-                if(ModernTheme.Button("统计范围："+source+"###JobCardSource",new(-1,0))) ImGui.OpenPopup("JobCardSourcePopup");
-                if(ImGui.IsItemHovered()) ImGui.SetTooltip("统计范围："+source);
+                ImGui.TableNextColumn(); DrawPlayerSelector();
                 ImGui.TableNextColumn(); ImGui.SetNextItemWidth(-1);
                 ImGui.Combo("###JobCardMetric",ref _cardMetric,new[]{"场均数据","每分钟数据","累计数据"},3);
                 ImGui.TableNextRow(); ImGui.TableNextColumn(); ImGui.SetNextItemWidth(-1);
@@ -36,9 +32,6 @@ internal partial class CrystallineConflictJobList {
                 ImGui.Combo("###JobCardSort",ref _cardSort,new[]{"按出场次数","按有效胜率","按职业顺序"},3);
             }
         }
-        ImGui.SetNextWindowSize(new Vector2(Math.Min(600*scale,ImGui.GetMainViewport().WorkSize.X-40*scale),0),ImGuiCond.Appearing);
-        using(var popup=ImRaii.Popup("JobCardSourcePopup")) if(popup) { ImGui.TextUnformatted("选择纳入职业统计的角色"); StatSourceFilter.Draw(); }
-        ImGui.TextDisabled("出场按角色人次统计；胜率只计胜负场。无数据用 — 表示。");
         if(RefreshActive) { ImGui.TextUnformatted("正在更新职业数据……"); return; }
         var model=StatsModel;
         var jobs=Enum.GetValues<Job>().Where(j=>_cardRole==0 || (int?)PlayerJobHelper.GetSubRoleFromJob(j)==_cardRole-1);
@@ -59,12 +52,13 @@ internal partial class CrystallineConflictJobList {
     }
     private void DrawJobCard(Job job,CCPlayerJobStats stats) {
         var scale=ImGuiHelpers.GlobalScale;
-        var height=ImGui.GetTextLineHeightWithSpacing()*15+32*scale;
+        var stacked=_stackCardMetrics=ImGui.GetContentRegionAvail().X<370*scale;
+        var height=ImGui.GetTextLineHeightWithSpacing()*(stacked?14:10)+24*scale;
         using var card=ImRaii.Child("JobCard"+job,new Vector2(0,height),true,ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoScrollWithMouse);
         if(!card)return;
         ImGui.SetWindowFontScale(1);
-        if(TextureHelper.JobIcons.TryGetValue(job,out var icon)) ImGui.Image(_plugin.WindowManager.GetTextureHandle(icon),new Vector2(42*scale));
-        else ImGui.Dummy(new Vector2(42*scale));
+        if(TextureHelper.JobIcons.TryGetValue(job,out var icon)) ImGui.Image(_plugin.WindowManager.GetTextureHandle(icon),new Vector2(32*scale));
+        else ImGui.Dummy(new Vector2(32*scale));
         ImGui.SameLine();
         using(var label=ImRaii.Group()) {
             ImGui.TextUnformatted(PlayerJobHelper.GetNameFromJob(job));
@@ -88,7 +82,44 @@ internal partial class CrystallineConflictJobList {
         }
         if(!hasData) ImGui.TextDisabled(all.Matches==0?"当前筛选范围内暂无该职业数据":"当前记录缺少可用结算数据");
     }
-    private static void Cell(string caption,string value) {
-        ImGui.TableNextColumn(); ImGui.TextDisabled(caption); ImGui.TextUnformatted(value);
+    private string? _selectedPlayer, _lastSelectedPlayer, _analysisPlayer;
+    private string[] _knownPlayers=Array.Empty<string>();
+    private string _playerSearch="";
+    protected override bool AdditionalFilterChanged => _analysisPlayer!=_lastSelectedPlayer;
+    protected override async Task RefreshInner(List<CrystallineConflictMatch> matches,List<CrystallineConflictMatch> additions,List<CrystallineConflictMatch> removals) {
+        _analysisPlayer=_selectedPlayer;
+        await base.RefreshInner(matches,additions,removals);
+    }
+    protected override void PreTableDraw() {
+        DrawPlayerSelector(); CSVButton();
+    }
+    private void DrawPlayerSelector() {
+        ImGui.SetNextItemWidth(-1);
+        if(!ImGui.BeginCombo("###JobPlayer",_selectedPlayer??"本人（每局本机角色）")) return;
+        try {
+            ImGui.SetNextItemWidth(-1);
+            ImGui.InputTextWithHint("###JobPlayerSearch","搜索玩家名或服务器",ref _playerSearch,100);
+            if(ImGui.Selectable("本人（每局本机角色）",_selectedPlayer==null)) SelectPlayer(null);
+            foreach(var name in _knownPlayers) {
+                if(!name.Contains(_playerSearch,StringComparison.OrdinalIgnoreCase)) continue;
+                if(ImGui.Selectable(name,_selectedPlayer==name)) SelectPlayer(name);
+            }
+        } finally { ImGui.EndCombo(); }
+    }
+    private void SelectPlayer(string? name) {
+        if(_selectedPlayer==name)return;
+        _selectedPlayer=name;
+        _=RefreshSelectedPlayer();
+    }
+    private async Task RefreshSelectedPlayer() {
+        try { await Refresh(); }
+        catch(Exception e) { _plugin.Log.Error(e,"Selected player job statistics refresh failed."); }
+    }
+    private bool _stackCardMetrics;
+    private void Cell(string caption,string value) {
+        ImGui.TableNextColumn();
+        ImGui.TextDisabled(caption);
+        if(!_stackCardMetrics) ImGui.SameLine();
+        ImGui.TextUnformatted(value);
     }
 }

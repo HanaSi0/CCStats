@@ -35,6 +35,11 @@ void Check(bool condition, string description) {
     if(!condition) throw new Exception("FAILED: " + description);
     passed++;
 }
+Check(JobPlayerSelection.Includes(null,"Local Player Ixion",true),"job analysis defaults to local participant");
+Check(!JobPlayerSelection.Includes(null,"Other Player Ixion",false),"job analysis excludes other players by default");
+Check(JobPlayerSelection.Includes("Other Player Ixion","other player ixion",false),"selected player includes exact alias ignoring case");
+Check(!JobPlayerSelection.Includes("Other Player Ixion","Other Player Shinryu",false),"selected player distinguishes worlds");
+Check(!JobPlayerSelection.Includes("Other Player Ixion","Local Player Ixion",true),"selected player excludes local participant");
 // Dear ImGui's CRC32 string hash, including its ### reset rule.
 uint HashLabel(string text) {
     var bytes = Encoding.UTF8.GetBytes(text);
