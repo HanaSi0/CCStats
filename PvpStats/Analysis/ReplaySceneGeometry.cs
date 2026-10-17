@@ -60,9 +60,18 @@ public sealed class ReplaySceneGeometry {
     public static bool GuardVisible(PlayerPosition player,DateTime now) => player.HP>0&&player.StatusTimestamp<=now&&player.Statuses.Any(s=>s.Id is 3054 or 3673&&(s.Remaining<=0||s.Remaining>(now-player.StatusTimestamp).TotalSeconds));
     public void Pawn(Vector3 at,float heading,bool dead,bool selected,int team) {
         var color=dead?Rgba(.45f,.46f,.49f):team==1?Rgba(.1f,.7f,1):Rgba(1,.23f,.32f);
-        Cylinder(at+new Vector3(0,.05f,0),.9f,.18f,color);
+        var basePoint=at+new Vector3(0,.2f,0);var apex=at+new Vector3(0,2.7f,0);
+        var corners=new Vector3[3];
+        for(int i=0;i<3;i++) {
+            var angle=heading+i*MathF.Tau/3;
+            corners[i]=basePoint+new Vector3(MathF.Sin(angle),0,MathF.Cos(angle))*.9f;
+        }
+        for(int i=0;i<3;i++) {
+            var face=dead?color:i==0?Rgba(.78f,.94f,1):i==1?color:Rgba((color&255)/255f*.65f,((color>>8)&255)/255f*.65f,((color>>16)&255)/255f*.65f);
+            Triangle(corners[i],corners[(i+1)%3],apex,face);
+        }
+        Triangle(corners[0],corners[2],corners[1],color);
         if(dead) { Ribbon(at+new Vector3(-.7f,.25f,-.7f),at+new Vector3(.7f,.25f,.7f),.22f,Rgba(1,.2f,.2f));Ribbon(at+new Vector3(-.7f,.25f,.7f),at+new Vector3(.7f,.25f,-.7f),.22f,Rgba(1,.2f,.2f));return; }
-        Cylinder(at+new Vector3(0,.2f,0),.5f,1.3f,color);Diamond(at+new Vector3(0,1.45f,0),.58f,1.25f,color);
         var direction=new Vector3(MathF.Sin(heading),0,MathF.Cos(heading));var side=new Vector3(direction.Z,0,-direction.X);
         var ground=at+new Vector3(0,.16f,0);
         // Bright arrow outside the pawn silhouette, with a dark backing and visible shaft.
