@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.4：复查七张地图，恢复赤土红沙峡谷岩壁及核心连接结构，补回海岸斗场核心地形；其余地图清理重复几何和顶点，保留主要地面、通道、掩体和高差。",
+  "Changelog": "1.0.5：补建赤土红沙两侧缺失的圆形显示地板，修复雾层和流沙透明显示；地图机制去掉名称与倒计时，按实际动作、位置及客户端范围区分伤害、分摊、护盾、恢复、吸引和击退效果。",
   "Tags": [
     "pvp",
     "crystalline conflict",

@@ -146,17 +146,6 @@ internal sealed partial class MatchReplayWindow {
                 }
             }
             DrawSniperReticles(origin,size);
-            if(_showMechanics) {
-                var active=ReplayMechanicObservation.Active(_data.MapMechanics,now).ToArray();
-                var global=active.LastOrDefault(e=>e.MapWide);
-                if(global!=null)draw.AddText(origin+new Vector2(10),ImGui.GetColorU32(ModernTheme.Gold),ReplayMechanicObservation.Caption(global,now));
-                else if(_timeline.MapEvents?.Any(e=>e.Type==PvpStats.Types.Match.CrystallineConflictMatchEvent.SpecialEvent&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3))==true)
-                    draw.AddText(origin+new Vector2(10),ImGui.GetColorU32(ModernTheme.Gold),"地图计时器触发");
-                foreach(var entry in active.Where(e=>!e.MapWide&&e.X.HasValue&&e.Z.HasValue)) {
-                    var point=new Vector3(entry.X!.Value,Height(entry.X.Value,entry.Y,entry.Z!.Value)+2.2f,entry.Z.Value);
-                    if(Project3D(point,origin,size,out var at))draw.AddText(at,ImGui.GetColorU32(ModernTheme.Gold),ReplayMechanicObservation.Caption(entry,now));
-                }
-            }
             } finally { draw.PopClipRect(); }
         } catch(Exception e) { _renderError="三维渲染初始化失败，可重试或使用二维回放。";_plugin.Log.Error(e,"Experimental 3D replay failed.");_renderer?.DisposeAfterFrame(_plugin.PluginInterface.UiBuilder);_renderer=null; }
     }
@@ -204,9 +193,6 @@ internal sealed partial class MatchReplayWindow {
             var at=World(crystal);_scene.Diamond(at+new Vector3(0,.5f,0),1.4f,5.5f,ReplaySceneGeometry.Rgba(.25f,.75f,1));
             _scene.Ring(at+new Vector3(0,.08f,0),_radius3D,.15f,ReplaySceneGeometry.Rgba(.3f,.85f,1));
         }
-        if(_showMechanics)foreach(var e in ReplayMechanicObservation.Active(_data.MapMechanics,now).Where(e=>!e.MapWide&&e.X.HasValue&&e.Z.HasValue)) {
-            var at=new Vector3(e.X!.Value,Height(e.X.Value,e.Y,e.Z!.Value),e.Z!.Value);_scene.Diamond(at,.65f,2,ReplaySceneGeometry.Rgba(1,.8f,.2f));
-        }
         foreach(var death in _timeline.Kills?.Where(k=>k.Timestamp<=now&&k.Timestamp>=now.AddSeconds(-3))??[]) {
             var p=DetailedAnalysis.FrameAt(_data,death.Timestamp)?.Players.FirstOrDefault(p=>p.Player==death.Victim.ToString());if(p==null)continue;var at=World(p)+new Vector3(0,.1f,0);
             _scene.Ribbon(at+new Vector3(-1,0,-1),at+new Vector3(1,0,1),.3f,ReplaySceneGeometry.Rgba(1,.15f,.2f));_scene.Ribbon(at+new Vector3(-1,0,1),at+new Vector3(1,0,-1),.3f,ReplaySceneGeometry.Rgba(1,.15f,.2f));
@@ -214,6 +200,12 @@ internal sealed partial class MatchReplayWindow {
     }
     private void BuildLBOverlay(MovementFrame? frame,DateTime now) {
         _lbOverlay.Clear();
+        if(_showMechanics)foreach(var visual in MapMechanicVisuals.Active(_data.MapMechanics,_match.TerritoryId,now)) {
+            var recordedY=visual.Rule.Ground?visual.Event.TargetY:visual.Event.Y;
+            var offset=recordedY.HasValue?visual.Center.Y-(_mesh?.EstimatedHeight(visual.Center.X,visual.Center.Z)??visual.Center.Y):0;
+            MapMechanicVisuals.Draw(_lbOverlay,visual,now,(x,z)=>(_mesh?.EstimatedHeight(x,z)??visual.Center.Y)+offset);
+            if(_lbOverlay.Vertices.Length>12000)break;
+        }
         if(!_showLB) { AddGuardBubbles(frame,now);return; }
         if(_lbEvents==null) {
             _lbEvents=new(_data.ReplaySkills);

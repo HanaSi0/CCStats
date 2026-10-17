@@ -1,0 +1,14 @@
+[
+  {
+    "center_x": -60,
+    "original_missing_samples": 33955,
+    "remaining_missing_samples": 0,
+    "sample_spacing": 0.2
+  },
+  {
+    "center_x": 60,
+    "original_missing_samples": 30573,
+    "remaining_missing_samples": 0,
+    "sample_spacing": 0.2
+  }
+]

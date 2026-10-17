@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PvpStats.Analysis;
 
-// This presents observed client events; map-specific AoE rules are verified separately against sources.
+// Raw event phases stay available in the log; only MapMechanicVisuals selects drawable arena mechanics.
 public static class ReplayMechanicObservation {
     public static bool Visible(ReplayMapEvent e,DateTime time) {
         if(time<e.Timestamp)return false;
@@ -17,10 +17,10 @@ public static class ReplayMechanicObservation {
     }
     public static IEnumerable<ReplayMapEvent> Active(IEnumerable<ReplayMapEvent> events,DateTime time) => events.Where(e=>Visible(e,time));
     public static string Caption(ReplayMapEvent e,DateTime time) => e.Kind switch {
-        ReplayMapEventKind.CastObserved=>"环境读条 · "+e.Label+(e.ExpectedEndTime.HasValue?$" · {Math.Max(0,(e.ExpectedEndTime.Value-time).TotalSeconds):F1} 秒":""),
+        ReplayMapEventKind.CastObserved=>"环境读条 · "+(MapMechanicVisuals.Find(e.ActionId)?.Name??e.Label)+(e.ExpectedEndTime.HasValue?$" · {Math.Max(0,(e.ExpectedEndTime.Value-time).TotalSeconds):F1} 秒":""),
         ReplayMapEventKind.TimerWarning=>"地图计时器 · "+(e.ExpectedEndTime.HasValue?$"{Math.Max(0,(e.ExpectedEndTime.Value-time).TotalSeconds):F1} 秒":"待触发"),
         ReplayMapEventKind.TimerTriggered=>"地图计时器触发",
-        _=>e.Label
+        _=>(MapMechanicVisuals.Find(e.ActionId)?.Name??e.Label)
     };
     public static string SourceDescription(ReplayMapEvent e) => e.Kind==ReplayMapEventKind.CastObserved
         ?"客户端环境对象读条观测；位置为施法来源，预计结束时间不是服务器结算时刻。"

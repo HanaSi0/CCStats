@@ -32,7 +32,7 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
     private ID3D11RenderTargetView* _target;
     private ID3D11ShaderResourceView* _view;
     private ID3D11DepthStencilView* _depthView;
-    private readonly uint _indexCount;
+    private readonly uint _indexCount,_opaqueIndexCount;
     private const int MaxDynamicVertices=120_000;
     internal int Width { get; private set; }
     internal int Height { get; private set; }
@@ -60,7 +60,7 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
             Check(((IUnknown*)deviceHandle)->QueryInterface(&iid,(void**)&device));_device=device;
             ID3D11DeviceContext* deferred=null;Check(device->CreateDeferredContext(0,&deferred));_deferred=deferred;
             ID3D11DeviceContext* immediate=null;device->GetImmediateContext(&immediate);_immediate=immediate;
-            _indexCount=(uint)mesh.Indices.Length;
+            _indexCount=(uint)mesh.Indices.Length;_opaqueIndexCount=(uint)mesh.OpaqueIndexCount;
             fixed(ReplayVertex* v=mesh.Vertices) _mapVertices=Buffer((uint)(mesh.Vertices.Length*sizeof(ReplayVertex)),D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER,v);
             fixed(uint* i=mesh.Indices) _mapIndices=Buffer((uint)(mesh.Indices.Length*sizeof(uint)),D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER,i);
             _dynamic=Buffer(MaxDynamicVertices*16,D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER,null,true);
@@ -160,8 +160,13 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
         D3D11_VIEWPORT viewport=new() { Width=Width,Height=Height,MinDepth=0,MaxDepth=1 };ctx->RSSetViewports(1,&viewport);ctx->RSSetState(_raster);
         ctx->IASetInputLayout(_layout);ctx->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY.D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         ctx->VSSetShader(_vs,null,0);ctx->PSSetShader(_ps,null,0);var camera=_camera;ctx->VSSetConstantBuffers(0,1,&camera);
-        uint stride=16,offset=0;var buffer=_mapVertices;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->IASetIndexBuffer(_mapIndices,DXGI_FORMAT.DXGI_FORMAT_R32_UINT,0);ctx->DrawIndexed(_indexCount,0,0);
+        uint stride=16,offset=0;var buffer=_mapVertices;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->IASetIndexBuffer(_mapIndices,DXGI_FORMAT.DXGI_FORMAT_R32_UINT,0);ctx->DrawIndexed(_opaqueIndexCount,0,0);
         if(dynamicVertices.Length>0) { buffer=_dynamic;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->Draw((uint)dynamicVertices.Length,0); }
+        if(_indexCount>_opaqueIndexCount) {
+            ctx->OMSetDepthStencilState(_overlayDepth,0);ctx->OMSetBlendState(_overlayBlend,null,uint.MaxValue);
+            buffer=_mapVertices;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);
+            ctx->DrawIndexed(_indexCount-_opaqueIndexCount,_opaqueIndexCount,0);
+        }
         if(overlays.Length>0) {
             ctx->OMSetDepthStencilState(_overlayDepth,0);ctx->OMSetBlendState(_overlayBlend,null,uint.MaxValue);
             buffer=_dynamic;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->Draw((uint)overlays.Length,(uint)dynamicVertices.Length);

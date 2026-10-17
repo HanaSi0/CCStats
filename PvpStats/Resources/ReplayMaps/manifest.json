@@ -42,10 +42,10 @@
   {
     "map": "red-sands",
     "name": "赤土红沙",
-    "triangles": 476240,
-    "vertices": 701414,
-    "compressed_bytes": 6650026,
-    "sha256": "dead355e13f162ec946a8557a8a4bcd857b156401a396a0497f9691537b49b5b"
+    "triangles": 483216,
+    "vertices": 704843,
+    "compressed_bytes": 6683609,
+    "sha256": "404c10857e2b2dd6fb3e87c22167993a8aa4aea8672f279af0da2401dea4fabd"
   },
   {
     "map": "volcanic-heart",

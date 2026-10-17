@@ -1,0 +1,66 @@
+{
+  "map": "red-sands",
+  "name": "赤土红沙",
+  "triangles": 483216,
+  "vertices": 704843,
+  "compressed_bytes": 6683609,
+  "sha256": "404c10857e2b2dd6fb3e87c22167993a8aa4aea8672f279af0da2401dea4fabd",
+  "source_triangles": 533990,
+  "source_sha256": {
+    "BgPart_0000-0048.glb": "b33877a78d6166953e738388b8139bf027724c05b9958c14346fe9f1f25d4f33",
+    "BgPart_0048-0077.glb": "896fcca38627c3dfdbc07ae60fefbb9adbdad416d4240192e1aee5a16f9a9ab6",
+    "SharedGroup_0000-0004.glb": "4733bb646de5812c7cd6f40db0a2a529649b0dfbad29d45a985f551080e0f875",
+    "Terrain_0000-0000.glb": "caf39b6f8d316d300042523655a1a1660b012a3e8ed1e2e3bde71d7ddd25b463"
+  },
+  "bounds": [
+    [
+      -108.0,
+      -44.85478591918945,
+      -87.0
+    ],
+    [
+      108.0,
+      13.997361183166504,
+      87.0
+    ]
+  ],
+  "visual_effect_triangles": 4732,
+  "origin": [
+    0,
+    0,
+    0
+  ],
+  "retention": "Restore source ground/canyon, preserve translucent fog and light shafts, reconstruct missing circular display floors; omit tiny props. Display mesh is not collision data.",
+  "display_floor_reconstructions": [
+    {
+      "center": [
+        -60.0,
+        0
+      ],
+      "source_hole_area": 1358.2,
+      "display_radius": 30,
+      "display_height": -0.9517040848731995,
+      "triangles": 3678,
+      "method": "Existing near-ground surface footprint, enclosed-hole detection, rim-height median and adjacent source colors. Display reconstruction only."
+    },
+    {
+      "center": [
+        60.0,
+        0
+      ],
+      "source_hole_area": 1222.92,
+      "display_radius": 30,
+      "display_height": -0.9409599900245667,
+      "triangles": 3186,
+      "method": "Existing near-ground surface footprint, enclosed-hole detection, rim-height median and adjacent source colors. Display reconstruction only."
+    }
+  ],
+  "before_optimization_triangles": 483314,
+  "duplicate_faces_removed": 98,
+  "floor_coverage": {
+    "spacing": 0.25,
+    "source_covered_samples": 594515,
+    "lost_samples": 0,
+    "topology_fallback": false
+  }
+}

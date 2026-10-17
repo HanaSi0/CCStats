@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<Authors>HanaSi0</Authors>
 		<Company></Company>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 		<AssemblyName>CCStats</AssemblyName>
 		<RootNamespace>PvpStats</RootNamespace>
 		<Description>CCStats 水晶冲突数据记录与 3D 实时渲染回放</Description>

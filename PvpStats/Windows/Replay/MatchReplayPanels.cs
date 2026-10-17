@@ -138,19 +138,14 @@ internal sealed partial class MatchReplayWindow {
         }
     }
     private void DrawMechanics(ImDrawListPtr draw,Func<Vector2,Vector2> at,Vector2 origin,float side,DateTime now,float scale,bool hovered) {
-        var entries=ReplayMechanicObservation.Active(_data.MapMechanics,now).ToArray();
-        var global=entries.LastOrDefault(e=>e.MapWide);
-        if(global!=null || (_timeline.MapEvents?.Any(e=>e.Type==CrystallineConflictMatchEvent.SpecialEvent&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3))??false)) {
-            draw.AddRect(origin,origin+new Vector2(side),ImGui.GetColorU32(ModernTheme.Gold),0,ImDrawFlags.None,3*scale);
-            draw.AddRectFilled(origin,origin+new Vector2(side,30*scale),ImGui.GetColorU32(new Vector4(.05f,.05f,.08f,.94f)));
-            draw.AddText(origin+new Vector2(8*scale),ImGui.GetColorU32(ModernTheme.Gold),global!=null?ReplayMechanicObservation.Caption(global,now):"地图计时器触发");
+        var geometry=new ReplaySceneGeometry();
+        foreach(var visual in MapMechanicVisuals.Active(_data.MapMechanics,_match.TerritoryId,now)) {
+            MapMechanicVisuals.Draw(geometry,visual,now,(_,_)=>0);
+            if(geometry.Vertices.Length>12000)break;
         }
-        foreach(var entry in entries.Where(e=>!e.MapWide&&e.X.HasValue&&e.Z.HasValue)) {
-            var uv=Uv(new PlayerPosition { X=entry.X!.Value,Z=entry.Z!.Value }); if(!InMap(uv))continue;
-            var point=at(uv);var d=8*scale;var color=ImGui.GetColorU32(ModernTheme.Gold);
-            draw.AddTriangleFilled(point+new Vector2(0,-d),point+new Vector2(d,d),point+new Vector2(-d,d),color);
-            draw.AddText(point+new Vector2(10*scale,-8*scale),color,ReplayMechanicObservation.Caption(entry,now));
-            if(hovered&&Vector2.Distance(ImGui.GetMousePos(),point)<12*scale)ImGui.SetTooltip(ReplayMechanicObservation.SourceDescription(entry));
-        }
+        var vertices=geometry.Vertices;
+        Vector2 Point(Vector3 p)=>at(Uv(new PlayerPosition { X=p.X,Z=p.Z }));
+        for(int i=0;i<vertices.Length;i+=3)
+            draw.AddTriangleFilled(Point(vertices[i].Position),Point(vertices[i+1].Position),Point(vertices[i+2].Position),vertices[i].Color);
     }
 }

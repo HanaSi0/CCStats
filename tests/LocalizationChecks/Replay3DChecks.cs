@@ -21,7 +21,7 @@ internal static class Replay3DChecks {
         b.Y=null;check(ReplayInterpolation.Sample(data,middle)!.Players[0].Y==a.Y,"missing future height does not fabricate a vertical path");b.Y=3;
         data.Frames[1].Timestamp=start.AddSeconds(10);check(ReferenceEquals(ReplayInterpolation.Sample(data,middle),data.Frames[0]),"3D playback preserves recording gaps");
         check(Marshal.SizeOf<ReplayVertex>()==16,"GPU vertex layout matches HLSL position/color input stride");
-        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,76963),(1033,1059,161691),(1034,1060,125504),(1116,1117,182418),(1138,1139,476240),(1293,1294,279142),(1357,1358,204054) };
+        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,76963),(1033,1059,161691),(1034,1060,125504),(1116,1117,182418),(1138,1139,483216),(1293,1294,279142),(1357,1358,204054) };
         foreach(var p in pairs) {
             check(ReplayMapMesh.MapKey(p.Normal)==ReplayMapMesh.MapKey(p.Custom),"normal and custom territory select the same exported arena: "+p.Normal);
             var mesh=ReplayMapMesh.LoadEmbedded(p.Normal);
@@ -37,8 +37,19 @@ internal static class Replay3DChecks {
             using var packed=new MemoryStream();using(var zip=new GZipStream(packed,CompressionLevel.Fastest,true))raw.WriteTo(zip);packed.Position=0;
             bool rejected=false;try { ReplayMapMesh.Read(packed); }catch(InvalidDataException) {rejected=true;}check(rejected,"corrupt map indices fail before GPU buffer creation");
         }
-        var floor=new ReplayMapMesh(new[] {new ReplayVertex(new(-5,3,-5),0),new ReplayVertex(new(5,3,-5),0),new ReplayVertex(new(0,3,5),0)},new uint[] {0,1,2});
+        var floor=new ReplayMapMesh(new[] {new ReplayVertex(new(-5,3,-5),0xffffffff),new ReplayVertex(new(5,3,-5),0xffffffff),new ReplayVertex(new(0,3,5),0xffffffff)},new uint[] {0,1,2});
         check(Math.Abs(floor.EstimatedHeight(0,0)-3)<.001,"legacy missing-height fallback comes from exported floor geometry");
+        var layered=new ReplayMapMesh(new[] {
+            new ReplayVertex(new(-5,10,-5),0x88ffffff),new ReplayVertex(new(5,10,-5),0x88ffffff),new ReplayVertex(new(0,10,5),0x88ffffff),
+            new ReplayVertex(new(-5,3,-5),0xffffffff),new ReplayVertex(new(5,3,-5),0xffffffff),new ReplayVertex(new(0,3,5),0xffffffff),
+            new ReplayVertex(new(-5,-15,-5),0xaaffffff),new ReplayVertex(new(5,-15,-5),0xaaffffff),new ReplayVertex(new(0,-15,5),0xaaffffff)
+        },new uint[]{0,1,2,3,4,5,6,7,8});
+        check(layered.OpaqueIndexCount==3&&layered.Indices.Length==9,"opaque terrain and translucent display layers use separate native map passes");
+        check(Math.Abs(layered.EstimatedHeight(0,0)-3)<.001,"fog and light shafts cannot replace actual terrain height");
+        check(layered.Vertices[layered.Indices[3]].Position.Y==-15,"low fog draws before the raised translucent layer for above-map cameras");
+        var red=ReplayMapMesh.LoadEmbedded(1138);
+        check(red.EstimatedHeight(-60,0)>-2&&red.EstimatedHeight(-60,0)<-.3f&&red.EstimatedHeight(60,0)>-2&&red.EstimatedHeight(60,0)<-.3f,"both missing circular floors have reconstructed display surfaces near adjacent terrain elevation");
+        check(red.OpaqueIndexCount<red.Indices.Length,"Red Sands preserves native visual layers instead of discarding them or drawing solid gray plates");
         var scene=new ReplaySceneGeometry();scene.Pawn(Vector3.Zero,0,false,true,1);scene.Diamond(Vector3.Zero,1,5,0xffffffff);scene.Ring(Vector3.Zero,5,.1f,0xffffffff);
         check(scene.Vertices.Length>0&&scene.Vertices.Length%3==0,"pawn, diamond and crystal circle produce GPU triangle lists");
     }

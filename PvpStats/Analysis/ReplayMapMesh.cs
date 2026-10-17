@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Numerics;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace PvpStats.Analysis;
@@ -16,6 +17,7 @@ public struct ReplayVertex {
 public sealed class ReplayMapMesh {
     public ReplayVertex[] Vertices { get; }
     public uint[] Indices { get; }
+    public int OpaqueIndexCount { get; }
     public Vector3 Min { get; }
     public Vector3 Max { get; }
     // The source is visual geometry, not a collision mesh. Used only for missing historical heights.
@@ -23,12 +25,27 @@ public sealed class ReplayMapMesh {
     private readonly Vector2 _groundMin;
     private const float Cell=1;
     public ReplayMapMesh(ReplayVertex[] vertices,uint[] indices) {
-        Vertices=vertices;Indices=indices;
+        Vertices=vertices;
+        // Keep visual-only fog/light shafts out of the ground estimator and opaque depth pass.
+        var solid=new System.Collections.Generic.List<uint>();
+        var translucent=new System.Collections.Generic.List<uint>();
+        for(int i=0;i<indices.Length;i+=3) {
+            var target=(vertices[indices[i]].Color>>24)==255&&(vertices[indices[i+1]].Color>>24)==255&&(vertices[indices[i+2]].Color>>24)==255?solid:translucent;
+            target.Add(indices[i]);target.Add(indices[i+1]);target.Add(indices[i+2]);
+        }
+        OpaqueIndexCount=solid.Count;
+        // The replay camera stays above the arena: lower fog precedes raised light shafts.
+        foreach(var i in Enumerable.Range(0,translucent.Count/3).OrderBy(i=>
+            (vertices[translucent[i*3]].Position.Y+vertices[translucent[i*3+1]].Position.Y+vertices[translucent[i*3+2]].Position.Y)/3)) {
+            solid.Add(translucent[i*3]);solid.Add(translucent[i*3+1]);solid.Add(translucent[i*3+2]);
+        }
+        Indices=solid.ToArray();
+        indices=Indices;
         var min=new Vector3(float.PositiveInfinity);var max=new Vector3(float.NegativeInfinity);
         foreach(var v in vertices) { min=Vector3.Min(min,v.Position);max=Vector3.Max(max,v.Position); }
         Min=min;Max=max;_groundMin=new((min.X+max.X)/2-128,(min.Z+max.Z)/2-128);
         Array.Fill(_ground,float.NaN);
-        for(int i=0;i<indices.Length;i+=3) {
+        for(int i=0;i<OpaqueIndexCount;i+=3) {
             var a=vertices[indices[i]].Position;var b=vertices[indices[i+1]].Position;var c=vertices[indices[i+2]].Position;
             var n=Vector3.Cross(b-a,c-a);if(MathF.Abs(n.Y)<n.Length()*.65f||MathF.Abs(n.Y)<.0001f)continue;
             int x0=Math.Clamp((int)MathF.Floor(MathF.Min(a.X,MathF.Min(b.X,c.X))-_groundMin.X),0,255);

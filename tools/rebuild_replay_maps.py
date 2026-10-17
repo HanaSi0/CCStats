@@ -94,21 +94,26 @@ texture_colors={}
 def material_color(material):
     extras=material.get('extras',{})
     path=extras.get('g_SamplerColorMap0_PngCachePath','')
+    if args.map=='red-sands' and extras.get('ShaderPackage')=='lightshaft.shpk':path=extras.get('g_Sampler1_PngCachePath',path)
+    if args.map=='red-sands' and extras.get('ShaderPackage')=='verticalfog.shpk':return np.array(extras.get('g_Color',[.5,.4375,.35])[:3])
     if path not in texture_colors:
         file=ROOT/'cache'/path.replace('\\','/')
         if path and file.is_file():
             im=Image.open(file).convert('RGB');im.thumbnail((32,32));color=np.asarray(im).reshape(-1,3).mean(0)/255
         else:color=np.array([.55,.60,.64])
         texture_colors[path]=np.clip(color,.2,.88)
+    if args.map=='red-sands' and extras.get('ShaderPackage')=='lightshaft.shpk':
+        color=texture_colors[path];return color/max(float(color.max()),.001)*.65
     return texture_colors[path]
 
-triangles=[];colors=[];audit=[];source_hashes={};original_count=0
+triangles=[];colors=[];alphas=[];audit=[];source_hashes={};original_count=0
 for source in sorted(ROOT.glob('*.glb')):
     source_hashes[source.name]=hashlib.sha256(source.read_bytes()).hexdigest()
     for batch in load(source)[1]:
         path='/'.join(batch['path']);material=batch['material'];original=(batch['points']-origin)[batch['faces']];original_count+=len(original)
         shader=material.get('extras',{}).get('ShaderPackage','').lower()
-        if not batch['visible'] or DETAIL.search(path) or any(word in shader for word in ['fog','water','sky']):continue
+        visual_effect=args.map=='red-sands' and shader in ['verticalfog.shpk','lightshaft.shpk']
+        if not batch['visible'] or DETAIL.search(path) or (not visual_effect and any(word in shader for word in ['fog','water','sky'])):continue
         tri=clipped(original)
         if not len(tri):continue
         p,inv=np.unique(np.round(tri.reshape(-1,3),7),axis=0,return_inverse=True);faces=inv.reshape(-1,3).astype('int32')
@@ -127,19 +132,20 @@ for source in sorted(ROOT.glob('*.glb')):
                 if drift<.000001 and abs(area(before_tri)-area(after_tri))<max(.000001,area(before_tri)*.0000001):p,faces=sp,sf
         tri=p[faces];normal=np.cross(tri[:,1]-tri[:,0],tri[:,2]-tri[:,0]);length=np.linalg.norm(normal,axis=1);valid=length>1e-8
         tri=tri[valid];normal=normal[valid]/length[valid,None]
-        light=.5+.5*abs(normal@np.array([.3,.88,.36]));color=np.clip(material_color(material)[None,:]*light[:,None],0,1)
-        triangles.append(tri);colors.append(color)
+        light=np.ones(len(normal)) if visual_effect else .5+.5*abs(normal@np.array([.3,.88,.36]));color=np.clip(material_color(material)[None,:]*light[:,None],0,1)
+        triangles.append(tri);colors.append(color);alphas.append(np.full(len(tri),224 if shader=='verticalfog.shpk' and visual_effect else 140 if visual_effect else 255,dtype='u1'))
         audit.append({'resource':path,'source':source.name,'clipped_triangles':before,'retained_triangles':len(tri),'ground_or_ramp':bool(floor)})
 tri=(np.concatenate(triangles)+origin).astype('<f4');color=np.concatenate(colors)
 args.output.mkdir(parents=True,exist_ok=True)
-np.savez_compressed(args.output/'geometry.npz',triangles=tri,colors=color)
+alpha=np.concatenate(alphas)
+np.savez_compressed(args.output/'geometry.npz',triangles=tri,colors=color,alphas=alpha)
 packed=np.empty(tri.size//3,dtype=[('p','<f4',(3,)),('color','u1',(4,))]);packed['p']=tri.reshape(-1,3)
-packed['color'][:,:3]=np.rint(np.repeat(color,3,axis=0)*255).astype('u1');packed['color'][:,3]=255
+packed['color'][:,:3]=np.rint(np.repeat(color,3,axis=0)*255).astype('u1');packed['color'][:,3]=np.repeat(alpha,3)
 vertices,inv=np.unique(packed,return_inverse=True);indices=inv.astype('<u4')
 raw=struct.pack('<4sII',b'CCM4',len(vertices),len(indices))+vertices.tobytes()+indices.tobytes()
 compressed=gzip.compress(raw,compresslevel=9,mtime=0)
 (args.output/(args.map+'.ccmap.gz')).write_bytes(compressed)
-report={'map':args.map,'name':name,'triangles':len(tri),'vertices':len(vertices),'compressed_bytes':len(compressed),'sha256':hashlib.sha256(compressed).hexdigest(),'source_triangles':original_count,'source_sha256':source_hashes,'bounds':[tri.reshape(-1,3).min(0).tolist(),tri.reshape(-1,3).max(0).tolist()],'origin':origin.tolist(),'retention':'Restore source ground, canyon walls, ramps and nearby rocks; no floor-mask clipping. Only outer-margin clipping, area/extent-validated lossless simplification. Fog, sky and tiny props remain excluded.'}
+report={'map':args.map,'name':name,'triangles':len(tri),'vertices':len(vertices),'compressed_bytes':len(compressed),'sha256':hashlib.sha256(compressed).hexdigest(),'source_triangles':original_count,'source_sha256':source_hashes,'bounds':[tri.reshape(-1,3).min(0).tolist(),tri.reshape(-1,3).max(0).tolist()],'visual_effect_triangles':int((alpha<255).sum()),'origin':origin.tolist(),'retention':'Restore source ground, canyon walls, ramps and nearby rocks; no floor-mask clipping. Only outer-margin clipping, area/extent-validated lossless simplification. Red Sands fog/light-shaft visual layers retained; sky and tiny props remain excluded.'}
 (args.output/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 (args.output/'audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps(report,ensure_ascii=False,indent=2))

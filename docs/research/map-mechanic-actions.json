@@ -1,0 +1,136 @@
+{
+  "snapshot": "2026-10-13",
+  "source": "https://github.com/xivapi/ffxiv-datamining/blob/master/csv/en/Action.csv",
+  "actions": [
+    {
+      "#": "28725",
+      "Name": "Elemental Impact",
+      "CastType": "2",
+      "EffectRange": "5",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "30"
+    },
+    {
+      "#": "28726",
+      "Name": "Self-destruct",
+      "CastType": "11",
+      "EffectRange": "70",
+      "XAxisModifier": "10",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "30"
+    },
+    {
+      "#": "28729",
+      "Name": "Biting Wind",
+      "CastType": "2",
+      "EffectRange": "5",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "0"
+    },
+    {
+      "#": "28731",
+      "Name": "Typhoon",
+      "CastType": "2",
+      "EffectRange": "3",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "0"
+    },
+    {
+      "#": "32364",
+      "Name": "Tatami Twist",
+      "CastType": "12",
+      "EffectRange": "10",
+      "XAxisModifier": "10",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "0"
+    },
+    {
+      "#": "32365",
+      "Name": "Tsujigiri",
+      "CastType": "2",
+      "EffectRange": "15",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "30"
+    },
+    {
+      "#": "32366",
+      "Name": "Onmyojutsu",
+      "CastType": "2",
+      "EffectRange": "30",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "30"
+    },
+    {
+      "#": "35751",
+      "Name": "Devour",
+      "CastType": "2",
+      "EffectRange": "6",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "70"
+    },
+    {
+      "#": "35752",
+      "Name": "100,000 Needles",
+      "CastType": "2",
+      "EffectRange": "22",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "50"
+    },
+    {
+      "#": "35753",
+      "Name": "Therapeutic Needles",
+      "CastType": "2",
+      "EffectRange": "22",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "50"
+    },
+    {
+      "#": "35754",
+      "Name": "Landslip",
+      "CastType": "2",
+      "EffectRange": "22",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "50"
+    },
+    {
+      "#": "35755",
+      "Name": "Sandpearl Shroud",
+      "CastType": "2",
+      "EffectRange": "2",
+      "XAxisModifier": "0",
+      "Range": "100",
+      "TargetArea": "True",
+      "Cast100ms": "30"
+    },
+    {
+      "#": "35756",
+      "Name": "Geyser",
+      "CastType": "2",
+      "EffectRange": "2",
+      "XAxisModifier": "0",
+      "Range": "0",
+      "TargetArea": "False",
+      "Cast100ms": "0"
+    }
+  ]
+}

@@ -20,7 +20,7 @@ internal partial class CrystallineConflictMatchManager {
         var row=_plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(action);
         if(_environmentCasts.TryGetValue(source.EntityId,out var cast)&&cast.ActionId==action&&cast.Timestamp<=now&&now-(cast.ObservedUntil??cast.Timestamp)<TimeSpan.FromSeconds(1))cast.ResolvedAt=now;
         RecordReplayMapEvent(new() { Timestamp=now,ActionId=action,Sequence=sequence,SourceNameId=source.NameId,SourceEntityId=source.EntityId,
-            Label=source.Name+" · "+PvpStats.Localization.ChineseText.ActionName(action,row.Name.ToString()),
+            Label=MapMechanicVisuals.Find(action)?.Name??(source.Name+" · "+PvpStats.Localization.ChineseText.ActionName(action,row.Name.ToString())),
             X=Finite(source.Position.X),Y=Finite(source.Position.Y),Z=Finite(source.Position.Z),Heading=Finite(source.Rotation),
             TargetX=target.HasValue?Finite(target.Value.X):null,TargetY=target.HasValue?Finite(target.Value.Y):null,TargetZ=target.HasValue?Finite(target.Value.Z):null,
             Kind=ReplayMapEventKind.ActionResolved,ClientCastType=row.CastType,ClientEffectRange=row.EffectRange,ClientXAxisModifier=row.XAxisModifier });
@@ -38,14 +38,23 @@ internal partial class CrystallineConflictMatchManager {
                 old.ObservedUntil=now;continue;
             }
             var row=_plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(source.CastActionId);
+            var ground=EnvironmentGround(source,source.CastActionId);
             var entry=new ReplayMapEvent { Timestamp=now,Kind=ReplayMapEventKind.CastObserved,ObservedUntil=now,ExpectedEndTime=end,
                 SourceEntityId=source.EntityId,SourceNameId=source.NameId,ActionId=source.CastActionId,
-                Label=source.Name+" · "+PvpStats.Localization.ChineseText.ActionName(source.CastActionId,row.Name.ToString()),
+                Label=MapMechanicVisuals.Find(source.CastActionId)?.Name??(source.Name+" · "+PvpStats.Localization.ChineseText.ActionName(source.CastActionId,row.Name.ToString())),
                 X=Finite(source.Position.X),Y=Finite(source.Position.Y),Z=Finite(source.Position.Z),Heading=Finite(source.Rotation),
+                TargetX=ground?.X,TargetY=ground?.Y,TargetZ=ground?.Z,
                 ClientCastType=row.CastType,ClientEffectRange=row.EffectRange,ClientXAxisModifier=row.XAxisModifier };
             if(RecordReplayMapEvent(entry))_environmentCasts[source.EntityId]=entry;
         }
         foreach(var id in _environmentCasts.Where(p=>now-(p.Value.ObservedUntil??p.Value.Timestamp)>TimeSpan.FromSeconds(1)).Select(p=>p.Key).ToArray())_environmentCasts.Remove(id);
+    }
+    private static unsafe Vector3? EnvironmentGround(IBattleNpc source,uint action) {
+        if(MapMechanicVisuals.Find(action)?.Ground!=true||source.Address==IntPtr.Zero)return null;
+        var cast=((FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara*)source.Address)->GetCastInfo();
+        if(cast==null||cast->ActionType!=1||cast->ActionId!=action)return null;
+        var p=cast->TargetLocation;var point=new Vector3(p.X,p.Y,p.Z);
+        return LimitBreakVisuals.Finite(point)?point:null;
     }
     private bool RecordReplayMapEvent(ReplayMapEvent entry) {
         var data=_currentMatchTimeline?.Detailed;

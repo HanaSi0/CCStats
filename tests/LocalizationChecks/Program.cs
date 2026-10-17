@@ -154,6 +154,7 @@ ReplayUpgradeChecks.Run(Check);
 MovementCompatibilityChecks.Run(Check);
 Replay3DChecks.Run(Check);
 ReplayCameraMechanicChecks.Run(Check);
+MapMechanicVisualChecks.Run(Check);
 LBCaptureChecks.Run(Check);
 LimitBreakVisualChecks.Run(Check);
 ReplaySummonChecks.Run(Check);
