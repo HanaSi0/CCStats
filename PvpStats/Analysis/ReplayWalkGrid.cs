@@ -61,6 +61,16 @@ public sealed class ReplayWalkGrid {
     public bool Highest(int x,int z,out float height) {
         var layers=Layers(x,z);height=layers.Length>0?layers[^1]:float.NaN;return layers.Length>0;
     }
+    // Copy keeping only cells whose centre passes the filter (the official area-map silhouette).
+    public ReplayWalkGrid Restrict(Func<float,float,bool> allowed) {
+        var counts=new byte[Width*Depth];var heights=new System.Collections.Generic.List<float>(_heights.Length);
+        for(int z=0;z<Depth;z++)for(int x=0;x<Width;x++) {
+            int i=z*Width+x;int n=_start[i+1]-_start[i];
+            if(n==0||!allowed(Origin.X+(x+.5f)*Cell,Origin.Y+(z+.5f)*Cell))continue;
+            counts[i]=(byte)n;for(int k=_start[i];k<_start[i+1];k++)heights.Add(_heights[k]);
+        }
+        return new(Width,Depth,Origin,Cell,counts,heights.ToArray());
+    }
     public bool NearestAt(float x,float z,float reference,out float height)=>Nearest(CellX(x),CellZ(z),reference,out height);
     // Searches outward ring by ring (cells hugging a wall have no standable floor of their own).
     // With a reference, the layer nearest it wins; otherwise the highest floor in the first ring that has one.

@@ -141,7 +141,7 @@ internal sealed partial class MatchReplayWindow {
     private void DrawMechanics(ImDrawListPtr draw,Func<Vector2,Vector2> at,Vector2 origin,float side,DateTime now,float scale,bool hovered) {
         var geometry=new ReplaySceneGeometry();
         // Same standable-floor clipping as the 3D view; the grid is small and loaded once per window.
-        _walk2D??=new(()=>_mesh?.Walk??ReplayMapMesh.LoadEmbeddedWalk(_match.TerritoryId));
+        _walk2D??=new(()=>_mesh?.Walk??OfficialWalk(ReplayMapMesh.LoadEmbeddedWalk(_match.TerritoryId)));
         var walk=_walk2D.Value;
         foreach(var visual in MapMechanicVisuals.Active(_data.MapMechanics,_match.TerritoryId,now)) {
             var reference=(visual.Rule.Ground?visual.Event.TargetY:visual.Event.Y)??visual.Center.Y;

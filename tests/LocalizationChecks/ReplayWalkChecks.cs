@@ -48,6 +48,23 @@ internal static class ReplayWalkChecks {
         check(Rejected(w=>{w.Write(0x31574343);w.Write(1);w.Write(1);w.Write(0f);w.Write(0f);w.Write(.5f);w.Write((byte)2);w.Write(3f);w.Write(1f);}),"walk grid rejects unsorted floor layers");
         check(Rejected(w=>{w.Write(0x31574343);w.Write(1);w.Write(1);w.Write(0f);w.Write(0f);w.Write(.5f);w.Write((byte)1);w.Write(float.NaN);}),"walk grid rejects nonfinite heights");
 
+        // Official area-map silhouette: a 256x256 texture whose centre 64x64 block is arena floor colour.
+        var pixels=new byte[256*256*4];
+        for(int y=0;y<256;y++)for(int x=0;x<256;x++) {
+            bool arena=x>=96&&x<160&&y>=96&&y<160;int i=(y*256+x)*4;
+            // BGRA: interior (240,235,214), parchment background (230,221,181).
+            pixels[i]=(byte)(arena?214:181);pixels[i+1]=(byte)(arena?235:221);pixels[i+2]=(byte)(arena?240:230);pixels[i+3]=255;
+        }
+        // Size factor 100 maps 1 world unit to 1/8 pixel of a 256 texture: pixel = (world+1024)/8.
+        var silhouette=new ReplayMapSilhouette(256,256,pixels,100,0,0);
+        check(silhouette.Inside(0,0)&&!silhouette.Inside(400,0)&&!silhouette.Inside(0,-400),"official area map separates the arena silhouette from out-of-bounds parchment");
+        check(ReplayMapSilhouette.Interior(240,235,214)&&ReplayMapSilhouette.Interior(214,235,240)&&!ReplayMapSilhouette.Interior(230,221,181)&&!ReplayMapSilhouette.Interior(181,221,230),"silhouette colour test is independent of BGRA or RGBA channel order");
+        var wide=new ReplayWalkGrid(4,1,new Vector2(-400,0),200,new byte[]{1,1,1,1},new[]{0f,0f,0f,0f});
+        var trimmed=wide.Restrict(silhouette.Inside);
+        check(trimmed.LayerCount==2&&trimmed.Layers(1,0).Length==1&&trimmed.Layers(2,0).Length==1&&trimmed.Layers(0,0).Length==0&&trimmed.Layers(3,0).Length==0,"floors outside the official arena silhouette are removed from the walk grid");
+        bool blank=false;try { new ReplayMapSilhouette(256,256,new byte[256*256*4],100,0,0); } catch(ArgumentException) { blank=true; }
+        check(blank,"an unrecognised area-map texture is rejected instead of erasing every floor");
+
         foreach(var territory in new uint[]{1032,1033,1034,1116,1138,1293,1357}) {
             var mesh=ReplayMapMesh.LoadEmbedded(territory);
             check(mesh.Walk is {LayerCount:>10000},"packaged arena has a walkable-floor grid: "+territory);

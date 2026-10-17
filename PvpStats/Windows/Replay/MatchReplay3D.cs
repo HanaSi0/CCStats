@@ -48,7 +48,11 @@ internal sealed partial class MatchReplayWindow {
     }
     private void Draw3D() {
         var scale=ImGuiHelpers.GlobalScale;
-        _meshTask??=Task.Run(()=>ReplayMapMesh.LoadEmbedded(_match.TerritoryId));
+        _meshTask??=Task.Run(()=> {
+            var mesh=ReplayMapMesh.LoadEmbedded(_match.TerritoryId);
+            if(OfficialWalk(mesh.Walk) is {} official)mesh.Attach(official);
+            return mesh;
+        });
         if(_mesh==null&&_meshTask.IsCompletedSuccessfully) { _mesh=_meshTask.Result;Reset3DCamera(); }
         if(_meshTask.IsFaulted) { ImGui.TextWrapped("地图加载失败，请查看日志。二维回放仍可使用。");if(_renderError.Length==0) { _renderError="地图资源加载失败";_plugin.Log.Error(_meshTask.Exception!,"3D replay map load failed."); }return; }
         if(ModernTheme.Button(_playing?"暂停###Replay3DPlay":"播放###Replay3DPlay"))_playing=!_playing;
@@ -253,9 +257,36 @@ internal sealed partial class MatchReplayWindow {
         ReplaySummons.Draw(_lbOverlay,ReplaySummons.Resolve(_data.SummonFrames,_lbEvents,now),_lbEvents,frame,now,(x,y,z)=>_mesh?.SurfaceHeight(x,z,y)??y);
         AddGuardBubbles(frame,now);
     }
+    // The display mesh can connect floors through wall gaps that the game blocks. The game's own area map
+    // marks the playable arena, so floors outside its silhouette are dropped. Missing texture: unchanged grid.
+    private readonly object _silhouetteLock=new();
+    private bool _silhouetteLoaded;
+    private ReplayMapSilhouette? _silhouette;
+    private ReplayWalkGrid? OfficialWalk(ReplayWalkGrid? walk) {
+        if(walk==null)return null;
+        var map=Silhouette();
+        return map!=null?walk.Restrict(map.Inside):walk;
+    }
+    private ReplayMapSilhouette? Silhouette() {
+        lock(_silhouetteLock) {
+            if(_silhouetteLoaded)return _silhouette;
+            _silhouetteLoaded=true;
+            try {
+                string path=_data.MapTexture;int factor=_data.MapSizeFactor,offsetX=_data.MapOffsetX,offsetY=_data.MapOffsetY;
+                if(path.Length==0||factor<=0) {
+                    var map=_plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.TerritoryType>().GetRow(_match.TerritoryId).Map.Value;
+                    var id=map.Id.ToString();if(id.Length==0)return null;
+                    path=$"ui/map/{id}/{id.Replace("/","")}_m.tex";factor=map.SizeFactor;offsetX=map.OffsetX;offsetY=map.OffsetY;
+                }
+                var texture=_plugin.DataManager.GetFile<Lumina.Data.Files.TexFile>(path);
+                if(texture!=null)_silhouette=new(texture.Header.Width,texture.Header.Height,texture.ImageData,factor,offsetX,offsetY);
+            } catch(Exception e) { _plugin.Log.Warning(e,"Area map silhouette unavailable; replay footprints use the full walk grid."); }
+            return _silhouette;
+        }
+    }
     // Footprints follow standable floor near the event's own elevation; without a walk grid they drape as before.
     private ReplayGroundDecal Ground(float reference,float lift,Func<float,float,float> fallback) =>
-        _mesh?.Walk is {} walk&&float.IsFinite(reference)?ReplayGroundDecal.Walkable(walk,reference,lift):ReplayGroundDecal.Draped(fallback,lift);
+        (_mesh?.Walk is {} walk&&float.IsFinite(reference))?ReplayGroundDecal.Walkable(walk,reference,lift):ReplayGroundDecal.Draped(fallback,lift);
     private void AddGuardBubbles(MovementFrame? frame,DateTime now) {
         if(frame==null)return;
         foreach(var player in frame.Players.Where(p=>ReplaySceneGeometry.GuardVisible(p,now)).Take(10)) {
