@@ -2,29 +2,45 @@
   {
     "map": "bayside",
     "name": "海岸斗场",
-    "triangles": 263786,
-    "vertices": 400129,
-    "compressed_bytes": 3644416,
-    "sha256": "e319a5076153c60414f31e0d46faed6b1e4b033a52f6fa4b1b1b8fea476d052c",
-    "walk_cells": 64139,
-    "walk_cells_removed": 83210,
-    "walk_gap_cells": 3,
-    "walk_bytes": 213649,
-    "walk_sha256": "75497fdb2066d886746cb6544bd270d06f80f6d6cb62447bf3a561ef4943e997",
-    "filled_holes": []
+    "triangles": 275315,
+    "vertices": 411007,
+    "compressed_bytes": 3791050,
+    "sha256": "218a86d6a47801b2149584c5422f1429b8be3c984fed780cf0019037e119ac44",
+    "walk_cells": 64687,
+    "walk_cells_removed": 24254,
+    "walk_gap_cells": 2,
+    "walk_bytes": 215628,
+    "walk_sha256": "1146ed8207197119a59e151de19da81d7ba70d6c98ff468c3639ad41021f2b4a",
+    "filled_holes": [],
+    "crop_margin": 3,
+    "crop_cell": 0.5,
+    "before_triangles": 263786,
+    "restored_source_triangles": 517,
+    "bounds": [
+      [
+        -9.0,
+        -11.326776504516602,
+        34.0
+      ],
+      [
+        209.0,
+        4.316425323486328,
+        166.0
+      ]
+    ]
   },
   {
     "map": "castletown",
     "name": "机关大殿",
-    "triangles": 159538,
-    "vertices": 244754,
-    "compressed_bytes": 2083428,
-    "sha256": "90cd7a6faec81721f9e9001d213d562c46ac53a787714d97f06cbdf80e87d3e5",
+    "triangles": 164653,
+    "vertices": 245624,
+    "compressed_bytes": 2118694,
+    "sha256": "c93d454ee2012b8c6d8e211590ff55b4e97fb585e1a3aba1f474d9caee03208b",
     "walk_cells": 31100,
-    "walk_cells_removed": 24234,
+    "walk_cells_removed": 17531,
     "walk_gap_cells": 12,
-    "walk_bytes": 63760,
-    "walk_sha256": "d6b3e9e749801d58e65888190ec7a99dd5fdd7c20689cb1e1625e478ed1a426a",
+    "walk_bytes": 63745,
+    "walk_sha256": "57e5e4ce60ee2f9dbc1f830c9f4afea245a89850f0bedc130dc729c629765939",
     "filled_holes": [
       {
         "centre": [
@@ -66,20 +82,36 @@
         "area": 59.75,
         "height": -1.03
       }
+    ],
+    "crop_margin": 3,
+    "crop_cell": 0.5,
+    "before_triangles": 159538,
+    "restored_source_triangles": 70,
+    "bounds": [
+      [
+        -96.5,
+        -4.180078029632568,
+        -48.0
+      ],
+      [
+        96.5,
+        6.313281059265137,
+        48.0
+      ]
     ]
   },
   {
     "map": "cloud-nine",
     "name": "九霄云上",
-    "triangles": 122926,
-    "vertices": 188594,
-    "compressed_bytes": 2086808,
-    "sha256": "63e738efae36580c12518249135d2837c2b1ad6f46a4bd19d58c96cc2834f5f0",
-    "walk_cells": 19980,
-    "walk_cells_removed": 13399,
-    "walk_gap_cells": 234,
-    "walk_bytes": 62101,
-    "walk_sha256": "378d246e665aa8a526eb86e80187c0c0bfd5b981dab40392eb1ab71aba15e5a9",
+    "triangles": 141546,
+    "vertices": 217758,
+    "compressed_bytes": 2378239,
+    "sha256": "1b21ca34f7e95c74aa131f04c3a2fd76f7e04e6b76b78b632e1d2509f3d78c19",
+    "walk_cells": 26671,
+    "walk_cells_removed": 12564,
+    "walk_gap_cells": 236,
+    "walk_bytes": 83544,
+    "walk_sha256": "606460b92deafade4071c00e35d52f7e18dbdf016cd0389f2b05bb4de279ad46",
     "filled_holes": [
       {
         "centre": [
@@ -89,62 +121,144 @@
         "area": 1.75,
         "height": 0.36
       }
+    ],
+    "crop_margin": 3,
+    "crop_cell": 0.5,
+    "before_triangles": 122926,
+    "restored_source_triangles": 15672,
+    "bounds": [
+      [
+        -100.0,
+        -7.484375476837158,
+        -99.0
+      ],
+      [
+        100.062255859375,
+        13.665942192077637,
+        99.0
+      ]
     ]
   },
   {
     "map": "harmonias",
     "name": "休兵书库",
-    "triangles": 194590,
-    "vertices": 282542,
-    "compressed_bytes": 2622991,
-    "sha256": "e717ddf31c5e9cd9d361a2420e52939bec7efb4876771a2079a3740d3b9c0b41",
-    "walk_cells": 91264,
-    "walk_cells_removed": 21797,
+    "triangles": 196557,
+    "vertices": 281499,
+    "compressed_bytes": 2638287,
+    "sha256": "5dbe24e571c324388c459d168939d671ceb3174210a6b2ce1c4b277833c0699f",
+    "walk_cells": 91267,
+    "walk_cells_removed": 17138,
     "walk_gap_cells": 91,
-    "walk_bytes": 98449,
-    "walk_sha256": "d5e4384d55b2d1c12bcc00f5c5a8fed7191c8c20a891394e8b990aeda63bf238",
-    "filled_holes": []
+    "walk_bytes": 98676,
+    "walk_sha256": "11516d8af4090c9e66bdcbe57bc16377a00f0ad91235c3302772addcc700e863",
+    "filled_holes": [],
+    "crop_margin": 3,
+    "crop_cell": 0.5,
+    "before_triangles": 194590,
+    "restored_source_triangles": 0,
+    "bounds": [
+      [
+        2.5,
+        -3.042969226837158,
+        14.703125
+      ],
+      [
+        197.5,
+        10.382814407348633,
+        185.296875
+      ]
+    ]
   },
   {
     "map": "palaistra",
     "name": "角力学校",
-    "triangles": 68600,
-    "vertices": 105300,
-    "compressed_bytes": 936336,
-    "sha256": "5b02e60083bbf613830000e3573d410c4d9c12790f58fcf084027c9ab77a7c57",
-    "walk_cells": 28831,
-    "walk_cells_removed": 17080,
+    "triangles": 72126,
+    "vertices": 101482,
+    "compressed_bytes": 943050,
+    "sha256": "bcd25e86553ebb2c738ae319b56372cb522ac9506045814e8743ee52dd2d3647",
+    "walk_cells": 28827,
+    "walk_cells_removed": 10854,
     "walk_gap_cells": 239,
-    "walk_bytes": 25222,
-    "walk_sha256": "7c53947eb305ac6b18e2c400b780518ff5c8ad21ce57658fc7ec18db1792b82d",
-    "filled_holes": []
+    "walk_bytes": 25345,
+    "walk_sha256": "d60c9ffb1ac3f03bc29474fa25d5bd8f4ce4ab7f8e28cd661b02371051f93eae",
+    "filled_holes": [],
+    "crop_margin": 3,
+    "crop_cell": 0.5,
+    "before_triangles": 68600,
+    "restored_source_triangles": 1050,
+    "bounds": [
+      [
+        -101.1796875,
+        -4.781250476837158,
+        -41.412109375
+      ],
+      [
+        101.1796875,
+        9.45703125,
+        41.412109375
+      ]
+    ]
   },
   {
     "map": "red-sands",
     "name": "赤土红沙",
-    "triangles": 459062,
-    "vertices": 592708,
-    "compressed_bytes": 6900122,
-    "sha256": "17807fc5c21fb8bf0fc8be7c6240b084210afafa6d6572a4f2ba2e760b4bcb03",
-    "walk_cells": 89767,
-    "walk_cells_removed": 176725,
-    "walk_gap_cells": 20,
-    "walk_bytes": 180205,
-    "walk_sha256": "0ffe549ace1ca006b481ed7ef39d90a6f0d7ae91ecb7b09a614cdfc767f2cef8",
-    "filled_holes": []
+    "triangles": 432346,
+    "vertices": 553323,
+    "compressed_bytes": 6262377,
+    "sha256": "379a74e77d157bb078eb7aad949d66e4faf6562e993d04b0dda0cb8e25772cbe",
+    "walk_cells": 91248,
+    "walk_cells_removed": 48279,
+    "walk_gap_cells": 34,
+    "walk_bytes": 185891,
+    "walk_sha256": "bc5d7cdf23d3dd10e6dcdc7304c6a355d3167270b3177d9325f70a46f8d0fb76",
+    "filled_holes": [],
+    "crop_margin": 3,
+    "crop_cell": 0.5,
+    "before_triangles": 459062,
+    "restored_source_triangles": 3946,
+    "bounds": [
+      [
+        -127.0,
+        -44.85478591918945,
+        -70.5
+      ],
+      [
+        127.0,
+        7.500000953674316,
+        70.5
+      ]
+    ],
+    "removed_fog_triangles": 112,
+    "official_png_sha256": "c391486d95b5f8080c900e7ddc8d8c009a2c7e6a99cc01006db24e49a8fb8005"
   },
   {
     "map": "volcanic-heart",
     "name": "火山之心",
-    "triangles": 139871,
-    "vertices": 190263,
-    "compressed_bytes": 1728140,
-    "sha256": "b5c0219e4ead651f727cf4df3fb209ca3977f4d37fbce28c5816bc517729c95b",
-    "walk_cells": 22455,
-    "walk_cells_removed": 15649,
-    "walk_gap_cells": 617,
-    "walk_bytes": 30764,
-    "walk_sha256": "fb603f709a3c2a8e62202cdb3183788df33cd5262f5bae81ebf1f9c126ab1ee4",
-    "filled_holes": []
+    "triangles": 158569,
+    "vertices": 217643,
+    "compressed_bytes": 1992805,
+    "sha256": "b2a0081f10e82c37d163d6d9f81f09d42318d0737d567dcd499666267ed3d121",
+    "walk_cells": 23273,
+    "walk_cells_removed": 12589,
+    "walk_gap_cells": 637,
+    "walk_bytes": 31299,
+    "walk_sha256": "39918518a3958529e0378e8c5f132ec676c25d0439bb31156888cf3b77c741c8",
+    "filled_holes": [],
+    "crop_margin": 3,
+    "crop_cell": 0.5,
+    "before_triangles": 139871,
+    "restored_source_triangles": 11976,
+    "bounds": [
+      [
+        -84.0,
+        -5.7278971672058105,
+        -43.0
+      ],
+      [
+        84.0,
+        6.345703125,
+        33.0
+      ]
+    ]
   }
 ]

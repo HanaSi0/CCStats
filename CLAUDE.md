@@ -10,3 +10,5 @@
 - Release 与 Debug 顺序构建，避免 Dalamud 打包器争用。云端 .NET 路径/权限问题见交接文档；其他机器按自己的环境配置。
 - 发布前先完成画面与性能核验、构建和回归检查。不要因为存在交接分支就自动打标签或发布。
 - 原项目 MIT 许可及署名保留。GitHub 作者为 HanaSi0，README 致谢上游 SaMo/wrath16；不要删除 LICENSE.txt。
+
+最新进展：在 `review/claude-walkable` 上完成七图场外裁边，并从原始导出恢复九霄云上两处出生圆台和连接区域，详见 `docs/arena-crop.md`；尚未发布新版本。

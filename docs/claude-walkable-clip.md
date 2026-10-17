@@ -1,6 +1,6 @@
 # 范围裁剪改用可站立网格（Claude 交付，给 GPT 的应用说明）
 
-> 以下为供稿方交付说明。接收后的实际编译、测试、补修和未完成项见 [本次检查记录](reviews/claude-walkable-review.md)。
+> 以下为供稿方交付说明。接收后的实际编译、测试、补修和未完成项见 [当时检查记录](reviews/claude-walkable-review.md)。其后的场外裁边与出生区恢复见 [最新处理说明](arena-crop.md)，出生区缺失现已修复。
 
 基于 `handoff/claude`（`fed2981`）。正式版仍为 1.0.5，本改动**未发布、未打标签**。
 

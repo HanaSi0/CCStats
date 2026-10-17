@@ -21,16 +21,20 @@ internal static class Replay3DChecks {
         b.Y=null;check(ReplayInterpolation.Sample(data,middle)!.Players[0].Y==a.Y,"missing future height does not fabricate a vertical path");b.Y=3;
         data.Frames[1].Timestamp=start.AddSeconds(10);check(ReferenceEquals(ReplayInterpolation.Sample(data,middle),data.Frames[0]),"3D playback preserves recording gaps");
         check(Marshal.SizeOf<ReplayVertex>()==16,"GPU vertex layout matches HLSL position/color input stride");
-        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,68600),(1033,1059,139871),(1034,1060,122926),(1116,1117,159538),(1138,1139,459062),(1293,1294,263786),(1357,1358,194590) };
+        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,72126),(1033,1059,158569),(1034,1060,141546),(1116,1117,164653),(1138,1139,432346),(1293,1294,275315),(1357,1358,196557) };
         foreach(var p in pairs) {
             check(ReplayMapMesh.MapKey(p.Normal)==ReplayMapMesh.MapKey(p.Custom),"normal and custom territory select the same exported arena: "+p.Normal);
             var mesh=ReplayMapMesh.LoadEmbedded(p.Normal);
             check(mesh.Indices.Length/3==p.Faces&&mesh.Vertices.Length>3,"packaged simplified map decodes completely: "+p.Normal);
             check(mesh.Min.X<mesh.Max.X&&mesh.Min.Z<mesh.Max.Z,"packaged arena has usable camera bounds: "+p.Normal);
-            if(p.Normal==1138)check(mesh.Min.Y<-15&&mesh.Max.Y>9,"Red Sands retains source canyon walls below the old -8 cutoff and rocks above the old 9 cutoff");
-            if(p.Normal==1293)check(mesh.EstimatedHeight(70,100)<-7&&mesh.EstimatedHeight(70,100)>-13,"Bayside retains the source sand surface between the platforms, instead of an unobserved floor gap");
+            if(p.Normal==1138)check(mesh.Min.X<-120&&mesh.Max.X>120,"Red Sands restores both outer starting platforms while using the new arena boundary");
+            if(p.Normal==1293)check(mesh.ArenaMask?.Contains(100,100)==true&&mesh.ArenaMask.Contains(70,100)==false,"Bayside core platform stays walkable while out-of-arena sand stays outside the floor mask");
             if(p.Normal is 1293 or 1357)check(mesh.Max.X>150&&mesh.Max.Z>150,"offset arena retains game world coordinates: "+p.Normal);
         }
+        var cloud=ReplayMapMesh.LoadEmbedded(1034);
+        check(cloud.Min.Z<-96&&cloud.Max.Z>96,"Cloud Nine display mesh includes the two previously box-clipped starting platforms");
+        check(cloud.Walk!.NearestAt(90,-90,7,out var northSpawn)&&northSpawn>5&&northSpawn<8,"Cloud Nine upper-right original starting platform has a restored usable floor");
+        check(cloud.Walk!.NearestAt(-90,90,7,out var southSpawn)&&southSpawn>5&&southSpawn<8,"Cloud Nine lower-left original starting platform has a restored usable floor");
         check(ReplayMapMesh.MapKey(0)==null,"unsupported territories do not silently select the wrong map");
         using(var raw=new MemoryStream()) {
             using(var writer=new BinaryWriter(raw,System.Text.Encoding.UTF8,true)) { writer.Write(0x344D4343);writer.Write(3);writer.Write(3);foreach(var v in new[] { Vector3.Zero,Vector3.UnitX,Vector3.UnitZ }) {writer.Write(v.X);writer.Write(v.Y);writer.Write(v.Z);writer.Write(0xffffffffu);}writer.Write(0u);writer.Write(1u);writer.Write(99u); }
@@ -49,7 +53,7 @@ internal static class Replay3DChecks {
         check(layered.Vertices[layered.Indices[3]].Position.Y==-15,"low fog draws before the raised translucent layer for above-map cameras");
         var red=ReplayMapMesh.LoadEmbedded(1138);
         check(red.EstimatedHeight(-60,0)>-2&&red.EstimatedHeight(-60,0)<-.3f&&red.EstimatedHeight(60,0)>-2&&red.EstimatedHeight(60,0)<-.3f,"both missing circular floors have reconstructed display surfaces near adjacent terrain elevation");
-        check(red.OpaqueIndexCount<red.Indices.Length,"Red Sands preserves native visual layers instead of discarding them or drawing solid gray plates");
+        check(red.OpaqueIndexCount<red.Indices.Length,"Red Sands keeps the translucent core flow effects after the decorative low fog plane is removed");
         var scene=new ReplaySceneGeometry();scene.Pawn(Vector3.Zero,0,false,true,1);scene.Diamond(Vector3.Zero,1,5,0xffffffff);scene.Ring(Vector3.Zero,5,.1f,0xffffffff);
         check(scene.Vertices.Length>0&&scene.Vertices.Length%3==0,"pawn, diamond and crystal circle produce GPU triangle lists");
     }
