@@ -105,6 +105,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
         _processKillHook.Enable();
         _processPacketActorControlHook.Enable();
         _processPacketActionEffectHook.Enable();
+        _plugin.LBCapture.HookReady = true;
         _processHoTDoTHook.Enable();
     }
 
@@ -297,6 +298,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
 
     private unsafe void ProcessPacketActionEffectDetour(uint casterEntityId, Character* casterPtr, Vector3* targetPos, ActionEffectHandler.Header* effectHeader, ActionEffectHandler.TargetEffects* effectArray, GameObjectId* effectTrail) {
         try {
+            _plugin.LBCapture.Observe(casterEntityId, targetPos, effectHeader, effectArray, effectTrail);
             if(!_plugin.DebugMode && !IsMatchInProgress()) {
                 return;
             }

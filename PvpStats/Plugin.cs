@@ -60,6 +60,7 @@ public sealed class Plugin : IDalamudPlugin {
     internal ValidationManager Validation { get; init; }
     internal CrystallineConflictStatsManager CCStatsEngine { get; init; }
     internal RegionalLeaderboardService Leaderboards { get; init; }
+    internal LimitBreakCaptureService LBCapture { get; init; }
 
     internal DataQueue DataQueue { get; init; }
     internal LocalizationService Localization { get; init; }
@@ -132,6 +133,7 @@ public sealed class Plugin : IDalamudPlugin {
             Localization = new(this);
             CCStatsEngine = new(this);
             Leaderboards = new(Path.Combine(PluginInterface.GetPluginConfigDirectory(), "leaderboards"), Configuration.LeaderboardRegion);
+            LBCapture = new(this);
             WindowManager = new(this);
             Validation = new(this);
             try {
@@ -180,6 +182,7 @@ public sealed class Plugin : IDalamudPlugin {
         CommandManager.RemoveHandler(ConfigCommandName);
 
         Functions?.Dispose();
+        LBCapture?.Dispose();
         CCMatchManager?.Dispose();
         WindowManager?.Dispose();
         Leaderboards?.Dispose();

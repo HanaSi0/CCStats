@@ -1,0 +1,49 @@
+{
+  "source": "https://na.finalfantasyxiv.com/lodestone/playguide/contentsguide/crystallineconflict/",
+  "retrieved_utc": "2026-10-17T12:06:00.941777+00:00",
+  "html_sha256": "6d6edd1cdf4baafd096320ade1473d16e9c5ba74d98ba7512c28e4489167ad86",
+  "maps": [
+    {
+      "name": "The Palaistra",
+      "official_text": "Sprint Zones\nEntering sprint zones will grant the effect of Swift Sprint, greatly increasing player movement speed.",
+      "geometry_verified": false,
+      "timings_verified": false
+    },
+    {
+      "name": "The Volcanic Heart",
+      "official_text": "Sprint Zones\nEntering sprint zones will grant the effect of Swift Sprint, greatly increasing player movement speed.\nEruption (Arena Event)\nThe Volcanic Heart periodically erupts, scattering self-destructing bombs across the field. Those who fail to avoid their explosive radii will take damage. Bomb cores will remain at the site of bombs' destruction, granting those who acquire them the following:\nAn effect increasing damage dealt for a short time. Stacks up to 10 times.\nA boost to the limit gauge.",
+      "geometry_verified": false,
+      "timings_verified": false
+    },
+    {
+      "name": "Cloud Nine",
+      "official_text": "Jump Glyphs\nStepping on one of Cloud Nine's jump glyphs will rapidly transport you to a specific location on the field.\nTurbulence\nPlayers cast up into the air by turbulence will take damage upon being returned unceremoniously to the ground. However, they may acquire black chocobo feathers while in the air, granting them the following:\nA soft landing, nullifying the typical damage taken from turbulence.\nAn effect increasing attack speed and movement speed for a short time.\nA boost to the limit gauge.\nThe locations of black chocobo feathers are indicated by markers on the ground. Those who do not wish to go flying can negate the effects of turbulence by using Guard.\nTurbulence also leaves behind a twister and gale sphere at the site where it occurred. Stumbling into these twisters will result in damage and knockback. If your Guard is active, it will be depleted by the twister.\nGale spheres, on the other hand, will greatly increase movement speed. Only one player may use any given gale sphere, and they will reappear after a fixed period of time while turbulence is active.",
+      "geometry_verified": false,
+      "timings_verified": false
+    },
+    {
+      "name": "The Clockwork Castletown",
+      "official_text": "Turn the tricks and traps of this Far Eastern labyrinth to your advantage─if you can. What surprises lurk within its glamour-woven walls?\nTrick Floors\nStanding upon a trick floor for too long will trigger a Tatami Twist, launching the unwitting loiterer into the air and inflicting damage. If your Guard is active, it will be depleted by the effort of staying upright.\nTrick Doors\nPlayers who approach these false gates will find themselves teleported instantly to another door, far away from the expected trajectory. Trick doors only operate in one direction, so attempting to return the way you came will prove fruitless.\nPneumatic Parade\nWhen the pneumatic parade begins, the clockwork onmyoji and clockwork yojimbo will join the fray. These puppets travel a predetermined path through the arena and unleash their unique attacks upon arriving in the vicinity of the centerpoint, checkpoints, and goals.\nWhile the clockwork yojimbo will obliterate its surroundings with strong physical damage, the clockwork onmyoji quietly seeks unsuspecting players. Those unfortunate enough to meet its gaze will be greatly shrunk in size and suffer the following effects:\nSlower movement and lower inflicted damage.\nIncreased damage taken.\nDuring the midst of the parade, infamous soy sauce mogul Kageyama will make his grand appearance upon a stage outside the arena, and shower combatants with glimmering coin. Players who get their hands on a pile of gold will enjoy the following effect:\nA boost to the limit gauge.",
+      "geometry_verified": false,
+      "timings_verified": false
+    },
+    {
+      "name": "The Red Sands",
+      "official_text": "Shifting Sands\nRide the shifting sands to travel swiftly to a specific location on the field.\nSandpits\nThe crystal line intersects with ringlike nests at checkpoints. Clearing any such checkpoint with the tactical crystal in tow will result in one of the following denizens emerging from within:\nRed Sands Antlion\nSabotender\nThe antlion will drag all players in range deep into the nest, rendering them immobile before erupting from the sands to deal massive damage.\nThe sabotender will unleash 100,000 Needles upon all players in range. As the needles are split between affected players, the damage dealt to each player will change accordingly.\nAccutender\nThis rare and curious creature will unleash Therapeutic Needles upon all players in range, granting them a barrier effect. As the needles are split between affected players, the strength of the barrier granted to each player will change accordingly.\nOasis\nThe arena's oasis area grants players within a special effect that regenerates HP over time. The effect will remain for a time after exiting the oasis.\nHeat Waves\nHeat waves atop the Red Sands will deal damage over time to all competitors. However, relief can be found at sandpits, from which balming geysers will erupt. Players standing in one of the small circular indicators on the ground will be soothed by sandpearl shrouds, granting HP recovery and a boost to the limit gauge.\nWhile the geyser is erupting, no creatures will emerge from the sandpit. Nevertheless, caution is advised, as the force of the geyser will deal damage to and knock back any who approach its center.",
+      "geometry_verified": false,
+      "timings_verified": false
+    },
+    {
+      "name": "The Bayside Battleground",
+      "official_text": "Jump Glyphs\nStepping on one of the Bayside Battleground's jump glyphs will rapidly transport you to a specific location on the field.",
+      "geometry_verified": false,
+      "timings_verified": false
+    },
+    {
+      "name": "Archeia Harmonias",
+      "official_text": "Aetherometer\nAetherometers can be found halfway between the centerpoint and each team's checkpoint. Upon reaching an aetherometer, the tactical crystal's progress will be halted temporarily. During this time, the advancing team must remain in the crystal's ring to charge the aetherometer.\nWhen the aether index reaches 100%, an aetherial bridge and a jump glyph will manifest, and the crystal can once again be moved. In the event all members of the advancing team leave the crystal's ring, or a member of the opposing team enters the crystal's ring, the aether index will revert to 0.\nAetherial Bridge\nAetherial bridges are paths that allow the tactical crystal to progress. Once a bridge has manifested, it will remain in place for the remainder of the match.\nJump Glyph\nEach team has a jump glyph situated at its base. By stepping on the glyph, players can travel swiftly to a specific location in the arena. Once a jump glyph has manifested, it will remain in place for the remainder of the match.\nHealing Glyph\nEach team has a healing glyph situated to the front of its starting point. While standing on the glyph belonging to their own team, players will recover HP over time.",
+      "geometry_verified": false,
+      "timings_verified": false
+    }
+  ]
+}

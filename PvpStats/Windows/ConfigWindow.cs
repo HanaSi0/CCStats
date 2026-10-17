@@ -19,6 +19,8 @@ namespace PvpStats.Windows;
 internal class ConfigWindow : Window {
 
     private int _section;
+    private DateTime _lbListRefresh;
+    private readonly List<string> _lbSessionLabels = new();
     private ThemeConfiguration _savedTheme = new();
     private string _themeStatus = "";
     private Plugin _plugin;
@@ -95,7 +97,7 @@ internal class ConfigWindow : Window {
             return;
         }
         if(_themeStatus.Length > 0) { ImGui.SameLine(); ImGui.TextDisabled(_themeStatus); }
-        var sections = new[] { "界面与悬浮图标", "玩家关联", "性能与记录", "主题与配色" };
+        var sections = new[] { "界面与悬浮图标", "玩家关联", "性能与记录", "主题与配色", "LB 采集" };
         var columns = ImGui.GetContentRegionAvail().X < 600 * ImGuiHelpers.GlobalScale ? 2 : 4;
         using(var tabs = ImRaii.Table("SettingsTabs", columns, ImGuiTableFlags.SizingStretchSame)) {
             if(tabs) for(var i = 0; i < sections.Length; i++) {
@@ -110,8 +112,47 @@ internal class ConfigWindow : Window {
             case 1: DrawPlayerLinkSettings(); break;
             case 2: DrawPerformanceSettings(); break;
             case 3: DrawThemeSettings(); break;
+            case 4: DrawLBCapture(); break;
             default: DrawInterfaceSettings(); break;
         }
+    }
+
+    private void DrawLBCapture() {
+        var capture = _plugin.LBCapture;
+        ImGui.TextWrapped("进入狼狱停船场，开始采集后释放 LB 和全部后续技能，等待效果消失再停止。切换职业后重新开始一组。");
+        ImGui.TextWrapped("记录附近已加载角色、木人及召唤物的位置、朝向和状态，以及本人和召唤物的技能效果。数据含角色名，仅保存在本机，导出后可发回分析。");
+        if(!capture.Active && !capture.ExportBusy && ModernTheme.Button("开始采集###StartLB")) capture.Start();
+        if(capture.Active && ModernTheme.Button("停止并保存###StopLB")) capture.Stop();
+        ImGui.TextUnformatted(capture.Status);
+        ImGui.TextUnformatted($"位置帧 {capture.Samples:N0} · 动作事件 {capture.Events:N0} · 已识别 LB 技能 {capture.Breaks}");
+        ImGui.TextDisabled("目标 30 帧/秒，状态约 10 次/秒；每组最多 10 分钟或 64 MiB。");
+        ImGui.Separator();
+        if(!capture.Active && !capture.ExportBusy && ModernTheme.Button("批量导出 ZIP###ExportLB")) capture.Export();
+        ImGui.TextUnformatted(capture.ExportStatus);
+        if(capture.ExportPath != null) {
+            ImGui.TextWrapped(capture.ExportPath);
+            if(ModernTheme.Button("复制 ZIP 路径###CopyLBZip")) ImGui.SetClipboardText(capture.ExportPath);
+        }
+        if(ModernTheme.Button("打开采集文件夹###OpenLBCaptures")) {
+            System.IO.Directory.CreateDirectory(capture.Root);
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(capture.Root) { UseShellExecute=true });
+        }
+        if(DateTime.UtcNow-_lbListRefresh>TimeSpan.FromSeconds(2)) {
+            _lbListRefresh=DateTime.UtcNow;
+            _lbSessionLabels.Clear();
+            foreach(var file in capture.Sessions) {
+                try {
+                    using var doc=System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(file));
+                    var data=doc.RootElement;
+                    var jobId=data.GetProperty("job").GetUInt32();
+                    var job=PlayerJobHelper.GetJobFromName(_plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.ClassJob>().GetRow(jobId).NameEnglish.ToString());
+                    var name=job.HasValue?PlayerJobHelper.GetNameFromJob(job.Value):$"职业 ID {jobId}";
+                    _lbSessionLabels.Add($"{System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(file))} · {name} · LB {data.GetProperty("lbActionIds").GetArrayLength()} · 动作 {data.GetProperty("events").GetInt32()}");
+                } catch { _lbSessionLabels.Add("记录摘要无法读取："+System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(file))); }
+            }
+        }
+        ImGui.TextUnformatted($"已保存 {_lbSessionLabels.Count} 组（LB 为 0 的组仍保留，便于诊断）");
+        foreach(var label in _lbSessionLabels) ImGui.TextUnformatted(label);
     }
 
     private void DrawThemeSettings() {

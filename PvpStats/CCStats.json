@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.13：重做 3D 地图拖动，默认左键平移、右键旋转，光标位置平滑缩放；补充环境读条与计时器观测。",
+  "Changelog": "0.2.14 测试版：设置新增狼狱 LB 采集，支持位置、朝向、状态、本人及召唤物动作记录，按职业保存和批量导出 ZIP。",
   "Tags": [
     "pvp",
     "statistics"
