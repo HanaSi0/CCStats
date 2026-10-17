@@ -126,9 +126,22 @@ public static class LimitBreakVisuals {
             }
         }
     }
-    public static LbVisualRule ClientDimensions(LbVisualRule rule,ReplaySkillEvent e) =>
-        rule.Shape is LbShape.Line or LbShape.DoubleLine && e.ClientCastType==4 && e.ClientEffectRange is >0 and <=100 && e.ClientWidth is >0 and <=50
-            ? rule with { Size=e.ClientEffectRange,Width=e.ClientWidth } : rule;
+    public static LbVisualRule ClientDimensions(LbVisualRule rule,ReplaySkillEvent e) {
+        if(e.ClientEffectRange is <=0 or >100)return rule;
+        if(rule.Shape is LbShape.Line or LbShape.DoubleLine && e.ClientCastType==4 && e.ClientWidth is >0 and <=50)
+            return rule with { Size=e.ClientEffectRange,Width=e.ClientWidth };
+        if(rule.Shape==LbShape.Cross&&e.ClientCastType==11&&e.ClientWidth is >0 and <=50)
+            return rule with { Size=e.ClientEffectRange,Width=e.ClientWidth };
+        if(rule.Shape==LbShape.Cone&&e.ClientCastType==3)return rule with {Size=e.ClientEffectRange};
+        // The inner 5m Sky Shatter bonus and textual party auras have their own independent dimensions.
+        if(rule.Shape==LbShape.Circle&&e.ClientCastType is 2 or 7&&!(rule.ActionId==29498&&rule.Size==5))
+            return rule with {Size=e.ClientEffectRange};
+        return rule;
+    }
+    public static float Reveal(ReplaySkillEvent e,DateTime now) {
+        var t=Math.Clamp((float)(now-e.Timestamp).TotalSeconds/.32f,0,1);
+        return 1-MathF.Pow(1-t,3);
+    }
     public static float Opacity(LbVisualRule rule,ReplaySkillEvent e,DateTime now) {
         var elapsed=(float)(now-e.Timestamp).TotalSeconds;
         if(elapsed<0)return 0;
@@ -136,7 +149,8 @@ public static class LimitBreakVisuals {
         if(elapsed>=rule.Duration)return 0;
         return rule.Duration>1.5f ? (elapsed<.5f?1:.4f) : elapsed<.45f?1:Math.Clamp((rule.Duration-elapsed)/(rule.Duration-.45f),0,1);
     }
-    public static void Draw(ReplaySceneGeometry geometry,LbVisualRule rule,Vector3 at,float heading,Vector3 source,Func<float,float,float> height,float fade=1) {
+    public static void Draw(ReplaySceneGeometry geometry,LbVisualRule rule,Vector3 at,float heading,Vector3 source,Func<float,float,float> height,float fade=1,float reveal=1) {
+        reveal=Math.Clamp(reveal,0,1);if(reveal<=0)return;
         var alpha=(rule.Reference ? .32f : .42f)*Math.Clamp(fade,0,1);
         var color=rule.Benefit?ReplaySceneGeometry.Rgba(.2f,.65f,1,alpha):ReplaySceneGeometry.Rgba(1,.2f,.25f,alpha);
         var edge=rule.Benefit?ReplaySceneGeometry.Rgba(.25f,.85f,1,Math.Max(.45f,.95f*fade)):ReplaySceneGeometry.Rgba(1,.38f,.18f,Math.Max(.45f,.95f*fade));
@@ -160,10 +174,10 @@ public static class LimitBreakVisuals {
                 if(i==0)Border(a-right,a+right);if(i==pieces-1)Border(b-right,b+right);
             }
         }
-        if(rule.Shape is LbShape.Line or LbShape.DoubleLine) { Rect(at,forward,rule.Size,rule.Shape==LbShape.DoubleLine?rule.Size:0,rule.Width);return; }
-        if(rule.Shape==LbShape.Cross) { Rect(at,forward,rule.Size,rule.Size,rule.Width);Rect(at,side,rule.Size,rule.Size,rule.Width);return; }
+        if(rule.Shape is LbShape.Line or LbShape.DoubleLine) { Rect(at,forward,rule.Size*reveal*(rule.Shape==LbShape.DoubleLine?.5f:1),rule.Shape==LbShape.DoubleLine?rule.Size*reveal*.5f:0,rule.Width);return; }
+        if(rule.Shape==LbShape.Cross) { Rect(at,forward,rule.Size*reveal,rule.Size*reveal,rule.Width);Rect(at,side,rule.Size*reveal,rule.Size*reveal,rule.Width);return; }
         if(rule.Shape==LbShape.Single) { Rect((at+source)/2,Vector3.Normalize(new Vector3(at.X-source.X,0,at.Z-source.Z)+new Vector3(.000001f,0,0)),Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,.45f); }
-        float radius=rule.Shape is LbShape.Single or LbShape.Self?1:rule.Size;
+        float radius=(rule.Shape is LbShape.Single or LbShape.Self?1:rule.Size)*reveal;
         float arc=rule.Shape==LbShape.Cone?rule.Width*MathF.PI/180:MathF.Tau;
         float angle=rule.Shape==LbShape.Cone?heading-arc/2:0;
         for(int ring=0;ring<Math.Max(1,(int)MathF.Ceiling(radius/2));ring++) {

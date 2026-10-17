@@ -21,6 +21,10 @@ internal static class AdvancedCombatChecks {
         player.HP=0;check(!ReplaySceneGeometry.GuardVisible(player,t),"dead players have no Guard sphere");player.HP=10;
         var geometry=new ReplaySceneGeometry();geometry.GuardBubble(Vector3.Zero);var vertices=geometry.Vertices.ToArray();
         check(vertices.Length<5000&&vertices.All(v=>LimitBreakVisuals.Finite(v.Position))&&vertices.Max(v=>v.Position.Y)>3,"Guard effect is bounded real 3D sphere geometry");
+        var badges=new List<Vector2>();
+        for(int i=0;i<10;i++)ReplayLabelLayout.Place(new(150,150),i<5?1:2,12,Vector2.Zero,new(300,300),badges);
+        check(badges.All(p=>p.X>=14&&p.Y>=14&&p.X<=286&&p.Y<=286),"crowded job badges remain inside the replay canvas");
+        check(badges.SelectMany((a,i)=>badges.Skip(i+1).Select(b=>Math.Abs(a.X-b.X)>=26||Math.Abs(a.Y-b.Y)>=26)).All(x=>x),"ten overlapping pawns retain individually separated job badges without moving world positions");
         var rule=LimitBreakVisuals.Rules.First(r=>r.ActionId==29230&&!r.Benefit);var skill=new ReplaySkillEvent {Timestamp=t,Resolved=true};
         check(LimitBreakVisuals.Opacity(rule,skill,t.AddSeconds(.4))==1&&LimitBreakVisuals.Opacity(rule,skill,t.AddSeconds(.8))>.4f,"instant range holds a clearly visible initial plateau before fading");
         data.Frames=new(){new(){Timestamp=t,Players=new(){player}},new(){Timestamp=t.AddSeconds(.1),Players=new(){new(){Player="me",HP=10,StatusTimestamp=t,Statuses=player.Statuses}}}};

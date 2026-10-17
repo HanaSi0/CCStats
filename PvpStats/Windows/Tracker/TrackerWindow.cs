@@ -25,6 +25,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
     protected bool CollapseFilters;
     protected string CurrentTab = "";
 
+    private readonly SerializedRefresh _refreshPipeline=new();
     private int _drawCycles;
     private float _longestDraw, _longestPreDraw;
 
@@ -46,7 +47,9 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
         Flags |= ImGuiWindowFlags.NoScrollbar;
     }
 
-    public virtual async Task Refresh(bool fullRefresh = false) {
+    public virtual Task Refresh(bool fullRefresh = false) => _refreshPipeline.Run(()=>RefreshCore(fullRefresh));
+
+    private async Task RefreshCore(bool fullRefresh) {
         Stopwatch s0 = new();
         s0.Start();
 
@@ -59,7 +62,7 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
             var updatedSet = await StatsEngine.Refresh(MatchFilters);
 
             if(fullRefresh) {
-                updatedSet.Removals = updatedSet.Matches;
+                updatedSet.Removals = updatedSet.Matches.Concat(updatedSet.Removals).ToList();
                 updatedSet.Additions = updatedSet.Matches;
             }
 
@@ -75,10 +78,11 @@ internal abstract class TrackerWindow<T> : Window where T : PvpMatch {
                 Task.Run(SaveFilters),
                 .. refreshTasks.Select(x => x.Unwrap()),
             ]);
-        } catch {
-            Plugin.Log.Error($"{WindowName} refresh failed.");
+        } catch(Exception e) {
+            Plugin.Log.Error(e,$"{WindowName} refresh failed.");
             throw;
         } finally {
+            Tabs.ForEach(x=>x.RefreshActive=false);
             Plugin.Log.Information(string.Format("{0,-50}: {1,4} ms", $"{WindowName} refresh time", s0.ElapsedMilliseconds.ToString()));
         }
     }

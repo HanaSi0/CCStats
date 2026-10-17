@@ -117,6 +117,12 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         ChangeTab(_beforeSettings);
     }
 
+    public override void OnOpen() {
+        base.OnOpen();
+        // This queue is shared with initialization/import. Reopening must also repopulate views without changing saved filters.
+        Plugin.DataQueue.QueueDataOperation(()=>Refresh(true));
+    }
+
     public override void OnClose() {
         if(CurrentTab == "Settings") ReturnFromSettings();
         base.OnClose();

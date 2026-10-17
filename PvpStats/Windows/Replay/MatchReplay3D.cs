@@ -68,6 +68,7 @@ internal sealed partial class MatchReplayWindow {
         var now=_origin.AddSeconds(_seconds);
         var frame=ReplayInterpolation.Sample(_data,now,(player,a,b)=>_timeline.Kills?.Any(k=>k.Victim.ToString()==player&&k.Timestamp>a&&k.Timestamp<=b)==true);
         if(frame?.Players.Any(p=>!p.Y.HasValue)==true||frame?.Crystal is {Y:null})ImGui.TextDisabled("旧记录缺少高度，使用地形估计。");
+        DrawCrystalHud(frame,now);
         var available=ImGui.GetContentRegionAvail();var flank=Math.Clamp(available.X*.19f,170*scale,240*scale);
         var bodyHeight=Math.Max(1,available.Y-ImGui.GetFrameHeightWithSpacing()-(_showReplayLog?140*scale:0));
         var mapWidth=Math.Max(1,available.X-2*(flank+ImGui.GetStyle().ItemSpacing.X));
@@ -115,19 +116,26 @@ internal sealed partial class MatchReplayWindow {
             var draw=ImGui.GetWindowDrawList();draw.AddImage(_renderer.Texture,origin,origin+size);
             draw.PushClipRect(origin,origin+size,true);
             try {
-            if(_renderedFrame!=null)foreach(var player in _renderedFrame.Players) {
+            var badgePositions=new System.Collections.Generic.List<Vector2>();
+            if(_renderedFrame!=null)foreach(var player in _renderedFrame.Players.OrderBy(p=>p.Team).ThenBy(p=>p.Player,StringComparer.Ordinal)) {
                 if(!float.IsFinite(player.X)||!float.IsFinite(player.Z))continue;
                 if(!Project3D(World(player)+new Vector3(0,.15f,0),origin,size,out var at))continue;
-                var job=ReplayJob(player);var half=new Vector2(8*ImGuiHelpers.GlobalScale);at+=new Vector2(0,12*ImGuiHelpers.GlobalScale);
+                if(at.X<origin.X||at.Y<origin.Y||at.X>origin.X+size.X||at.Y>origin.Y+size.Y)continue;
+                var job=ReplayJob(player);var scale=ImGuiHelpers.GlobalScale;var half=new Vector2(9*scale);
+                var anchor=at;at=ReplayLabelLayout.Place(anchor,player.Team,12*scale,origin,origin+size,badgePositions);
+                var teamColor=player.Team==1?new Vector4(.2f,.8f,1,1):new Vector4(1,.25f,.32f,1);
+                draw.AddLine(anchor,at,ImGui.GetColorU32(new Vector4(teamColor.X,teamColor.Y,teamColor.Z,.75f)),1.5f*scale);
                 if(job is {} known&&TextureHelper.JobIcons.TryGetValue(known,out var icon)) {
-                    draw.AddRectFilled(at-half-new Vector2(2),at+half+new Vector2(2),ImGui.GetColorU32(new Vector4(.02f,.03f,.05f,.9f)),3);
+                    draw.AddRectFilled(at-half-new Vector2(3*scale),at+half+new Vector2(3*scale),ImGui.GetColorU32(new Vector4(.015f,.025f,.04f,.97f)),4*scale);
+                    draw.AddRect(at-half-new Vector2(3*scale),at+half+new Vector2(3*scale),ImGui.GetColorU32(teamColor),4*scale,ImDrawFlags.None,2*scale);
                     draw.AddImage(_plugin.WindowManager.GetTextureHandle(icon),at-half,at+half);
                 }
                 if(hovered&&Vector2.Distance(ImGui.GetMousePos(),at)<14*ImGuiHelpers.GlobalScale) {
                     if(ImGui.IsMouseClicked(ImGuiMouseButton.Left)) { _selected=player.Player;_cameraDirty=true; }
-                    ImGui.SetTooltip(player.Player+"\n"+(job.HasValue?PlayerJobHelper.GetNameFromJob(job.Value):"职业未知"));
+                    ImGui.SetTooltip(player.Player+"\n"+(player.Team==1?"星极队 · ":"灵极队 · ")+(job.HasValue?PlayerJobHelper.GetNameFromJob(job.Value):"职业未知"));
                 }
             }
+            DrawSniperReticles(origin,size);
             if(_showMechanics) {
                 var active=ReplayMechanicObservation.Active(_data.MapMechanics,now).ToArray();
                 var global=active.LastOrDefault(e=>e.MapWide);
@@ -141,6 +149,25 @@ internal sealed partial class MatchReplayWindow {
             }
             } finally { draw.PopClipRect(); }
         } catch(Exception e) { _renderError="三维渲染初始化失败，可重试或使用二维回放。";_plugin.Log.Error(e,"Experimental 3D replay failed.");_renderer?.DisposeAfterFrame(_plugin.PluginInterface.UiBuilder);_renderer=null; }
+    }
+    private void DrawSniperReticles(Vector2 origin,Vector2 size) {
+        if(!_showLB||_lbEvents==null)return;
+        var now=_origin.AddSeconds(_renderSeconds);
+        foreach(var e in _lbEvents.Where(e=>e.ActionId==29415&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-3)).GroupBy(e=>e.Actor).Select(g=>g.OrderByDescending(e=>e.Timestamp).First())) {
+            var rule=LimitBreakVisuals.Rules.First(r=>r.ActionId==29415);var opacity=LimitBreakVisuals.Opacity(rule,e,now);if(opacity<=0)continue;
+            if(!LimitBreakVisuals.Center(rule,e,out var target))continue;
+            if(!e.Resolved&&_renderedFrame?.Players.FirstOrDefault(p=>p.Player==e.TargetPlayer) is {} tracked)target=World(tracked);
+            if(!Project3D(target+new Vector3(0,1.6f,0),origin,size,out var screen))continue;
+            var scale=ImGuiHelpers.GlobalScale;var reveal=LimitBreakVisuals.Reveal(e,now);
+            var radius=(18+10*(1-reveal))*scale;
+            var draw=ImGui.GetWindowDrawList();var color=ImGui.GetColorU32(new Vector4(1,.3f,.2f,Math.Max(.25f,opacity)));
+            draw.AddCircle(screen,radius,color,48,2*scale);
+            draw.AddCircle(screen,3*scale,color,16,1.5f*scale);
+            for(int i=0;i<4;i++) {
+                float angle=i*MathF.PI/2;var axis=new Vector2(MathF.Cos(angle),MathF.Sin(angle));
+                draw.AddLine(screen+axis*(radius*.6f),screen+axis*(radius+7*scale),color,2*scale);
+            }
+        }
     }
     private bool Project3D(Vector3 world,Vector2 origin,Vector2 size,out Vector2 screen) {
         var clip=Vector4.Transform(new Vector4(world,1),_projection3D);screen=default;
@@ -211,7 +238,7 @@ internal sealed partial class MatchReplayWindow {
             }
             // Skill footprints use one consistent caster/impact elevation offset, draped to mesh height for slopes.
             var terrainOffset=at.Y-(_mesh?.EstimatedHeight(at.X,at.Z)??0);
-            LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity);
+            LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity,LimitBreakVisuals.Reveal(e,now));
             if(_lbOverlay.Vertices.Length>48000)break;
         }
         AddGuardBubbles(frame,now);

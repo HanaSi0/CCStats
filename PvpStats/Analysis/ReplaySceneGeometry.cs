@@ -67,10 +67,17 @@ public sealed class ReplaySceneGeometry {
             corners[i]=basePoint+new Vector3(MathF.Sin(angle),0,MathF.Cos(angle))*.9f;
         }
         for(int i=0;i<3;i++) {
-            var face=dead?color:i==0?Rgba(.78f,.94f,1):i==1?color:Rgba((color&255)/255f*.65f,((color>>8)&255)/255f*.65f,((color>>16)&255)/255f*.65f);
+            var face=dead?color:i==0?(team==1?Rgba(.3f,.85f,1):Rgba(1,.4f,.32f)):i==1?color:Rgba((color&255)/255f*.65f,((color>>8)&255)/255f*.65f,((color>>16)&255)/255f*.65f);
             Triangle(corners[i],corners[(i+1)%3],apex,face);
         }
         Triangle(corners[0],corners[2],corners[1],color);
+        var teamColor=team==1?Rgba(.15f,.8f,1):Rgba(1,.22f,.3f);
+        var foot=at+new Vector3(0,.11f,0);
+        if(team==1)Ring(foot,1.08f,.2f,teamColor);
+        else for(int i=0;i<4;i++) {
+            var a=i*MathF.Tau/4;var b=(i+1)*MathF.Tau/4;
+            Ribbon(foot+new Vector3(MathF.Sin(a),0,MathF.Cos(a))*1.3f,foot+new Vector3(MathF.Sin(b),0,MathF.Cos(b))*1.3f,.22f,teamColor);
+        }
         if(dead) { Ribbon(at+new Vector3(-.7f,.25f,-.7f),at+new Vector3(.7f,.25f,.7f),.22f,Rgba(1,.2f,.2f));Ribbon(at+new Vector3(-.7f,.25f,.7f),at+new Vector3(.7f,.25f,-.7f),.22f,Rgba(1,.2f,.2f));return; }
         var direction=new Vector3(MathF.Sin(heading),0,MathF.Cos(heading));var side=new Vector3(direction.Z,0,-direction.X);
         var ground=at+new Vector3(0,.16f,0);

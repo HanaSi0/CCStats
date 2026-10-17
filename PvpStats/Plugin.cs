@@ -272,23 +272,19 @@ public sealed class Plugin : IDalamudPlugin {
             CCCache.EnableCaching();
         }
 
-        var lastVersion = new Version(Configuration.LastPluginVersion);
+        // Publish the cache before optional legacy repairs. A corrupt historical record must not leave the first window empty.
+        await WindowManager.RefreshAll(true);
+        var lastVersion = Version.TryParse(Configuration.LastPluginVersion,out var savedVersion)?savedVersion:new Version(0,0,0,0);
         var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
-        //version update validations
-        var ccValidationTask = Task.Run(async () => {
+        try {
             await Validation.BulkCCUpdateValidatePlayerCount();
-            if(lastVersion < new Version(2, 4, 0, 0)) {
-                await Validation.BulkUpdateCCMatchTypes();
-            }
-            if(lastVersion < new Version(2, 5, 3, 0)) {
-                await Validation.SetCrystallineConflictMatchFlags();
-            }
-        });
-
-        await ccValidationTask;
-
-        await WindowManager.RefreshAll();
+            if(lastVersion < new Version(2,4,0,0))await Validation.BulkUpdateCCMatchTypes();
+            if(lastVersion < new Version(2,5,3,0))await Validation.SetCrystallineConflictMatchFlags();
+        } catch(Exception e) {
+            Log.Error(e,"Historical match validation failed; saved matches remain available.");
+        } finally {
+            await WindowManager.RefreshAll(true);
+        }
         Configuration.LastPluginVersion = currentVersion?.ToString() ?? "0.0.0.0";
         Configuration.Save();
         Log2.Information("PvP Tracker initialized.");

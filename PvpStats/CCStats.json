@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.18：3D 回放加入 4× MSAA，显卡不支持时自动降级；网页预览提高渲染分辨率，减少边缘锯齿。",
+  "Changelog": "0.2.19：修复首次打开战绩加载；新增二维水晶进度条、LB 展开动效与狙击准星，修正范围，强化红蓝队辨识。",
   "Tags": [
     "pvp",
     "statistics"

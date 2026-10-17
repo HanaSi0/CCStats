@@ -20,6 +20,18 @@ internal static class LimitBreakVisualChecks {
         check(vertices.All(v=>(v.Color>>24)>0&&(v.Color>>24)<255),"LB fills carry real partial alpha for separate blend pass");
         check((ReplaySceneGeometry.Rgba(1,1,1)>>24)==255,"opaque map and pawn colors retain full alpha");
         check(LimitBreakVisuals.Opacity(whm,e,start.AddSeconds(1.26))==0,"instant effects vanish after short impact fade");
+        check(LimitBreakVisuals.Reveal(e,start)==0&&LimitBreakVisuals.Reveal(e,start.AddSeconds(.4))==1,"LB reveal grows from the actual event time to full extent");
+        geometry.Clear();LimitBreakVisuals.Draw(geometry,whm,Vector3.Zero,0,Vector3.Zero,(_,_)=>0,1,.5f);
+        check(Math.Abs(geometry.Vertices.ToArray().Max(v=>v.Position.Z)-20)<.14,"beam reveal advances forward to half length instead of shrinking around its center");
+        var circle=rules.First(r=>r.ActionId==29498&&r.Size==10);
+        geometry.Clear();LimitBreakVisuals.Draw(geometry,circle,Vector3.Zero,0,Vector3.Zero,(_,_)=>0,1,.5f);
+        check(geometry.Vertices.ToArray().All(v=>new Vector2(v.Position.X,v.Position.Z).Length()<5.15f),"circular LB reveal expands radially from the center without exceeding its current radius");
+        var doubleLine=rules.Single(r=>r.ActionId==29097&&!r.Benefit);
+        geometry.Clear();LimitBreakVisuals.Draw(geometry,doubleLine,Vector3.Zero,0,Vector3.Zero,(_,_)=>0);
+        check(Math.Abs(geometry.Vertices.ToArray().Max(v=>v.Position.Z)-15)<.14&&Math.Abs(geometry.Vertices.ToArray().Min(v=>v.Position.Z)+15)<.14,"Eventide reference layout no longer doubles client total line length from 30 to 60");
+        check(ReplayCrystalHud.Progress(375)==.375f&&ReplayCrystalHud.Position(500)==.25f,"HUD uses director tenths of a percent and signed crystal position");
+        check(ReplayCrystalHud.Progress(null)==null&&ReplayCrystalHud.Position(null)==null&&ReplayCrystalHud.Checkpoint(100)==1,"HUD retains unavailable observations and actual checkpoint clear progress");
+        check(ReplayCrystalHud.Progress(1001)==null&&ReplayCrystalHud.Position(-1001)==null,"invalid progress never becomes a fabricated endpoint");
         var persistent=rules.Single(r=>r.ActionId==29401);
         check(LimitBreakVisuals.Opacity(persistent,e,start.AddSeconds(2))==.4f,"persistent effects settle to faint background");
         check(LimitBreakVisuals.Opacity(whm,e,start.AddSeconds(-1))==0,"future skills have no visual");
