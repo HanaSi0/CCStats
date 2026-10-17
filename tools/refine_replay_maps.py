@@ -200,9 +200,9 @@ def refine(name,src,out):
     grid=replay_walkable.build(wp[wf],name,lo,hi)
     walk=grid.write(out/f'{name}.ccwalk.gz')
     print(f'{name}: {len(i)} -> {len(faces)} faces ({before} welded opaque, {collapsed} coplanar collapses), {vertices} vertices, '
-          f'{len(holes)} holes filled, {len(grid.reach_col)} walkable cells, {time.time()-t0:.0f}s',flush=True)
+          f'{len(holes)} holes filled, {len(grid.reach_col)} walkable cells ({grid.clipped} outside official map), {time.time()-t0:.0f}s',flush=True)
     return {'map':name,'name':MAPS[name],'triangles':int(len(faces)),'vertices':int(vertices),'compressed_bytes':len(data),
-            'sha256':hashlib.sha256(data).hexdigest(),'walk_cells':int(len(grid.reach_col)),'walk_bytes':len(walk),
+            'sha256':hashlib.sha256(data).hexdigest(),'walk_cells':int(len(grid.reach_col)),'walk_cells_outside_official_map':int(grid.clipped),'walk_bytes':len(walk),
             'walk_sha256':hashlib.sha256(walk).hexdigest(),'filled_holes':holes}
 
 

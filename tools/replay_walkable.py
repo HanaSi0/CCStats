@@ -12,6 +12,7 @@ Runtime format (gzip, little endian):
   float32 height[sum(layerCount)] (ascending per cell, cells in index order).
 """
 import gzip,struct
+from pathlib import Path
 import numpy as np
 from scipy import ndimage
 
@@ -22,7 +23,10 @@ CLEARANCE=1.8     # free height required above a floor
 CLIMB=0.6         # largest step between neighbouring floor cells
 SLOPE=0.82        # minimum |normal.y| of a standable surface (about 35 degrees)
 # Flood seeds per map: arena centre (crystal start). Bayside players can drop onto the sand.
-SEEDS={'bayside':[(100,0,100),(70,-10,100)],'harmonias':[(100,0,100)]}
+SEEDS={'bayside':[(100,0,100)],'harmonias':[(100,0,100)]}
+# Game area-map offsets (Map sheet, OffsetX/OffsetY); every arena map uses SizeFactor 400 (4 px per unit).
+MAP_OFFSET={'bayside':-100,'harmonias':-100}
+MASKS=Path(__file__).resolve().parent/'arena_masks'
 
 
 def sample(tris,s=SPACING):
@@ -123,5 +127,44 @@ class WalkGrid:
         data=gzip.compress(raw,compresslevel=9,mtime=0);open(path,'wb').write(data);return data
 
 
+def official_mask(map_key):
+    """Arena silhouette from the game's area map ui/map/s5pN/00/s5pN00_m.tex (1 = playable), or None."""
+    path=MASKS/f'{map_key}.png'
+    if not path.exists():return None
+    from PIL import Image
+    mask=np.asarray(Image.open(path).convert('1'),dtype=bool)
+    # One-pixel tolerance, as the runtime ReplayMapSilhouette: thin markings inside the arena are darker.
+    return ndimage.binary_dilation(mask,np.ones((3,3),bool))
+
+
+def clip_to_mask(grid,map_key,min_cells=64):
+    """Drop floors outside the official silhouette, then islands smaller than min_cells left behind."""
+    mask=official_mask(map_key)
+    if mask is None:return 0
+    offset=MAP_OFFSET.get(map_key,0);H,W=mask.shape
+    x=grid.reach_col%grid.W;z=grid.reach_col//grid.W
+    px=np.floor((grid.lo[0]+(x+.5)*grid.cell+offset)*4*W/2048+W/2).astype(np.int64)
+    py=np.floor((grid.lo[1]+(z+.5)*grid.cell+offset)*4*H/2048+H/2).astype(np.int64)
+    ok=(px>=0)&(px<W)&(py>=0)&(py<H);keep=np.zeros(len(px),bool);keep[ok]=mask[py[ok],px[ok]]
+    removed=int((~keep).sum());col=grid.reach_col[keep];h=grid.reach_h[keep]
+    # Connected components inside the mask (same step rule as the flood).
+    o=np.lexsort((h,col));col=col[o];h=h[o];start=np.searchsorted(col,np.arange(grid.W*grid.D+1))
+    label=np.full(len(col),-1);sizes=[]
+    for k0 in range(len(col)):
+        if label[k0]>=0:continue
+        cid=len(sizes);label[k0]=cid;stack=[k0];n=0
+        while stack:
+            k=stack.pop();n+=1;c=col[k];cx=c%grid.W;cz=c//grid.W
+            for nx,nz in((cx+1,cz),(cx-1,cz),(cx,cz+1),(cx,cz-1)):
+                if nx<0 or nz<0 or nx>=grid.W or nz>=grid.D:continue
+                nc=nz*grid.W+nx
+                for m in range(start[nc],start[nc+1]):
+                    if label[m]<0 and abs(h[m]-h[k])<=CLIMB:label[m]=cid;stack.append(m)
+        sizes.append(n)
+    big=np.array(sizes)[label]>=min_cells
+    grid.reach_col=col[big];grid.reach_h=h[big]
+    return removed+int((~big).sum())
+
+
 def build(tris,map_key,lo,hi):
-    grid=WalkGrid(tris,lo,hi);grid.flood(SEEDS.get(map_key,[(0,0,0)]));return grid
+    grid=WalkGrid(tris,lo,hi);grid.flood(SEEDS.get(map_key,[(0,0,0)]));grid.clipped=clip_to_mask(grid,map_key);return grid
