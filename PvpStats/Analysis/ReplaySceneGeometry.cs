@@ -10,7 +10,18 @@ public sealed class ReplaySceneGeometry {
     public ReadOnlySpan<ReplayVertex> Vertices => System.Runtime.InteropServices.CollectionsMarshal.AsSpan(_vertices);
     public void Clear()=>_vertices.Clear();
     public static uint Rgba(float r,float g,float b,float alpha=1) => (uint)(Math.Clamp(r,0,1)*255)|((uint)(Math.Clamp(g,0,1)*255)<<8)|((uint)(Math.Clamp(b,0,1)*255)<<16)|((uint)(Math.Clamp(alpha,0,1)*255)<<24);
-    public void Triangle(Vector3 a,Vector3 b,Vector3 c,uint color) { _vertices.Add(new(a,color));_vertices.Add(new(b,color));_vertices.Add(new(c,color)); }
+    private ReplayArenaMask? _clip;
+    public ClipScope ClipTo(ReplayArenaMask? mask)=>new(this,mask);
+    public readonly struct ClipScope : IDisposable {
+        private readonly ReplaySceneGeometry _owner;
+        private readonly ReplayArenaMask? _previous;
+        internal ClipScope(ReplaySceneGeometry owner,ReplayArenaMask? mask) { _owner=owner;_previous=owner._clip;owner._clip=mask; }
+        public void Dispose()=>_owner._clip=_previous;
+    }
+    public void Triangle(Vector3 a,Vector3 b,Vector3 c,uint color) {
+        if(_clip!=null)_clip.Clip(this,a,b,c,color);else UnclippedTriangle(a,b,c,color);
+    }
+    internal void UnclippedTriangle(Vector3 a,Vector3 b,Vector3 c,uint color) { _vertices.Add(new(a,color));_vertices.Add(new(b,color));_vertices.Add(new(c,color)); }
     public void Ribbon(Vector3 a,Vector3 b,float width,uint color) {
         var axis=b-a;var right=new Vector3(-axis.Z,0,axis.X);if(right.LengthSquared()<.00001f)return;
         right=Vector3.Normalize(right)*width/2;a.Y+=.06f;b.Y+=.06f;

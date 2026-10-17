@@ -19,7 +19,7 @@ internal sealed partial class MatchReplayWindow {
     private ReplayGpuRenderer? _renderer;
     private readonly ReplaySceneGeometry _scene=new();
     private readonly ReplaySceneGeometry _lbOverlay=new();
-    private bool _showLB=true;
+    private bool _showLB=true,_clipAreas=true;
     private System.Collections.Generic.List<ReplaySkillEvent>? _lbEvents;
     private bool _disposed,_cameraDirty=true,_followPlayer;
     private string _renderError="";
@@ -67,6 +67,7 @@ internal sealed partial class MatchReplayWindow {
         ImGui.TextUnformatted($"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss} · {_data.Frames.Count:N0} 帧 · 目标采样 {1/_data.SampleIntervalSeconds:F0} 次/秒");
         ImGui.SameLine();ImGui.Checkbox("水晶轨迹###Replay3DTrail",ref _showCrystalTrail);if(ImGui.IsItemEdited())_cameraDirty=true;
         ImGui.SameLine();ImGui.Checkbox("地图事件###Replay3DEvents",ref _showMechanics);if(ImGui.IsItemEdited())_cameraDirty=true;
+        ImGui.SameLine();ImGui.Checkbox("裁剪范围###ReplayClipAreas",ref _clipAreas);if(ImGui.IsItemEdited())_cameraDirty=true;
         ImGui.SameLine();if(ImGui.Checkbox("极限技范围###Replay3DLB",ref _showLB))_cameraDirty=true;
         if(ImGui.IsItemHovered())ImGui.SetTooltip("浅蓝为增益，浅红为伤害或控制；即时效果先明显显示再淡出，持续区域保留淡色与边框。扇形角度、南十字宽度及黄昏双向长度为参考；旧记录缺少落点时不补画。");
         ImGui.SameLine();ImGui.SetNextItemWidth(76*scale);if(ImGui.DragFloat("水晶参考圈###Replay3DRadius",ref _radius3D,.1f,1,12,"%.1f"))_cameraDirty=true;
@@ -203,7 +204,7 @@ internal sealed partial class MatchReplayWindow {
         if(_showMechanics)foreach(var visual in MapMechanicVisuals.Active(_data.MapMechanics,_match.TerritoryId,now)) {
             var recordedY=visual.Rule.Ground?visual.Event.TargetY:visual.Event.Y;
             var offset=recordedY.HasValue?visual.Center.Y-(_mesh?.EstimatedHeight(visual.Center.X,visual.Center.Z)??visual.Center.Y):0;
-            MapMechanicVisuals.Draw(_lbOverlay,visual,now,(x,z)=>(_mesh?.EstimatedHeight(x,z)??visual.Center.Y)+offset);
+            using(_lbOverlay.ClipTo(_clipAreas?_mesh?.ArenaMask:null))MapMechanicVisuals.Draw(_lbOverlay,visual,now,(x,z)=>(_mesh?.EstimatedHeight(x,z)??visual.Center.Y)+offset);
             if(_lbOverlay.Vertices.Length>12000)break;
         }
         if(!_showLB) { AddGuardBubbles(frame,now);return; }
@@ -241,10 +242,10 @@ internal sealed partial class MatchReplayWindow {
             }
             // Skill footprints use one consistent caster/impact elevation offset, draped to mesh height for slopes.
             var terrainOffset=at.Y-(_mesh?.EstimatedHeight(at.X,at.Z)??0);
-            LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity,LimitBreakVisuals.Reveal(e,now));
+            using(_lbOverlay.ClipTo(_clipAreas?_mesh?.ArenaMask:null))LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity,LimitBreakVisuals.Reveal(e,now));
             if(_lbOverlay.Vertices.Length>48000)break;
         }
-        ReplaySummons.Draw(_lbOverlay,ReplaySummons.Resolve(_data.SummonFrames,_lbEvents,now),_lbEvents,frame,now,(x,y,z)=>_mesh?.EstimatedHeight(x,z)??y);
+        ReplaySummons.Draw(_lbOverlay,ReplaySummons.Resolve(_data.SummonFrames,_lbEvents,now),_lbEvents,frame,now,(x,y,z)=>_mesh?.EstimatedHeight(x,z)??y,_clipAreas?_mesh?.ArenaMask:null);
         AddGuardBubbles(frame,now);
     }
     private void AddGuardBubbles(MovementFrame? frame,DateTime now) {

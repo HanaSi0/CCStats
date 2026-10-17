@@ -18,6 +18,7 @@ public sealed class ReplayMapMesh {
     public ReplayVertex[] Vertices { get; }
     public uint[] Indices { get; }
     public int OpaqueIndexCount { get; }
+    public ReplayArenaMask? ArenaMask { get; private set; }
     public Vector3 Min { get; }
     public Vector3 Max { get; }
     // The source is visual geometry, not a collision mesh. Used only for missing historical heights.
@@ -93,6 +94,6 @@ public sealed class ReplayMapMesh {
         var key=MapKey(territory)??throw new InvalidDataException("此区域尚未提供三维地图。");
         using var stream=typeof(ReplayMapMesh).Assembly.GetManifestResourceStream("PvpStats.Resources.ReplayMaps."+key+".ccmap.gz")
             ??throw new FileNotFoundException("三维地图资源缺失。");
-        return Read(stream);
+        var mesh=Read(stream);mesh.ArenaMask=ReplayArenaMask.Build(mesh,territory);return mesh;
     }
 }
