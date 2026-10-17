@@ -1,5 +1,6 @@
 using PvpStats.Localization;
 using PvpStats.Interface;
+using PvpStats.Helpers;
 using System;
 using System.Threading.Tasks;
 using Dalamud.Bindings.ImGui;
@@ -44,7 +45,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
         //};
         //Flags = Flags | ImGuiWindowFlags.NoScrollbar;
 
-        Size = new Vector2(1100, 740);
+        Size = new Vector2(1120, 800);
         SizeCondition = ImGuiCond.FirstUseEver;
 
         _leaderboard = new(plugin);
@@ -123,15 +124,12 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
 
     public override void PreDraw() {
         var screen = ImGui.GetMainViewport().WorkSize / ImGuiHelpers.GlobalScale;
-        SizeConstraints = new() {
-            MinimumSize = new Vector2(Math.Min(800, Math.Max(300, screen.X - 40)), Math.Min(540, Math.Max(250, screen.Y - 60))),
-            MaximumSize = new Vector2(Math.Max(300, screen.X - 20), Math.Max(250, screen.Y - 20)),
-        };
+        WindowChrome.Constrain(this);
         // Repair sizes saved by old child-window navigation, once per installation.
-        if(Plugin.Configuration.WindowLayoutVersion < 2) {
+        if(Plugin.Configuration.WindowLayoutVersion < 3) {
             var available = ImGui.GetMainViewport().WorkSize / ImGuiHelpers.GlobalScale;
-            Size = new Vector2(Math.Min(1100, Math.Max(300, available.X - 40)),
-                Math.Min(740, Math.Max(250, available.Y - 60)));
+            Size = new Vector2(Math.Min(1120, Math.Max(300, available.X - 40)),
+                Math.Min(800, Math.Max(250, available.Y - 60)));
             SizeCondition = ImGuiCond.Always;
             Position = ImGui.GetMainViewport().WorkPos + new Vector2(20, 20) * ImGuiHelpers.GlobalScale;
             PositionCondition = ImGuiCond.Always;
@@ -141,16 +139,16 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
 
     public override void DrawInternal() {
         ImGui.SetWindowFontScale(1f);
-        if(Plugin.Configuration.WindowLayoutVersion < 2) {
+        if(Plugin.Configuration.WindowLayoutVersion < 3) {
             SizeCondition = ImGuiCond.FirstUseEver;
             PositionCondition = ImGuiCond.FirstUseEver;
-            Plugin.Configuration.WindowLayoutVersion = 2;
+            Plugin.Configuration.WindowLayoutVersion = 3;
             Plugin.DataQueue.QueueDataOperation(Plugin.Configuration.Save);
         }
         UpdateOverview();
         if(CurrentTab == "") ChangeTab("Matches");
         ModernTheme.Brand(Plugin, "CCStats", "水晶冲突 · 战绩与数据中心");
-        var sidebarWidth = ImGuiHelpers.GlobalScale * 142;
+        var sidebarWidth = ImGuiHelpers.GlobalScale * (ImGui.GetWindowWidth()/ImGuiHelpers.GlobalScale<900?124:152);
         using(var sidebar = ImRaii.Child("CCNavigation", new Vector2(sidebarWidth, 0), true)) {
             if(sidebar) {
                 Navigation("Matches", "战绩查询");
@@ -239,6 +237,11 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
     }
 
     private void DrawOverviewCards() {
+        if(ImGui.GetContentRegionAvail().X<640*ImGuiHelpers.GlobalScale) {
+            ImGui.TextWrapped($"筛选比赛 {_overviewMatches?.Count??0:N0}  ·  有效胜率 {(_overviewPlayed>0?((double)_overviewWins/_overviewPlayed).ToString("P1"):"—")}");
+            ImGui.TextDisabled($"{_overviewWins:N0} 胜 / {_overviewPlayed-_overviewWins:N0} 负  ·  平均时长 {StatDisplay.Duration(_averageDuration.TotalSeconds,_averageDuration>TimeSpan.Zero)}");
+            return;
+        }
         var gap = ImGui.GetStyle().ItemSpacing.X;
         var width = Math.Max(40, (ImGui.GetContentRegionAvail().X - 3 * gap) / 4);
         ModernTheme.Card("MetricMatches", "筛选比赛", (_overviewMatches?.Count ?? 0).ToString("N0"), width, ModernTheme.Accent);

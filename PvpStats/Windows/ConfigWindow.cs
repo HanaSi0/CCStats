@@ -681,7 +681,7 @@ internal class ConfigWindow : Window {
             _plugin.Configuration.EnableDetailedTelemetry=detailed;
             _plugin.Configuration.Save();
         }
-        ImGui.TextWrapped("采集客户端已加载的本局玩家，包括镜头外模型；每 0.5 秒记录位置，并保存受击状态与效果。未加载对象不补位置。仅在对局详情点击按钮后，才使用本机进行细致推算。");
+        ImGui.TextWrapped("采集客户端已加载的本局玩家，包括镜头外模型；目标每秒 20 次记录位置，并保存受击状态与效果。未加载对象不补位置。仅在对局详情点击按钮后，才使用本机进行细致推算。");
         bool enableTimelineCC = _plugin.Configuration.EnableTimelineCC ?? true;
         if(ImGui.Checkbox(ChineseText.Label("Crystalline Conflict Timeline Tracking"), ref enableTimelineCC)) {
             _plugin.Configuration.EnableTimelineCC = enableTimelineCC;

@@ -37,7 +37,7 @@ internal sealed class DetailedCombatPanel {
         ImGui.TextWrapped("防御期间承伤是伤害包数值；格挡/招架是命中次数。控制状态秒数按连续采样累计，重叠状态分别计时，缺帧不补算。自返治疗不等于全部吸血；已识别吸血仅覆盖血宴灵蛇与强碎灵蛇的自返治疗包，不代表实际有效回血。");
         using(var table=ImRaii.Table("DetailedPlayers",9,ImGuiTableFlags.ScrollX|ImGuiTableFlags.BordersInnerH|ImGuiTableFlags.RowBg,new(0,220*ImGuiHelpers.GlobalScale))) {
             if(table) {
-                foreach(var caption in new[]{"玩家全名","防御承伤","防御受击","格挡/招架","控制成功/抵抗","控制状态秒数≈","自返治疗","已识别吸血","防御减伤估算≈"}) ImGui.TableSetupColumn(caption,ImGuiTableColumnFlags.WidthFixed,caption=="玩家全名"?210:125);
+                foreach(var caption in new[]{"玩家全名","防御承伤","防御受击","格挡/招架","控制成功/抵抗","控制状态秒数≈","自返治疗","已识别吸血","防御减伤估算≈"}) ImGui.TableSetupColumn(caption,ImGuiTableColumnFlags.WidthFixed,(caption=="玩家全名"?210:125)*ImGuiHelpers.GlobalScale);
                 ImGui.TableSetupScrollFreeze(1,1); ImGui.TableHeadersRow();
                 foreach(var stats in result.Stats.Values.OrderBy(s=>s.Player)) {
                     var estimates=result.Estimates.Where(e=>e.Effect.Target==stats.Player&&e.Supported).ToArray();

@@ -171,7 +171,7 @@ internal class CrystallineConflictMatchManager : IDisposable {
 
             if(_plugin.Configuration.EnableDetailedTelemetry) {
                 _currentMatchTimeline ??= new();
-                _currentMatchTimeline.Detailed = new() { GameVersion = _currentMatch.GameVersion ?? "" };
+                _currentMatchTimeline.Detailed = new() { Version=3,SampleIntervalSeconds=.05,GameVersion = _currentMatch.GameVersion ?? "" };
                 _currentMatchTimeline.Kills ??= new();
                 _currentMatchTimeline.CrystalPosition ??= new();
                 // The shared timeline UI expects both teams even when only detailed recording is enabled.
@@ -182,6 +182,7 @@ internal class CrystallineConflictMatchManager : IDisposable {
                     { CrystallineConflictTeamName.Astra, new() }, { CrystallineConflictTeamName.Umbra, new() },
                 };
                 _lastMovementSample = DateTime.MinValue;
+                _movementAliases.Clear();
                 lock(_detailedLock) _recordedEffects.Clear();
             }
             _castTargets = [];
@@ -896,6 +897,8 @@ internal class CrystallineConflictMatchManager : IDisposable {
         return true;
     }
 
+    private readonly Dictionary<uint,string> _movementAliases=new();
+
     private int DetailedTeam(string alias) {
         if(_currentMatch?.IntroPlayerInfo?.TryGetValue(alias, out var intro) == true) return (int)(intro.Team ?? CrystallineConflictTeamName.Unknown);
         return (int?)_currentMatch?.Players.FirstOrDefault(p=>p.Alias.ToString()==alias)?.Team ?? 0;
@@ -939,7 +942,8 @@ internal class CrystallineConflictMatchManager : IDisposable {
 
     private unsafe void CaptureMovement(DateTime now, CrystallineConflictContentDirector* director) {
         var data = _currentMatchTimeline?.Detailed;
-        if(data == null || _scoreboardPayloadReceived || _currentMatch?.IsCompleted != false || now-_lastMovementSample < TimeSpan.FromSeconds(.5)) return;
+        if(data == null || _scoreboardPayloadReceived || _currentMatch?.IsCompleted != false || now-_lastMovementSample < TimeSpan.FromSeconds(data.SampleIntervalSeconds)) return;
+        if(_currentMatch.IntroPlayerInfo==null)return;
         _lastMovementSample = now;
         try {
             if(data.MapSizeFactor == 0) try {
@@ -949,8 +953,13 @@ internal class CrystallineConflictMatchManager : IDisposable {
                 if(id.Length > 0) data.MapTexture=$"ui/map/{id}/{id.Replace("/", "")}_m.tex";
             } catch { /* Keep recording loaded objects when map metadata is unavailable. */ }
             var objects = _plugin.ObjectTable.OfType<IPlayerCharacter>().Where(p=>p.EntityId != 0 && p.EntityId != 0xE0000000).GroupBy(p=>p.EntityId).Select(g=>g.First()).ToArray();
-            var aliases = objects.ToDictionary(p=>p.EntityId,p=>new PlayerAlias(p.Name.ToString(),_plugin.DataManager.GetExcelSheet<World>().GetRow(p.HomeWorld.RowId).Name.ToString()).ToString());
+            foreach(var p in objects) if(!_movementAliases.ContainsKey(p.EntityId))
+                _movementAliases[p.EntityId]=new PlayerAlias(p.Name.ToString(),_plugin.DataManager.GetExcelSheet<World>().GetRow(p.HomeWorld.RowId).Name.ToString()).ToString();
+            var aliases=_movementAliases;
             var frame = new MovementFrame { Timestamp=now, CrystalProgress=director->CrystalPosition, AstraProgress=director->AstraProgress, UmbraProgress=director->UmbraProgress };
+            // BNpcName 11350 is the game's "tactical crystal", independent of client language.
+            var crystals=_plugin.ObjectTable.OfType<IBattleNpc>().Where(n=>n.NameId==11350 && float.IsFinite(n.Position.X)&&float.IsFinite(n.Position.Z)).ToArray();
+            if(crystals.Length==1) frame.Crystal=new() { X=crystals[0].Position.X,Z=crystals[0].Position.Z };
             foreach(var player in objects) {
                 var alias = aliases[player.EntityId];
                 var team = DetailedTeam(alias);
@@ -963,8 +972,8 @@ internal class CrystallineConflictMatchManager : IDisposable {
                 });
             }
             lock(_detailedLock) {
-                if(data.Frames.Count >= 2400 || data.EstimatedBytes >= DetailedTelemetry.ByteBudget) { data.FramesTruncated=true; return; }
-                data.EstimatedBytes += 256 + frame.Players.Sum(p=>384 + p.Controls.Count*192);
+                if(data.Frames.Count >= MovementCodec.MaxFrames || data.MovementBytesEstimate >= MovementCodec.RawBudget-16384) { data.FramesTruncated=true; return; }
+                data.MovementBytesEstimate += 32 + frame.Players.Sum(p=>24 + p.Controls.Count*10);
                 data.Frames.Add(frame);
             }
         } catch(Exception e) {

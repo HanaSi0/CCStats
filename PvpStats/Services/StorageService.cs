@@ -113,7 +113,7 @@ internal class StorageService {
 
     internal async Task UpdateCCTimeline(CrystallineConflictMatchTimeline timeline) {
         LogUpdate(timeline.Id.ToString());
-        await WriteToDatabase(() => GetCCTimelines().Update(timeline));
+        await WriteToDatabase(() => { timeline.Detailed?.PrepareForStorage(); return GetCCTimelines().Update(timeline); });
     }
 
     internal ILiteCollection<PlayerAliasLink> GetAutoLinks() {

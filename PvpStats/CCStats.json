@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.4：优化筛选布局、复制操作与历史统计刷新稳定性。",
+  "Changelog": "0.2.5：重构详情与窗口缩放，修复空曲线页面异常；提高走位采样，放大地图并记录水晶坐标。",
   "Tags": [
     "pvp",
     "statistics"

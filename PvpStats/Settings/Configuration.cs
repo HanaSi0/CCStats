@@ -17,6 +17,8 @@ public class Configuration : IPluginConfiguration {
     public string LastPluginVersion { get; set; } = "0.0.0.0";
     public bool? EnableDBCachingCC { get; set; }
 
+    public System.Numerics.Vector2? MatchDetailSize { get; set; }
+    public System.Numerics.Vector2? ReplayWindowSize { get; set; }
     public bool EnableDetailedTelemetry { get; set; } = true;
 
     public bool? EnableTimelineCC { get; set; }

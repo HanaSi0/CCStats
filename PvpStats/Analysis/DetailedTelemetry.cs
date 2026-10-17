@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using LiteDB;
+using System.Text.Json.Serialization;
 
 namespace PvpStats.Analysis;
 
@@ -19,7 +21,31 @@ public sealed class DetailedTelemetry {
     public const long ByteBudget = 8 * 1024 * 1024;
     public bool FramesTruncated { get; set; }
     public bool EffectsTruncated { get; set; }
-    public List<MovementFrame> Frames { get; set; } = new();
+    public double SampleIntervalSeconds { get; set; } = .5;
+    public long MovementBytesEstimate { get; set; }
+    [BsonIgnore, JsonIgnore] public double FrameGapSeconds => Math.Max(.15,SampleIntervalSeconds*(Version>=3?3:2));
+    private List<MovementFrame>? _frames=new();
+    private bool _packedRead;
+    public bool MovementDownsampled { get; set; }
+    [BsonIgnore] public List<MovementFrame> Frames {
+        get { if(!_packedRead && (_frames?.Count??0)==0 && PackedFrames.Length>0) { _frames=MovementCodec.Decode(PackedFrames); _packedRead=true; } return _frames??=new(); }
+        set => _frames=value;
+    }
+    [BsonField("Frames"),JsonIgnore] public List<MovementFrame>? LegacyFrames {
+        get => Version>=3?null:Frames;
+        set { if(value!=null)_frames=value; }
+    }
+    [JsonIgnore] public byte[] PackedFrames { get; set; } = Array.Empty<byte>();
+    public void PrepareForStorage() {
+        if(Version<3 || _frames==null)return;
+        PackedFrames=MovementCodec.Encode(_frames);
+        while(PackedFrames.Length>4*1024*1024 && _frames.Count>2) {
+            var last=_frames[^1]; _frames=_frames.Where((f,i)=>i%2==0).ToList();
+            if(_frames[^1]!=last)_frames.Add(last);
+            SampleIntervalSeconds*=2; MovementDownsampled=true;
+            PackedFrames=MovementCodec.Encode(_frames);
+        }
+    }
     public List<ObservedEffect> Effects { get; set; } = new();
 }
 public sealed class MovementFrame {
@@ -29,6 +55,11 @@ public sealed class MovementFrame {
     public int CrystalProgress { get; set; }
     public int AstraProgress { get; set; }
     public int UmbraProgress { get; set; }
+    public CrystalPosition? Crystal { get; set; }
+}
+public sealed class CrystalPosition {
+    public float X { get; set; }
+    public float Z { get; set; }
 }
 public sealed class PlayerPosition {
     public string Player { get; set; } = "";
@@ -99,7 +130,7 @@ public static class DetailedAnalysis {
         var frames = data.Frames;
         int low = 0, high = frames.Count - 1, found = -1;
         while(low <= high) { int mid = (low+high)/2; if(frames[mid].Timestamp <= time) { found=mid; low=mid+1; } else high=mid-1; }
-        return found >= 0 && time - frames[found].Timestamp <= TimeSpan.FromSeconds(1) ? frames[found] : null;
+        return found >= 0 && time - frames[found].Timestamp <= TimeSpan.FromSeconds(data.FrameGapSeconds) ? frames[found] : null;
     }
     public static Dictionary<string,PlayerDetailedStats> Summarize(DetailedTelemetry data) {
         var result = new Dictionary<string,PlayerDetailedStats>();
@@ -131,7 +162,7 @@ public static class DetailedAnalysis {
             if(i+1 == data.Frames.Count) continue;
             var next = data.Frames[i+1];
             var seconds = (next.Timestamp-frame.Timestamp).TotalSeconds;
-            if(seconds <= 0 || seconds > 1) continue;
+            if(seconds <= 0 || seconds > data.FrameGapSeconds) continue;
             foreach(var player in frame.Players) {
                 var after = next.Players.FirstOrDefault(p=>p.Player==player.Player);
                 if(after == null || player.HP == 0 || after.HP == 0) continue;

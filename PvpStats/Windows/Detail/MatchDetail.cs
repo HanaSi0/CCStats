@@ -27,6 +27,7 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
     protected string CurrentTab = "";
 
     private bool _popupOpen = false;
+    private Vector2 _lastWindowSize;
 
     public MatchDetail(Plugin plugin, MatchCacheService<T> cache, T match) : base($"Match Details: {match.Id}") {
         Plugin = plugin;
@@ -49,31 +50,32 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
 
     protected abstract string BuildCSV();
 
+    public override void PreDraw() => WindowChrome.Constrain(this);
     public override void OnClose() {
+        if(_lastWindowSize.X>0) {
+            Plugin.Configuration.MatchDetailSize=_lastWindowSize;
+            Plugin.DataQueue.QueueDataOperation(Plugin.Configuration.Save);
+        }
         Plugin.WindowManager.RemoveWindow(this);
     }
 
     public override void Draw() {
         ImGui.SetWindowFontScale(1f);
-        SizeCondition = ImGuiCond.Once;
+        _lastWindowSize=ImGui.GetWindowSize()/Dalamud.Interface.Utility.ImGuiHelpers.GlobalScale;
+
     }
 
     protected void DrawFunctions() {
-        //need to increment this for each function
-        int functionCount = 3;
-        //get width of strip
-        using(_ = ImRaii.PushFont(UiBuilder.IconFont)) {
-            var buttonWidth = ImGui.GetStyle().FramePadding.X * 2 + ImGui.CalcTextSize(FontAwesomeIcon.Search.ToIconString()).X;
-            var totalWidth = buttonWidth * functionCount + ImGui.GetStyle().ItemSpacing.X * (functionCount - 1);
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + (ImGui.GetColumnWidth() - totalWidth) / 2f);
+        var scale=Dalamud.Interface.Utility.ImGuiHelpers.GlobalScale;
+        using(var font=ImRaii.PushFont(UiBuilder.IconFont)) {
+            if(ModernTheme.Button(FontAwesomeIcon.Copy.ToIconString()+"###CopyMatch",new Vector2(36*scale))) ImGui.SetClipboardText(CSV);
         }
-        ImGuiHelper.CSVButton(CSV);
-
+        ImGuiHelper.WrappedTooltip("复制对局数据");
         ImGui.SameLine();
         using(_ = ImRaii.PushFont(UiBuilder.IconFont)) {
             var color = Match.IsBookmarked ? Plugin.Configuration.Colors.Favorite : ImGuiColors.DalamudWhite;
             using(_ = ImRaii.PushColor(ImGuiCol.Text, color)) {
-                if(ModernTheme.Button($"{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch")) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Star.ToIconString()}##--FavoriteMatch",new Vector2(36*scale))) {
                     Match.IsBookmarked = !Match.IsBookmarked;
                     Plugin.DataQueue.QueueDataOperation(async () => {
                         await Cache.UpdateMatch(Match);
@@ -87,7 +89,7 @@ internal abstract class MatchDetail<T> : Window where T : PvpMatch {
         using(var font = ImRaii.PushFont(UiBuilder.IconFont)) {
             var color = !Match.Tags.IsNullOrEmpty() ? Plugin.Configuration.Colors.Favorite : ImGuiColors.DalamudWhite;
             using(_ = ImRaii.PushColor(ImGuiCol.Text, color)) {
-                if(ModernTheme.Button($"{FontAwesomeIcon.Tags.ToIconString()}##--Tags")) {
+                if(ModernTheme.Button($"{FontAwesomeIcon.Tags.ToIconString()}##--Tags",new Vector2(36*scale))) {
                     ImGui.OpenPopup($"{Match.Id}--TagsPopup");
                 }
             }

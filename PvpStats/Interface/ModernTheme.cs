@@ -25,7 +25,10 @@ internal static class ModernTheme {
     private sealed class Scope : IDisposable {
         private readonly IDisposable _styles;
         private readonly IDisposable _colors;
+        private readonly bool _resizeFromEdges;
         internal Scope(ThemeConfiguration p) {
+            _resizeFromEdges=ImGui.GetIO().ConfigWindowsResizeFromEdges;
+            ImGui.GetIO().ConfigWindowsResizeFromEdges=true;
             var scale = ImGuiHelpers.GlobalScale;
             _styles = ImRaii.PushStyle(ImGuiStyleVar.WindowRounding, 12f * scale)
                 .Push(ImGuiStyleVar.ChildRounding, 10f * scale).Push(ImGuiStyleVar.FrameRounding, 7f * scale)
@@ -58,7 +61,7 @@ internal static class ModernTheme {
                 .Push(ImGuiCol.TableRowBgAlt, p.TableAlternate)
                 .Push(ImGuiCol.TableBorderLight, p.Border).Push(ImGuiCol.TableBorderStrong, p.Border);
         }
-        public void Dispose() { _colors.Dispose(); _styles.Dispose(); }
+        public void Dispose() { _colors.Dispose(); _styles.Dispose(); ImGui.GetIO().ConfigWindowsResizeFromEdges=_resizeFromEdges; }
     }
 
     private sealed class Interaction {
