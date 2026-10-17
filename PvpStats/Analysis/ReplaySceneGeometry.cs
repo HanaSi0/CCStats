@@ -11,15 +11,20 @@ public sealed class ReplaySceneGeometry {
     public void Clear()=>_vertices.Clear();
     public static uint Rgba(float r,float g,float b,float alpha=1) => (uint)(Math.Clamp(r,0,1)*255)|((uint)(Math.Clamp(g,0,1)*255)<<8)|((uint)(Math.Clamp(b,0,1)*255)<<16)|((uint)(Math.Clamp(alpha,0,1)*255)<<24);
     private ReplayArenaMask? _clip;
-    public ClipScope ClipTo(ReplayArenaMask? mask)=>new(this,mask);
+    private float? _clipReference;
+    // reference: elevation of the effect (caster, impact or arena event); layered masks keep it on that floor.
+    public ClipScope ClipTo(ReplayArenaMask? mask,float? reference=null)=>new(this,mask,reference);
     public readonly struct ClipScope : IDisposable {
         private readonly ReplaySceneGeometry _owner;
         private readonly ReplayArenaMask? _previous;
-        internal ClipScope(ReplaySceneGeometry owner,ReplayArenaMask? mask) { _owner=owner;_previous=owner._clip;owner._clip=mask; }
-        public void Dispose()=>_owner._clip=_previous;
+        private readonly float? _previousReference;
+        internal ClipScope(ReplaySceneGeometry owner,ReplayArenaMask? mask,float? reference) {
+            _owner=owner;_previous=owner._clip;_previousReference=owner._clipReference;owner._clip=mask;owner._clipReference=reference;
+        }
+        public void Dispose() { _owner._clip=_previous;_owner._clipReference=_previousReference; }
     }
     public void Triangle(Vector3 a,Vector3 b,Vector3 c,uint color) {
-        if(_clip!=null)_clip.Clip(this,a,b,c,color);else UnclippedTriangle(a,b,c,color);
+        if(_clip!=null)_clip.Clip(this,a,b,c,color,_clipReference);else UnclippedTriangle(a,b,c,color);
     }
     internal void UnclippedTriangle(Vector3 a,Vector3 b,Vector3 c,uint color) { _vertices.Add(new(a,color));_vertices.Add(new(b,color));_vertices.Add(new(c,color)); }
     public void Ribbon(Vector3 a,Vector3 b,float width,uint color) {

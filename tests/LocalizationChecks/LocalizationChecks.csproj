@@ -26,6 +26,7 @@
     <Compile Include="../../PvpStats/Types/Match/PvpScoreboard.cs" Link="PvpScoreboard.cs" />
     <None Include="Fixtures/**" CopyToOutputDirectory="PreserveNewest" />
     <EmbeddedResource Include="../../PvpStats/Resources/ReplayMaps/*.ccmap.gz" LogicalName="PvpStats.Resources.ReplayMaps.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="../../PvpStats/Resources/ReplayMaps/*.ccwalk.gz" LogicalName="PvpStats.Resources.ReplayMaps.%(Filename)%(Extension)" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <Compile Include="../../PvpStats/Analysis/*.cs" Link="Analysis/%(Filename)%(Extension)" />
     <Compile Include="../../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />

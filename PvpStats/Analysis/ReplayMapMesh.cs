@@ -65,7 +65,19 @@ public sealed class ReplayMapMesh {
             }
         }
     }
+    // Standable floors (official-silhouette walk grid); null when the resource is unavailable.
+    public ReplayWalkGrid? Walk { get; private set; }
     public float EstimatedHeight(float x,float z) {
+        if(Walk!=null&&Walk.Around(x,z,null,3,out var floor))return floor;
+        return EstimatedDisplayHeight(x,z);
+    }
+    // Floor nearest a known elevation (summon, caster, effect); falls back to EstimatedHeight.
+    public float SurfaceHeight(float x,float z,float reference) {
+        if(Walk!=null&&float.IsFinite(reference)&&Walk.Around(x,z,reference,3,out var floor))return floor;
+        return EstimatedHeight(x,z);
+    }
+    // Highest upward display surface (may be a wall or rock top). Used only without a walk grid.
+    public float EstimatedDisplayHeight(float x,float z) {
         int ix=(int)MathF.Floor((x-_groundMin.X)/Cell),iz=(int)MathF.Floor((z-_groundMin.Y)/Cell);
         if(ix>=0&&ix<256&&iz>=0&&iz<256&&float.IsFinite(_ground[iz*256+ix]))return _ground[iz*256+ix];
         return 0;
@@ -94,6 +106,14 @@ public sealed class ReplayMapMesh {
         var key=MapKey(territory)??throw new InvalidDataException("此区域尚未提供三维地图。");
         using var stream=typeof(ReplayMapMesh).Assembly.GetManifestResourceStream("PvpStats.Resources.ReplayMaps."+key+".ccmap.gz")
             ??throw new FileNotFoundException("三维地图资源缺失。");
-        var mesh=Read(stream);mesh.ArenaMask=ReplayArenaMask.Build(mesh,territory);return mesh;
+        var mesh=Read(stream);mesh.Walk=LoadEmbeddedWalk(territory);
+        // Official-silhouette walk grid first; the height-band footprint remains only as a fallback.
+        mesh.ArenaMask=ReplayArenaMask.FromWalk(mesh.Walk)??ReplayArenaMask.Build(mesh,territory);return mesh;
+    }
+    public static ReplayWalkGrid? LoadEmbeddedWalk(uint territory) {
+        var key=MapKey(territory);if(key==null)return null;
+        using var stream=typeof(ReplayMapMesh).Assembly.GetManifestResourceStream("PvpStats.Resources.ReplayMaps."+key+".ccwalk.gz");
+        if(stream==null)return null;
+        try { return ReplayWalkGrid.Read(stream); } catch(Exception e) when(e is InvalidDataException or EndOfStreamException) { return null; }
     }
 }

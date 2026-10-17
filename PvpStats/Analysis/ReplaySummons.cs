@@ -101,10 +101,12 @@ public static class ReplaySummons {
     }
     public static void Draw(ReplaySceneGeometry scene,ReplaySummonFrame? frame,IReadOnlyList<ReplaySkillEvent> events,MovementFrame? players,DateTime now,Func<float,float,float,float> height,ReplayArenaMask? arenaMask=null) {
         if(frame==null)return;
-        void GroundRibbon(Vector3 a,Vector3 b,float width,uint color) { using(scene.ClipTo(arenaMask))scene.Ribbon(a,b,width,color); }
+        void GroundRibbon(Vector3 a,Vector3 b,float width,uint color,float reference) { using(scene.ClipTo(arenaMask,reference))scene.Ribbon(a,b,width,color); }
+        // Limit summon geometry independently: earlier LB footprints must not suppress every summon.
+        int initialVertices=scene.Vertices.Length;
         var impacts=events.Where(e=>IsPetAction(e.ActionId)&&e.Resolved&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-1.2)).ToArray();
         foreach(var pet in frame.Summons.Take(10)) {
-            if(scene.Vertices.Length>72000)break;
+            if(scene.Vertices.Length-initialVertices>72000)break;
             var basePoint=new Vector3(pet.X,height(pet.X,pet.Y,pet.Z),pet.Z);
             if(!LimitBreakVisuals.Finite(basePoint))continue;
             // Violet = summon damage; mint = summon healing. Neither uses player red/blue.
@@ -118,7 +120,7 @@ public static class ReplaySummons {
                 var color=ReplaySceneGeometry.Rgba(.85f,.38f,1,.85f*(1-t));
                 for(int i=0;i<64;i++) {
                     Vector3 P(int j) { var a=j*MathF.Tau/64;var x=pet.X+MathF.Sin(a)*radius;var z=pet.Z+MathF.Cos(a)*radius;return new(x,height(x,pet.Y,z)+.1f,z); }
-                    GroundRibbon(P(i),P(i+1),.3f,color);
+                    GroundRibbon(P(i),P(i+1),.3f,color,pet.Y);
                 }
             }
             foreach(var e in impacts.Where(e=>MatchesSource(pet,e)).GroupBy(e=>(e.ActionId,e.Sequence)).Select(g=>g.Last()).TakeLast(4)) {
@@ -128,7 +130,7 @@ public static class ReplaySummons {
                     if(radius>.3f)for(int i=0;i<64;i++) {
                         Vector3 P(int j) { var a=j*MathF.Tau/64;var x=e.X+MathF.Sin(a)*radius;var z=e.Z+MathF.Cos(a)*radius;return new(x,height(x,e.Y,z)+.12f,z); }
                         var color=e.ActionId==29680?ReplaySceneGeometry.Rgba(.25f,1,.68f,.75f*fade):ReplaySceneGeometry.Rgba(.85f,.38f,1,.75f*fade);
-                        GroundRibbon(P(i),P(i+1),.2f,color);
+                        GroundRibbon(P(i),P(i+1),.2f,color,e.Y);
                     }
                 }
                 foreach(var target in e.SummonTargets.Take(10)) {

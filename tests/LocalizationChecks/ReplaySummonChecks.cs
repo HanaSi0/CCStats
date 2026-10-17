@@ -12,6 +12,11 @@ internal static class ReplaySummonChecks {
         check(ReplaySummons.At(new[]{sample},now.AddSeconds(.46))==null,"recording gaps never fabricate a full nominal summon lifetime");
         check(ReplaySummons.IsPetAction(29675)&&ReplaySummons.IsPetAction(29681)&&!ReplaySummons.IsPetAction(29665)&&!ReplaySummons.IsPetAction(29666),"only autonomous LB pet actions added, ordinary summoner follow-ups stay excluded");
         var scene=new ReplaySceneGeometry();ReplaySummons.Draw(scene,sample,Array.Empty<ReplaySkillEvent>(),null,now,(_,y,_)=>y);
+        var expectedSummonVertices=scene.Vertices.Length;var crowded=new ReplaySceneGeometry();
+        for(int i=0;i<24001;i++)crowded.Triangle(Vector3.Zero,Vector3.UnitX,Vector3.UnitZ,0xffffffff);
+        var beforeSummon=crowded.Vertices.Length;
+        ReplaySummons.Draw(crowded,sample,Array.Empty<ReplaySkillEvent>(),null,now,(_,y,_)=>y);
+        check(crowded.Vertices.Length-beforeSummon==expectedSummonVertices,"earlier large LB geometry cannot consume the summon-specific vertex allowance or hide all summons");
         var baseline=scene.Vertices.Length;
         check(baseline>0&&scene.Vertices.ToArray().Any(v=>v.Position.Y>6),"observed pet has an airborne placeholder");
         check(scene.Vertices.ToArray().Where(v=>v.Position.Y<1).All(v=>Vector2.Distance(new(v.Position.X,v.Position.Z),new(1,2))<30.2),"selection waves stay within the official 30y radius");
