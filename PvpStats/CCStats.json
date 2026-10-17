@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.17：3D 回放玩家棋子改为三棱锥，保留队伍色、职业图标、朝向箭头、选中圈及防御球罩。",
+  "Changelog": "0.2.18：3D 回放加入 4× MSAA，显卡不支持时自动降级；网页预览提高渲染分辨率，减少边缘锯齿。",
   "Tags": [
     "pvp",
     "statistics"

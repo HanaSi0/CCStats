@@ -28,6 +28,7 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
     private ID3D11BlendState* _overlayBlend;
     private ID3D11Texture2D* _color;
     private ID3D11Texture2D* _depth;
+    private ID3D11Texture2D* _multisampleColor;
     private ID3D11RenderTargetView* _target;
     private ID3D11ShaderResourceView* _view;
     private ID3D11DepthStencilView* _depthView;
@@ -35,6 +36,7 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
     private const int MaxDynamicVertices=120_000;
     internal int Width { get; private set; }
     internal int Height { get; private set; }
+    internal uint SampleCount { get; private set; } = 1;
     internal ImTextureID Texture => new((ulong)_view);
     private bool _disposed;
     private bool _disposeScheduled;
@@ -75,7 +77,7 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
                 elements[1]=new() { SemanticName=(sbyte*)col,Format=DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,AlignedByteOffset=12,InputSlotClass=D3D11_INPUT_CLASSIFICATION.D3D11_INPUT_PER_VERTEX_DATA };
                 ID3D11InputLayout* layout=null;Check(device->CreateInputLayout(elements,2,vs->GetBufferPointer(),vs->GetBufferSize(),&layout));_layout=layout;
             } finally { Release(ref vs);Release(ref ps); }
-            D3D11_RASTERIZER_DESC raster=new() { FillMode=D3D11_FILL_MODE.D3D11_FILL_SOLID,CullMode=D3D11_CULL_MODE.D3D11_CULL_NONE,DepthClipEnable=1 };
+            D3D11_RASTERIZER_DESC raster=new() { FillMode=D3D11_FILL_MODE.D3D11_FILL_SOLID,CullMode=D3D11_CULL_MODE.D3D11_CULL_NONE,DepthClipEnable=1,MultisampleEnable=1 };
             ID3D11RasterizerState* rs=null;Check(device->CreateRasterizerState(&raster,&rs));_raster=rs;
             D3D11_DEPTH_STENCIL_DESC depth=new() { DepthEnable=1,DepthWriteMask=D3D11_DEPTH_WRITE_MASK.D3D11_DEPTH_WRITE_MASK_ALL,DepthFunc=D3D11_COMPARISON_FUNC.D3D11_COMPARISON_LESS_EQUAL };
             depth.StencilReadMask=depth.StencilWriteMask=255;
@@ -112,17 +114,36 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
         width=Math.Clamp(width,64,1280);height=Math.Clamp(height,64,900);
         if(width==Width&&height==Height)return;
         _deferred->ClearState();ReleaseTargets();
-        try {
-            D3D11_TEXTURE2D_DESC desc=new() { Width=(uint)width,Height=(uint)height,MipLevels=1,ArraySize=1,Format=DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,SampleDesc=new() {Count=1},Usage=D3D11_USAGE.D3D11_USAGE_DEFAULT,BindFlags=(uint)(D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET|D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE) };
-            ID3D11Texture2D* texture=null;Check(_device->CreateTexture2D(&desc,null,&texture));_color=texture;
-            ID3D11RenderTargetView* target=null;Check(_device->CreateRenderTargetView((ID3D11Resource*)texture,null,&target));_target=target;
-            ID3D11ShaderResourceView* view=null;Check(_device->CreateShaderResourceView((ID3D11Resource*)texture,null,&view));_view=view;
-            desc.Format=DXGI_FORMAT.DXGI_FORMAT_D32_FLOAT;desc.BindFlags=(uint)D3D11_BIND_FLAG.D3D11_BIND_DEPTH_STENCIL;
-            ID3D11Texture2D* depth=null;Check(_device->CreateTexture2D(&desc,null,&depth));_depth=depth;
-            ID3D11DepthStencilView* dv=null;Check(_device->CreateDepthStencilView((ID3D11Resource*)depth,null,&dv));_depthView=dv;
-            Width=width;Height=height;
-        } catch { ReleaseTargets();throw; }
+        Exception? lastFailure=null;
+        foreach(uint samples in new uint[] {4,2,1}) {
+            if(samples>1&&!SupportsSamples(samples))continue;
+            try {
+                // ImGui always receives a single-sampled SRV. All 3D geometry is drawn into the multisample target first.
+                D3D11_TEXTURE2D_DESC desc=new() { Width=(uint)width,Height=(uint)height,MipLevels=1,ArraySize=1,Format=DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                    SampleDesc=new() {Count=1},Usage=D3D11_USAGE.D3D11_USAGE_DEFAULT,BindFlags=(uint)(D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET|D3D11_BIND_FLAG.D3D11_BIND_SHADER_RESOURCE) };
+                ID3D11Texture2D* color=null;Check(_device->CreateTexture2D(&desc,null,&color));_color=color;
+                ID3D11ShaderResourceView* view=null;Check(_device->CreateShaderResourceView((ID3D11Resource*)color,null,&view));_view=view;
+                var renderTexture=color;
+                if(samples>1) {
+                    desc.SampleDesc.Count=samples;desc.BindFlags=(uint)D3D11_BIND_FLAG.D3D11_BIND_RENDER_TARGET;
+                    ID3D11Texture2D* multi=null;Check(_device->CreateTexture2D(&desc,null,&multi));_multisampleColor=multi;renderTexture=multi;
+                }
+                ID3D11RenderTargetView* target=null;Check(_device->CreateRenderTargetView((ID3D11Resource*)renderTexture,null,&target));_target=target;
+                // Color and depth must have identical sample counts and quality levels.
+                desc.SampleDesc.Count=samples;desc.Format=DXGI_FORMAT.DXGI_FORMAT_D32_FLOAT;desc.BindFlags=(uint)D3D11_BIND_FLAG.D3D11_BIND_DEPTH_STENCIL;
+                ID3D11Texture2D* depth=null;Check(_device->CreateTexture2D(&desc,null,&depth));_depth=depth;
+                ID3D11DepthStencilView* dv=null;Check(_device->CreateDepthStencilView((ID3D11Resource*)depth,null,&dv));_depthView=dv;
+                Width=width;Height=height;SampleCount=samples;return;
+            } catch(Exception e) { lastFailure=e;ReleaseTargets(); }
+        }
+        throw new InvalidOperationException("三维渲染目标创建失败。",lastFailure);
     }
+    private bool SupportsSamples(uint count) {
+        uint color=0,depth=0;
+        return _device->CheckMultisampleQualityLevels(DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,count,&color)>=0&&color>0
+            &&_device->CheckMultisampleQualityLevels(DXGI_FORMAT.DXGI_FORMAT_D32_FLOAT,count,&depth)>=0&&depth>0;
+    }
+
     internal void Render(Matrix4x4 viewProjection,ReadOnlySpan<ReplayVertex> dynamicVertices,ReadOnlySpan<ReplayVertex> overlays) {
         ObjectDisposedException.ThrowIf(_disposed,this);
         if(_target==null)return;
@@ -145,11 +166,16 @@ internal unsafe sealed class ReplayGpuRenderer : IDisposable {
             ctx->OMSetDepthStencilState(_overlayDepth,0);ctx->OMSetBlendState(_overlayBlend,null,uint.MaxValue);
             buffer=_dynamic;ctx->IASetVertexBuffers(0,1,&buffer,&stride,&offset);ctx->Draw((uint)overlays.Length,(uint)dynamicVertices.Length);
         }
+        if(_multisampleColor!=null) {
+            // Unbind the RTV before resolving. Resolve includes both opaque and translucent passes.
+            ctx->OMSetRenderTargets(0,null,null);
+            ctx->ResolveSubresource((ID3D11Resource*)_color,0,(ID3D11Resource*)_multisampleColor,0,DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM);
+        }
         ID3D11CommandList* command=null;
         try { Check(ctx->FinishCommandList(0,&command));_immediate->ExecuteCommandList(command,1); }
         finally { Release(ref command); }
     }
-    private void ReleaseTargets() { Release(ref _view);Release(ref _target);Release(ref _depthView);Release(ref _color);Release(ref _depth);Width=Height=0; }
+    private void ReleaseTargets() { Release(ref _view);Release(ref _target);Release(ref _depthView);Release(ref _color);Release(ref _multisampleColor);Release(ref _depth);Width=Height=0;SampleCount=1; }
     public void Dispose() {
         if(_disposed)return;_disposed=true;
         if(_deferred!=null)_deferred->ClearState();ReleaseTargets();
