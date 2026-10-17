@@ -26,7 +26,10 @@ internal static class ModernTheme {
         private readonly IDisposable _styles;
         private readonly IDisposable _colors;
         private readonly bool _resizeFromEdges;
+        private readonly ImGuiDir _windowMenuButtonPosition;
         internal Scope(ThemeConfiguration p) {
+            _windowMenuButtonPosition=ImGui.GetStyle().WindowMenuButtonPosition;
+            ImGui.GetStyle().WindowMenuButtonPosition=ImGuiDir.None;
             _resizeFromEdges=ImGui.GetIO().ConfigWindowsResizeFromEdges;
             ImGui.GetIO().ConfigWindowsResizeFromEdges=true;
             var scale = ImGuiHelpers.GlobalScale;
@@ -61,7 +64,7 @@ internal static class ModernTheme {
                 .Push(ImGuiCol.TableRowBgAlt, p.TableAlternate)
                 .Push(ImGuiCol.TableBorderLight, p.Border).Push(ImGuiCol.TableBorderStrong, p.Border);
         }
-        public void Dispose() { _colors.Dispose(); _styles.Dispose(); ImGui.GetIO().ConfigWindowsResizeFromEdges=_resizeFromEdges; }
+        public void Dispose() { _colors.Dispose(); _styles.Dispose(); ImGui.GetIO().ConfigWindowsResizeFromEdges=_resizeFromEdges; ImGui.GetStyle().WindowMenuButtonPosition=_windowMenuButtonPosition; }
     }
 
     private sealed class Interaction {

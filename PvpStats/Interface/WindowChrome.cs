@@ -16,7 +16,7 @@ internal static class WindowChrome {
         // Use the same host-rendered icon font and hit testing for every title-bar control.
         // Retain Dalamud's additions menu (pin/opacity), replace only the two mismatched native glyphs.
         window.ShowCloseButton=false;
-        window.Flags &= ~(ImGuiWindowFlags.NoResize|ImGuiWindowFlags.AlwaysAutoResize);
+        window.Flags &= ~(ImGuiWindowFlags.NoResize|ImGuiWindowFlags.AlwaysAutoResize|ImGuiWindowFlags.NoCollapse);
         var preset=0;
         window.TitleBarButtons.Add(new() {
             Priority=-3,Icon=FontAwesomeIcon.Expand,IconOffset=new Vector2(2.5f,1),
@@ -28,7 +28,8 @@ internal static class WindowChrome {
             },
         });
         window.AllowClickthrough=false;
-        window.Flags|=ImGuiWindowFlags.NoCollapse;
+        // NoCollapse makes ImGui force the window open on every Begin().
+        // ModernTheme hides the native arrow while keeping collapse enabled.
         window.TitleBarButtons.Add(new() {
             Priority=-1, Icon=FontAwesomeIcon.Times, IconOffset=new Vector2(2.5f,1),
             ShowTooltip=()=>ImGui.SetTooltip("关闭窗口"), Click=_=>window.IsOpen=false,

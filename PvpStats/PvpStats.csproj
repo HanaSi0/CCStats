@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<Authors>SaMo</Authors>
 		<Company></Company>
-		<Version>0.2.10</Version>
+		<Version>0.2.11</Version>
 		<AssemblyName>CCStats</AssemblyName>
 		<RootNamespace>PvpStats</RootNamespace>
 		<Description>CCStats 水晶冲突战绩统计</Description>

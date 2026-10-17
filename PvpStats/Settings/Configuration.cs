@@ -19,7 +19,6 @@ public class Configuration : IPluginConfiguration {
 
     public System.Numerics.Vector2? MatchDetailSize { get; set; }
     public System.Numerics.Vector2? ReplayWindowSize { get; set; }
-    public System.Numerics.Vector2? Replay3DWindowSize { get; set; }
     public bool EnableDetailedTelemetry { get; set; } = true;
 
     public bool? EnableTimelineCC { get; set; }

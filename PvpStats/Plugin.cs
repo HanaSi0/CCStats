@@ -141,7 +141,7 @@ public sealed class Plugin : IDalamudPlugin {
             }
 
             CommandManager.AddHandler(CCStatsCommandName, new CommandInfo(OnCCCommand) {
-                HelpMessage = "打开水晶冲突记录器；/ccstats probe 打开地图试验。"
+                HelpMessage = "打开水晶冲突记录器。"
             });
             CommandManager.AddHandler(ConfigCommandName, new CommandInfo(OnConfigCommand) {
                 HelpMessage = "Opens config window."
@@ -202,7 +202,6 @@ public sealed class Plugin : IDalamudPlugin {
     }
 
     private void OnCCCommand(string command, string args) {
-        if(string.Equals(args.Trim(),"probe",StringComparison.OrdinalIgnoreCase)) { WindowManager.OpenMapProbe();return; }
         WindowManager.OpenCCWindow();
     }
 

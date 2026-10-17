@@ -9,7 +9,6 @@ namespace PvpStats.Analysis;
 
 public sealed class DetailedTelemetry {
     public int Version { get; set; } = 2;
-    public string CrystalReferenceLabel { get; set; } = "";
     public string GameVersion { get; set; } = "";
     public Dictionary<uint, string> StatusDescriptions { get; set; } = new();
     public Dictionary<uint, string> ActionDescriptions { get; set; } = new();

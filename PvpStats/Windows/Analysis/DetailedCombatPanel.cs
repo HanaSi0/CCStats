@@ -14,10 +14,8 @@ internal sealed class DetailedCombatPanel {
     private Task<(Dictionary<string,PlayerDetailedStats> Stats,List<MitigationEstimate> Estimates)>? _calculation;
     private int _selected=-1;
     internal DetailedCombatPanel(DetailedTelemetry? data) => _data=data;
-    internal void Draw(bool completed, Action openReplay,Action openReplay3D) {
+    internal void Draw(bool completed, Action openReplay) {
         if(ModernTheme.Button("地图回放###OpenMapReplay")) openReplay();
-        ImGui.SameLine();
-        if(ModernTheme.Button("3D 回放###OpenReplay3D"))openReplay3D();
         ImGui.SameLine();
         using(var disabled=ImRaii.Disabled(!completed || _data==null || _calculation!=null)) {
             if(ModernTheme.Button("开始细致推算###CalculateDetailed")) {

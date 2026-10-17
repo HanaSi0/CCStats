@@ -3,7 +3,7 @@
     "Author": "HanaSi0 / SaMo",
     "Name": "CCStats",
     "InternalName": "CCStats",
-    "AssemblyVersion": "0.2.10.0",
+    "AssemblyVersion": "0.2.11.0",
     "Description": "记录和查询水晶冲突战绩，支持数据分析、地图回放与国际服榜单。",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/HanaSi0/CCStats",
@@ -18,10 +18,10 @@
     "LoadPriority": 0,
     "IconUrl": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/images/icon.png",
     "Punchline": "水晶冲突战绩工具。",
-    "Changelog": "0.2.10：Hyperborea 地图试验支持目标地图、手动圈中心；新增独立批量采集进度窗口与校验 ZIP 导出。",
+    "Changelog": "0.2.11：撤下地图试验与实验性 3D 入口，修复窗口折叠后自动展开；保留二维回放和历史记录兼容。",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.10/latest.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.10/latest.zip",
-    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.10/latest.zip"
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.11/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.11/latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/HanaSi0/CCStats/main/plugin-packages/v0.2.11/latest.zip"
   }
 ]
