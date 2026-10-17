@@ -159,6 +159,7 @@ internal class CCTrackerWindow : TrackerWindow<CrystallineConflictMatch> {
                 Navigation("Players", "玩家分析");
                 Navigation("Records", "个人纪录");
                 Navigation("Profile", "个人资料");
+                if(ModernTheme.Button("地图试验###OpenMapProbe"))Plugin.WindowManager.OpenMapProbe();
                 ImGui.Separator();
                 using(var iconFont = ImRaii.PushFont(UiBuilder.IconFont)) {
                     if(ModernTheme.Button(FontAwesomeIcon.Cog.ToIconString() + "###CCSettingsNav")) Plugin.WindowManager.OpenConfigWindow();

@@ -171,7 +171,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
 
             if(_plugin.Configuration.EnableDetailedTelemetry) {
                 _currentMatchTimeline ??= new();
-                _currentMatchTimeline.Detailed = new() { Version=4,SampleIntervalSeconds=1d/30,GameVersion = _currentMatch.GameVersion ?? "" };
+                _currentMatchTimeline.Detailed = new() { Version=5,SampleIntervalSeconds=1d/30,GameVersion = _currentMatch.GameVersion ?? "" };
                 _currentMatchTimeline.Kills ??= new();
                 _currentMatchTimeline.CrystalPosition ??= new();
                 // The shared timeline UI expects both teams even when only detailed recording is enabled.
@@ -961,13 +961,13 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             var frame = new MovementFrame { Timestamp=now, CrystalProgress=director->CrystalPosition, AstraProgress=director->AstraProgress, UmbraProgress=director->UmbraProgress };
             // BNpcName 11350 is the game's "tactical crystal", independent of client language.
             var crystals=_plugin.ObjectTable.OfType<IBattleNpc>().Where(n=>n.NameId==11350 && float.IsFinite(n.Position.X)&&float.IsFinite(n.Position.Z)).ToArray();
-            if(crystals.Length==1) frame.Crystal=new() { X=crystals[0].Position.X,Z=crystals[0].Position.Z };
+            if(crystals.Length==1) frame.Crystal=new() { X=crystals[0].Position.X,Y=float.IsFinite(crystals[0].Position.Y)?crystals[0].Position.Y:null,Z=crystals[0].Position.Z };
             foreach(var player in objects) {
                 var alias = aliases[player.EntityId];
                 var team = DetailedTeam(alias);
                 if(team is not (1 or 2) || !float.IsFinite(player.Position.X) || !float.IsFinite(player.Position.Z)) continue;
                 frame.Players.Add(new() {
-                    Player=alias, Team=team, X=player.Position.X, Z=player.Position.Z, Heading=player.Rotation, HP=player.CurrentHp, MaxHP=player.MaxHp,
+                    Player=alias, Team=team, X=player.Position.X, Y=float.IsFinite(player.Position.Y)?player.Position.Y:null, Z=player.Position.Z, Heading=player.Rotation, HP=player.CurrentHp, MaxHP=player.MaxHp,
                     ClassJobId=player.ClassJob.RowId, StatusTimestamp=now,
                     Statuses=player.StatusList.Where(s=>s.StatusId!=0).Take(60).OrderBy(s=>s.StatusId).ThenBy(s=>s.Param).Select(s=>new ReplayBuff { Id=s.StatusId,Param=s.Param,Remaining=s.RemainingTime }).ToList(),
                     Controls=player.StatusList.Where(s=>DetailedAnalysis.Controls.ContainsKey(s.StatusId)).Select(s=>new ObservedControl {

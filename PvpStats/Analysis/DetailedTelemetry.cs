@@ -62,12 +62,14 @@ public sealed class MovementFrame {
 }
 public sealed class CrystalPosition {
     public float X { get; set; }
+    public float? Y { get; set; }
     public float Z { get; set; }
 }
 public sealed class PlayerPosition {
     public string Player { get; set; } = "";
     public int Team { get; set; }
     public float X { get; set; }
+    public float? Y { get; set; }
     public float Z { get; set; }
     public float Heading { get; set; }
     public uint HP { get; set; }

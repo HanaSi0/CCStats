@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.8：回放地图居中，队员固定分行；状态图标下显示倒计时，移除状态悬停弹窗与常驻图例，事件和导出移至地图下方。",
+  "Changelog": "0.2.9：加入试验性 3D 回放和地图试验入口；支持棋子、水晶菱形、XYZ 采样及护送圈人工边缘测量。",
   "Tags": [
     "pvp",
     "statistics"
