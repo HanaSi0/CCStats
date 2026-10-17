@@ -42,5 +42,3 @@ def load(path):
  path0=path
  for node in doc['scenes'][doc.get('scene',0)]['nodes']:walk(node,np.eye(4),[],True)
  return doc,batches
-
-
