@@ -6,7 +6,7 @@
 
 仓库：https://github.com/HanaSi0/CCStats
 
-迁移分支：`handoff/claude`。正式版主分支仍为 1.0.5（提交 `59a335f`，标签 `v1.0.5`）。迁移分支包含该版本及随后尚未发布的范围裁剪实现，版本号尚未提升。
+迁移分支：`handoff/claude`。正式版主分支仍为 1.0.5（提交 `59a335f`，标签 `v1.0.5`）。迁移分支包含该版本及随后尚未发布的范围裁剪实现，另已按用户要求移除 LB 采集测试页并取得七张官方二维地图原图；版本号尚未提升。
 
 ```bash
 git clone --branch handoff/claude https://github.com/HanaSi0/CCStats.git
@@ -43,7 +43,7 @@ cd CCStats
 
 尚未执行：
 
-- 未发布代码的完整插件 Release/Debug 构建、UI 审计、打包与发布。
+- 范围裁剪的画面可行性仍未确认，尚未打包发布新版本。后续移除 LB 采集页面时补做的构建/检查见下方“追加交接”。
 - 裁剪前后画面比较、七地图高台/坡道/窄路边缘检查、多个大范围同屏的耗时与顶点预算验证。
 - 游戏内 FFXIV/Dalamud/Direct3D 的实际运行测试。
 
@@ -101,3 +101,17 @@ git diff --check
 ## 可直接发给 Claude 的接手指令
 
 > 请阅读 CLAUDE.md 和 docs/claude-handoff.md，接手 CCStats。当前正式版是 1.0.5，handoff/claude 分支保存了尚未发布的 3D 范围裁剪实现。先审查并进行裁剪前后画面对比，检查七张地图道路、坡道、高台和多范围同屏的性能；这是显示地面轮廓而非真实导航网格，不能夸大准确性。确认方案可行后完成实现、检查与下一版发布。保留现有功能，不修改授权原型，不把云端测试当作游戏内验证。
+
+## 追加交接：删除 LB 采集页及官方二维地图
+
+用户要求删除设置里的“LB 采集”，并提供七张官方二维地图及继续完善交接文档。曾错误生成模型俯视图，用户明确纠正为官方地图；所有错误导出图、ZIP 和导出脚本已撤下，不能继续拿模型渲染图代替官方贴图。
+
+- `PvpStats/Windows/ConfigWindow.cs` 已删除“LB 采集”设置项、页面方法及仅用于该页的列表字段。正常比赛的 LB 记录和回放必须保留。后台 `LimitBreakCaptureService`/旧诊断工具仍在源码，但该测试页已无启动入口。
+- [官方客户端地图清单](exports/official-maps-2d/README.md) 和 [结构化资源表](exports/official-maps-2d/assets.json) 提供七张地图的真实 Map 行 ID、资源路径、SizeFactor 和 Offset。路径已对照公开客户端 Map、TerritoryType 和 PlaceName 表核对。
+- 下载脚本：`python3 tools/download_official_maps.py`。目标是原始 `ui/map/s5p1/00/s5p100_m.tex` 到 `s5p7` 的 PNG 解码图，经社区 XIVAPI 提供，不做模型渲染或重绘。全部成功才打包；失败必须保持“未取得”状态。
+- **七张官方原图现已全部取得并提交**：[PNG 与说明](exports/official-maps-2d/README.md)、[七图 ZIP](exports/official-maps-2d/official-maps-2d.zip)。均为完整 2048×2048 PNG，未经裁剪/旋转/缩放/模型渲染，验证了图片解码、尺寸、SHA256 和 ZIP 完整性。
+- 初次访问出现 403，随后重查发现原先拼接的 `s5p1.00_m.tex` 文件名有误。正确公式已在插件 `CrystallineConflictMatchManager.cs` 中存在：`ui/map/{id}/{id.Replace("/", "")}_m.tex`，即 `ui/map/s5p1/00/s5p100_m.tex`。改正路径并使用正常请求头后，七张均下载成功。不能再把本项写作“尚未取得”或拿错误链接交给用户。
+- 下载地址是社区 XIVAPI 对原始客户端贴图的 PNG 解码结果，并非 Square Enix 官网文件直传。网络域名草稿曾保存但未发布；当前原图获取已完成，新 Claude 环境可直接用仓库内 PNG。
+- 移除设置页后，Release/Debug 构建已通过（0 错误）；没有发布新版本。574 项回归检查通过，UI 审计检查了 411 项且无未映射候选。裁剪画面仍未完成对比，未发布新版本。
+
+接手优先顺序：七张**官方原图**已备齐，先确认用户需要如何使用这些原图；之后再继续尚未验证的范围裁剪。正式 main 与标签仍为 1.0.5，迁移分支没有 1.0.6 标签。

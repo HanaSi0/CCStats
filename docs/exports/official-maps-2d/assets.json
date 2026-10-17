@@ -1,0 +1,153 @@
+{
+  "source": "https://github.com/xivapi/ffxiv-datamining/blob/master/csv/en/Map.csv",
+  "note": "Original client map textures, decoded by community XIVAPI; not 3D renders. Map IDs verified from Map/TerritoryType sheets; exact texture filenames follow the plugin client resource formula.",
+  "maps": [
+    {
+      "key": "palaistra",
+      "name": "角力学校",
+      "english_name": "The Palaistra",
+      "territory_ids": [
+        1032,
+        1058
+      ],
+      "map_row_id": 759,
+      "map_id": "s5p1/00",
+      "client_texture": "ui/map/s5p1/00/s5p100_m.tex",
+      "size_factor": 400,
+      "offset_x": 0,
+      "offset_y": 0,
+      "png_url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p1%2F00%2Fs5p100_m.tex&format=png",
+      "download_status": "downloaded",
+      "file": "images/palaistra.png",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "992c66c1bdf9dfc1aa7398a6d53ae0c76befd76058c52bf9f2d2be444c7d418e"
+    },
+    {
+      "key": "volcanic-heart",
+      "name": "火山之心",
+      "english_name": "The Volcanic Heart",
+      "territory_ids": [
+        1033,
+        1059
+      ],
+      "map_row_id": 760,
+      "map_id": "s5p2/00",
+      "client_texture": "ui/map/s5p2/00/s5p200_m.tex",
+      "size_factor": 400,
+      "offset_x": 0,
+      "offset_y": 0,
+      "png_url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p2%2F00%2Fs5p200_m.tex&format=png",
+      "download_status": "downloaded",
+      "file": "images/volcanic-heart.png",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "21c3a1466d4e5a4a8cda9f9deeb050dd7296f1e1fb97aa0e78258785c40cd6a5"
+    },
+    {
+      "key": "cloud-nine",
+      "name": "九霄云上",
+      "english_name": "Cloud Nine",
+      "territory_ids": [
+        1034,
+        1060
+      ],
+      "map_row_id": 761,
+      "map_id": "s5p3/00",
+      "client_texture": "ui/map/s5p3/00/s5p300_m.tex",
+      "size_factor": 400,
+      "offset_x": 0,
+      "offset_y": 0,
+      "png_url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p3%2F00%2Fs5p300_m.tex&format=png",
+      "download_status": "downloaded",
+      "file": "images/cloud-nine.png",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "fc7a9d49e7c379981e7807a87e27b7c2e2c21728521d2f6572039350ac8af80b"
+    },
+    {
+      "key": "castletown",
+      "name": "机关大殿",
+      "english_name": "The Clockwork Castletown",
+      "territory_ids": [
+        1116,
+        1117
+      ],
+      "map_row_id": 822,
+      "map_id": "s5p4/00",
+      "client_texture": "ui/map/s5p4/00/s5p400_m.tex",
+      "size_factor": 400,
+      "offset_x": 0,
+      "offset_y": 0,
+      "png_url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p4%2F00%2Fs5p400_m.tex&format=png",
+      "download_status": "downloaded",
+      "file": "images/castletown.png",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "5c10bfc471da8119be53a72b4d7c7c068050cd4cb87b2dd9e977d1fd2fd58e66"
+    },
+    {
+      "key": "red-sands",
+      "name": "赤土红沙",
+      "english_name": "The Red Sands",
+      "territory_ids": [
+        1138,
+        1139
+      ],
+      "map_row_id": 854,
+      "map_id": "s5p5/00",
+      "client_texture": "ui/map/s5p5/00/s5p500_m.tex",
+      "size_factor": 400,
+      "offset_x": 0,
+      "offset_y": 0,
+      "png_url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p5%2F00%2Fs5p500_m.tex&format=png",
+      "download_status": "downloaded",
+      "file": "images/red-sands.png",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "c391486d95b5f8080c900e7ddc8d8c009a2c7e6a99cc01006db24e49a8fb8005"
+    },
+    {
+      "key": "bayside",
+      "name": "海岸斗场",
+      "english_name": "The Bayside Battleground",
+      "territory_ids": [
+        1293,
+        1294
+      ],
+      "map_row_id": 1060,
+      "map_id": "s5p6/00",
+      "client_texture": "ui/map/s5p6/00/s5p600_m.tex",
+      "size_factor": 400,
+      "offset_x": -100,
+      "offset_y": -100,
+      "png_url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p6%2F00%2Fs5p600_m.tex&format=png",
+      "download_status": "downloaded",
+      "file": "images/bayside.png",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "39d7b31de3939e154c6a14b3e647783063a2036de5875fb784736c18688eb042"
+    },
+    {
+      "key": "harmonias",
+      "name": "休兵书库",
+      "english_name": "Archeia Harmonias",
+      "territory_ids": [
+        1357,
+        1358
+      ],
+      "map_row_id": 1229,
+      "map_id": "s5p7/00",
+      "client_texture": "ui/map/s5p7/00/s5p700_m.tex",
+      "size_factor": 400,
+      "offset_x": -100,
+      "offset_y": -100,
+      "png_url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p7%2F00%2Fs5p700_m.tex&format=png",
+      "download_status": "downloaded",
+      "file": "images/harmonias.png",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "a775af4d887df15a597a271ba5c8a66b88a9e45c688dad4888718f94507e4972"
+    }
+  ]
+}

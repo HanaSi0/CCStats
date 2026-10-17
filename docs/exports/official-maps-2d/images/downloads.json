@@ -1,0 +1,86 @@
+[
+  {
+    "map": "palaistra",
+    "name": "角力学校",
+    "url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p1%2F00%2Fs5p100_m.tex&format=png",
+    "client_texture": "ui/map/s5p1/00/s5p100_m.tex",
+    "status": "downloaded",
+    "file": "palaistra.png",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 649986,
+    "sha256": "992c66c1bdf9dfc1aa7398a6d53ae0c76befd76058c52bf9f2d2be444c7d418e"
+  },
+  {
+    "map": "volcanic-heart",
+    "name": "火山之心",
+    "url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p2%2F00%2Fs5p200_m.tex&format=png",
+    "client_texture": "ui/map/s5p2/00/s5p200_m.tex",
+    "status": "downloaded",
+    "file": "volcanic-heart.png",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 580527,
+    "sha256": "21c3a1466d4e5a4a8cda9f9deeb050dd7296f1e1fb97aa0e78258785c40cd6a5"
+  },
+  {
+    "map": "cloud-nine",
+    "name": "九霄云上",
+    "url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p3%2F00%2Fs5p300_m.tex&format=png",
+    "client_texture": "ui/map/s5p3/00/s5p300_m.tex",
+    "status": "downloaded",
+    "file": "cloud-nine.png",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 869397,
+    "sha256": "fc7a9d49e7c379981e7807a87e27b7c2e2c21728521d2f6572039350ac8af80b"
+  },
+  {
+    "map": "castletown",
+    "name": "机关大殿",
+    "url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p4%2F00%2Fs5p400_m.tex&format=png",
+    "client_texture": "ui/map/s5p4/00/s5p400_m.tex",
+    "status": "downloaded",
+    "file": "castletown.png",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 756558,
+    "sha256": "5c10bfc471da8119be53a72b4d7c7c068050cd4cb87b2dd9e977d1fd2fd58e66"
+  },
+  {
+    "map": "red-sands",
+    "name": "赤土红沙",
+    "url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p5%2F00%2Fs5p500_m.tex&format=png",
+    "client_texture": "ui/map/s5p5/00/s5p500_m.tex",
+    "status": "downloaded",
+    "file": "red-sands.png",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 1286626,
+    "sha256": "c391486d95b5f8080c900e7ddc8d8c009a2c7e6a99cc01006db24e49a8fb8005"
+  },
+  {
+    "map": "bayside",
+    "name": "海岸斗场",
+    "url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p6%2F00%2Fs5p600_m.tex&format=png",
+    "client_texture": "ui/map/s5p6/00/s5p600_m.tex",
+    "status": "downloaded",
+    "file": "bayside.png",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 930834,
+    "sha256": "39d7b31de3939e154c6a14b3e647783063a2036de5875fb784736c18688eb042"
+  },
+  {
+    "map": "harmonias",
+    "name": "休兵书库",
+    "url": "https://v2.xivapi.com/api/asset?path=ui%2Fmap%2Fs5p7%2F00%2Fs5p700_m.tex&format=png",
+    "client_texture": "ui/map/s5p7/00/s5p700_m.tex",
+    "status": "downloaded",
+    "file": "harmonias.png",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 954819,
+    "sha256": "a775af4d887df15a597a271ba5c8a66b88a9e45c688dad4888718f94507e4972"
+  }
+]
