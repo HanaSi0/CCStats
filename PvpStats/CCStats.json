@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.6：七张回放地图按官方轮廓裁除场外景物，补回出生及连接区域；技能、机制和召唤物波纹使用分层地面裁剪，修复上墙与跨层竖片；调整顶点预算并修复大范围效果下召唤物不显示；移除 LB 采集测试页面。",
+  "Changelog": "1.0.7：重新打包发布，保留 1.0.6 的七图裁边、出生区恢复与技能范围裁剪更新。",
   "Tags": [
     "pvp",
     "crystalline conflict",
