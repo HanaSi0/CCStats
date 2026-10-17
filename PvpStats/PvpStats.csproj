@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/15.0.0">
 	<PropertyGroup>
-		<Authors>SaMo</Authors>
+		<Authors>HanaSi0</Authors>
 		<Company></Company>
-		<Version>0.2.22</Version>
+		<Version>1.0.0</Version>
 		<AssemblyName>CCStats</AssemblyName>
 		<RootNamespace>PvpStats</RootNamespace>
-		<Description>CCStats 水晶冲突战绩统计</Description>
+		<Description>CCStats 水晶冲突数据记录与 3D 实时渲染回放</Description>
 		<Copyright></Copyright>
 		<PackageProjectUrl></PackageProjectUrl>
 	</PropertyGroup>
 	<ItemGroup>
+        <Content Include="..\LICENSE.txt">
+            <Link>LICENSE.txt</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
         <Content Include="..\images\icon.png">
             <Link>icon.png</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
