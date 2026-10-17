@@ -6,6 +6,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using PvpStats.Analysis;
+using PvpStats.Types.Player;
 using PvpStats.Helpers;
 using PvpStats.Interface;
 using PvpStats.Interface.Rendering;
@@ -32,6 +33,13 @@ internal sealed partial class MatchReplayWindow {
     private bool _has3DFrame;
     private string _renderSelected="";
     private bool _renderFollow;
+    private static string ReplayJobInitial(Job? job) => job switch {
+        Job.PLD=>"骑",Job.WAR=>"战",Job.DRK=>"暗",Job.GNB=>"枪",
+        Job.WHM=>"白",Job.SCH=>"学",Job.AST=>"占",Job.SGE=>"贤",
+        Job.MNK=>"僧",Job.DRG=>"龙",Job.NIN=>"忍",Job.SAM=>"侍",Job.RPR=>"镰",Job.VPR=>"蛇",
+        Job.BRD=>"诗",Job.MCH=>"机",Job.DNC=>"舞",Job.BLM=>"黑",Job.SMN=>"召",Job.RDM=>"赤",Job.PCT=>"绘",
+        _=>"？"
+    };
     private void Reset3DCamera() {
         if(_mesh==null)return;
         var target=(_mesh.Min+_mesh.Max)/2;target.Y=1;
@@ -116,20 +124,23 @@ internal sealed partial class MatchReplayWindow {
             var draw=ImGui.GetWindowDrawList();draw.AddImage(_renderer.Texture,origin,origin+size);
             draw.PushClipRect(origin,origin+size,true);
             try {
-            var badgePositions=new System.Collections.Generic.List<Vector2>();
             if(_renderedFrame!=null)foreach(var player in _renderedFrame.Players.OrderBy(p=>p.Team).ThenBy(p=>p.Player,StringComparer.Ordinal)) {
                 if(!float.IsFinite(player.X)||!float.IsFinite(player.Z))continue;
-                if(!Project3D(World(player)+new Vector3(0,.15f,0),origin,size,out var at))continue;
+                if(!Project3D(World(player)+new Vector3(0,3.15f,0),origin,size,out var at))continue;
                 if(at.X<origin.X||at.Y<origin.Y||at.X>origin.X+size.X||at.Y>origin.Y+size.Y)continue;
-                var job=ReplayJob(player);var scale=ImGuiHelpers.GlobalScale;var half=new Vector2(9*scale);
-                var anchor=at;at=ReplayLabelLayout.Place(anchor,player.Team,12*scale,origin,origin+size,badgePositions);
-                var teamColor=player.Team==1?new Vector4(.2f,.8f,1,1):new Vector4(1,.25f,.32f,1);
-                if(job is {} known&&TextureHelper.JobIcons.TryGetValue(known,out var icon)) {
-                    draw.AddRectFilled(at-half-new Vector2(3*scale),at+half+new Vector2(3*scale),ImGui.GetColorU32(new Vector4(.015f,.025f,.04f,.97f)),4*scale);
-                    draw.AddRect(at-half-new Vector2(3*scale),at+half+new Vector2(3*scale),ImGui.GetColorU32(teamColor),4*scale,ImDrawFlags.None,2*scale);
-                    draw.AddImage(_plugin.WindowManager.GetTextureHandle(icon),at-half,at+half);
-                }
-                if(hovered&&Vector2.Distance(ImGui.GetMousePos(),at)<14*ImGuiHelpers.GlobalScale) {
+                var job=ReplayJob(player);var scale=ImGuiHelpers.GlobalScale;
+                var label=ReplayJobInitial(job);var textSize=ImGui.CalcTextSize(label);
+                var textAt=at-new Vector2(textSize.X*.5f,textSize.Y);
+                var teamColor=player.Team==1?new Vector4(.18f,.82f,1,1):new Vector4(1,.22f,.3f,1);
+                // Labels stay directly over their pawn. Overlap is intentional; no badges or leader lines.
+                var outline=ImGui.GetColorU32(new Vector4(.01f,.015f,.025f,1));
+                draw.AddText(textAt+new Vector2(-scale,0),outline,label);
+                draw.AddText(textAt+new Vector2(scale,0),outline,label);
+                draw.AddText(textAt+new Vector2(0,-scale),outline,label);
+                draw.AddText(textAt+new Vector2(0,scale),outline,label);
+                draw.AddText(textAt,ImGui.GetColorU32(teamColor),label);
+                at=textAt+textSize*.5f;
+                if(hovered&&Vector2.Distance(ImGui.GetMousePos(),at)<10*ImGuiHelpers.GlobalScale) {
                     if(ImGui.IsMouseClicked(ImGuiMouseButton.Left)) { _selected=player.Player;_cameraDirty=true; }
                     ImGui.SetTooltip(player.Player+"\n"+(player.Team==1?"星极队 · ":"灵极队 · ")+(job.HasValue?PlayerJobHelper.GetNameFromJob(job.Value):"职业未知"));
                 }

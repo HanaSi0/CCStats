@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.0 正式发布：水晶冲突数据记录与 3D 实时渲染回放，整合战绩查询、职业与玩家分析、水晶轨迹、极限技展示及国际服官方榜单。",
+  "Changelog": "1.0.1：3D 回放采用三棱锥上方的红蓝单字职业简称，移除职业图标和标签避让，允许重叠，减少拥挤。",
   "Tags": [
     "pvp",
     "crystalline conflict",
