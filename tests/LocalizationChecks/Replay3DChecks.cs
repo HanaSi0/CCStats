@@ -21,7 +21,7 @@ internal static class Replay3DChecks {
         b.Y=null;check(ReplayInterpolation.Sample(data,middle)!.Players[0].Y==a.Y,"missing future height does not fabricate a vertical path");b.Y=3;
         data.Frames[1].Timestamp=start.AddSeconds(10);check(ReferenceEquals(ReplayInterpolation.Sample(data,middle),data.Frames[0]),"3D playback preserves recording gaps");
         check(Marshal.SizeOf<ReplayVertex>()==16,"GPU vertex layout matches HLSL position/color input stride");
-        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,76963),(1033,1059,161691),(1034,1060,125504),(1116,1117,182418),(1138,1139,483216),(1293,1294,279142),(1357,1358,204054) };
+        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,68600),(1033,1059,139871),(1034,1060,122926),(1116,1117,159538),(1138,1139,459062),(1293,1294,263786),(1357,1358,194590) };
         foreach(var p in pairs) {
             check(ReplayMapMesh.MapKey(p.Normal)==ReplayMapMesh.MapKey(p.Custom),"normal and custom territory select the same exported arena: "+p.Normal);
             var mesh=ReplayMapMesh.LoadEmbedded(p.Normal);

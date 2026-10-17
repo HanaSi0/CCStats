@@ -59,49 +59,43 @@ public static class MapMechanicVisuals {
             .GroupBy(v=>(v.Event.SourceEntityId,v.Event.ActionId,X:(int)MathF.Round(v.Center.X*2),Z:(int)MathF.Round(v.Center.Z*2)))
             .Select(g=>g.First()).Take(32);
     }
-    public static void Draw(ReplaySceneGeometry geometry,MapMechanicVisual visual,DateTime now,Func<float,float,float> height) {
-        var e=visual.Event;var rule=visual.Rule;var center=visual.Center;var rgb=Color(rule.Effect);
+    public const float GroundLift=.28f;
+    public static void Draw(ReplaySceneGeometry geometry,MapMechanicVisual visual,DateTime now,Func<float,float,float> height)=>
+        Draw(geometry,visual,now,ReplayGroundDecal.Draped(height,GroundLift));
+    // Every fill and outline is a ground decal: with a walk grid it covers only standable floor.
+    public static void Draw(ReplaySceneGeometry geometry,MapMechanicVisual visual,DateTime now,ReplayGroundDecal ground) {
+        var e=visual.Event;var rule=visual.Rule;var rgb=Color(rule.Effect);
         bool casting=e.Kind==ReplayMapEventKind.CastObserved;
         float age=Math.Max(0,(float)(now-e.Timestamp).TotalSeconds);
         float opacity=casting?1:Math.Clamp((1.1f-age)/.5f,0,1);
         uint fill=ReplaySceneGeometry.Rgba(rgb.X,rgb.Y,rgb.Z,(casting?.12f:.25f)*opacity);
         uint edge=ReplaySceneGeometry.Rgba(rgb.X,rgb.Y,rgb.Z,.85f*opacity);
-        Vector3 Ground(Vector3 p)=>new(p.X,height(p.X,p.Z)+.28f,p.Z);
-        void Tri(Vector3 a,Vector3 b,Vector3 c,uint color)=>geometry.Triangle(Ground(a),Ground(b),Ground(c),color);
-        void Line(Vector3 a,Vector3 b,float thickness=.18f) {
-            var side=new Vector3(b.Z-a.Z,0,a.X-b.X);if(side.LengthSquared()<.00001f)return;
-            side=Vector3.Normalize(side)*thickness/2;
-            Tri(a-side,a+side,b+side,edge);Tri(a-side,b+side,b-side,edge);
-        }
+        var center=new Vector2(visual.Center.X,visual.Center.Z);
+        static Vector2 Dir(float angle)=>new(MathF.Sin(angle),MathF.Cos(angle));
+        void Line(Vector2 a,Vector2 b,float thickness=.18f)=>ground.Line(geometry,a,b,thickness,edge);
         void Ring(float radius) {
-            for(int i=0;i<64;i++)Line(center+LimitBreakVisuals.Forward(i*MathF.Tau/64)*radius,center+LimitBreakVisuals.Forward((i+1)*MathF.Tau/64)*radius);
+            for(int i=0;i<64;i++)Line(center+Dir(i*MathF.Tau/64)*radius,center+Dir((i+1)*MathF.Tau/64)*radius);
         }
-        var forward=LimitBreakVisuals.Forward(float.IsFinite(e.Heading??0)?e.Heading??0:0);var right=new Vector3(forward.Z,0,-forward.X);
-        void Rect(Vector3 f,float halfLength,float width) {
-            var side=new Vector3(f.Z,0,-f.X)*width/2;int slices=Math.Max(1,(int)MathF.Ceiling(halfLength));
-            for(int i=0;i<slices;i++) {
-                var a=center+f*(-halfLength+2*halfLength*i/slices);var b=center+f*(-halfLength+2*halfLength*(i+1)/slices);
-                Tri(a-side,a+side,b+side,fill);Tri(a-side,b+side,b-side,fill);Line(a-side,b-side);Line(a+side,b+side);
-            }
-            Line(center-f*halfLength-side,center-f*halfLength+side);Line(center+f*halfLength-side,center+f*halfLength+side);
+        var forward=Dir(float.IsFinite(e.Heading??0)?e.Heading??0:0);var right=new Vector2(forward.Y,-forward.X);
+        void Rect(Vector2 f,float halfLength,float width) {
+            var side=new Vector2(f.Y,-f.X)*width/2;var back=center-f*halfLength;var front=center+f*halfLength;
+            ground.Quad(geometry,back-side,back+side,front+side,front-side,fill);
+            Line(back-side,front-side);Line(back+side,front+side);Line(back-side,back+side);Line(front-side,front+side);
         }
         if(rule.Shape==MapMechanicShape.Cross) { Rect(forward,visual.Size,visual.Width);Rect(right,visual.Size,visual.Width);return; }
         if(rule.Shape==MapMechanicShape.Square) { Rect(forward,visual.Size/2,visual.Width);return; }
         // Gaze is directional/facing-dependent: outline the reach with an eye, never an all-hit filled disk.
         if(rule.Effect!=MapMechanicEffect.Gaze) {
-            int rings=Math.Max(1,(int)MathF.Ceiling(visual.Size/4));
-            for(int j=0;j<rings;j++)for(int i=0;i<48;i++) {
-                var a=LimitBreakVisuals.Forward(i*MathF.Tau/48);var b=LimitBreakVisuals.Forward((i+1)*MathF.Tau/48);
-                float inner=visual.Size*j/rings,outer=visual.Size*(j+1)/rings;
-                Tri(center+a*inner,center+a*outer,center+b*outer,fill);Tri(center+a*inner,center+b*outer,center+b*inner,fill);
-            }
+            Span<Vector2> disk=stackalloc Vector2[64];
+            for(int i=0;i<64;i++)disk[i]=center+Dir(i*MathF.Tau/64)*visual.Size;
+            ground.Fill(geometry,disk,fill);
         }
         Ring(visual.Size);
         if(rule.Effect is MapMechanicEffect.Pull or MapMechanicEffect.Knockback) {
             float phase=(age%1);
             float r=visual.Size*(rule.Effect==MapMechanicEffect.Pull?1-phase:phase);Ring(Math.Max(.2f,r));
             for(int i=0;i<8;i++) {
-                var axis=LimitBreakVisuals.Forward(i*MathF.Tau/8);var side=new Vector3(axis.Z,0,-axis.X);
+                var axis=Dir(i*MathF.Tau/8);var side=new Vector2(axis.Y,-axis.X);
                 var tip=center+axis*(visual.Size*.65f);var back=tip+axis*(rule.Effect==MapMechanicEffect.Pull?1.5f:-1.5f);
                 Line(tip,back+side*.9f,.25f);Line(tip,back-side*.9f,.25f);
             }
