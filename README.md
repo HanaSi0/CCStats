@@ -1,4 +1,4 @@
-# CCStats 1.0.5
+# CCStats 1.0.6
 
 **让每一场水晶冲突，都有迹可循。**
 
@@ -23,7 +23,7 @@ https://raw.githubusercontent.com/HanaSi0/CCStats/main/repo.json
 
 搜索 **CCStats** 安装，输入 `/ccstats` 打开。支持 Dalamud API 15。已使用 `repo-test.json` 的用户无需换库，两个入口均提供正式版。
 
-[下载 1.0.5](https://github.com/HanaSi0/CCStats/releases/tag/v1.0.5) · [更新说明](docs/release-notes/1.0.5.md) · [开发文档](docs/development.md)
+[下载 1.0.6](https://github.com/HanaSi0/CCStats/releases/tag/v1.0.6) · [更新说明](docs/release-notes/1.0.6.md) · [开发文档](docs/development.md)
 
 ## 致谢与许可
 

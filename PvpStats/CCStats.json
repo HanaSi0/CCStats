@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.5：补建赤土红沙两侧缺失的圆形显示地板，修复雾层和流沙透明显示；地图机制去掉名称与倒计时，按实际动作、位置及客户端范围区分伤害、分摊、护盾、恢复、吸引和击退效果。",
+  "Changelog": "1.0.6：七张回放地图按官方轮廓裁除场外景物，补回出生及连接区域；技能、机制和召唤物波纹使用分层地面裁剪，修复上墙与跨层竖片；调整顶点预算并修复大范围效果下召唤物不显示；移除 LB 采集测试页面。",
   "Tags": [
     "pvp",
     "crystalline conflict",
