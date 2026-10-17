@@ -69,6 +69,7 @@ internal class WindowManager : IDisposable {
 
     public void Dispose() {
         _uiWork.Dispose();
+        foreach(var replay in WindowSystem.Windows.OfType<PvpStats.Windows.Replay.MatchReplayWindow>().ToArray())replay.Dispose();
         WindowSystem.RemoveAllWindows();
         _plugin.PluginInterface.UiBuilder.Draw -= DrawUI;
         _plugin.PluginInterface.UiBuilder.OpenConfigUi -= OpenConfigWindow;
@@ -94,15 +95,17 @@ internal class WindowManager : IDisposable {
         WindowSystem.AddWindow(window);
     }
 
-    internal void OpenReplay(CrystallineConflictMatch match, PvpStats.Types.Match.Timeline.CrystallineConflictMatchTimeline timeline) {
-        var name="地图回放###CCReplay"+match.Id;
+    internal void OpenReplay(CrystallineConflictMatch match, PvpStats.Types.Match.Timeline.CrystallineConflictMatchTimeline timeline,bool threeD=false) {
+        if(threeD&&!match.IsCompleted)return;
+        var name=(threeD?"3D 回放（试验）###CCReplay3D":"地图回放###CCReplay")+match.Id;
         var existing=WindowSystem.Windows.FirstOrDefault(w=>w.WindowName==name);
         if(existing!=null) { existing.IsOpen=true; existing.BringToFront(); return; }
-        AddWindow(new PvpStats.Windows.Replay.MatchReplayWindow(_plugin,match,timeline));
+        AddWindow(new PvpStats.Windows.Replay.MatchReplayWindow(_plugin,match,timeline,threeD));
     }
 
     internal void RemoveWindow(Window window) {
         WindowSystem.RemoveWindow(window);
+        if(window is PvpStats.Windows.Replay.MatchReplayWindow replay)replay.Dispose();
     }
 
     internal void ToggleCCWindow() {

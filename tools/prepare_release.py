@@ -21,7 +21,7 @@ with zipfile.ZipFile(package) as archive:
     assert not {'PvpStats.dll', 'PvpStats.json'} & names, 'Upstream identity must not be shipped'
     assert required <= names, f'Missing files: {required - names}'
     assert not any('..' in Path(name).parts or name.startswith('/') for name in names)
-    assert not any(Path(name).name in {'Dalamud.dll', 'FFXIVClientStructs.dll', 'Dalamud.Bindings.ImGui.dll'} for name in names), 'Host assemblies must not be shipped'
+    assert not any(Path(name).name in {'Dalamud.dll', 'FFXIVClientStructs.dll', 'Dalamud.Bindings.ImGui.dll', 'TerraFX.Interop.Windows.dll'} for name in names), 'Host assemblies must not be shipped'
     assert archive.read('icon.png') == (root / 'images/icon.png').read_bytes(), 'Logo mismatch'
     manifest = json.loads(archive.read('CCStats.json'))
 assert manifest['InternalName'] == 'CCStats'

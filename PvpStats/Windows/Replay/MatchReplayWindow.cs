@@ -15,7 +15,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PvpStats.Windows.Replay;
-internal sealed partial class MatchReplayWindow : Window {
+internal sealed partial class MatchReplayWindow : Window, IDisposable {
+    private readonly bool _is3D;
     private readonly Plugin _plugin;
     private readonly CrystallineConflictMatch _match;
     private readonly CrystallineConflictMatchTimeline _timeline;
@@ -30,12 +31,14 @@ internal sealed partial class MatchReplayWindow : Window {
     private int _speed = 1;
     private bool _playing, _exporting;
     private string _selected = "", _exportStatus = "";
-    internal MatchReplayWindow(Plugin plugin, CrystallineConflictMatch match, CrystallineConflictMatchTimeline timeline) : base("地图回放###CCReplay" + match.Id) {
+    internal MatchReplayWindow(Plugin plugin, CrystallineConflictMatch match, CrystallineConflictMatchTimeline timeline,bool threeD=false) : base((threeD?"3D 回放（试验）###CCReplay3D":"地图回放###CCReplay") + match.Id) {
+        _is3D=threeD;
         _plugin=plugin; _match=match; _timeline=timeline; _data=timeline.Detailed ?? new();
         _origin=match.MatchStartTime ?? _data.Frames.FirstOrDefault()?.Timestamp ?? match.DutyStartTime;
         _duration=Math.Max(1,(float)((match.MatchEndTime ?? _data.Frames.LastOrDefault()?.Timestamp ?? _origin)-_origin).TotalSeconds);
-        Size=ViewLayout.ClampWindow(plugin.Configuration.ReplayWindowSize??new Vector2(1120,800),ImGui.GetMainViewport().WorkSize/ImGuiHelpers.GlobalScale); SizeCondition=ImGuiCond.FirstUseEver;
-        SizeConstraints=new() { MinimumSize=new(800,580), MaximumSize=new(2400,1800) };
+        Size=ViewLayout.ClampWindow((threeD?plugin.Configuration.Replay3DWindowSize:plugin.Configuration.ReplayWindowSize)??(threeD?new Vector2(1440,920):new Vector2(1120,800)),ImGui.GetMainViewport().WorkSize/ImGuiHelpers.GlobalScale); SizeCondition=ImGuiCond.FirstUseEver;
+        SizeConstraints=new() { MinimumSize=threeD?new(1050,680):new(800,580), MaximumSize=new(2400,1800) };
+        if(threeD) { _min=Vector2.Zero;_span=Vector2.One;IsOpen=true;return; }
         var points=_data.Frames.SelectMany(f=>f.Players).Where(p=>float.IsFinite(p.X)&&float.IsFinite(p.Z)).ToArray();
         _min=points.Length==0 ? new(-100,-100) : new(points.Min(p=>p.X)-10,points.Min(p=>p.Z)-10);
         var max=points.Length==0 ? new Vector2(100,100) : new Vector2(points.Max(p=>p.X)+10,points.Max(p=>p.Z)+10);
@@ -46,7 +49,7 @@ internal sealed partial class MatchReplayWindow : Window {
     }
     public override void PreDraw() => WindowChrome.Constrain(this);
     public override void OnClose() {
-        if(_lastWindowSize.X>0) { _plugin.Configuration.ReplayWindowSize=_lastWindowSize; _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save); }
+        if(_lastWindowSize.X>0) { if(_is3D)_plugin.Configuration.Replay3DWindowSize=_lastWindowSize;else _plugin.Configuration.ReplayWindowSize=_lastWindowSize; _plugin.DataQueue.QueueDataOperation(_plugin.Configuration.Save); }
         _plugin.WindowManager.RemoveWindow(this);
     }
     private Vector2 Uv(PlayerPosition p) => _data.MapSizeFactor > 0
@@ -55,6 +58,7 @@ internal sealed partial class MatchReplayWindow : Window {
     public override void Draw() {
         ImGui.SetWindowFontScale(1);
         _lastWindowSize=ImGui.GetWindowSize()/ImGuiHelpers.GlobalScale;
+        if(_is3D) { Draw3D();return; }
         var scale=ImGuiHelpers.GlobalScale;
         ImGui.TextDisabled($"已加载对象观测 · 目标采样 {1/_data.SampleIntervalSeconds:F0} 次/秒 · 不补造缺失坐标");
         if(_data.MovementDownsampled)ImGui.TextDisabled("长局记录已为存储容量降低采样密度。");
@@ -65,6 +69,7 @@ internal sealed partial class MatchReplayWindow : Window {
         ImGui.SameLine(); ImGui.SetNextItemWidth(100*scale);
         ImGui.Combo("倍速###ReplaySpeed",ref _speed,new[]{"0.5×","1×","2×","4×"},4);
         ImGui.SameLine(); if(ModernTheme.Button(_showInfo?"收起信息###ReplayInfo":"显示信息###ReplayInfo"))_showInfo=!_showInfo;
+        ImGui.SameLine(); using(var disabled3D=ImRaii.Disabled(!_match.IsCompleted))if(ModernTheme.Button("3D 回放（试验）###ReplayOpen3D"))_plugin.WindowManager.OpenReplay(_match,_timeline,true);
         if(ModernTheme.Button("−###MapZoomOut"))_camera.ZoomAt(1/1.3f,new Vector2(.5f),1);
         ImGui.SameLine(); if(ModernTheme.Button("＋###MapZoomIn"))_camera.ZoomAt(1.3f,new Vector2(.5f),1);
         ImGui.SameLine(); if(ModernTheme.Button("重置视角###MapFit"))_camera.Reset();

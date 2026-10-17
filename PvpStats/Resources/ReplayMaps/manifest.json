@@ -1,0 +1,58 @@
+[
+  {
+    "map": "bayside",
+    "name": "海岸斗场",
+    "triangles": 286988,
+    "vertices": 530163,
+    "compressed_bytes": 4072437,
+    "sha256": "72ddb4f61aff763383448ba0dc51275f424d367acea84d3ef0788493707de830"
+  },
+  {
+    "map": "castletown",
+    "name": "机关大殿",
+    "triangles": 184223,
+    "vertices": 315693,
+    "compressed_bytes": 2381100,
+    "sha256": "3c21c46c03987a09c0b5ccb057b1d2e4be8d8d575ebca6fbb80dd5fe4d2114ed"
+  },
+  {
+    "map": "cloud-nine",
+    "name": "九霄云上",
+    "triangles": 125762,
+    "vertices": 296456,
+    "compressed_bytes": 2409146,
+    "sha256": "66ac4d52bafa521080fd88a3ff15cddc52f34021ac89637cd46f9e417f5ce52b"
+  },
+  {
+    "map": "harmonias",
+    "name": "休兵书库",
+    "triangles": 204624,
+    "vertices": 403156,
+    "compressed_bytes": 3012501,
+    "sha256": "17141ba3cf26b9b43f4cbf3655e677ae672ce8d066023a5f5e28cc45a23d9b81"
+  },
+  {
+    "map": "palaistra",
+    "name": "角力学校",
+    "triangles": 77378,
+    "vertices": 144993,
+    "compressed_bytes": 1089886,
+    "sha256": "7bc80e01efb394a4a2bb9a8d825e6035e1772d1a1f693d929f61c9e2ea4bc72a"
+  },
+  {
+    "map": "red-sands",
+    "name": "赤土红沙",
+    "triangles": 238519,
+    "vertices": 515817,
+    "compressed_bytes": 4292571,
+    "sha256": "0a45bda9e322272e525902d62326d08b44b09e3c2c02bd49fc0fe1d36011af6c"
+  },
+  {
+    "map": "volcanic-heart",
+    "name": "火山之心",
+    "triangles": 162239,
+    "vertices": 279407,
+    "compressed_bytes": 2083103,
+    "sha256": "e7d0badfae30bd0256bf3cd0b90e4d5c1adeae7604984640c4893fe1563ce959"
+  }
+]

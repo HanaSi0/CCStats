@@ -152,6 +152,7 @@ Check(StatDisplay.CardColumns(610,1)==1 && StatDisplay.CardColumns(640,1)==2 && 
 MovementReplayChecks.Run(Check);
 ReplayUpgradeChecks.Run(Check);
 MovementCompatibilityChecks.Run(Check);
+Replay3DChecks.Run(Check);
 await StabilityChecks.Run(Check);
 StatisticsChecks.Run(Check);
 DetailedTelemetryChecks.Run(Check);
