@@ -5,7 +5,7 @@ using System.Numerics;
 namespace PvpStats.Analysis;
 public enum LbShape { Circle, Line, DoubleLine, Cone, Cross, Single, Self }
 public enum LbAnchor { Source, Target, Ground }
-public sealed record LbVisualRule(uint ActionId,uint JobId,LbShape Shape,LbAnchor Anchor,float Size,float Width=0,bool Benefit=false,float Duration=.65f,bool Reference=false,uint StatusId=0);
+public sealed record LbVisualRule(uint ActionId,uint JobId,LbShape Shape,LbAnchor Anchor,float Size,float Width=0,bool Benefit=false,float Duration=1.25f,bool Reference=false,uint StatusId=0);
 public sealed class ReplaySkillEvent {
     public DateTime Timestamp { get; set; }
     public uint ActionId { get; set; }
@@ -134,13 +134,20 @@ public static class LimitBreakVisuals {
         if(elapsed<0)return 0;
         if(!e.Resolved)return rule.Shape==LbShape.Single&&elapsed<3?.6f:0;
         if(elapsed>=rule.Duration)return 0;
-        return rule.Duration>1.5f ? (elapsed<.35f?1:.18f) : Math.Clamp(1-elapsed/rule.Duration,0,1);
+        return rule.Duration>1.5f ? (elapsed<.5f?1:.4f) : elapsed<.45f?1:Math.Clamp((rule.Duration-elapsed)/(rule.Duration-.45f),0,1);
     }
     public static void Draw(ReplaySceneGeometry geometry,LbVisualRule rule,Vector3 at,float heading,Vector3 source,Func<float,float,float> height,float fade=1) {
-        var alpha=(rule.Reference ? .14f : .24f)*Math.Clamp(fade,0,1);
+        var alpha=(rule.Reference ? .32f : .42f)*Math.Clamp(fade,0,1);
         var color=rule.Benefit?ReplaySceneGeometry.Rgba(.2f,.65f,1,alpha):ReplaySceneGeometry.Rgba(1,.2f,.25f,alpha);
+        var edge=rule.Benefit?ReplaySceneGeometry.Rgba(.25f,.85f,1,Math.Max(.45f,.95f*fade)):ReplaySceneGeometry.Rgba(1,.38f,.18f,Math.Max(.45f,.95f*fade));
         Vector3 Ground(Vector3 p)=>new(p.X,height(p.X,p.Z)+.22f,p.Z);
         void Tri(Vector3 a,Vector3 b,Vector3 c)=>geometry.Triangle(Ground(a),Ground(b),Ground(c),color);
+        void Border(Vector3 a,Vector3 b) {
+            var side=new Vector3(b.Z-a.Z,0,a.X-b.X);if(side.LengthSquared()<.00001f)return;
+            side=Vector3.Normalize(side)*.13f;
+            geometry.Triangle(Ground(a-side),Ground(a+side),Ground(b+side),edge);
+            geometry.Triangle(Ground(a-side),Ground(b+side),Ground(b-side),edge);
+        }
         var forward=Forward(heading);var side=new Vector3(forward.Z,0,-forward.X);
         void Rect(Vector3 center,Vector3 f,float front,float back,float width) {
             var right=new Vector3(f.Z,0,-f.X)*width/2;
@@ -149,11 +156,13 @@ public static class LimitBreakVisuals {
             for(int i=0;i<pieces;i++) {
                 var a=center+f*(-back+(front+back)*i/pieces);var b=center+f*(-back+(front+back)*(i+1)/pieces);
                 Tri(a-right,a+right,b+right);Tri(a-right,b+right,b-right);
+                Border(a-right,b-right);Border(a+right,b+right);
+                if(i==0)Border(a-right,a+right);if(i==pieces-1)Border(b-right,b+right);
             }
         }
         if(rule.Shape is LbShape.Line or LbShape.DoubleLine) { Rect(at,forward,rule.Size,rule.Shape==LbShape.DoubleLine?rule.Size:0,rule.Width);return; }
         if(rule.Shape==LbShape.Cross) { Rect(at,forward,rule.Size,rule.Size,rule.Width);Rect(at,side,rule.Size,rule.Size,rule.Width);return; }
-        if(rule.Shape==LbShape.Single) { Rect((at+source)/2,Vector3.Normalize(new Vector3(at.X-source.X,0,at.Z-source.Z)+new Vector3(.000001f,0,0)),Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,.22f); }
+        if(rule.Shape==LbShape.Single) { Rect((at+source)/2,Vector3.Normalize(new Vector3(at.X-source.X,0,at.Z-source.Z)+new Vector3(.000001f,0,0)),Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,Vector2.Distance(new(at.X,at.Z),new(source.X,source.Z))/2,.45f); }
         float radius=rule.Shape is LbShape.Single or LbShape.Self?1:rule.Size;
         float arc=rule.Shape==LbShape.Cone?rule.Width*MathF.PI/180:MathF.Tau;
         float angle=rule.Shape==LbShape.Cone?heading-arc/2:0;
@@ -162,6 +171,9 @@ public static class LimitBreakVisuals {
             for(int i=0;i<64;i++) {
                 var a=Forward(angle+arc*i/64);var b=Forward(angle+arc*(i+1)/64);
                 Tri(at+a*inner,at+a*outer,at+b*outer);Tri(at+a*inner,at+b*outer,at+b*inner);
+                if(ring==rings-1)Border(at+a*outer,at+b*outer);
+                if(rule.Shape==LbShape.Cone&&i==0)Border(at+a*inner,at+a*outer);
+                if(rule.Shape==LbShape.Cone&&i==63)Border(at+b*inner,at+b*outer);
             }
         }
     }

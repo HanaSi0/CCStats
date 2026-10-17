@@ -134,6 +134,7 @@ public sealed class ObservedEffect {
     public bool SelfReturn { get; set; }
     public bool SnapshotsCaptured { get; set; }
     public bool PetSource { get; set; }
+    public bool IsWeaponskill { get; set; }
     public uint ShieldPercent { get; set; }
     public List<EffectStatus> ActorStatuses { get; set; } = new();
     public List<EffectStatus> TargetStatuses { get; set; } = new();

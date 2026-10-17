@@ -60,7 +60,7 @@ internal sealed partial class MatchReplayWindow {
         ImGui.SameLine();ImGui.Checkbox("水晶轨迹###Replay3DTrail",ref _showCrystalTrail);if(ImGui.IsItemEdited())_cameraDirty=true;
         ImGui.SameLine();ImGui.Checkbox("地图事件###Replay3DEvents",ref _showMechanics);if(ImGui.IsItemEdited())_cameraDirty=true;
         ImGui.SameLine();if(ImGui.Checkbox("极限技范围###Replay3DLB",ref _showLB))_cameraDirty=true;
-        if(ImGui.IsItemHovered())ImGui.SetTooltip("浅蓝为增益，浅红为伤害或控制；即时效果短暂淡出，持续区域保留淡色。扇形角度、南十字宽度及黄昏双向长度为参考；旧记录缺少落点时不补画。");
+        if(ImGui.IsItemHovered())ImGui.SetTooltip("浅蓝为增益，浅红为伤害或控制；即时效果先明显显示再淡出，持续区域保留淡色与边框。扇形角度、南十字宽度及黄昏双向长度为参考；旧记录缺少落点时不补画。");
         ImGui.SameLine();ImGui.SetNextItemWidth(76*scale);if(ImGui.DragFloat("水晶参考圈###Replay3DRadius",ref _radius3D,.1f,1,12,"%.1f"))_cameraDirty=true;
         if(ImGui.IsItemHovered())ImGui.SetTooltip("参考半径默认 5 游戏单位，尚未验证为服务器实际判定半径。");
         if(_data.MovementDownsampled)ImGui.TextDisabled("此记录已降低采样密度；不补造缺失观测。");
@@ -176,7 +176,8 @@ internal sealed partial class MatchReplayWindow {
         }
     }
     private void BuildLBOverlay(MovementFrame? frame,DateTime now) {
-        _lbOverlay.Clear();if(!_showLB)return;
+        _lbOverlay.Clear();
+        if(!_showLB) { AddGuardBubbles(frame,now);return; }
         if(_lbEvents==null) {
             _lbEvents=new(_data.ReplaySkills);
             // Legacy timelines lack exact cast poses and ground destinations. Only use a nearby, past recorded pose.
@@ -196,7 +197,7 @@ internal sealed partial class MatchReplayWindow {
             }
             _lbEvents.Sort((a,b)=>a.Timestamp.CompareTo(b.Timestamp));
         }
-        foreach(var (e,rule) in LimitBreakVisuals.Active(_lbEvents,frame,now)) {
+        foreach(var (e,rule) in LimitBreakVisuals.Active(_lbEvents,frame,now).OrderByDescending(x=>x.Rule.Benefit)) {
             if(!LimitBreakVisuals.Center(rule,e,out var at))continue;
             var source=new Vector3(e.X,e.Y,e.Z);
             if(!e.Resolved&&rule.Shape==LbShape.Single) {
@@ -211,7 +212,14 @@ internal sealed partial class MatchReplayWindow {
             // Skill footprints use one consistent caster/impact elevation offset, draped to mesh height for slopes.
             var terrainOffset=at.Y-(_mesh?.EstimatedHeight(at.X,at.Z)??0);
             LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity);
-            if(_lbOverlay.Vertices.Length>65000)break;
+            if(_lbOverlay.Vertices.Length>48000)break;
+        }
+        AddGuardBubbles(frame,now);
+    }
+    private void AddGuardBubbles(MovementFrame? frame,DateTime now) {
+        if(frame==null)return;
+        foreach(var player in frame.Players.Where(p=>ReplaySceneGeometry.GuardVisible(p,now)).Take(10)) {
+            if(float.IsFinite(player.X)&&float.IsFinite(player.Z))_lbOverlay.GuardBubble(World(player));
         }
     }
     public void Dispose() {

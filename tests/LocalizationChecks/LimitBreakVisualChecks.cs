@@ -14,14 +14,14 @@ internal static class LimitBreakVisualChecks {
         var geometry=new ReplaySceneGeometry();
         LimitBreakVisuals.Draw(geometry,whm,new(10,0,20),0,new(10,0,20),(_,_)=>0);
         var vertices=geometry.Vertices.ToArray();
-        check(vertices.Min(v=>v.Position.X)==7&&vertices.Max(v=>v.Position.X)==13&&vertices.Min(v=>v.Position.Z)==20&&vertices.Max(v=>v.Position.Z)==60,"WHM beam is 40 long and client-parameter 6 wide, in facing direction");
+        check(Math.Abs(vertices.Min(v=>v.Position.X)-7)<.14&&Math.Abs(vertices.Max(v=>v.Position.X)-13)<.14&&Math.Abs(vertices.Min(v=>v.Position.Z)-20)<.14&&Math.Abs(vertices.Max(v=>v.Position.Z)-60)<.14,"WHM beam is 40 long and client-parameter 6 wide, in facing direction");
         geometry.Clear();LimitBreakVisuals.Draw(geometry,whm,Vector3.Zero,MathF.PI/2,Vector3.Zero,(_,_)=>0);
-        check(Math.Abs(geometry.Vertices.ToArray().Max(v=>v.Position.X)-40)<.001,"beam rotates with game heading convention");
+        check(Math.Abs(geometry.Vertices.ToArray().Max(v=>v.Position.X)-40)<.14,"beam rotates with game heading convention");
         check(vertices.All(v=>(v.Color>>24)>0&&(v.Color>>24)<255),"LB fills carry real partial alpha for separate blend pass");
         check((ReplaySceneGeometry.Rgba(1,1,1)>>24)==255,"opaque map and pawn colors retain full alpha");
-        check(LimitBreakVisuals.Opacity(whm,e,start.AddSeconds(.66))==0,"instant effects vanish after short impact fade");
+        check(LimitBreakVisuals.Opacity(whm,e,start.AddSeconds(1.26))==0,"instant effects vanish after short impact fade");
         var persistent=rules.Single(r=>r.ActionId==29401);
-        check(LimitBreakVisuals.Opacity(persistent,e,start.AddSeconds(2))==.18f,"persistent effects settle to faint background");
+        check(LimitBreakVisuals.Opacity(persistent,e,start.AddSeconds(2))==.4f,"persistent effects settle to faint background");
         check(LimitBreakVisuals.Opacity(whm,e,start.AddSeconds(-1))==0,"future skills have no visual");
         var aim=rules.Single(r=>r.ActionId==29415);var cast=new ReplaySkillEvent {Timestamp=start,ActionId=29415,Actor=e.Actor};
         check(LimitBreakVisuals.Opacity(aim,cast,start.AddSeconds(1))>0&&LimitBreakVisuals.Opacity(aim,cast,start.AddSeconds(4))==0,"single-target aim tether is bounded before impact");

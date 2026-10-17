@@ -1,0 +1,61 @@
+{
+  "scope": "Wolves Den samples, not complete matches; no Guard status samples, so this archive cannot validate Guard prevention or Guard-blocked controls. Packet sums include overheal; no invented effective healing or shield absorption.",
+  "sessions": [
+    {
+      "job_id": 24,
+      "damage_effect_packets": 18000,
+      "healing_effect_packets": 0,
+      "self_return_healing_packets": 0,
+      "guard_status_samples": 0
+    },
+    {
+      "job_id": 32,
+      "damage_effect_packets": 40000,
+      "healing_effect_packets": 16000,
+      "self_return_healing_packets": 16000,
+      "guard_status_samples": 0
+    },
+    {
+      "job_id": 39,
+      "damage_effect_packets": 88000,
+      "healing_effect_packets": 24000,
+      "self_return_healing_packets": 24000,
+      "guard_status_samples": 0
+    },
+    {
+      "job_id": 42,
+      "damage_effect_packets": 16000,
+      "healing_effect_packets": 20000,
+      "self_return_healing_packets": 0,
+      "guard_status_samples": 0
+    },
+    {
+      "job_id": 34,
+      "damage_effect_packets": 24000,
+      "healing_effect_packets": 0,
+      "self_return_healing_packets": 0,
+      "guard_status_samples": 0
+    },
+    {
+      "job_id": 22,
+      "damage_effect_packets": 64000,
+      "healing_effect_packets": 0,
+      "self_return_healing_packets": 0,
+      "guard_status_samples": 0
+    },
+    {
+      "job_id": 31,
+      "damage_effect_packets": 40000,
+      "healing_effect_packets": 0,
+      "self_return_healing_packets": 0,
+      "guard_status_samples": 0
+    },
+    {
+      "job_id": 23,
+      "damage_effect_packets": 11000,
+      "healing_effect_packets": 0,
+      "self_return_healing_packets": 0,
+      "guard_status_samples": 0
+    }
+  ]
+}

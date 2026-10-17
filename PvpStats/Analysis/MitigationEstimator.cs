@@ -25,7 +25,28 @@ public static class MitigationEstimator {
     private static readonly Regex Incoming = new(@"^(?:Damage taken is reduced|Reduces damage taken) by (\d+(?:\.\d+)?)%\.?$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
     private static readonly Regex GuardReduction = new(@"(?:Reduces damage taken by|Damage taken is reduced by) (\d+(?:\.\d+)?)%", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
     public static List<MitigationEstimate> Calculate(DetailedTelemetry data) => data.Effects
-        .Where(e=>DetailedAnalysis.IsDamage(e.Type) && e.GuardObserved).Select(e=>Estimate(data,e)).ToList();
+        .Where(e=>DetailedAnalysis.IsDamage(e.Type) && e.GuardObserved).Select(e=>EstimateAdvanced(data,e)).ToList();
+    // Marginal removal of Guard: other supported multiplicative modifiers cancel. This is not a raw/base damage reconstruction.
+    private static readonly HashSet<uint> CompatibleStatuses = new() {48,902,1078,1411,4495,2037,2038,3033,4290,2863,2858,4309,4116,4117,4118,4119,4312,3144,3145,3042,3051};
+    public static MitigationEstimate EstimateAdvanced(DetailedTelemetry data,ObservedEffect effect) {
+        var strict=Estimate(data,effect);if(strict.Supported)return strict;
+        MitigationEstimate Pending(string reason)=>new() { Effect=effect,Reason=reason };
+        if(!effect.GuardObserved||!effect.SnapshotsCaptured||data.GameVersion.Length==0)return strict;
+        if(effect.Type!=3||effect.SelfReturn||effect.PetSource||!DetailedAnalysis.IsEnemy(effect)||effect.Amount==0||effect.ShieldPercent>0)return strict;
+        if(!GuardActionCatalog.Direct.Contains(effect.ActionId))return strict;
+        var guards=effect.TargetStatuses.Where(s=>s.Id==3054).ToArray();
+        if(guards.Length!=1||guards[0].Remaining<=.15f||effect.TargetStatuses.Any(s=>s.Id is 3673 or 3021 or 1302 or 3039))return strict;
+        if(!data.StatusDescriptions.TryGetValue(3054,out var guard)||!Regex.IsMatch(guard.Replace('％','%'),@"90\s*%"))return Pending("客户端防御说明未确认 90% 减伤");
+        if(!data.ActionDescriptions.TryGetValue(effect.ActionId,out var action)||string.IsNullOrWhiteSpace(action))return Pending("缺少当场客户端技能说明");
+        if(Regex.IsMatch(action,@"ignores?|unaffected|remaining HP|current HP|防御.{0,20}(?:無視|無効)|(?:无视|無視).{0,20}防御|无视.{0,20}减伤",RegexOptions.IgnoreCase))return Pending("技能包含防御交互，需要专用规则");
+        foreach(var status in effect.ActorStatuses.Concat(effect.TargetStatuses)) {
+            if(status.Id==3054)continue;
+            if(!CompatibleStatuses.Contains(status.Id))return Pending($"状态 {status.Id} 尚未确认与防御减伤独立，暂不计入合计");
+            if(status.Remaining>0&&status.Remaining<=.15f)return Pending($"状态 {status.Id} 临近变化，暂不反推");
+        }
+        return new() { Effect=effect,WithoutGuard=effect.Amount*10d,GuardPrevented=effect.Amount*9d,
+            Reason="条件估算：使用官网普通直伤目录及当场防御状态，仅撤去 90% 防御，保留双方其余已支持状态；相乘倍率在比较中抵消。不还原基础伤害，不含服务器取整、状态先后或护盾误差。" };
+    }
     public static MitigationEstimate Estimate(DetailedTelemetry data, ObservedEffect effect) {
         var result = new MitigationEstimate { Effect=effect };
         MitigationEstimate Unresolved(string reason) { result.Reason=reason; return result; }

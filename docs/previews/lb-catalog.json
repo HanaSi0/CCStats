@@ -1,0 +1,1526 @@
+[
+  {
+    "id": 19,
+    "name": "骑士",
+    "roots": [
+      29069
+    ],
+    "actions": [
+      {
+        "id": 29069,
+        "name": "列阵",
+        "rules": [
+          {
+            "id": 29069,
+            "job": 19,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 15.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 29069,
+            "job": 19,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 10.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29071,
+        "name": "信念之剑",
+        "rules": [
+          {
+            "id": 29071,
+            "job": 19,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29072,
+        "name": "真理之剑",
+        "rules": [
+          {
+            "id": 29072,
+            "job": 19,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29073,
+        "name": "英勇之剑",
+        "rules": [
+          {
+            "id": 29073,
+            "job": 19,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "战士",
+    "roots": [
+      29083
+    ],
+    "actions": [
+      {
+        "id": 29083,
+        "name": "原初的怒吼",
+        "rules": [
+          {
+            "id": 29083,
+            "job": 21,
+            "shape": "Cone",
+            "anchor": "Source",
+            "size": 12.0,
+            "width": 90.0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": true
+          },
+          {
+            "id": 29083,
+            "job": 21,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 15.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29078,
+        "name": "技能 29078",
+        "rules": [
+          {
+            "id": 29078,
+            "job": 21,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41433,
+        "name": "技能 41433",
+        "rules": [
+          {
+            "id": 41433,
+            "job": 21,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 10.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name": "暗黑骑士",
+    "roots": [
+      29097
+    ],
+    "actions": [
+      {
+        "id": 29097,
+        "name": "黄昏",
+        "rules": [
+          {
+            "id": 29097,
+            "job": 32,
+            "shape": "DoubleLine",
+            "anchor": "Source",
+            "size": 30.0,
+            "width": 6.0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": true
+          },
+          {
+            "id": 29097,
+            "job": 32,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 10.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41437,
+        "name": "技能 41437",
+        "rules": [
+          {
+            "id": 41437,
+            "job": 32,
+            "shape": "Line",
+            "anchor": "Source",
+            "size": 10.0,
+            "width": 4.0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41434,
+        "name": "绯红乱",
+        "rules": [
+          {
+            "id": 41434,
+            "job": 32,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41435,
+        "name": "报应",
+        "rules": [
+          {
+            "id": 41435,
+            "job": 32,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41436,
+        "name": "戮山",
+        "rules": [
+          {
+            "id": 41436,
+            "job": 32,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 37,
+    "name": "绝枪战士",
+    "roots": [
+      29130,
+      29131
+    ],
+    "actions": [
+      {
+        "id": 29130,
+        "name": "连续剑",
+        "rules": [
+          {
+            "id": 29130,
+            "job": 37,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 6.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 4.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29131,
+        "name": "终结击",
+        "rules": [
+          {
+            "id": 29131,
+            "job": 37,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 6.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29469,
+        "name": "终结击",
+        "rules": [
+          {
+            "id": 29469,
+            "job": 37,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 6.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "白魔法师",
+    "roots": [
+      29230
+    ],
+    "actions": [
+      {
+        "id": 29230,
+        "name": "狂喜之心",
+        "rules": [
+          {
+            "id": 29230,
+            "job": 24,
+            "shape": "Line",
+            "anchor": "Source",
+            "size": 40.0,
+            "width": 6.0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 29230,
+            "job": 24,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 30.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 15.0,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "name": "学者",
+    "roots": [
+      41502
+    ],
+    "actions": [
+      {
+        "id": 41502,
+        "name": "炽天附体",
+        "rules": [
+          {
+            "id": 41502,
+            "job": 28,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 30.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 41502,
+            "job": 28,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 20.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41500,
+        "name": "技能 41500",
+        "rules": [
+          {
+            "id": 41500,
+            "job": 28,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41501,
+        "name": "技能 41501",
+        "rules": [
+          {
+            "id": 41501,
+            "job": 28,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 15.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "name": "占星术士",
+    "roots": [
+      29255
+    ],
+    "actions": [
+      {
+        "id": 29255,
+        "name": "天星河流",
+        "rules": [
+          {
+            "id": 29255,
+            "job": 33,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 15.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 29255,
+            "job": 33,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 15.0,
+            "reference": false
+          },
+          {
+            "id": 29255,
+            "job": 33,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 15.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41508,
+        "name": "技能 41508",
+        "rules": [
+          {
+            "id": 41508,
+            "job": 33,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "name": "贤者",
+    "roots": [
+      29266,
+      29267
+    ],
+    "actions": [
+      {
+        "id": 29266,
+        "name": "中庸之道",
+        "rules": [
+          {
+            "id": 29266,
+            "job": 40,
+            "shape": "Circle",
+            "anchor": "Ground",
+            "size": 5.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 15.0,
+            "reference": false
+          },
+          {
+            "id": 29266,
+            "job": 40,
+            "shape": "Circle",
+            "anchor": "Ground",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 15.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29267,
+        "name": "中庸之道",
+        "rules": [
+          {
+            "id": 29267,
+            "job": 40,
+            "shape": "Circle",
+            "anchor": "Ground",
+            "size": 5.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 15.0,
+            "reference": false
+          },
+          {
+            "id": 29267,
+            "job": 40,
+            "shape": "Circle",
+            "anchor": "Ground",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 15.0,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "name": "武僧",
+    "roots": [
+      29485
+    ],
+    "actions": [
+      {
+        "id": 29485,
+        "name": "陨石冲击",
+        "rules": [
+          {
+            "id": 29485,
+            "job": 20,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "name": "龙骑士",
+    "roots": [
+      29497,
+      29498
+    ],
+    "actions": [
+      {
+        "id": 29497,
+        "name": "高跳",
+        "rules": [
+          {
+            "id": 29497,
+            "job": 22,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 4.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29498,
+        "name": "天穹破碎",
+        "rules": [
+          {
+            "id": 29498,
+            "job": 22,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 10.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 29498,
+            "job": 22,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29499,
+        "name": "天穹破碎",
+        "rules": [
+          {
+            "id": 29499,
+            "job": 22,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 10.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "name": "忍者",
+    "roots": [
+      29515
+    ],
+    "actions": [
+      {
+        "id": 29515,
+        "name": "星遁天诛",
+        "rules": [
+          {
+            "id": 29515,
+            "job": 30,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29516,
+        "name": "星遁天诛",
+        "rules": [
+          {
+            "id": 29516,
+            "job": 30,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "name": "武士",
+    "roots": [
+      29537
+    ],
+    "actions": [
+      {
+        "id": 29537,
+        "name": "斩铁剑",
+        "rules": [
+          {
+            "id": 29537,
+            "job": 34,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "name": "钐镰客",
+    "roots": [
+      29553
+    ],
+    "actions": [
+      {
+        "id": 29553,
+        "name": "妖异之镰",
+        "rules": [
+          {
+            "id": 29553,
+            "job": 39,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 10.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 29553,
+            "job": 39,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 20.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29543,
+        "name": "缢杀",
+        "rules": [
+          {
+            "id": 29543,
+            "job": 39,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29544,
+        "name": "绞决",
+        "rules": [
+          {
+            "id": 29544,
+            "job": 39,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29548,
+        "name": "技能 29548",
+        "rules": [
+          {
+            "id": 29548,
+            "job": 39,
+            "shape": "Cone",
+            "anchor": "Source",
+            "size": 8.0,
+            "width": 90.0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": true
+          }
+        ]
+      },
+      {
+        "id": 29554,
+        "name": "技能 29554",
+        "rules": [
+          {
+            "id": 29554,
+            "job": 39,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41458,
+        "name": "技能 41458",
+        "rules": [
+          {
+            "id": 41458,
+            "job": 39,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "name": "蝰蛇剑士",
+    "roots": [
+      39190
+    ],
+    "actions": [
+      {
+        "id": 39190,
+        "name": "吞世巨蛇",
+        "rules": [
+          {
+            "id": 39190,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 39190,
+            "job": 41,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 20.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39169,
+        "name": "祖灵之牙一式",
+        "rules": [
+          {
+            "id": 39169,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39170,
+        "name": "祖灵之牙二式",
+        "rules": [
+          {
+            "id": 39170,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39171,
+        "name": "祖灵之牙三式",
+        "rules": [
+          {
+            "id": 39171,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39172,
+        "name": "祖灵之牙四式",
+        "rules": [
+          {
+            "id": 39172,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39173,
+        "name": "技能 39173",
+        "rules": [
+          {
+            "id": 39173,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39179,
+        "name": "祖灵之尾一式",
+        "rules": [
+          {
+            "id": 39179,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39180,
+        "name": "祖灵之尾二式",
+        "rules": [
+          {
+            "id": 39180,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39181,
+        "name": "祖灵之尾三式",
+        "rules": [
+          {
+            "id": 39181,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39182,
+        "name": "祖灵之尾四式",
+        "rules": [
+          {
+            "id": 39182,
+            "job": 41,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "name": "吟游诗人",
+    "roots": [
+      29401
+    ],
+    "actions": [
+      {
+        "id": 29401,
+        "name": "最终幻想",
+        "rules": [
+          {
+            "id": 29401,
+            "job": 23,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 30.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 30.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41467,
+        "name": "技能 41467",
+        "rules": [
+          {
+            "id": 41467,
+            "job": 23,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "name": "机工士",
+    "roots": [
+      29415
+    ],
+    "actions": [
+      {
+        "id": 29415,
+        "name": "魔弹射手",
+        "rules": [
+          {
+            "id": 29415,
+            "job": 31,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 38,
+    "name": "舞者",
+    "roots": [
+      29432
+    ],
+    "actions": [
+      {
+        "id": 29432,
+        "name": "行列舞",
+        "rules": [
+          {
+            "id": 29432,
+            "job": 38,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 15.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "name": "黑魔法师",
+    "roots": [
+      29662
+    ],
+    "actions": [
+      {
+        "id": 29662,
+        "name": "灵魂共鸣",
+        "rules": [
+          {
+            "id": 29662,
+            "job": 25,
+            "shape": "Self",
+            "anchor": "Source",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 30.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29651,
+        "name": "技能 29651",
+        "rules": [
+          {
+            "id": 29651,
+            "job": 25,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29655,
+        "name": "技能 29655",
+        "rules": [
+          {
+            "id": 29655,
+            "job": 25,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41480,
+        "name": "技能 41480",
+        "rules": [
+          {
+            "id": 41480,
+            "job": 25,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41481,
+        "name": "技能 41481",
+        "rules": [
+          {
+            "id": 41481,
+            "job": 25,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "name": "召唤师",
+    "roots": [
+      29673,
+      29675,
+      29678,
+      29680
+    ],
+    "actions": [
+      {
+        "id": 29673,
+        "name": "召唤巴哈姆特",
+        "rules": [
+          {
+            "id": 29673,
+            "job": 27,
+            "shape": "Circle",
+            "anchor": "Ground",
+            "size": 15.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29675,
+        "name": "百万核爆",
+        "rules": [
+          {
+            "id": 29675,
+            "job": 27,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 15.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29678,
+        "name": "召唤不死鸟",
+        "rules": [
+          {
+            "id": 29678,
+            "job": 27,
+            "shape": "Circle",
+            "anchor": "Ground",
+            "size": 15.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29680,
+        "name": "不死鸟之翼",
+        "rules": [
+          {
+            "id": 29680,
+            "job": 27,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 15.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41484,
+        "name": "技能 41484",
+        "rules": [
+          {
+            "id": 41484,
+            "job": 27,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 41485,
+        "name": "技能 41485",
+        "rules": [
+          {
+            "id": 41485,
+            "job": 27,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29665,
+        "name": "技能 29665",
+        "rules": [
+          {
+            "id": 29665,
+            "job": 27,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29666,
+        "name": "技能 29666",
+        "rules": [
+          {
+            "id": 29666,
+            "job": 27,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29676,
+        "name": "技能 29676",
+        "rules": [
+          {
+            "id": 29676,
+            "job": 27,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 29681,
+        "name": "技能 29681",
+        "rules": [
+          {
+            "id": 29681,
+            "job": 27,
+            "shape": "Single",
+            "anchor": "Target",
+            "size": 1.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "name": "赤魔法师",
+    "roots": [
+      41498
+    ],
+    "actions": [
+      {
+        "id": 41498,
+        "name": "南十字",
+        "rules": [
+          {
+            "id": 41498,
+            "job": 35,
+            "shape": "Cross",
+            "anchor": "Target",
+            "size": 15.0,
+            "width": 6.0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": true
+          },
+          {
+            "id": 41498,
+            "job": 35,
+            "shape": "Cross",
+            "anchor": "Target",
+            "size": 15.0,
+            "width": 6.0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "name": "绘灵法师",
+    "roots": [
+      39215,
+      39216,
+      39217
+    ],
+    "actions": [
+      {
+        "id": 39215,
+        "name": "陆行鸟堡垒降临",
+        "rules": [
+          {
+            "id": 39215,
+            "job": 42,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 8.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          },
+          {
+            "id": 39215,
+            "job": 42,
+            "shape": "Circle",
+            "anchor": "Ground",
+            "size": 8.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 15.0,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39216,
+        "name": "星空构想",
+        "rules": [
+          {
+            "id": 39216,
+            "job": 42,
+            "shape": "Circle",
+            "anchor": "Target",
+            "size": 5.0,
+            "width": 0,
+            "benefit": false,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      },
+      {
+        "id": 39217,
+        "name": "星空构想",
+        "rules": [
+          {
+            "id": 39217,
+            "job": 42,
+            "shape": "Circle",
+            "anchor": "Source",
+            "size": 30.0,
+            "width": 0,
+            "benefit": true,
+            "duration": 1.25,
+            "reference": false
+          }
+        ]
+      }
+    ]
+  }
+]

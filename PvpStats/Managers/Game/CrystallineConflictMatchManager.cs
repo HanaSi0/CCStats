@@ -921,12 +921,12 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             if(sequence != 0 && !_recordedEffects.Add((sequence,targetId,index))) return;
             var recipient = reflected ? actor : target;
             if(recipient.Length == 0) return;
-            var needsSnapshot = DetailedAnalysis.IsDamage(type) && !reflected && snapshot.Statuses.Any(s=>s.StatusId is 3054 or 3673);
+            var needsSnapshot = (!reflected && snapshot.Statuses.Any(s=>s.StatusId is 3054 or 3673)) || (reflected && type==4);
             var actorStatuses = needsSnapshot ? actorCharacter?.StatusList.Select(s=>new EffectStatus { Id=s.StatusId, Param=s.Param, Remaining=s.RemainingTime }).ToList() ?? new() : new();
             var targetStatuses = needsSnapshot ? snapshot.Statuses.Select(s=>new EffectStatus { Id=s.StatusId, Param=s.Param, Remaining=s.RemainingTime }).ToList() : new();
             data.EstimatedBytes += 512 + (actorStatuses.Count + targetStatuses.Count)*192;
             // Freeze the loaded client's descriptions with this match, once per ID. No rule evaluation during combat.
-            if(DetailedAnalysis.IsDamage(type) && !data.ActionDescriptions.ContainsKey(actionId)) {
+            if((DetailedAnalysis.IsDamage(type)||needsSnapshot) && !data.ActionDescriptions.ContainsKey(actionId)) {
                 try { data.ActionDescriptions[actionId] = _plugin.DataManager.GetExcelSheet<ActionTransient>().GetRow(actionId).Description.ToString(); } catch { data.ActionDescriptions[actionId] = ""; }
                 data.EstimatedBytes += 1024 + data.ActionDescriptions[actionId].Length*4;
             }
@@ -943,6 +943,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
                 GuardObserved=!reflected && snapshot.Statuses.Any(s=>s.StatusId is 3054 or 3673),
                 SelfReturn=reflected && type==4, SnapshotsCaptured=needsSnapshot && actorCharacter!=null, PetSource=petSource,
                 ShieldPercent=snapshot.ShieldPercents, ActorStatuses=actorStatuses, TargetStatuses=targetStatuses,
+                IsWeaponskill=_plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(actionId).ActionCategory.RowId==3,
             });
         }
     }

@@ -31,7 +31,7 @@ internal partial class CrystallineConflictMatchDetail {
                     break;
                 case "Detailed":
                     if(_timeline==null) { ImGui.TextWrapped("此局没有可用的细项或时间线记录，旧比赛无法补抓。"); break; }
-                    _detailedPanel??=new(_timeline.Detailed);
+                    _detailedPanel??=new(_timeline.Detailed,Match.LocalPlayer?.ToString());
                     _detailedPanel.Draw(Match.IsCompleted,()=>Plugin.WindowManager.OpenReplay(Match,_timeline),()=>Plugin.WindowManager.OpenReplay(Match,_timeline,true));
                     break;
                 case "Timeline":

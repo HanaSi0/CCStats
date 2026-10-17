@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Linq;
 
 namespace PvpStats.Analysis;
 
@@ -40,6 +41,23 @@ public sealed class ReplaySceneGeometry {
             Triangle(bottom,a,b,shade);Triangle(top,b,a,color);
         }
     }
+    public void GuardBubble(Vector3 basePoint) {
+        var center=basePoint+new Vector3(0,1.4f,0);const float radius=1.9f;
+        var fill=Rgba(.2f,.65f,1,.14f);var edge=Rgba(.35f,.85f,1,.8f);
+        Vector3 Point(float latitude,float longitude)=>center+new Vector3(MathF.Cos(latitude)*MathF.Sin(longitude),MathF.Sin(latitude),MathF.Cos(latitude)*MathF.Cos(longitude))*radius;
+        for(int y=0;y<12;y++)for(int x=0;x<24;x++) {
+            float a=-MathF.PI/2+MathF.PI*y/12,b=-MathF.PI/2+MathF.PI*(y+1)/12,c=MathF.Tau*x/24,d=MathF.Tau*(x+1)/24;
+            Triangle(Point(a,c),Point(b,c),Point(b,d),fill);Triangle(Point(a,c),Point(b,d),Point(a,d),fill);
+        }
+        Ring(center,radius,.075f,edge);
+        for(int axis=0;axis<2;axis++)for(int i=0;i<64;i++) {
+            float a=MathF.Tau*i/64,b=MathF.Tau*(i+1)/64;
+            Vector3 P(float angle,float r)=>center+(axis==0?new Vector3(MathF.Sin(angle),MathF.Cos(angle),0):new Vector3(0,MathF.Cos(angle),MathF.Sin(angle)))*r;
+            Triangle(P(a,radius-.025f),P(a,radius+.025f),P(b,radius+.025f),edge);
+            Triangle(P(a,radius-.025f),P(b,radius+.025f),P(b,radius-.025f),edge);
+        }
+    }
+    public static bool GuardVisible(PlayerPosition player,DateTime now) => player.HP>0&&player.StatusTimestamp<=now&&player.Statuses.Any(s=>s.Id is 3054 or 3673&&(s.Remaining<=0||s.Remaining>(now-player.StatusTimestamp).TotalSeconds));
     public void Pawn(Vector3 at,float heading,bool dead,bool selected,int team) {
         var color=dead?Rgba(.45f,.46f,.49f):team==1?Rgba(.1f,.7f,1):Rgba(1,.23f,.32f);
         Cylinder(at+new Vector3(0,.05f,0),.9f,.18f,color);

@@ -10,8 +10,8 @@ https://raw.githubusercontent.com/HanaSi0/CCStats/main/repo.json
 
 搜索 **CCStats** 安装，输入 `/ccstats` 打开。
 
-版本：**0.2.15** · 国际服 Dalamud API 15。原 `repo-test.json` 库链仍可使用。
+版本：**0.2.16** · 国际服 Dalamud API 15。原 `repo-test.json` 库链仍可使用。
 
-[更新说明](docs/release-notes/0.2.15.md) · [开发文档](docs/development.md)
+[更新说明](docs/release-notes/0.2.16.md) · [开发文档](docs/development.md) · [技能样式预览](https://raw.githack.com/HanaSi0/CCStats/main/docs/previews/lb-preview.html)
 
 基于 SaMo 的 [PvPStats](https://github.com/wrath16/PvpStats)，遵循 [MIT 许可](LICENSE.txt)。
