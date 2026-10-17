@@ -1,0 +1,294 @@
+{
+  "version": "1.0.4",
+  "maps": [
+    {
+      "map": "bayside",
+      "name": "海岸斗场",
+      "before": {
+        "map": "bayside",
+        "name": "海岸斗场",
+        "triangles": 286988,
+        "vertices": 530163,
+        "compressed_bytes": 4072437,
+        "sha256": "72ddb4f61aff763383448ba0dc51275f424d367acea84d3ef0788493707de830"
+      },
+      "after": {
+        "map": "bayside",
+        "name": "海岸斗场",
+        "triangles": 279142,
+        "vertices": 424993,
+        "compressed_bytes": 3430048,
+        "sha256": "a4122e90c2f21648ade725bb5a2509e659e607edaa00fb2e92748024c491d14e"
+      },
+      "source_sha256": {
+        "BgPart_0000-0026.glb": "14e31b2fed746ab79995d90ab48ff5a8d50551d79eef04b3cc9d08b55dafcd64",
+        "BgPart_0026-0045.glb": "fe6b4c1f3b90078be3ae26ffd86881ae2e4706bc09bfe600b0a6c3dbf424aeb7",
+        "BgPart_0045-0063.glb": "9043f56ef9658bc0965e96e08795654c6547950038d01bd4d33f5e0f5c0f2382",
+        "BgPart_0063-0097.glb": "5228db4a7c85204c14f55ef1da193053ce3944bbd7a04accd42259c7d2c3f003",
+        "Decal_0000-0000.glb": "e55e0cdb901164c7cdd46a2ad35117e7328d6bb9ab5327aecec8487891c9a554",
+        "SharedGroup_0000-0003.glb": "58ae50c750efb3272af3e6d461d6e4a4115c2fbdc862586c4eda0e0e06e66ade",
+        "SharedGroup_0003-0011.glb": "a2606128a46dbe977565f5e3f946d745030f68d99bb6fa49d3847d10e7375d35",
+        "Terrain_0000-0000.glb": "2dcbddeedd49c8baae0387a38206bcd2cfe097a16acf98aa65337dffb26593f6"
+      },
+      "coverage_check": {
+        "spacing": 0.25,
+        "source_covered_samples": 438529,
+        "lost_samples": 0,
+        "topology_fallback": false
+      },
+      "browser_checks": [
+        "native CCM resource renders",
+        "mouse rotation changes image",
+        "reset view",
+        "top view",
+        "no WebGL error"
+      ],
+      "scope": "Existing core structures retained. Restore only source terrain and complete canal markers; do not reintroduce surrounding props or architecture."
+    },
+    {
+      "map": "castletown",
+      "name": "机关大殿",
+      "before": {
+        "map": "castletown",
+        "name": "机关大殿",
+        "triangles": 184223,
+        "vertices": 315693,
+        "compressed_bytes": 2381100,
+        "sha256": "3c21c46c03987a09c0b5ccb057b1d2e4be8d8d575ebca6fbb80dd5fe4d2114ed"
+      },
+      "after": {
+        "map": "castletown",
+        "name": "机关大殿",
+        "triangles": 182418,
+        "vertices": 245921,
+        "compressed_bytes": 1995739,
+        "sha256": "7ac8ff976f7c25b8a282a4de3b7cdbb0cac8988197cd1d4e6676790324208fb0"
+      },
+      "source_sha256": {
+        "BgPart_0000-0027.glb": "5b7355e66dee1f1893a3432035975e772d8e71b4056387efaee10caf1b23bb95",
+        "BgPart_0027-0049.glb": "5ab28e39ed092a5c28c105309731ea71e3f6b6fdcb0568d088dd13816363dfe1",
+        "BgPart_0049-0064.glb": "a4de1a534d8d20a5dee59dc9646e1a84f11e8ccf97ed3c989a60abdd029fa7b3",
+        "BgPart_0064-0093.glb": "ec19e9bc961932acd118958d9d68c825810e52952a4380875500b08be8b6c997",
+        "SharedGroup_0000-0009.glb": "c87ece3679a3ee479c54f89de9e7975d1e977ac05da3d61a04b5e3e454351aec",
+        "Terrain_0000-0001.glb": "bc7232c48fed92402654b5b395efa3835971bdc7884aa0d80fef4336fcce4bcc"
+      },
+      "coverage_check": {
+        "spacing": 0.25,
+        "source_covered_samples": 202909,
+        "lost_samples": 0,
+        "topology_fallback": false
+      },
+      "browser_checks": [
+        "native CCM resource renders",
+        "mouse rotation changes image",
+        "reset view",
+        "top view",
+        "no WebGL error"
+      ],
+      "scope": "Existing core footprint retained; lossless regrouping and duplicate cleanup only."
+    },
+    {
+      "map": "cloud-nine",
+      "name": "九霄云上",
+      "before": {
+        "map": "cloud-nine",
+        "name": "九霄云上",
+        "triangles": 125762,
+        "vertices": 296456,
+        "compressed_bytes": 2409146,
+        "sha256": "66ac4d52bafa521080fd88a3ff15cddc52f34021ac89637cd46f9e417f5ce52b"
+      },
+      "after": {
+        "map": "cloud-nine",
+        "name": "九霄云上",
+        "triangles": 125504,
+        "vertices": 199871,
+        "compressed_bytes": 1861892,
+        "sha256": "4c11664fabe318b0c9c51de09edf318c4e71b1e3f1522693c7edd7503bb39cea"
+      },
+      "source_sha256": {
+        "BgPart_0000-0062.glb": "4d7cfb34dc7bd6e16e8bcd1d7f70af3536d513efd779ffea4f335c45ac387827",
+        "BgPart_0062-0083.glb": "5e042d14dce35b4edcb839749fe1022ac580ee0a997a5969525ebe62081e448f",
+        "SharedGroup_0000-0005.glb": "75310058b9214c73450ea94c52f5f14e4a06147f68c53951021d2a9789b1dd26",
+        "Terrain_0000-0000.glb": "6d4b37a7b111de91c61221d9339a39970dd8910b3edcd9aa8d002cc0164ede96"
+      },
+      "coverage_check": {
+        "spacing": 0.25,
+        "source_covered_samples": 122267,
+        "lost_samples": 0,
+        "topology_fallback": false
+      },
+      "browser_checks": [
+        "native CCM resource renders",
+        "mouse rotation changes image",
+        "reset view",
+        "top view",
+        "no WebGL error"
+      ],
+      "scope": "Existing core footprint retained; lossless regrouping and duplicate cleanup only."
+    },
+    {
+      "map": "harmonias",
+      "name": "休兵书库",
+      "before": {
+        "map": "harmonias",
+        "name": "休兵书库",
+        "triangles": 204624,
+        "vertices": 403156,
+        "compressed_bytes": 3012501,
+        "sha256": "17141ba3cf26b9b43f4cbf3655e677ae672ce8d066023a5f5e28cc45a23d9b81"
+      },
+      "after": {
+        "map": "harmonias",
+        "name": "休兵书库",
+        "triangles": 204054,
+        "vertices": 311903,
+        "compressed_bytes": 2480725,
+        "sha256": "1849deb58df31a5b113e5d817a23c047afba142a7e7ec743941ac1955355e0c1"
+      },
+      "source_sha256": {
+        "BgPart_0000-0038.glb": "ff53127a87a3c3d7520f21c7495a714b71dfcaa512d2a5099335550c8fcc2fcd",
+        "BgPart_0038-0081.glb": "35ade4f63a6b5599e4810926001e5bd6e37ec384debcda007f358e1aa9360967",
+        "BgPart_0081-0084.glb": "041a038b1d0fa266886cdf8ad07b605a0773d2cdca37c1b9b11b1a584c368382",
+        "SharedGroup_0000-0014.glb": "76743fe13ae11c736510cd13d535022ccf1e28434483741b198e94221fe0740c",
+        "Terrain_0000-0001.glb": "18674c4ccd9f4a5e52e2e9e03d130da0cd002ff1523c7faaf0a6e21d0c19aae7"
+      },
+      "coverage_check": {
+        "spacing": 0.25,
+        "source_covered_samples": 246341,
+        "lost_samples": 0,
+        "topology_fallback": false
+      },
+      "browser_checks": [
+        "native CCM resource renders",
+        "mouse rotation changes image",
+        "reset view",
+        "top view",
+        "no WebGL error"
+      ],
+      "scope": "Existing core footprint retained; lossless regrouping and duplicate cleanup only."
+    },
+    {
+      "map": "palaistra",
+      "name": "角力学校",
+      "before": {
+        "map": "palaistra",
+        "name": "角力学校",
+        "triangles": 77378,
+        "vertices": 144993,
+        "compressed_bytes": 1089886,
+        "sha256": "7bc80e01efb394a4a2bb9a8d825e6035e1772d1a1f693d929f61c9e2ea4bc72a"
+      },
+      "after": {
+        "map": "palaistra",
+        "name": "角力学校",
+        "triangles": 76963,
+        "vertices": 117183,
+        "compressed_bytes": 927832,
+        "sha256": "cd2745e27ceb31ca9f2b2010d6399cd68b93520389e0600f78ca591c2144590d"
+      },
+      "source_sha256": {
+        "BgPart_0000-0024.glb": "f14df6f5db20e13a56777e192522ce80815019487cbcc657c4ceb1dbdd27d770",
+        "BgPart_0024-0032.glb": "61b5dfaa0b50fa54d1fa75f99d47d9750782a22b857f6328cc8402d827b85c8b",
+        "SharedGroup_0000-0004.glb": "67207b9e94f61cede03305fd886e89dbb0851d7247d95c8852008ae8dfb7c54b",
+        "Terrain_0000-0001.glb": "2b8eb0cca31e6414d07bc6f85cc589108efe75c3a8bfc980cd80766c7f1507a2"
+      },
+      "coverage_check": {
+        "spacing": 0.25,
+        "source_covered_samples": 166285,
+        "lost_samples": 0,
+        "topology_fallback": false
+      },
+      "browser_checks": [
+        "native CCM resource renders",
+        "mouse rotation changes image",
+        "reset view",
+        "top view",
+        "no WebGL error"
+      ],
+      "scope": "Existing core footprint retained; lossless regrouping and duplicate cleanup only."
+    },
+    {
+      "map": "red-sands",
+      "name": "赤土红沙",
+      "before": {
+        "map": "red-sands",
+        "name": "赤土红沙",
+        "triangles": 238519,
+        "vertices": 515817,
+        "compressed_bytes": 4292571,
+        "sha256": "0a45bda9e322272e525902d62326d08b44b09e3c2c02bd49fc0fe1d36011af6c"
+      },
+      "after": {
+        "map": "red-sands",
+        "name": "赤土红沙",
+        "triangles": 476240,
+        "vertices": 701414,
+        "compressed_bytes": 6650026,
+        "sha256": "dead355e13f162ec946a8557a8a4bcd857b156401a396a0497f9691537b49b5b"
+      },
+      "source_sha256": {
+        "BgPart_0000-0048.glb": "b33877a78d6166953e738388b8139bf027724c05b9958c14346fe9f1f25d4f33",
+        "BgPart_0048-0077.glb": "896fcca38627c3dfdbc07ae60fefbb9adbdad416d4240192e1aee5a16f9a9ab6",
+        "SharedGroup_0000-0004.glb": "4733bb646de5812c7cd6f40db0a2a529649b0dfbad29d45a985f551080e0f875",
+        "Terrain_0000-0000.glb": "caf39b6f8d316d300042523655a1a1660b012a3e8ed1e2e3bde71d7ddd25b463"
+      },
+      "coverage_check": {
+        "spacing": 0.25,
+        "source_covered_samples": 576393,
+        "lost_samples": 0,
+        "topology_fallback": false
+      },
+      "browser_checks": [
+        "native CCM resource renders",
+        "mouse rotation changes image",
+        "reset view",
+        "top view",
+        "no WebGL error"
+      ],
+      "scope": "Restore original canyon walls, slopes and arena edge surfaces with outer-margin clipping; area/extent-validated lossless operations only. Fog and tiny props excluded."
+    },
+    {
+      "map": "volcanic-heart",
+      "name": "火山之心",
+      "before": {
+        "map": "volcanic-heart",
+        "name": "火山之心",
+        "triangles": 162239,
+        "vertices": 279407,
+        "compressed_bytes": 2083103,
+        "sha256": "e7d0badfae30bd0256bf3cd0b90e4d5c1adeae7604984640c4893fe1563ce959"
+      },
+      "after": {
+        "map": "volcanic-heart",
+        "name": "火山之心",
+        "triangles": 161691,
+        "vertices": 209074,
+        "compressed_bytes": 1704084,
+        "sha256": "57520ca6564cecd541595c73de87757459b604e92b959783c2aee916db3012ef"
+      },
+      "source_sha256": {
+        "BgPart_0000-0011.glb": "f4335ae289ee7d06d88c192f9ba056f17e9d3fd27dc2e610fb044ee36ae92fdd",
+        "BgPart_0011-0039.glb": "fd3c386587cf38a8639aec1c2fd0c6e4e4071ea8c62ecf335a4be35da730cc0d",
+        "BgPart_0039-0072.glb": "68590bed7795ba7c77f3d779965fdec1005fd79e73de8e9b1a17198029635640",
+        "SharedGroup_0000-0004.glb": "19fa0ced0bca3d94b2afb8fae5a3ff7b6985d590ef4d6cb153e80921cfb199c3",
+        "Terrain_0000-0001.glb": "cf0c919275b7bd7895973749eadc4a9c34d3fb3cd5f132594558bcfd75e0809a"
+      },
+      "coverage_check": {
+        "spacing": 0.25,
+        "source_covered_samples": 143064,
+        "lost_samples": 0,
+        "topology_fallback": false
+      },
+      "browser_checks": [
+        "native CCM resource renders",
+        "mouse rotation changes image",
+        "reset view",
+        "top view",
+        "no WebGL error"
+      ],
+      "scope": "Existing core footprint retained; lossless regrouping and duplicate cleanup only."
+    }
+  ],
+  "limitations": "Display geometry only. Raster coverage check applies to the final optimization input, not verified game collision/navmesh. FPS has not been measured in-game."
+}

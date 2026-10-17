@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.3：重写 LB 召唤物识别和显示；修复主人信息缺失时漏记技能、固定 NPC ID 限制和波纹高度。支持从已记录召唤落点生成持续时间估计占位符，并恢复可用的旧效果记录。",
+  "Changelog": "1.0.4：复查七张地图，恢复赤土红沙峡谷岩壁及核心连接结构，补回海岸斗场核心地形；其余地图清理重复几何和顶点，保留主要地面、通道、掩体和高差。",
   "Tags": [
     "pvp",
     "crystalline conflict",

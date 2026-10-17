@@ -21,12 +21,14 @@ internal static class Replay3DChecks {
         b.Y=null;check(ReplayInterpolation.Sample(data,middle)!.Players[0].Y==a.Y,"missing future height does not fabricate a vertical path");b.Y=3;
         data.Frames[1].Timestamp=start.AddSeconds(10);check(ReferenceEquals(ReplayInterpolation.Sample(data,middle),data.Frames[0]),"3D playback preserves recording gaps");
         check(Marshal.SizeOf<ReplayVertex>()==16,"GPU vertex layout matches HLSL position/color input stride");
-        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,77378),(1033,1059,162239),(1034,1060,125762),(1116,1117,184223),(1138,1139,238519),(1293,1294,286988),(1357,1358,204624) };
+        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,76963),(1033,1059,161691),(1034,1060,125504),(1116,1117,182418),(1138,1139,476240),(1293,1294,279142),(1357,1358,204054) };
         foreach(var p in pairs) {
             check(ReplayMapMesh.MapKey(p.Normal)==ReplayMapMesh.MapKey(p.Custom),"normal and custom territory select the same exported arena: "+p.Normal);
             var mesh=ReplayMapMesh.LoadEmbedded(p.Normal);
             check(mesh.Indices.Length/3==p.Faces&&mesh.Vertices.Length>3,"packaged simplified map decodes completely: "+p.Normal);
             check(mesh.Min.X<mesh.Max.X&&mesh.Min.Z<mesh.Max.Z,"packaged arena has usable camera bounds: "+p.Normal);
+            if(p.Normal==1138)check(mesh.Min.Y<-15&&mesh.Max.Y>9,"Red Sands retains source canyon walls below the old -8 cutoff and rocks above the old 9 cutoff");
+            if(p.Normal==1293)check(mesh.EstimatedHeight(70,100)<-7&&mesh.EstimatedHeight(70,100)>-13,"Bayside retains the source sand surface between the platforms, instead of an unobserved floor gap");
             if(p.Normal is 1293 or 1357)check(mesh.Max.X>150&&mesh.Max.Z>150,"offset arena retains game world coordinates: "+p.Normal);
         }
         check(ReplayMapMesh.MapKey(0)==null,"unsupported territories do not silently select the wrong map");
