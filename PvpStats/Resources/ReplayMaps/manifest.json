@@ -2,57 +2,149 @@
   {
     "map": "bayside",
     "name": "海岸斗场",
-    "triangles": 279142,
-    "vertices": 424993,
-    "compressed_bytes": 3430048,
-    "sha256": "a4122e90c2f21648ade725bb5a2509e659e607edaa00fb2e92748024c491d14e"
+    "triangles": 263786,
+    "vertices": 400129,
+    "compressed_bytes": 3644416,
+    "sha256": "e319a5076153c60414f31e0d46faed6b1e4b033a52f6fa4b1b1b8fea476d052c",
+    "walk_cells": 64139,
+    "walk_cells_removed": 83210,
+    "walk_gap_cells": 3,
+    "walk_bytes": 213649,
+    "walk_sha256": "75497fdb2066d886746cb6544bd270d06f80f6d6cb62447bf3a561ef4943e997",
+    "filled_holes": []
   },
   {
     "map": "castletown",
     "name": "机关大殿",
-    "triangles": 182418,
-    "vertices": 245921,
-    "compressed_bytes": 1995739,
-    "sha256": "7ac8ff976f7c25b8a282a4de3b7cdbb0cac8988197cd1d4e6676790324208fb0"
+    "triangles": 159538,
+    "vertices": 244754,
+    "compressed_bytes": 2083428,
+    "sha256": "90cd7a6faec81721f9e9001d213d562c46ac53a787714d97f06cbdf80e87d3e5",
+    "walk_cells": 31100,
+    "walk_cells_removed": 24234,
+    "walk_gap_cells": 12,
+    "walk_bytes": 63760,
+    "walk_sha256": "d6b3e9e749801d58e65888190ec7a99dd5fdd7c20689cb1e1625e478ed1a426a",
+    "filled_holes": [
+      {
+        "centre": [
+          -43.6,
+          -14.19
+        ],
+        "area": 51.75,
+        "height": -1.03
+      },
+      {
+        "centre": [
+          -47.75,
+          -15.75
+        ],
+        "area": 2.75,
+        "height": -1.03
+      },
+      {
+        "centre": [
+          17.36,
+          -12.52
+        ],
+        "area": 40.25,
+        "height": -1.03
+      },
+      {
+        "centre": [
+          -17.26,
+          12.35
+        ],
+        "area": 42.0,
+        "height": -1.03
+      },
+      {
+        "centre": [
+          42.89,
+          13.47
+        ],
+        "area": 59.75,
+        "height": -1.03
+      }
+    ]
   },
   {
     "map": "cloud-nine",
     "name": "九霄云上",
-    "triangles": 125504,
-    "vertices": 199871,
-    "compressed_bytes": 1861892,
-    "sha256": "4c11664fabe318b0c9c51de09edf318c4e71b1e3f1522693c7edd7503bb39cea"
+    "triangles": 122926,
+    "vertices": 188594,
+    "compressed_bytes": 2086808,
+    "sha256": "63e738efae36580c12518249135d2837c2b1ad6f46a4bd19d58c96cc2834f5f0",
+    "walk_cells": 19980,
+    "walk_cells_removed": 13399,
+    "walk_gap_cells": 234,
+    "walk_bytes": 62101,
+    "walk_sha256": "378d246e665aa8a526eb86e80187c0c0bfd5b981dab40392eb1ab71aba15e5a9",
+    "filled_holes": [
+      {
+        "centre": [
+          0.25,
+          -16.75
+        ],
+        "area": 1.75,
+        "height": 0.36
+      }
+    ]
   },
   {
     "map": "harmonias",
     "name": "休兵书库",
-    "triangles": 204054,
-    "vertices": 311903,
-    "compressed_bytes": 2480725,
-    "sha256": "1849deb58df31a5b113e5d817a23c047afba142a7e7ec743941ac1955355e0c1"
+    "triangles": 194590,
+    "vertices": 282542,
+    "compressed_bytes": 2622991,
+    "sha256": "e717ddf31c5e9cd9d361a2420e52939bec7efb4876771a2079a3740d3b9c0b41",
+    "walk_cells": 91264,
+    "walk_cells_removed": 21797,
+    "walk_gap_cells": 91,
+    "walk_bytes": 98449,
+    "walk_sha256": "d5e4384d55b2d1c12bcc00f5c5a8fed7191c8c20a891394e8b990aeda63bf238",
+    "filled_holes": []
   },
   {
     "map": "palaistra",
     "name": "角力学校",
-    "triangles": 76963,
-    "vertices": 117183,
-    "compressed_bytes": 927832,
-    "sha256": "cd2745e27ceb31ca9f2b2010d6399cd68b93520389e0600f78ca591c2144590d"
+    "triangles": 68600,
+    "vertices": 105300,
+    "compressed_bytes": 936336,
+    "sha256": "5b02e60083bbf613830000e3573d410c4d9c12790f58fcf084027c9ab77a7c57",
+    "walk_cells": 28831,
+    "walk_cells_removed": 17080,
+    "walk_gap_cells": 239,
+    "walk_bytes": 25222,
+    "walk_sha256": "7c53947eb305ac6b18e2c400b780518ff5c8ad21ce57658fc7ec18db1792b82d",
+    "filled_holes": []
   },
   {
     "map": "red-sands",
     "name": "赤土红沙",
-    "triangles": 483216,
-    "vertices": 704843,
-    "compressed_bytes": 6683609,
-    "sha256": "404c10857e2b2dd6fb3e87c22167993a8aa4aea8672f279af0da2401dea4fabd"
+    "triangles": 459062,
+    "vertices": 592708,
+    "compressed_bytes": 6900122,
+    "sha256": "17807fc5c21fb8bf0fc8be7c6240b084210afafa6d6572a4f2ba2e760b4bcb03",
+    "walk_cells": 89767,
+    "walk_cells_removed": 176725,
+    "walk_gap_cells": 20,
+    "walk_bytes": 180205,
+    "walk_sha256": "0ffe549ace1ca006b481ed7ef39d90a6f0d7ae91ecb7b09a614cdfc767f2cef8",
+    "filled_holes": []
   },
   {
     "map": "volcanic-heart",
     "name": "火山之心",
-    "triangles": 161691,
-    "vertices": 209074,
-    "compressed_bytes": 1704084,
-    "sha256": "57520ca6564cecd541595c73de87757459b604e92b959783c2aee916db3012ef"
+    "triangles": 139871,
+    "vertices": 190263,
+    "compressed_bytes": 1728140,
+    "sha256": "b5c0219e4ead651f727cf4df3fb209ca3977f4d37fbce28c5816bc517729c95b",
+    "walk_cells": 22455,
+    "walk_cells_removed": 15649,
+    "walk_gap_cells": 617,
+    "walk_bytes": 30764,
+    "walk_sha256": "fb603f709a3c2a8e62202cdb3183788df33cd5262f5bae81ebf1f9c126ab1ee4",
+    "filled_holes": []
   }
 ]

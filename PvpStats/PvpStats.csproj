@@ -34,6 +34,7 @@
 	<ItemGroup>
 		<Reference Include="TerraFX.Interop.Windows" Private="false" />
 		<EmbeddedResource Include="Resources/ReplayMaps/*.ccmap.gz" />
+		<EmbeddedResource Include="Resources/ReplayMaps/*.ccwalk.gz" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
 		<PackageReference Include="LiteDB" Version="5.0.16" />
 	</ItemGroup>

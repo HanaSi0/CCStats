@@ -13,6 +13,7 @@ using PvpStats.Types.Player;
 namespace PvpStats.Windows.Replay;
 internal sealed partial class MatchReplayWindow {
     private readonly Dictionary<uint,Job?> _replayJobs=new();
+    private Lazy<ReplayArenaMask?>? _arenaMask2D;
     private Job? ReplayJob(PlayerPosition sample) {
         if(sample.ClassJobId>0) {
             if(!_replayJobs.TryGetValue(sample.ClassJobId,out var job)) {
@@ -139,9 +140,12 @@ internal sealed partial class MatchReplayWindow {
     }
     private void DrawMechanics(ImDrawListPtr draw,Func<Vector2,Vector2> at,Vector2 origin,float side,DateTime now,float scale,bool hovered) {
         var geometry=new ReplaySceneGeometry();
+        // Same standable-floor footprint as the 3D view; the small grid is loaded once per window.
+        _arenaMask2D??=new(()=>_mesh?.ArenaMask??ReplayArenaMask.FromWalk(ReplayMapMesh.LoadEmbeddedWalk(_match.TerritoryId)));
+        var mask=_clipAreas?_arenaMask2D.Value:null;
         foreach(var visual in MapMechanicVisuals.Active(_data.MapMechanics,_match.TerritoryId,now)) {
-            MapMechanicVisuals.Draw(geometry,visual,now,(_,_)=>0);
-            if(geometry.Vertices.Length>12000)break;
+            using(geometry.ClipTo(mask,(visual.Rule.Ground?visual.Event.TargetY:visual.Event.Y)??visual.Center.Y))MapMechanicVisuals.Draw(geometry,visual,now,(_,_)=>0);
+            if(geometry.Vertices.Length>30_000)break;
         }
         var vertices=geometry.Vertices;
         Vector2 Point(Vector3 p)=>at(Uv(new PlayerPosition { X=p.X,Z=p.Z }));

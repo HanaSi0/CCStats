@@ -31,7 +31,29 @@ internal static class ReplayAreaClipChecks {
             check(arena!=null&&arena.CoveredCells>1000,"each exported arena builds a usable cached display footprint: "+territory);
             check(arena!=null&&!arena.Contains(mesh.Max.X+5,mesh.Max.Z+5),"effects outside arena bounds are excluded: "+territory);
         }
+        foreach(uint territory in new uint[]{1032,1033,1034,1116,1138,1293,1357})
+            check(ReplayMapMesh.LoadEmbedded(territory).ArenaMask is {Layered:true},"official-silhouette walk grid drives the footprint: "+territory);
+        // Layered floors: the event elevation picks the floor, so a bridge footprint stays on the bridge.
+        var layers=new ReplayWalkGrid(3,3,Vector2.Zero,ReplayArenaMask.Cell,Enumerable.Repeat((byte)2,9).ToArray(),Enumerable.Range(0,9).SelectMany(_=>new[]{0f,5f}).ToArray());
+        var layered=ReplayArenaMask.FromWalk(layers)!;var bridge=new ReplaySceneGeometry();
+        using(bridge.ClipTo(layered,4.6f))bridge.Triangle(new(.2f,9,.2f),new(1.3f,9,.2f),new(.2f,9,1.3f),0x88ffffff);
+        check(bridge.Vertices.Length>0&&bridge.Vertices.ToArray().All(v=>Math.Abs(v.Position.Y-5.24f)<.001f),"footprint on a bridge uses the bridge layer, not the ground or a draped height");
+        bridge.Clear();using(bridge.ClipTo(layered,.3f))bridge.Triangle(new(.2f,9,.2f),new(1.3f,9,.2f),new(.2f,9,1.3f),0x88ffffff);
+        check(bridge.Vertices.ToArray().All(v=>Math.Abs(v.Position.Y-.24f)<.001f),"footprint under a bridge uses the lower floor");
+        // A cell whose only floor is far below the effect (sand under a platform edge) must not pull a strip down.
+        var edge=new ReplayWalkGrid(2,1,Vector2.Zero,ReplayArenaMask.Cell,new byte[]{1,1},new[]{0f,-5f});
+        var edgeMask=ReplayArenaMask.FromWalk(edge)!;var strip=new ReplaySceneGeometry();
+        using(strip.ClipTo(edgeMask,0))strip.Triangle(new(.05f,0,.05f),new(.95f,0,.05f),new(.05f,0,.45f),0x88ffffff);
+        check(strip.Vertices.Length>0&&strip.Vertices.ToArray().All(v=>v.Position.X<=.5001f&&Math.Abs(v.Position.Y-.24f)<.001f),"floors on another level are dropped instead of stretching the footprint down to them");
         var red=ReplayMapMesh.LoadEmbedded(1138).ArenaMask!;
+        // Dunes behind the east plaza wall: inside the old height band, outside the official arena.
+        check(!red.Contains(40,-20)&&!red.Contains(42,-20),"Red Sands dunes behind the plaza wall are excluded");
+        var bay=ReplayMapMesh.LoadEmbedded(1293).ArenaMask!;
+        check(!bay.Contains(70,100)&&bay.Contains(100,100),"Bayside sand under the platforms is excluded while the central platform stays");
+        var plaza=new ReplaySceneGeometry();var shield=LimitBreakVisuals.Rules.First(r=>r.ActionId==41502&&r.Shape==LbShape.Circle);
+        var plazaAt=new Vector3(60,ReplayMapMesh.LoadEmbedded(1138).EstimatedHeight(60,0),0);
+        using(plaza.ClipTo(red,plazaAt.Y))LimitBreakVisuals.Draw(plaza,shield with {Size=22},plazaAt,0,plazaAt,(_,_)=>8);
+        check(plaza.Vertices.Length>0&&plaza.Vertices.ToArray().All(v=>v.Position.Y<plazaAt.Y+1.2f),"plaza footprint stays on the plaza floor instead of rising onto its walls");
         check(red.Contains(-60,0)&&red.Contains(60,0)&&red.Contains(0,0),"clipping retains both repaired circular floors and central crystal lane");
         check(!red.Contains(0,80),"Red Sands distant canyon floor does not become a playable effect surface");
         var geometry=new ReplaySceneGeometry();var rule=LimitBreakVisuals.Rules.First(r=>r.ActionId==41502&&r.Shape==LbShape.Circle);
