@@ -201,7 +201,7 @@ internal sealed partial class MatchReplayWindow : Window {
                 var payload=new { MatchId=_match.Id.ToString(), _match.TerritoryId, StartUtc=_origin, _match.MatchEndTime, Telemetry=_data,
                     Knockouts=_timeline.Kills?.Select(k=>new { k.Timestamp,Victim=k.Victim.ToString(),Killer=k.CreditedKiller?.ToString() }),
                     CrystalProgress=_timeline.CrystalPosition, MapEvents=_timeline.MapEvents,
-                    SceneProbe=_scene3D==null?null:new { _scene3D.Status,_scene3D.Models,_scene3D.MissingModels,_scene3D.TerrainPlates,_scene3D.Limited,TriangleCount=_scene3D.Triangles.Count,_scene3D.AssetPaths } };
+                    SceneProbe=_scene3D==null?null:new { _scene3D.Status,_scene3D.Models,_scene3D.MissingModels,_scene3D.TerrainPlates,_scene3D.Limited,TriangleCount=_scene3D.Triangles.Count,_scene3D.AssetPaths,_scene3D.ModelDiagnostics } };
                 Directory.CreateDirectory(Path.GetDirectoryName(path)!);
                 await File.WriteAllTextAsync(path,JsonSerializer.Serialize(payload,new JsonSerializerOptions { WriteIndented=true }));
                 _exportStatus="已导出："+path;

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Numerics;
 namespace PvpStats.Analysis;
 public readonly record struct SceneTriangle(Vector3 A,Vector3 B,Vector3 C,Vector4 Color);
+public sealed record ReplayModelDiagnostic(string Asset,int Triangles,float MinX,float MinY,float MinZ,float MaxX,float MaxY,float MaxZ,float[] Transform);
 public sealed class ReplayScene3D {
     public List<SceneTriangle> Triangles { get; } = new();
+    public List<ReplayModelDiagnostic> ModelDiagnostics { get; } = new();
     public List<string> AssetPaths { get; } = new();
     public int Models { get; set; }
     public int TerrainPlates { get; set; }

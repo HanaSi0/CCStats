@@ -69,6 +69,7 @@ internal class WindowManager : IDisposable {
 
     public void Dispose() {
         _uiWork.Dispose();
+        foreach(var batch in WindowSystem.Windows.OfType<PvpStats.Windows.Replay.MapProbeBatchWindow>())batch.Cancel();
         WindowSystem.RemoveAllWindows();
         _plugin.PluginInterface.UiBuilder.Draw -= DrawUI;
         _plugin.PluginInterface.UiBuilder.OpenConfigUi -= OpenConfigWindow;
@@ -105,6 +106,11 @@ internal class WindowManager : IDisposable {
         var existing=WindowSystem.Windows.FirstOrDefault(w=>w.WindowName==PvpStats.Windows.Replay.MapProbeWindow.Title);
         if(existing!=null) { existing.IsOpen=true;existing.BringToFront();return; }
         AddWindow(new PvpStats.Windows.Replay.MapProbeWindow(_plugin));
+    }
+    internal void OpenMapProbeBatch(PvpStats.Windows.Replay.MapProbeWindow source) {
+        var existing=WindowSystem.Windows.FirstOrDefault(w=>w.WindowName==PvpStats.Windows.Replay.MapProbeBatchWindow.Title);
+        if(existing!=null) { existing.IsOpen=true;existing.BringToFront();return; }
+        AddWindow(new PvpStats.Windows.Replay.MapProbeBatchWindow(_plugin,source));
     }
     internal void OpenProbeSnapshot(CrystallineConflictMatch match,PvpStats.Types.Match.Timeline.CrystallineConflictMatchTimeline timeline,float? referenceRadius) {
         foreach(var previous in WindowSystem.Windows.Where(w=>w.WindowName=="3D 地图试验###CCLiveMapScene").ToArray()) {

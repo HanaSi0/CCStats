@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "0.2.9：加入试验性 3D 回放和地图试验入口；支持棋子、水晶菱形、XYZ 采样及护送圈人工边缘测量。",
+  "Changelog": "0.2.10：Hyperborea 地图试验支持目标地图、手动圈中心；新增独立批量采集进度窗口与校验 ZIP 导出。",
   "Tags": [
     "pvp",
     "statistics"

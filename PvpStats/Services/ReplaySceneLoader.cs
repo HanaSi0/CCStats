@@ -18,7 +18,8 @@ internal sealed class ReplaySceneLoader {
     private readonly HashSet<string> _pathStack=new(StringComparer.OrdinalIgnoreCase);
     private readonly Vector2 _min,_max;
     private int _nodes;
-    internal ReplaySceneLoader(Plugin plugin,Vector2 min,Vector2 max,CancellationToken cancel) { _plugin=plugin;_min=min-new Vector2(25);_max=max+new Vector2(25);_cancel=cancel; }
+    private readonly Action<string>? _progress;
+    internal ReplaySceneLoader(Plugin plugin,Vector2 min,Vector2 max,CancellationToken cancel,Action<string>? progress=null) { _progress=progress;_plugin=plugin;_min=min-new Vector2(25);_max=max+new Vector2(25);_cancel=cancel; }
     internal ReplayScene3D Load(string background) {
         var path=background.Replace('\\','/').Trim('/');
         if(!path.StartsWith("bg/",StringComparison.OrdinalIgnoreCase))path="bg/"+path;
@@ -83,7 +84,8 @@ internal sealed class ReplaySceneLoader {
                 }
             } catch { _scene.MissingModels++;return; }
         }
-        bool added=false;
+        bool added=false;var countBefore=_scene.Triangles.Count;
+        var worldMin=new Vector3(float.PositiveInfinity);var worldMax=new Vector3(float.NegativeInfinity);
         foreach(var tri in source) {
             if(_scene.Triangles.Count>=12000) { _scene.Limited=true;break; }
             var a=Vector3.Transform(tri.A,transform);var b=Vector3.Transform(tri.B,transform);var c=Vector3.Transform(tri.C,transform);
@@ -91,8 +93,11 @@ internal sealed class ReplaySceneLoader {
             var min=Vector3.Min(a,Vector3.Min(b,c));var max=Vector3.Max(a,Vector3.Max(b,c));
             if(max.X<_min.X||min.X>_max.X||max.Z<_min.Y||min.Z>_max.Y)continue;
             if(Vector3.Cross(b-a,c-a).LengthSquared()<.000001f)continue;
-            _scene.Triangles.Add(new(a,b,c,tri.Color));added=true;
+            _scene.Triangles.Add(new(a,b,c,tri.Color));added=true;worldMin=Vector3.Min(worldMin,min);worldMax=Vector3.Max(worldMax,max);
         }
-        if(added)_scene.Models++;
+        if(added) {
+            if(_scene.ModelDiagnostics.Count<256)_scene.ModelDiagnostics.Add(new(path,_scene.Triangles.Count-countBefore,worldMin.X,worldMin.Y,worldMin.Z,worldMax.X,worldMax.Y,worldMax.Z,
+                new[]{transform.M11,transform.M12,transform.M13,transform.M14,transform.M21,transform.M22,transform.M23,transform.M24,transform.M31,transform.M32,transform.M33,transform.M34,transform.M41,transform.M42,transform.M43,transform.M44}));
+            _scene.Models++;_progress?.Invoke($"已读取 {_scene.Models} 个模型，{_scene.Triangles.Count:N0} 个三角面"); }
     }
 }

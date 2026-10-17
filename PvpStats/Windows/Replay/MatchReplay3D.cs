@@ -141,6 +141,7 @@ internal sealed partial class MatchReplayWindow {
             }
             var status=_scene3D?.Status??"正在读取本机地图模型…";
             draw.AddText(origin+new Vector2(8*scale),ImGui.GetColorU32(ModernTheme.Gold),"试验 · "+status);
+            if(_data.CrystalReferenceLabel.Length>0)draw.AddText(origin+new Vector2(8,72)*scale,ImGui.GetColorU32(ModernTheme.Gold),_data.CrystalReferenceLabel);
             if(_data.Version<5)draw.AddText(origin+new Vector2(8,20)*scale,ImGui.GetColorU32(ModernTheme.Gold),"旧记录缺少高度：高度为地图表面推定");
             if(_scene3D?.Limited==true||_scene3D?.MissingModels>0)draw.AddText(origin+new Vector2(8,52)*scale,ImGui.GetColorU32(ModernTheme.Gold),"地图几何可能不完整（资源缺失或达到显示预算）");
         } finally { draw.PopClipRect(); }
