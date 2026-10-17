@@ -124,7 +124,6 @@ internal sealed partial class MatchReplayWindow {
                 var job=ReplayJob(player);var scale=ImGuiHelpers.GlobalScale;var half=new Vector2(9*scale);
                 var anchor=at;at=ReplayLabelLayout.Place(anchor,player.Team,12*scale,origin,origin+size,badgePositions);
                 var teamColor=player.Team==1?new Vector4(.2f,.8f,1,1):new Vector4(1,.25f,.32f,1);
-                draw.AddLine(anchor,at,ImGui.GetColorU32(new Vector4(teamColor.X,teamColor.Y,teamColor.Z,.75f)),1.5f*scale);
                 if(job is {} known&&TextureHelper.JobIcons.TryGetValue(known,out var icon)) {
                     draw.AddRectFilled(at-half-new Vector2(3*scale),at+half+new Vector2(3*scale),ImGui.GetColorU32(new Vector4(.015f,.025f,.04f,.97f)),4*scale);
                     draw.AddRect(at-half-new Vector2(3*scale),at+half+new Vector2(3*scale),ImGui.GetColorU32(teamColor),4*scale,ImDrawFlags.None,2*scale);
