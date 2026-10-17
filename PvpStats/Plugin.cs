@@ -205,7 +205,28 @@ public sealed class Plugin : IDalamudPlugin {
     }
 
     private void OnCCCommand(string command, string args) {
+        if(args.Trim().Equals("exportmaps", StringComparison.OrdinalIgnoreCase)) { ExportArenaMaps(); return; }
         WindowManager.OpenCCWindow();
+    }
+
+    // Writes the raw area-map textures (ui/map/<id>_m.tex) of the seven arenas for offline map checks.
+    private void ExportArenaMaps() {
+        var folder = Path.Combine(PluginInterface.GetPluginConfigDirectory(), "arena-maps");
+        Directory.CreateDirectory(folder);
+        int written = 0;
+        foreach(var territory in new uint[] { 1032, 1033, 1034, 1116, 1138, 1293, 1357 }) {
+            try {
+                var map = DataManager.GetExcelSheet<Lumina.Excel.Sheets.TerritoryType>().GetRow(territory).Map.Value;
+                var id = map.Id.ToString();
+                if(id.Length == 0) continue;
+                var path = $"ui/map/{id}/{id.Replace("/", "")}_m.tex";
+                var file = DataManager.GetFile(path);
+                if(file == null) { Log.Warning($"Arena map not found: {path}"); continue; }
+                File.WriteAllBytes(Path.Combine(folder, $"{territory}_{id.Replace("/", "_")}_sf{map.SizeFactor}_x{map.OffsetX}_y{map.OffsetY}_m.tex"), file.Data);
+                written++;
+            } catch(Exception e) { Log.Warning(e, $"Arena map export failed for territory {territory}"); }
+        }
+        ChatGui.Print($"[CCStats] 已导出 {written}/7 张竞技场地图：{folder}");
     }
 
     private void OnConfigCommand(string command, string args) {
