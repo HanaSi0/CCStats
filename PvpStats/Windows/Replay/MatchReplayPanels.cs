@@ -74,6 +74,10 @@ internal sealed partial class MatchReplayWindow {
         if(!_showReplayLog)return;
         using var log=ImRaii.Child("ReplayLog",new Vector2(0,Math.Max(1,height)),true);
         if(!log)return;
+        var summonEvents=_lbEvents??_data.ReplaySkills;
+        var summons=ReplaySummons.Resolve(_data.SummonFrames,summonEvents,now);
+        ImGui.TextDisabled($"召唤记录：{_data.SummonFrames.Count} 组采样 · {summonEvents.Count(e=>ReplaySummons.IsPetAction(e.ActionId))} 个效果 · 当前 {summons.Summons.Count} 个（估计 {summons.Summons.Count(p=>p.Estimated)}）");
+        if(_data.SummonsTruncated)ImGui.TextColored(ModernTheme.Gold,"召唤物记录达到容量上限。");
         if(_data.MapMechanicsTruncated)ImGui.TextColored(ModernTheme.Gold,"环境事件达到记录上限。");
         using var columns=ImRaii.Table("ReplayLogColumns",2,ImGuiTableFlags.SizingStretchSame);
         if(!columns)return;

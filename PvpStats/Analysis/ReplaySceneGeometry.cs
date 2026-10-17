@@ -16,6 +16,17 @@ public sealed class ReplaySceneGeometry {
         right=Vector3.Normalize(right)*width/2;a.Y+=.06f;b.Y+=.06f;
         Triangle(a-right,a+right,b+right,color);Triangle(a-right,b+right,b-right,color);
     }
+    public void Beam(Vector3 a,Vector3 b,float width,uint color) {
+        var axis=b-a;if(axis.LengthSquared()<.00001f)return;
+        axis=Vector3.Normalize(axis);
+        var right=Vector3.Cross(axis,Vector3.UnitY);
+        if(right.LengthSquared()<.00001f)right=Vector3.Cross(axis,Vector3.UnitZ);
+        right=Vector3.Normalize(right)*width/2;
+        var other=Vector3.Normalize(Vector3.Cross(axis,right))*width/2;
+        foreach(var side in new[]{right,other}) {
+            Triangle(a-side,a+side,b+side,color);Triangle(a-side,b+side,b-side,color);
+        }
+    }
     public void Ring(Vector3 center,float radius,float width,uint color) {
         for(int i=0;i<64;i++) {
             float a=i*MathF.Tau/64,b=(i+1)*MathF.Tau/64;

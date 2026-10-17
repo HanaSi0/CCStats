@@ -232,6 +232,7 @@ internal sealed partial class MatchReplayWindow {
                 }
                 _lbEvents.Add(e);
             }
+            ReplaySummons.RecoverEffects(_data,_lbEvents);
             _lbEvents.Sort((a,b)=>a.Timestamp.CompareTo(b.Timestamp));
         }
         foreach(var (e,rule) in LimitBreakVisuals.Active(_lbEvents,frame,now).OrderByDescending(x=>x.Rule.Benefit)) {
@@ -251,7 +252,7 @@ internal sealed partial class MatchReplayWindow {
             LimitBreakVisuals.Draw(_lbOverlay,LimitBreakVisuals.ClientDimensions(rule,e),at,e.Heading,source,(x,z)=>(_mesh?.EstimatedHeight(x,z)??0)+terrainOffset,opacity,LimitBreakVisuals.Reveal(e,now));
             if(_lbOverlay.Vertices.Length>48000)break;
         }
-        ReplaySummons.Draw(_lbOverlay,ReplaySummons.At(_data.SummonFrames,now),_lbEvents,frame,now,(x,y,z)=>Height(x,y,z));
+        ReplaySummons.Draw(_lbOverlay,ReplaySummons.Resolve(_data.SummonFrames,_lbEvents,now),_lbEvents,frame,now,(x,y,z)=>_mesh?.EstimatedHeight(x,z)??y);
         AddGuardBubbles(frame,now);
     }
     private void AddGuardBubbles(MovementFrame? frame,DateTime now) {

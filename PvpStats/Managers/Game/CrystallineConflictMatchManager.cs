@@ -310,6 +310,13 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             bool isPet = false;
 
             var actor = _plugin.ObjectTable.SearchByEntityId(casterEntityId);
+            // Capture replay packets before analytics/owner remapping can reject an unowned pet.
+            try {
+                var replayOwner=actor as IPlayerCharacter ?? _plugin.ObjectTable.SearchByEntityId(actor?.OwnerId??0) as IPlayerCharacter;
+                var replayAlias=replayOwner==null?"":replayOwner.Name+" "+replayOwner.HomeWorld.Value.Name.ToString();
+                RecordLBSkill(now,casterEntityId,replayAlias,targetPos,effectHeader,effectArray,effectTrail);
+            } catch(Exception captureError) { _plugin.Log.Debug(captureError,"LB replay packet capture unavailable."); }
+
             var spell = _plugin.DataManager.GetExcelSheet<Lumina.Excel.Sheets.Action>().GetRow(actionId);
             if(_plugin.DebugMode) {
                 Plugin.Log2.Debug($"{actor?.Name} cast {spell.Name} {actionId} targets: {targets} display: {effectHeader->ActionType} " +
@@ -517,7 +524,6 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
                 }
             }
 
-            if(actorAlias != null) RecordLBSkill(now,casterEntityId,actorAlias.ToString(),targetPos,effectHeader,effectArray,effectTrail);
 
             if(CombatHelper.IsLimitBreak(actionId) && actionEvent != null) {
                 if(!_plugin.DebugMode) {
@@ -964,7 +970,6 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             foreach(var p in objects) if(!_movementAliases.ContainsKey(p.EntityId))
                 _movementAliases[p.EntityId]=new PlayerAlias(p.Name.ToString(),_plugin.DataManager.GetExcelSheet<World>().GetRow(p.HomeWorld.RowId).Name.ToString()).ToString();
             var aliases=_movementAliases;
-            RecordSummons(now);
             var frame = new MovementFrame { Timestamp=now, CrystalProgress=director->CrystalPosition, AstraProgress=director->AstraProgress, UmbraProgress=director->UmbraProgress };
             // BNpcName 11350 is the game's "tactical crystal", independent of client language.
             var crystals=_plugin.ObjectTable.OfType<IBattleNpc>().Where(n=>n.NameId==11350 && float.IsFinite(n.Position.X)&&float.IsFinite(n.Position.Z)).ToArray();
@@ -1074,6 +1079,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
         }
 
         try { CaptureEnvironmentCasts(now); }catch(Exception e) { _plugin.Log.Debug(e,"Environment cast sample unavailable."); }
+        try { RecordSummons(now); }catch(Exception e) { _plugin.Log.Debug(e,"Summon object sample unavailable."); }
         CaptureMovement(now, director);
         if(_currentMatchTimeline != null) {
 

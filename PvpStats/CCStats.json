@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.2：LB 召唤物增加空中占位符、持续扩散的索敌范围波纹，以及紫色攻击／薄荷绿增益连线；按实际对象与效果包记录显示。",
+  "Changelog": "1.0.3：重写 LB 召唤物识别和显示；修复主人信息缺失时漏记技能、固定 NPC ID 限制和波纹高度。支持从已记录召唤落点生成持续时间估计占位符，并恢复可用的旧效果记录。",
   "Tags": [
     "pvp",
     "crystalline conflict",

@@ -11,18 +11,23 @@ namespace PvpStats.Managers.Game;
 internal partial class CrystallineConflictMatchManager {
     private DateTime _lastSummonSample;
     private void RecordSummons(DateTime now) {
-        var data=_currentMatchTimeline?.Detailed;if(data==null)return;
+        var data=_currentMatchTimeline?.Detailed;if(data==null||_scoreboardPayloadReceived||_currentMatch?.IsCompleted!=false)return;
         if((now-_lastSummonSample).TotalSeconds<.2)return;
         _lastSummonSample=now;
         lock(_detailedLock) {
             if(data.SummonFrames.Count>=8192||data.EstimatedBytes>=DetailedTelemetry.ByteBudget) { data.SummonsTruncated=true;return; }
             var sample=new ReplaySummonFrame {Timestamp=now};
-            foreach(var pet in _plugin.ObjectTable.OfType<IBattleNpc>().Where(p=>ReplaySummons.IsPetName(p.NameId)).Take(10)) {
+            var signals=data.ReplaySkills.Where(e=>ReplaySummons.IsPetAction(e.ActionId)&&e.SourceEntityId!=0&&e.Timestamp<=now&&e.Timestamp>=now.AddSeconds(-20))
+                .GroupBy(e=>e.SourceEntityId).ToDictionary(g=>g.Key,g=>g.Last());
+            foreach(var pet in _plugin.ObjectTable.OfType<IBattleChara>().Where(p=>p is not IPlayerCharacter)) {
+                if(sample.Summons.Count>=10)break;
+                var nameId=pet is IBattleNpc npc?npc.NameId:0;
+                signals.TryGetValue(pet.EntityId,out var signal);
+                if(!ReplaySummons.IsPetName(nameId)&&signal==null)continue;
                 if(!LimitBreakVisuals.Finite(pet.Position))continue;
-                if(_plugin.ObjectTable.SearchByEntityId(pet.OwnerId) is not IPlayerCharacter owner)continue;
-                var alias=owner.Name+" "+owner.HomeWorld.Value.Name.ToString();
-                if(DetailedTeam(alias) is not (1 or 2))continue;
-                sample.Summons.Add(new() {EntityId=pet.EntityId,NameId=pet.NameId,Owner=alias,Phoenix=pet.NameId==8228,X=pet.Position.X,Y=pet.Position.Y,Z=pet.Position.Z});
+                var owner=_plugin.ObjectTable.SearchByEntityId(pet.OwnerId) as IPlayerCharacter;
+                var alias=owner==null?signal?.Actor??"":owner.Name+" "+owner.HomeWorld.Value.Name.ToString();
+                sample.Summons.Add(new() {EntityId=pet.EntityId,NameId=nameId,Owner=alias,Phoenix=signal!=null?ReplaySummons.IsPhoenixAction(signal.ActionId):nameId==8228,X=pet.Position.X,Y=pet.Position.Y,Z=pet.Position.Z});
             }
             if(sample.Summons.Count==0&&(data.SummonFrames.Count==0||data.SummonFrames[^1].Summons.Count==0))return;
             data.SummonFrames.Add(sample);data.EstimatedBytes+=80+sample.Summons.Count*160;
@@ -34,7 +39,7 @@ internal partial class CrystallineConflictMatchManager {
         var source=_plugin.ObjectTable.SearchByEntityId(sourceId) as IBattleChara;
         if(source==null||!LimitBreakVisuals.Finite(source.Position))return;
         var petAction=ReplaySummons.IsPetAction(header->SpellId);
-        if(petAction&&source is not IBattleNpc)return;
+        if(petAction&&source is IPlayerCharacter)return;
         var entry=new ReplaySkillEvent { Timestamp=now,ActionId=header->SpellId,Sequence=header->GlobalSequence,Variation=header->AnimationVariation,Actor=actor,
             PetSource=petAction,SourceEntityId=sourceId,X=source.Position.X,Y=source.Position.Y,Z=source.Position.Z,Heading=source.Rotation,Resolved=header->AnimationVariation!=0 };
         // Ground coordinates are meaningful only for designated-location spells. PCT field is placed at the caster's feet.
