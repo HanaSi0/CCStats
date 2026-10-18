@@ -9,7 +9,7 @@ using System.Windows.Media;
 namespace CCStats.Desktop;
 public partial class MainWindow {
     private string LocalIdentity=>_preferences.Links.Canonical(_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer??"");
-    private List<MatchRecord> Filtered()=>RecordStatistics.Filter(_records,_search,_map,_result,_favorites).ToList();
+    private List<MatchRecord> Filtered()=>RecordStatistics.Filter(_records,_search,_map,_result,_favorites,_mode).Where(r=>(_rank=="全部"||r.Rank==_rank)&&(!_fromDate.HasValue||r.StartUtc.ToLocalTime().Date>=_fromDate.Value.Date)&&(!_untilDate.HasValue||r.StartUtc.ToLocalTime().Date<=_untilDate.Value.Date)).ToList();
     private void ShowMatches() {
         var tools=new WrapPanel();tools.Children.Add(ActionButton("读取文件",OpenFile));
         tools.Children.Add(ActionButton("导出 CSV",async (_,_)=> {
@@ -23,10 +23,15 @@ public partial class MainWindow {
         ComboBox Choice(string[] values,string selected,Action<string> set) {var c=new ComboBox {ItemsSource=values,SelectedItem=selected,MinWidth=115,Margin=new Thickness(0,0,8,8)};c.SelectionChanged+=(_,_)=>{if(c.SelectedItem is string s)set(s);};return c;}
         filters.Children.Add(Choice(new[]{"全部"}.Concat(_records.Select(r=>r.Map).Distinct()).ToArray(),_map,s=>_map=s));
         filters.Children.Add(Choice(new[]{"全部","胜利","失败","未记录"},_result,s=>_result=s));
+        filters.Children.Add(Choice(new[]{"全部","练习赛","段位赛","自定赛"},_mode,s=>_mode=s));
+        filters.Children.Add(Choice(new[]{"全部"}.Concat(_records.Select(r=>r.Rank).Where(r=>r.Length>0).Distinct()).ToArray(),_rank,s=>_rank=s));
+        var from=new DatePicker {SelectedDate=_fromDate,ToolTip="起始日期",Width=135,Margin=new Thickness(0,0,8,8)};from.SelectedDateChanged+=(_,_)=>_fromDate=from.SelectedDate;filters.Children.Add(from);
+        var until=new DatePicker {SelectedDate=_untilDate,ToolTip="结束日期",Width=135,Margin=new Thickness(0,0,8,8)};until.SelectedDateChanged+=(_,_)=>_untilDate=until.SelectedDate;filters.Children.Add(until);
+        foreach(var picker in new[]{from,until}) {picker.Foreground=Brushes.Black;var style=new Style(typeof(TextBlock));style.Setters.Add(new Setter(TextBlock.ForegroundProperty,Brushes.Black));picker.Resources[typeof(TextBlock)]=style;}
         var favorite=new CheckBox {Content="仅收藏",IsChecked=_favorites,Foreground=Brushes.White,Margin=new Thickness(4,5,8,0)};filters.Children.Add(favorite);
         filters.Children.Add(ActionButton("应用筛选",(_,_)=>{_search=search.Text;_favorites=favorite.IsChecked==true;ShowPage(0);}));PageContent.Children.Add(filters);
         var rows=Filtered();Card($"{rows.Count:N0} 条记录",Text("双击记录查看结算、事件、分析和回放；缺失数值显示为 —。",true));
-        var grid=TableFactory.Create(rows,("时间","StartLabel"),("地图","Map"),("比赛类型","Mode"),("结果","Result"),("时长","Duration"),("收藏","Favorite"),("标签","Tags"));
+        var grid=TableFactory.Create(rows,("时间","StartLabel"),("地图","Map"),("记录类型","Kind"),("比赛类型","Mode"),("结果","Result"),("时长","Duration"),("收藏","Favorite"),("标签","Tags"));
         grid.MouseDoubleClick+=async (_,_)=>{if(grid.SelectedItem is MatchRecord record)await OpenRecordAsync(record);};PageContent.Children.Add(grid);
         if(rows.Count==0)Card("暂无记录",Text("软件会自动识别正在运行的游戏，也可以读取已有 JSON 或历史数据文件。",true));
     }

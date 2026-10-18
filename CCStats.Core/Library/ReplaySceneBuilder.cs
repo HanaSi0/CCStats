@@ -9,7 +9,13 @@ public static class ReplaySceneBuilder {
         Vector3 At(PlayerPosition p)=>new(p.X,Height(p.X,p.Y,p.Z),p.Z);
         foreach(var p in frame?.Players??Enumerable.Empty<PlayerPosition>()) {
             if(!float.IsFinite(p.X)||!float.IsFinite(p.Z))continue;
-            scene.Pawn(At(p),p.Heading,p.HP==0,false,p.Team,ArenaMechanicScene.Mini(p,time)?.4f:1);
+            if(p.Team==0) {
+                var at=At(p);float size=ArenaMechanicScene.Mini(p,time)?.4f:1;
+                var top=at+new Vector3(0,2.7f*size,0);var points=new Vector3[3];
+                for(int i=0;i<3;i++) {float angle=p.Heading+i*MathF.Tau/3;points[i]=at+new Vector3(MathF.Sin(angle)*size,.2f*size,MathF.Cos(angle)*size);}
+                for(int i=0;i<3;i++)scene.Triangle(points[i],points[(i+1)%3],top,ReplaySceneGeometry.Rgba(.65f,.68f,.72f));
+                scene.Ribbon(at,at+new Vector3(MathF.Sin(p.Heading)*3,0,MathF.Cos(p.Heading)*3),.18f,ReplaySceneGeometry.Rgba(.8f,.82f,.85f));
+            } else scene.Pawn(At(p),p.Heading,p.HP==0,false,p.Team,ArenaMechanicScene.Mini(p,time)?.4f:1);
             // Unknown affiliations use a neutral marker, avoiding fabricated opponent identities.
             if(p.Team==0)scene.Diamond(At(p)+Vector3.UnitY*3,.2f,.4f,ReplaySceneGeometry.Rgba(.8f,.8f,.8f));
             if(ReplaySceneGeometry.GuardVisible(p,time))scene.GuardBubble(At(p));

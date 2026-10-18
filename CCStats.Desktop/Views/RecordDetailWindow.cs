@@ -11,7 +11,7 @@ internal sealed class RecordDetailWindow : Window {
     private readonly ReplayBundle _bundle;
     public event Action? Changed;
     public RecordDetailWindow(ReplayBundle bundle,RecordLibrary library) {
-        _bundle=bundle;Title="对局详情 · "+bundle.Match.Map;Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
+        _bundle=bundle;Title=(bundle.Match.Observation?"观测详情 · ":"对局详情 · ")+bundle.Match.Map;Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(18)};var header=new StackPanel();
         header.Children.Add(new TextBlock {Text=bundle.Match.Map+"　"+bundle.Match.StartLabel+"　"+bundle.Match.Result+"　"+bundle.Match.Duration,Foreground=Brushes.White,FontSize=21,Margin=new Thickness(0,0,0,14)});
         var tools=new WrapPanel();var favorite=new CheckBox {Content="收藏",IsChecked=bundle.Match.Favorite,Foreground=Brushes.White,Margin=new Thickness(0,8,12,0)};var tags=new TextBox {Text=bundle.Match.Tags,MinWidth=220};tools.Children.Add(favorite);tools.Children.Add(tags);

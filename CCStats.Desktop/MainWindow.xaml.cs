@@ -35,6 +35,8 @@ public partial class MainWindow : Window {
     private ListBox? _capturePlayers;
     private string _search="",_map="全部",_result="全部";
     private bool _favorites;
+    private string _mode="全部",_rank="全部";
+    private DateTime? _fromDate,_untilDate;
     public MainWindow(string? settingsPath=null) {
         InitializeComponent();_smoke=settingsPath!=null;
         Icon=new BitmapImage(new Uri("pack://application:,,,/Assets/icon.png"));

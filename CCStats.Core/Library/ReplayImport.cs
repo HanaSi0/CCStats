@@ -9,7 +9,7 @@ public static class ReplayImport {
         var root=json.RootElement;var summary=Import.ReplayFileReader.Read(root,Path.GetFullPath(path));var data=root.GetProperty("Telemetry").Deserialize<DetailedTelemetry>()??new();
         if(data.Frames.Count>180000||data.Effects.Count>1000000)throw new InvalidDataException("记录超出容量限制。");
         var bundle=new ReplayBundle {Match=new() {Id=summary.MatchId,StartUtc=summary.StartUtc.UtcDateTime,EndUtc=summary.EndUtc?.UtcDateTime,Territory=summary.TerritoryId,Observation=summary.IsObservation,SourcePath=Path.GetFullPath(path)},Data=data};
-        if(root.TryGetProperty("Record",out var metadata)&&metadata.ValueKind==JsonValueKind.Object) {var record=metadata.Deserialize<MatchRecord>();if(record!=null&&record.Id==summary.MatchId) {bundle.Match=record;bundle.Match.SourcePath=Path.GetFullPath(path);}}
+        if(root.TryGetProperty("Record",out var metadata)&&metadata.ValueKind==JsonValueKind.Object) {var record=metadata.Deserialize<MatchRecord>();if(record!=null&&record.Id==summary.MatchId) {record.Observation|=summary.IsObservation;bundle.Match=record;bundle.Match.SourcePath=Path.GetFullPath(path);}}
         if(root.TryGetProperty("Timeline",out var timeline)&&timeline.ValueKind==JsonValueKind.Array)bundle.Timeline=timeline.Deserialize<List<TimelineRow>>()??new();
         if(root.TryGetProperty("Actions",out var actions)&&actions.ValueKind==JsonValueKind.Array)bundle.Actions=actions.Deserialize<List<ActionSummary>>()??new();
         if(root.TryGetProperty("Progress",out var progress)&&progress.ValueKind==JsonValueKind.Array)bundle.Progress=progress.Deserialize<List<ProgressSample>>()??new();

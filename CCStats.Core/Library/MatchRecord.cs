@@ -24,6 +24,7 @@ public sealed class MatchRecord {
     public string SourcePath {get;set;} = "";
     public List<PlayerScore> Players {get;set;} = new();
     public int FrameCount {get;set;}
+    public string Kind=>Observation?"观测片段":"比赛";
     public string Map=>Import.ReplayFileReader.MapName(Territory);
     public string StartLabel=>StartUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm");
     public double DurationSeconds=>EndUtc.HasValue?Math.Max(0,(EndUtc.Value-StartUtc).TotalSeconds):0;
