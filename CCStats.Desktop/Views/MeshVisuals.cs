@@ -10,13 +10,14 @@ internal static class MeshVisuals {
         for(int i=0;i<65536;i++) {pixels[i*4]=(byte)(((i>>8)&15)*17);pixels[i*4+1]=(byte)(((i>>4)&15)*17);pixels[i*4+2]=(byte)((i&15)*17);pixels[i*4+3]=opaque?(byte)255:(byte)(((i>>12)&15)*17);}
         var bitmap=BitmapSource.Create(256,256,96,96,PixelFormats.Bgra32,null,pixels,1024);bitmap.Freeze();
         var brush=new ImageBrush(bitmap) {Stretch=Stretch.Fill,TileMode=TileMode.None,ViewportUnits=BrushMappingMode.Absolute,Viewport=new Rect(0,0,1,1)};RenderOptions.SetBitmapScalingMode(brush,BitmapScalingMode.NearestNeighbor);brush.Freeze();
-        var material=new EmissiveMaterial(brush);material.Freeze();return material;
+        var material=new DiffuseMaterial(brush);material.Freeze();return material;
     }
     private static readonly Material Opaque=Palette(true),Alpha=Palette(false);
     internal static async Task VerifyPaletteAsync(Window owner) {
         var viewport=new System.Windows.Controls.Viewport3D {Width=128,Height=128,Camera=new PerspectiveCamera(new Point3D(0,0,4),new Vector3D(0,0,-1),new Vector3D(0,1,0),45)};
         var color=ReplaySceneGeometry.Rgba(.25f,.5f,.75f);
-        var vertices=new[]{new ReplayVertex(new(-2,-2,0),color),new ReplayVertex(new(2,-2,0),color),new ReplayVertex(new(0,2,0),color)};
+        var vertices=new[]{new ReplayVertex(new(-2,-2,0),color),new ReplayVertex(new(2,-2,0),color),new ReplayVertex(new(0,2,0),color),new ReplayVertex(new(-2,-2,-.5f),color),new ReplayVertex(new(2,-2,-.5f),color),new ReplayVertex(new(0,2,-.5f),color)};
+        viewport.Children.Add(new ModelVisual3D {Content=new AmbientLight(Colors.White)});
         viewport.Children.Add(new ModelVisual3D {Content=Dynamic(vertices)});
         var window=new Window {Owner=owner,Content=viewport,SizeToContent=SizeToContent.WidthAndHeight,ShowInTaskbar=false,WindowStyle=WindowStyle.None};
         window.Show();await Task.Delay(150);viewport.UpdateLayout();

@@ -29,7 +29,7 @@ internal sealed class IndependentCapture {
                     token.ThrowIfCancellationRequested();var (territory,frame)=game.Sample();
                     if(territory!=lastTerritory&&territory!=0) {_manualPaused=false;lastTerritory=territory;}
                     bool request=Volatile.Read(ref _record)!=0||(_autoRecord&&!_manualPaused&&ReplayMapMesh.MapKey(territory)!=null);
-                    if(writer!=null&&(!request||territory!=writer.Territory)) {writer.Dispose();saved=writer.Destination;writer=null;}
+                    if(writer!=null&&(!request||territory!=writer.Territory||writer.ShouldRollOver)) {writer.Dispose();saved=writer.Destination;writer=null;}
                     if(request&&frame.Players.Count>0&&territory>0) {writer??=new ObservationWriter(directory,territory);writer.Append(territory,frame);}
                     if(frame.Timestamp-lastPublished>=TimeSpan.FromMilliseconds(200)) {
                         lastPublished=frame.Timestamp;

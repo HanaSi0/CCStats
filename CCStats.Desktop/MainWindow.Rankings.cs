@@ -12,17 +12,18 @@ public partial class MainWindow {
     private DataGrid? _rankingGrid;
     private RankingSnapshot? _shownRanking;
     private async Task StartRankingsAsync() {
-        _rankings=RankingRegion.All.Select(r=>new LeaderboardService(Path.Combine(_directory,"leaderboards",r.Key))).ToArray();
+        _rankings=await Task.Run(()=>RankingRegion.All.Select(r=>new LeaderboardService(Path.Combine(_directory,"leaderboards",r.Key))).ToArray());
+        if(_exiting) {foreach(var service in _rankings)service.Dispose();return;}
         foreach(var (region,index) in RankingRegion.All.Select((r,i)=>(r,i))) {
             if(_exiting)return;
-            try {await _rankings[index].CheckDateAsync(region with {Site=0});}catch(Exception ex) {StatusText.Text="榜单暂未更新："+ex.Message;}
+            try {await Task.Run(()=>_rankings[index].CheckDateAsync(region with {Site=0}));}catch(Exception ex) {StatusText.Text="榜单暂未更新："+ex.Message;}
         }
     }
     private void ShowRankings() {
         var tools=new WrapPanel();var regions=new ComboBox {ItemsSource=RankingRegion.All.Select(r=>r.Name),SelectedIndex=_rankingRegion,MinWidth=150,Margin=new Thickness(0,0,10,10)};
         regions.SelectionChanged+=(_,_)=>{_rankingRegion=regions.SelectedIndex;_shownRanking=null;UpdateRankings();};tools.Children.Add(regions);
         tools.Children.Add(ActionButton("手动更新",async (_,_)=> {
-            if(_rankings==null)return;try {await _rankings[_rankingRegion].CheckDateAsync(RankingRegion.All[_rankingRegion] with {Site=0},true);UpdateRankings();}catch(Exception ex){StatusText.Text=ex.Message;}
+            if(_rankings==null)return;try {var index=_rankingRegion;await Task.Run(()=>_rankings[index].CheckDateAsync(RankingRegion.All[index] with {Site=0},true));UpdateRankings();}catch(Exception ex){StatusText.Text=ex.Message;}
         }));
         tools.Children.Add(ActionButton("定位本人",(_,_)=> {
             if(_rankingGrid==null)return;var name=LocalIdentity;

@@ -34,9 +34,10 @@ internal sealed class ReplayWindow : Window {
     private double _seconds,_speed=1,_lastClock,_rendered=-1;
     private Point _lastMouse;
     private BitmapImage? _mapImage;
-    public ReplayWindow(ReplayBundle bundle) {
+    public ReplayWindow(ReplayBundle bundle,double startSeconds=0) {
         _bundle=bundle;_origin=bundle.Match.StartUtc;
         _duration=Math.Max(1,bundle.Match.DurationSeconds>0?bundle.Match.DurationSeconds:bundle.Data.Frames.LastOrDefault() is {} last?(last.Timestamp-_origin).TotalSeconds:1);
+        _seconds=Math.Clamp(startSeconds,0,_duration);
         Title="地图回放 · "+bundle.Match.Map;Width=1450;Height=920;MinWidth=1000;MinHeight=680;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(12)};var top=new StackPanel();var actions=new WrapPanel();
         Button Button(string text,Action click) {var b=new Button {Content=text};b.Click+=(_,_)=>click();return b;}
@@ -50,6 +51,7 @@ internal sealed class ReplayWindow : Window {
         top.Children.Add(actions);_time.Maximum=_duration;_time.ValueChanged+=(_,_)=>{if(Math.Abs(_time.Value-_seconds)>.0001){_seconds=_time.Value;_playing=false;_rendered=-1;}};top.Children.Add(_time);top.Children.Add(_info);top.Children.Add(_progress);DockPanel.SetDock(top,Dock.Top);root.Children.Add(top);
         var body=new Grid();body.ColumnDefinitions.Add(new(){Width=new GridLength(220)});body.ColumnDefinitions.Add(new(){Width=new GridLength(1,GridUnitType.Star)});body.ColumnDefinitions.Add(new(){Width=new GridLength(220)});
         body.Children.Add(new ScrollViewer {Content=_left,VerticalScrollBarVisibility=ScrollBarVisibility.Auto});Grid.SetColumn(_canvas,1);body.Children.Add(_canvas);var right=new ScrollViewer {Content=_right,VerticalScrollBarVisibility=ScrollBarVisibility.Auto};Grid.SetColumn(right,2);body.Children.Add(right);
+        _viewport.Children.Add(new ModelVisual3D {Content=new AmbientLight(Colors.White)});
         _viewport.Children.Add(_mapVisual);_viewport.Children.Add(_dynamic);_canvas.Children.Add(_viewport);_overlay=new Overlay(this);_canvas.Children.Add(_overlay);
         _canvas.MouseDown+=(_,e)=>{_lastMouse=e.GetPosition(_canvas);_canvas.CaptureMouse();_camera.BeginDrag(e.ChangedButton==MouseButton.Right,new((float)_lastMouse.X,(float)_lastMouse.Y),SizeVector());};
         _canvas.MouseMove+=(_,e)=>{if(_canvas.IsMouseCaptured){var p=e.GetPosition(_canvas);_camera.Drag(new((float)p.X,(float)p.Y),SizeVector());_lastMouse=p;ApplyCamera();}};
@@ -81,10 +83,13 @@ internal sealed class ReplayWindow : Window {
         var extent=_mesh==null?150:Math.Max(_mesh.Max.X-_mesh.Min.X,_mesh.Max.Z-_mesh.Min.Z);float distance=extent;
         for(int pass=0;pass<8;pass++) {
             _camera.Reset(target,distance);if(_mesh==null)break;float needed=0;
-            foreach(var x in new[]{_mesh.Min.X,_mesh.Max.X})foreach(var y in new[]{_mesh.Min.Y,_mesh.Max.Y})foreach(var z in new[]{_mesh.Min.Z,_mesh.Max.Z}) {
-                var projected=Vector4.Transform(new Vector4(x,y,z,1),_camera.ViewProjection(SizeVector()));if(projected.W<=.01f){needed=Math.Max(needed,2);continue;}needed=Math.Max(needed,Math.Max(Math.Abs(projected.X/projected.W),Math.Abs(projected.Y/projected.W)));
+            int step=Math.Max(1,_mesh.Vertices.Length/8192);
+            for(int i=0;i<_mesh.Vertices.Length;i+=step) {
+                var point=_mesh.Vertices[i].Position;var projected=Vector4.Transform(new Vector4(point,1),_camera.ViewProjection(SizeVector()));
+                if(projected.W<=.01f){needed=Math.Max(needed,2);continue;}
+                needed=Math.Max(needed,Math.Max(Math.Abs(projected.X/projected.W),Math.Abs(projected.Y/projected.W)));
             }
-            if(needed<=.86f)break;distance=Math.Min(600,distance*Math.Max(1.1f,needed/.86f));
+            if(needed<=.90f)break;distance=Math.Min(600,distance*Math.Max(1.05f,needed/.90f));
         }
         ApplyCamera();
     }

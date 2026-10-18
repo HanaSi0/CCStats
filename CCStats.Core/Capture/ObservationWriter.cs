@@ -10,6 +10,8 @@ public sealed class ObservationWriter : IDisposable {
     private readonly uint _territory;
     private readonly DateTime _start=DateTime.UtcNow;
     private bool _finished;
+    public long BytesWritten=>_file.Position+_json.BytesPending;
+    public bool ShouldRollOver=>BytesWritten>=60L*1024*1024;
     public uint Territory=>_territory;
     public string Destination {get;}
     public int Frames {get;private set;}

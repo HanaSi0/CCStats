@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 namespace CCStats.Desktop.Views;
 internal sealed class RecordDetailWindow : Window {
+    private sealed record TimedEvent(string Elapsed,DateTime Timestamp,string Kind,string Actor,string Target,string Description);
     private readonly ReplayBundle _bundle;
     public event Action? Changed;
     public RecordDetailWindow(ReplayBundle bundle,RecordLibrary library) {
@@ -40,11 +41,12 @@ internal sealed class RecordDetailWindow : Window {
         if(!calculate.IsEnabled)analysisStatus.Text="此记录没有技能效果观测，不能推算伤害、防御减伤或技能控制数据。";
         analysis.Children.Add(calculate);analysis.Children.Add(analysisStatus);analysis.Children.Add(analysisHost);Tab("高级分析",analysis);
         var events=bundle.Timeline.Concat(bundle.Data.ReplaySkills.Select(e=>new TimelineRow(e.Timestamp,"技能",e.Actor,e.TargetPlayer,ChineseText.ActionName(e.ActionId,$"技能 {e.ActionId}")))).Concat(bundle.Data.MapMechanics.Select(e=>new TimelineRow(e.Timestamp,"地图事件","","",e.Label))).Distinct().OrderBy(e=>e.Timestamp).ToArray();
-        Tab("事件时间线",TableFactory.Create(events,("时间","Timestamp"),("类型","Kind"),("来源","Actor"),("目标","Target"),("事件","Description")));
+        var eventGrid=TableFactory.Create(events.Select(e=>new TimedEvent(TimeSpan.FromSeconds(Math.Max(0,(e.Timestamp-bundle.Match.StartUtc).TotalSeconds)).ToString(@"mm\:ss\.fff"),e.Timestamp,e.Kind,e.Actor,e.Target,e.Description)),("相对时间","Elapsed"),("类型","Kind"),("来源","Actor"),("目标","Target"),("事件","Description"));
+        eventGrid.MouseDoubleClick+=(_,_)=>{if(eventGrid.SelectedItem is TimedEvent row)new ReplayWindow(bundle,(row.Timestamp-bundle.Match.StartUtc).TotalSeconds){Owner=this}.Show();};Tab("事件时间线",eventGrid);
         var curve=new StackPanel();var points=bundle.Progress.Where(p=>p.Series=="水晶位置").Select(p=>(p.Timestamp,(double)p.Points)).ToArray();
         if(points.Length==0&&!bundle.Match.Observation)points=bundle.Data.Frames.Select(f=>(f.Timestamp,(double)f.CrystalProgress)).Where((_,i)=>i%15==0).ToArray();
         if(points.Length>0)curve.Children.Add(new TrendView(points){Height=300});else curve.Children.Add(new TextBlock {Text="此记录尚无推进数据。",Foreground=Brushes.LightSteelBlue,Margin=new Thickness(12)});
-        var progressTable=TableFactory.Create(bundle.Progress,("时间","Timestamp"),("来源","Series"),("原始值","Points"));progressTable.Height=200;curve.Children.Add(progressTable);Tab("推进曲线",curve);
+        var progressRows=bundle.Progress.Count>0?bundle.Progress:points.Select(p=>new ProgressSample(p.Item1,"水晶位置",(int)p.Item2)).ToList();var progressTable=TableFactory.Create(progressRows,("时间","Timestamp"),("来源","Series"),("原始值","Points"));progressTable.Height=200;curve.Children.Add(progressTable);Tab("推进曲线",curve);
         var skills=bundle.Data.Effects.GroupBy(e=>new {e.Actor,e.ActionId}).Select(g=>new {Player=g.Key.Actor,Name=ChineseText.ActionName(g.Key.ActionId,$"技能 {g.Key.ActionId}"),Hits=g.Count(),Damage=g.Where(e=>DetailedAnalysis.IsDamage(e.Type)).Sum(e=>e.Amount),Healing=g.Where(e=>e.Type==4).Sum(e=>e.Amount)});
         var skillPanel=new StackPanel();
         if(bundle.Actions.Count>0)skillPanel.Children.Add(TableFactory.Create(bundle.Actions.Select(a=>new {a.Player,Name=a.Kind=="状态"?ChineseText.StatusName(a.ActionId,$"状态 {a.ActionId}"):ChineseText.ActionName(a.ActionId,$"技能 {a.ActionId}"),a.Casts,a.Targets,a.Damage,a.Healing,a.StatusHits,a.StatusMisses}),("玩家","Player"),("技能/状态","Name"),("使用次数","Casts"),("目标数","Targets"),("伤害","Damage"),("治疗","Healing"),("状态命中","StatusHits"),("状态抵抗","StatusMisses")));
