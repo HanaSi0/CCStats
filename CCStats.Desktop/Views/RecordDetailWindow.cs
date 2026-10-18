@@ -44,7 +44,7 @@ internal sealed class RecordDetailWindow : Window {
                 bool exactSnapshots=bundle.Data.CaptureMethod!="ReadOnlyMemoryPolling";
                 var rows=result.stats.Values.Select(p=>new {p.Player,Damage=p.DamageDealt,Taken=p.DamageReceived,Healing=p.HealingDealt,Drain=p.DrainHealing,GuardDamage=exactSnapshots?(long?)p.GuardedDamage:null,GuardPrevented=p.EstimatedHits>0?(double?)p.EstimatedGuardPrevented:null,GuardHits=exactSnapshots?(int?)p.GuardedHits:null,Controls=p.ControlApplications,ControlSeconds=p.ControlSeconds,BlockedControls=exactSnapshots?(int?)p.ControlResistsUnderGuard:null,Pending=p.PendingHits});
                 analysisHost.Content=TableFactory.Create(rows,("玩家","Player"),("观测伤害","Damage"),("观测承伤","Taken"),("观测治疗","Healing"),("吸血","Drain"),("防御期间承伤","GuardDamage"),("推算防御减伤","GuardPrevented"),("防御命中数","GuardHits"),("控制应用","Controls"),("控制秒数","ControlSeconds"),("防御期间抵抗","BlockedControls"),("待定记录","Pending"));
-                analysisStatus.Text=$"已完成；可推算 {result.estimates.Count(e=>e.Supported)} 条，条件不足 {result.estimates.Count(e=>!e.Supported)} 条。观测统计不等同完整结算。";
+                analysisStatus.Text=(exactSnapshots?"":"事后轮询缺少命中瞬间状态，防御相关数值显示为 —。")+$"已完成；可推算 {result.estimates.Count(e=>e.Supported)} 条，条件不足 {result.estimates.Count(e=>!e.Supported)} 条。观测统计不等同完整结算。";
             } catch(Exception ex){analysisStatus.Text=ex.Message;}finally{button.IsEnabled=true;}
         });calculate.IsEnabled=bundle.Data.Effects.Count>0;
         if(!calculate.IsEnabled)analysisStatus.Text="此记录没有技能效果观测，不能推算伤害、防御减伤或技能控制数据。";
@@ -52,7 +52,7 @@ internal sealed class RecordDetailWindow : Window {
         var events=bundle.Timeline.Concat(bundle.Data.ReplaySkills.Select(e=>new TimelineRow(e.Timestamp,"技能",e.Actor,e.TargetPlayer,ChineseText.ActionName(e.ActionId,$"技能 {e.ActionId}")))).Concat(bundle.Data.MapMechanics.Select(e=>new TimelineRow(e.Timestamp,"地图事件","","",e.Label))).Distinct().OrderBy(e=>e.Timestamp).ToArray();
         var eventGrid=TableFactory.Create(events.Select(e=>new TimedEvent(TimeSpan.FromSeconds(Math.Max(0,(e.Timestamp-bundle.Match.StartUtc).TotalSeconds)).ToString(@"mm\:ss\.fff"),e.Timestamp,e.Kind,e.Actor,e.Target,e.Description)),("相对时间","Elapsed"),("类型","Kind"),("来源","Actor"),("目标","Target"),("事件","Description"));
         eventGrid.MouseDoubleClick+=(_,_)=>{if(eventGrid.SelectedItem is TimedEvent row)new ReplayWindow(bundle,(row.Timestamp-bundle.Match.StartUtc).TotalSeconds){Owner=this}.Show();};Tab("事件时间线",eventGrid);
-        var curve=new StackPanel();var points=bundle.Progress.Where(p=>p.Series=="水晶位置").Select(p=>(p.Timestamp,(double)p.Points)).ToArray();
+        var curve=new StackPanel();var points=bundle.Progress.Where(p=>p.Series is "水晶位置" or "战术水晶位置").Select(p=>(p.Timestamp,(double)p.Points)).ToArray();
         if(points.Length==0&&!bundle.Match.Observation)points=bundle.Data.Frames.Select(f=>(f.Timestamp,(double)f.CrystalProgress)).Where((_,i)=>i%15==0).ToArray();
         if(points.Length>0)curve.Children.Add(new TrendView(points){Height=300});else curve.Children.Add(new TextBlock {Text="此记录尚无推进数据。",Foreground=Brushes.LightSteelBlue,Margin=new Thickness(12)});
         var progressRows=bundle.Progress.Count>0?bundle.Progress:points.Select(p=>new ProgressSample(p.Item1,"水晶位置",(int)p.Item2)).ToList();var progressTable=TableFactory.Create(progressRows,("时间","Timestamp"),("来源","Series"),("原始值","Points"));progressTable.Height=200;curve.Children.Add(progressTable);Tab("推进曲线",curve);

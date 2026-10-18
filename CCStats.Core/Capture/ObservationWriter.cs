@@ -11,7 +11,7 @@ public sealed class ObservationWriter : IDisposable {
     private readonly Dictionary<ulong,ReplayArenaObject> _objects=new();
     private long _supplementBytes;private bool _finished;private string _localPlayer="";
     private PlayerPvpProfile? _profile;
-    private bool _directorObserved,_crystalObserved,_effectsPolled;
+    private bool _rosterLimited,_directorObserved,_crystalObserved,_effectsPolled;
     public long BytesWritten=>_file.Position+_json.BytesPending+_supplementBytes;
     public bool ShouldRollOver=>BytesWritten>=60L*1024*1024;
     public uint Territory=>_territory;
@@ -35,7 +35,7 @@ public sealed class ObservationWriter : IDisposable {
     }
     private void AppendBatch(ObservationBatch batch) {
         _details.GameVersion=batch.GameVersion;if(batch.Profile!=null)_profile=batch.Profile;if(batch.LocalPlayer.Length>0)_localPlayer=batch.LocalPlayer;
-        _directorObserved|=batch.DirectorAvailable;_effectsPolled|=batch.EffectsPolled;
+        _rosterLimited|=batch.UnconfirmedRosterLimited;_directorObserved|=batch.DirectorAvailable;_effectsPolled|=batch.EffectsPolled;
         // Budget each channel independently. Keep recording movement when any event channel fills.
         foreach(var effect in batch.Effects) {
             if(_details.Effects.Count>=50000||_supplementBytes>=8L*1024*1024) {_details.EffectsTruncated=true;break;}
@@ -76,6 +76,7 @@ public sealed class ObservationWriter : IDisposable {
             _details.CaptureWarnings.Add("内存轮询无法保证完整瞬时事件；事件时间和施法位置为首次观察值。未捕获官方结算，观测数据不参与胜率统计。");
             _details.CaptureWarnings.Add("状态在观察时采集，不能替代命中瞬间快照；防御减伤与免控精确推算不可用。");
             if(_details.EffectsTruncated||_details.ReplaySkillsTruncated||_details.MapMechanicsTruncated||_details.ArenaObjectsTruncated||_details.SummonsTruncated)_details.CaptureWarnings.Add("部分事件通道达到容量限制，相关统计只代表已保留的观测。");
+            if(_rosterLimited)_details.CaptureWarnings.Add("参赛名单未确认时有超过十名角色，位置记录仅保留前十名已加载角色。");
             if(!_directorObserved)_details.CaptureWarnings.Add("未确认队伍和推进状态。");
             if(!_crystalObserved)_details.CaptureWarnings.Add("未观察到唯一水晶对象。");
             if(!_effectsPolled)_details.CaptureWarnings.Add("未读取到动作效果槽。");

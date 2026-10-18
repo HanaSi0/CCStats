@@ -22,6 +22,7 @@ public static class ReplayImport {
         if(bundle.Progress.Count==0&&data.DirectorObserved) {
             (int Crystal,int Astra,int Umbra)? last=null;
             foreach(var frame in data.Frames) {
+                if(frame.AstraProgress<0||frame.UmbraProgress<0)continue;
                 var current=(frame.CrystalProgress,frame.AstraProgress,frame.UmbraProgress);
                 if(last==current)continue;
                 bundle.Progress.Add(new(frame.Timestamp,"战术水晶位置",frame.CrystalProgress));

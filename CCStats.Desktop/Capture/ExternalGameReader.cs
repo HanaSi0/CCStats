@@ -70,7 +70,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
         if(!Read(_gameMain+ClientLayout.TerritoryOffset,_territory)||!Read(_objects+ClientLayout.ObjectArrayOffset,_table))throw new InvalidDataException("客户端地址不可读，请重新连接或等待版本适配。");
         uint territory=BinaryPrimitives.ReadUInt32LittleEndian(_territory);if(territory>100000)throw new InvalidDataException("区域编号异常，已停止采集。");
         if(territory!=_lastTerritory) {Reset();_lastTerritory=territory;}
-        var now=DateTime.UtcNow;var frame=new MovementFrame {Timestamp=now};var batch=new ObservationBatch {GameVersion=_version};Telemetry=batch;
+        var now=DateTime.UtcNow;var frame=new MovementFrame {Timestamp=now,AstraProgress=-1,UmbraProgress=-1};var batch=new ObservationBatch {GameVersion=_version};Telemetry=batch;
         bool arena=ReplayMapMesh.MapKey(territory)!=null,detail=arena&&(now-_lastDetail).TotalSeconds>=.2;
         if(detail) {ReadDirector(batch);_lastDetail=now;}
         batch.DirectorAvailable=_lastProgress!=null;
@@ -80,10 +80,12 @@ internal sealed class ExternalGameReader : IObservedGameSource {
         for(int slot=0;slot<ClientLayout.ObjectSlots;slot++) {
             long address=BinaryPrimitives.ReadInt64LittleEndian(_table.AsSpan(slot*8,8));if(!Read(address,_header))continue;
             byte kind=_header[0x90];if(kind is not (1 or 2 or 7))continue;
-            uint id=U(_header,0x78);if(id is 0 or 0xE0000000||actors.ContainsKey(id))continue;
+            uint id=U(_header,0x78);
             float x=F(_header,0xB0),y=F(_header,0xB4),z=F(_header,0xB8),heading=F(_header,0xC0);
             if(!Finite(x,y,z,heading))continue;
             uint nameId=kind==2&&Read(address+0x2338,_nameId)?U(_nameId,0):0;
+            if(detail&&ArenaObjectDecoder.Decode(_header,nameId,territory,slot,now) is {} arenaObject)batch.ArenaObjects.Add(arenaObject);
+            if(kind==7||id is 0 or 0xE0000000||actors.ContainsKey(id))continue;
             PlayerPosition? player=null;
             if(kind==1) {
                 if(!_cache.TryGetValue(id,out var meta)||(now-meta.At).TotalSeconds>=.2) {
@@ -95,15 +97,13 @@ internal sealed class ExternalGameReader : IObservedGameSource {
                 player=ClientLayout.DecodePlayer(_header,meta.World,ReadOnlySpan<byte>.Empty,meta.At);if(player==null)continue;
                 player.Statuses=meta.Statuses;if(_teams.TryGetValue(id,out var team))player.Team=team.Team;
                 foreach(var status in player.Statuses.Where(s=>DetailedAnalysis.Controls.ContainsKey(s.Id)))player.Controls.Add(new(){StatusId=status.Id,Remaining=Math.Max(0,status.Remaining-(float)(now-meta.At).TotalSeconds)});
-                frame.Players.Add(player);if(slot==0)batch.LocalPlayer=player.Player;
+                if(_teams.Count>0) {if(player.Team is 1 or 2)frame.Players.Add(player);}
+                else if(frame.Players.Count<10)frame.Players.Add(player);else batch.UnconfirmedRosterLimited=true;
+                if(slot==0)batch.LocalPlayer=player.Player;
             }
             actors[id]=new(id,U(_header,0x88),nameId,kind,x,y,z,heading,player);addresses[id]=address;
             if(kind==2&&nameId==11350)crystals.Add(new(){X=x,Y=y,Z=z});
-            if(detail&&(kind==7||kind==2&&nameId!=11350)) {
-                var mechan=ClientCatalog.Mechanic(kind,nameId,U(_header,0x84),territory);
-                // Preserve raw identities of unknown objects; never invent an active mechanism from their position.
-                if(kind==7||mechan!=ArenaMechanicKind.Unknown)batch.ArenaObjects.Add(new(){Timestamp=now,ObservedUntil=now,ObjectId=id,EntityId=id,NameId=nameId,DataId=U(_header,0x84),ObjectKind=kind,EventState=_header[0x70],RenderFlags=BinaryPrimitives.ReadUInt64LittleEndian(_header.AsSpan(0x118)),Kind=mechan,X=x,Y=y,Z=z,Heading=heading});
-            }
+
         }
         if(crystals.Count==1)frame.Crystal=crystals[0];
         if(arena) {

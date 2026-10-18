@@ -36,6 +36,10 @@ internal static class CaptureAdaptationChecks {
         BinaryPrimitives.WriteUInt16LittleEndian(profileBytes.AsSpan(0x50),11);check(PlayerPvpProfile.Decode(profileBytes,own.Player,now)==null,"invalid lifetime counters reject a mismatched profile layout");
         var ui=new byte[64];BinaryPrimitives.WriteInt32LittleEndian(ui,5);BinaryPrimitives.WriteUInt32LittleEndian(ui.AsSpan(8),123456);BinaryPrimitives.WriteInt32LittleEndian(ui.AsSpan(16),8);BinaryPrimitives.WriteInt64LittleEndian(ui.AsSpan(24),12345);BinaryPrimitives.WriteInt32LittleEndian(ui.AsSpan(32),12);BinaryPrimitives.WriteInt64LittleEndian(ui.AsSpan(40),98765);
         var values=ClientUiDecoder.Decode(ui,4,(_,_)=>"Player Name");check(values.Count==2&&values[0].Value=="123456"&&values[1].Value=="Player Name","settlement probes export primitive fields while omitting arbitrary pointers");
+        var eventHeader=new byte[ClientLayout.HeaderBytes];eventHeader[0x90]=7;BinaryPrimitives.WriteUInt32LittleEndian(eventHeader.AsSpan(0x78),0xE0000000);BinaryPrimitives.WriteUInt32LittleEndian(eventHeader.AsSpan(0x84),2010780);BinaryPrimitives.WriteUInt32LittleEndian(eventHeader.AsSpan(0x7C),777);
+        var eventObject=ArenaObjectDecoder.Decode(eventHeader,0,1116,3,now);
+        check(eventObject is {EntityId:0,Kind:ArenaMechanicKind.Gold,ObjectId:>0}&&eventObject.ObjectId!=ArenaObjectDecoder.Decode(eventHeader,0,1116,4,now)!.ObjectId,"event objects without network entity IDs retain distinct scene identities and mechanism classification");
+        eventHeader[0x90]=2;check(ArenaObjectDecoder.Decode(eventHeader,0,1116,3,now)==null,"an unidentified NPC cannot be rendered as an active map mechanism");
         var directory=Path.Combine(Path.GetTempPath(),"ccstats-adaptation-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
         try {
             string path;
@@ -48,6 +52,7 @@ internal static class CaptureAdaptationChecks {
                 var next=new ObservationBatch {GameVersion=batch.GameVersion,DirectorAvailable=true,Summons=new(){Timestamp=now.AddSeconds(.2)}};
                 next.MapEvents.Add(new(){Timestamp=now.AddSeconds(.2),ActionId=28731,SourceEntityId=500,Kind=ReplayMapEventKind.ActionResolved});
                 frame.Timestamp=now.AddSeconds(.2);writer.Append(1034,frame,next);
+                frame.Timestamp=now.AddSeconds(.4);frame.AstraProgress=-1;frame.UmbraProgress=-1;writer.Append(1034,frame);
             }
             var bundle=await ReplayImport.ReadAsync(path);
             check(bundle.ClientProfile?.CasualMatches==10,"client profile snapshot survives recording finalization");
@@ -55,7 +60,7 @@ internal static class CaptureAdaptationChecks {
             check(bundle.Data.Effects.Count==3&&bundle.Data.SummonFrames.Count==2&&bundle.Data.SummonFrames.Last().Summons.Count==0,"effects and summon appearance/disappearance survive recording finalization");
             check(bundle.Data.DirectorObserved&&bundle.Data.Frames.First().Crystal?.X==3&&bundle.Progress.Count==3,"crystal coordinates and director progress reach replay and numeric analysis");
             check(bundle.Data.ArenaStates.Single().State==1&&bundle.Data.MapMechanics.First().ResolvedAt.HasValue&&bundle.Data.CaptureWarnings.Count>0,"scene states, actual cast resolution and provenance are saved with the recording");
-            using(var library=new RecordLibrary(Path.Combine(directory,"library"))) {library.Save(bundle);library.SaveProfile(profile with {ObservedAt=now.AddDays(-1),CasualMatches=1});check(library.Profile(own.Player)?.CasualMatches==10,"older imports cannot overwrite newer client profile totals");var stored=library.Load(bundle.Match.Id);check(stored.Data.ArenaStates.Single().LayoutId==77&&stored.Data.CaptureMethod=="ReadOnlyMemoryPolling","supplemental client state survives the real database codec");}
+            using(var library=new RecordLibrary(Path.Combine(directory,"library"))) {library.Save(bundle);library.SaveProfile(profile with {ObservedAt=now.AddDays(-1),CasualMatches=1});check(library.Profile(own.Player)?.CasualMatches==10,"older imports cannot overwrite newer client profile totals");var stored=library.Load(bundle.Match.Id);check(stored.Data.Frames.Last().AstraProgress==-1&&stored.Data.Frames.Last().UmbraProgress==-1,"missing director observations remain missing after movement compression");check(stored.Data.ArenaStates.Single().LayoutId==77&&stored.Data.CaptureMethod=="ReadOnlyMemoryPolling","supplemental client state survives the real database codec");}
             var export=Path.Combine(directory,"export.json");await ReplayImport.ExportAsync(bundle,export);var again=await ReplayImport.ReadAsync(export);
             check(again.Data.ArenaStates.Count==1&&again.Data.Effects.Count==3&&again.Match.Observation,"export and reimport retain supplemental event provenance");
             batch.SettlementPanels.Add(new(now,"PvPResult",values));CaptureDiagnostics.SavePanels(Path.Combine(directory,"observations"),1034,batch);
