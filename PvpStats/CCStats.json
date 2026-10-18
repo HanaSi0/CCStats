@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.8：从原始模型重建九霄云上，修复出生区连接道路和中段侧路缺面；同步更新分层地面与技能范围显示高度。",
+  "Changelog": "1.0.9：新增地图机制占位符与图例，记录机关对象轨迹；精修爆弹怪等外观，阴阳师眼睛按移动、实际读条及结算开合，缩小状态同步显示。",
   "Tags": [
     "pvp",
     "crystalline conflict",
