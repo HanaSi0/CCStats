@@ -1,0 +1,56 @@
+{
+  "version": "1.1.0",
+  "date": "2026-10-18",
+  "offline_checks": 686,
+  "ui_reviewed": 416,
+  "ui_unmapped": 0,
+  "webgl_mechanic_styles": 24,
+  "release_build": {
+    "errors": 0,
+    "warnings": 88
+  },
+  "debug_build": {
+    "errors": 0,
+    "warnings": 86
+  },
+  "cleanup": {
+    "files": 32,
+    "bytes": 189436699,
+    "git_history_rewritten": false
+  },
+  "rankings": [
+    {
+      "Key": "japan",
+      "Success": false,
+      "OfficialDate": null,
+      "Count": 0,
+      "Pages": 0,
+      "Message": "抓取失败，保留原快照：The proxy tunnel request to proxy 'http://proxy:8080/' failed with status code '403'.\""
+    },
+    {
+      "Key": "north-america",
+      "Success": true,
+      "OfficialDate": "2026-10-17",
+      "Count": 300,
+      "Pages": 7,
+      "Message": "北美服官网日期 2026-10-17 与缓存一致，直接使用缓存。"
+    },
+    {
+      "Key": "europe",
+      "Success": false,
+      "OfficialDate": null,
+      "Count": 0,
+      "Pages": 0,
+      "Message": "抓取失败，保留原快照：The proxy tunnel request to proxy 'http://proxy:8080/' failed with status code '403'.\""
+    },
+    {
+      "Key": "oceania",
+      "Success": true,
+      "OfficialDate": "2026-10-17",
+      "Count": 100,
+      "Pages": 3,
+      "Message": "大洋洲服官网日期 2026-10-17 与缓存一致，直接使用缓存。"
+    }
+  ],
+  "game_host_tested": false
+}

@@ -83,41 +83,47 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
     public CrystallineConflictMatchManager(Plugin plugin) {
         _plugin = plugin;
 
-        _plugin.Framework.Update += OnFrameworkUpdate;
-        _plugin.ClientState.TerritoryChanged += OnTerritoryChanged;
-        _plugin.InteropProvider.InitializeFromAttributes(this);
+        try {
+            _plugin.InteropProvider.InitializeFromAttributes(this);
 
-        unsafe {
-            _processPacketActionEffectHook = _plugin.InteropProvider.HookFromAddress<ActionEffectHandler.Delegates.Receive>(
-                ActionEffectHandler.MemberFunctionPointers.Receive, this.ProcessPacketActionEffectDetour
-            );
-        }
-        _plugin.Log.Debug($"cc match end 1 address: 0x{_ccMatchEndHook!.Address.ToString("X2")}");
-        _plugin.Log.Debug($"cc match end 2 address: 0x{_ccMatchEndSpectatorHook!.Address.ToString("X2")}");
-        _plugin.Log.Debug($"cc process kill address: 0x{_processKillHook!.Address.ToString("X2")}");
-        _plugin.Log.Debug($"process actor control address: 0x{_processPacketActorControlHook!.Address.ToString("X2")}");
-        _plugin.Log.Debug($"process action effect address: 0x{_processPacketActionEffectHook!.Address.ToString("X2")}");
+            unsafe {
+                _processPacketActionEffectHook = _plugin.InteropProvider.HookFromAddress<ActionEffectHandler.Delegates.Receive>(
+                    ActionEffectHandler.MemberFunctionPointers.Receive, this.ProcessPacketActionEffectDetour
+                );
+            }
+            _plugin.Log.Debug($"cc match end 1 address: 0x{_ccMatchEndHook!.Address.ToString("X2")}");
+            _plugin.Log.Debug($"cc match end 2 address: 0x{_ccMatchEndSpectatorHook!.Address.ToString("X2")}");
+            _plugin.Log.Debug($"cc process kill address: 0x{_processKillHook!.Address.ToString("X2")}");
+            _plugin.Log.Debug($"process actor control address: 0x{_processPacketActorControlHook!.Address.ToString("X2")}");
+            _plugin.Log.Debug($"process action effect address: 0x{_processPacketActionEffectHook!.Address.ToString("X2")}");
 
-        _ccMatchEndHook.Enable();
+            _ccMatchEndHook.Enable();
 #if DEBUG
-        _ccMatchEndSpectatorHook.Enable();
+            _ccMatchEndSpectatorHook.Enable();
 #endif
-        _processKillHook.Enable();
-        _processPacketActorControlHook.Enable();
-        _processPacketActionEffectHook.Enable();
-        _plugin.LBCapture.HookReady = true;
-        _processHoTDoTHook.Enable();
+            _processKillHook.Enable();
+            _processPacketActorControlHook.Enable();
+            _processPacketActionEffectHook.Enable();
+            _plugin.LBCapture.HookReady = true;
+            _processHoTDoTHook.Enable();
+            _plugin.Framework.Update += OnFrameworkUpdate;
+            _plugin.ClientState.TerritoryChanged += OnTerritoryChanged;
+        } catch {
+            Dispose();
+            throw;
+        }
     }
 
     public void Dispose() {
+        _plugin.LBCapture.HookReady = false;
         _plugin.Framework.Update -= OnFrameworkUpdate;
         _plugin.ClientState.TerritoryChanged -= OnTerritoryChanged;
-        _ccMatchEndHook.Dispose();
-        _ccMatchEndSpectatorHook.Dispose();
-        _processKillHook.Dispose();
-        _processPacketActorControlHook.Dispose();
-        _processPacketActionEffectHook.Dispose();
-        _processHoTDoTHook.Dispose();
+        _ccMatchEndHook?.Dispose();
+        _ccMatchEndSpectatorHook?.Dispose();
+        _processKillHook?.Dispose();
+        _processPacketActorControlHook?.Dispose();
+        _processPacketActionEffectHook?.Dispose();
+        _processHoTDoTHook?.Dispose();
     }
 
     public bool IsMatchInProgress() {

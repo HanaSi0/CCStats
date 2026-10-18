@@ -15,6 +15,7 @@ public class Configuration : IPluginConfiguration {
     public static readonly int CurrentVersion = 0;
     public int Version { get; set; } = CurrentVersion;
     public string LastPluginVersion { get; set; } = "0.0.0.0";
+    public int LegacyValidationRevision { get; set; }
     public bool? EnableDBCachingCC { get; set; }
 
     public System.Numerics.Vector2? MatchDetailSize { get; set; }

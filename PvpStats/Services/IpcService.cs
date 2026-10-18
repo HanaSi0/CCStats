@@ -28,7 +28,7 @@ internal class IpcService : IDisposable {
     private bool OpenMatchDetailsWindow(string id) {
         PvpMatch? match = TryGetPvpMatch(id);
         if(match == null) return false;
-        _plugin.WindowManager.OpenMatchDetailsWindow(match);
+        _plugin.WindowManager.PostUi(() => _plugin.WindowManager.OpenMatchDetailsWindow(match));
         return true;
     }
 

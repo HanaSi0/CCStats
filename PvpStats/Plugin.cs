@@ -146,10 +146,10 @@ public sealed class Plugin : IDalamudPlugin {
                 HelpMessage = "打开水晶冲突记录器。"
             });
             CommandManager.AddHandler(ConfigCommandName, new CommandInfo(OnConfigCommand) {
-                HelpMessage = "Opens config window."
+                HelpMessage = "打开插件设置。"
             });
             CommandManager.AddHandler(LastMatchCommandName, new CommandInfo(OnLastMatchCommand) {
-                HelpMessage = "Opens match details window of last played match."
+                HelpMessage = "打开最近一场已完成比赛的详情。"
             });
 
 #if DEBUG
@@ -199,7 +199,7 @@ public sealed class Plugin : IDalamudPlugin {
             var lastMatch = CCCache.Matches.OrderByDescending(x => x.DutyStartTime)
                 .FirstOrDefault(x => x.IsCompleted && !x.IsQuarantined && !x.IsDeleted);
             if(lastMatch != null) {
-                WindowManager.OpenMatchDetailsWindow(lastMatch);
+                WindowManager.PostUi(() => WindowManager.OpenMatchDetailsWindow(lastMatch));
             }
         });
     }
@@ -245,9 +245,11 @@ public sealed class Plugin : IDalamudPlugin {
                 "AlreadyImported" => $"此前已导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联。",
                 _ => $"已导入：{imported.Matches} 场对局、{imported.Timelines} 份时间线、{imported.Links} 条玩家关联；原版文件保留。",
             };
+            if(imported.State == "Imported") Configuration.LegacyValidationRevision = 0;
             PlayerLinksService.ReloadFromStorage();
             if(refreshViews) {
                 if(Configuration.EnableDBCachingCC ?? true) CCCache.EnableCaching();
+                await ValidateHistoricalData();
                 await WindowManager.RefreshAll();
             }
             Log.Information(LegacyImportStatus);
@@ -274,19 +276,26 @@ public sealed class Plugin : IDalamudPlugin {
 
         // Publish the cache before optional legacy repairs. A corrupt historical record must not leave the first window empty.
         await WindowManager.RefreshAll(true);
-        var lastVersion = Version.TryParse(Configuration.LastPluginVersion,out var savedVersion)?savedVersion:new Version(0,0,0,0);
         var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        try {
-            await Validation.BulkCCUpdateValidatePlayerCount();
-            if(lastVersion < new Version(2,4,0,0))await Validation.BulkUpdateCCMatchTypes();
-            if(lastVersion < new Version(2,5,3,0))await Validation.SetCrystallineConflictMatchFlags();
-        } catch(Exception e) {
-            Log.Error(e,"Historical match validation failed; saved matches remain available.");
-        } finally {
-            await WindowManager.RefreshAll(true);
-        }
+        await ValidateHistoricalData();
+        await WindowManager.RefreshAll(true);
         Configuration.LastPluginVersion = currentVersion?.ToString() ?? "0.0.0.0";
         Configuration.Save();
-        Log2.Information("PvP Tracker initialized.");
+        Log2.Information("CCStats initialized.");
     }
+    private async Task ValidateHistoricalData() {
+        if(!PvpStats.Helpers.MatchVersionPolicy.NeedsLegacyValidation(Configuration.LegacyValidationRevision)) return;
+        try {
+            await Validation.BulkCCUpdateValidatePlayerCount();
+            await Validation.BulkUpdateCCMatchTypes();
+            await Validation.SetCrystallineConflictMatchFlags();
+            // A schema revision is independent of both upstream and CCStats release numbering.
+            // Advance only after all repairs succeeded, so failures retry on the next load.
+            Configuration.LegacyValidationRevision = PvpStats.Helpers.MatchVersionPolicy.LegacyValidationRevision;
+            Configuration.Save();
+        } catch(Exception e) {
+            Log.Error(e,"Historical match validation failed; saved matches remain available.");
+        }
+    }
+
 }

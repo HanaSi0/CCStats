@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using PvpStats.Helpers;
 using PvpStats.Types.Match;
 using PvpStats.Types.Match.Timeline;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ namespace PvpStats.Services.DataCache;
 internal abstract class MatchCacheService<T> where T : PvpMatch {
     protected readonly Plugin Plugin;
     //private readonly StorageService _storage;
-    private List<T> _matches = [];
+    private readonly MatchSnapshotStore<T> _matches = new();
 
     internal bool CachingEnabled { get; private set; }
     internal ReadOnlyCollection<T> Matches {
         get {
             if(CachingEnabled) {
-                return _matches.AsReadOnly();
+                return _matches.Snapshot();
             } else {
                 return GetFromStorage().ToList().AsReadOnly();
             }
@@ -44,36 +45,27 @@ internal abstract class MatchCacheService<T> where T : PvpMatch {
     }
 
     private void ClearCache() {
-        _matches = [];
+        _matches.Reset(System.Array.Empty<T>());
     }
 
     private void RebuildCache() {
-        _matches = GetFromStorage().ToList();
+        _matches.Reset(GetFromStorage());
     }
 
     internal async Task AddMatch(T match) {
-        if(CachingEnabled) {
-            _matches.Add(match);
-        }
         await AddToStorage(match);
+        if(CachingEnabled) _matches.Add(match);
         Plugin.Ipc.OnMatchSaved(match.Id.ToString());
     }
 
     internal async Task UpdateMatch(T match) {
-        if(CachingEnabled && _matches.RemoveAll(x => x.Id == match.Id) > 0) {
-            _matches.Add(match);
-        }
         await UpdateToStorage(match);
+        if(CachingEnabled) _matches.Update(new[] { match }, (a,b) => a.Id == b.Id);
     }
 
     internal async Task UpdateMatches(IEnumerable<T> matches) {
-        if(CachingEnabled) {
-            foreach(var match in matches) {
-                if(_matches.RemoveAll(x => x.Id == match.Id) > 0) {
-                    _matches.Add(match);
-                }
-            }
-        }
-        await UpdateManyToStorage(matches);
+        var updates = matches.ToArray();
+        await UpdateManyToStorage(updates);
+        if(CachingEnabled) _matches.Update(updates, (a,b) => a.Id == b.Id);
     }
 }

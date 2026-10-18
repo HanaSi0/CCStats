@@ -7,6 +7,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../PvpStats/Helpers/MatchSnapshotStore.cs" Link="MatchSnapshotStore.cs" />
     <Compile Include="../../PvpStats/Helpers/JobPlayerSelection.cs" Link="JobPlayerSelection.cs" />
     <Compile Include="../../PvpStats/Helpers/CurveSeries.cs" Link="CurveSeries.cs" />
     <Compile Include="../../PvpStats/Helpers/SerializedRefresh.cs" Link="SerializedRefresh.cs" />

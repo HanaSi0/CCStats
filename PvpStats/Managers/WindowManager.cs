@@ -23,6 +23,7 @@ using System.Data;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace PvpStats.Managers;
 internal class WindowManager : IDisposable {
@@ -30,6 +31,7 @@ internal class WindowManager : IDisposable {
     private WindowSystem WindowSystem;
     private Plugin _plugin;
     private readonly UiWorkQueue _uiWork=new();
+    private readonly CancellationTokenSource _lifetime=new();
     internal void PostUi(Action action) => _uiWork.Post(action);
     internal CCTrackerWindow CCTrackerWindow { get; private set; }
     internal FloatingLauncher Launcher { get; private set; }
@@ -68,6 +70,7 @@ internal class WindowManager : IDisposable {
     }
 
     public void Dispose() {
+        _lifetime.Cancel();
         _uiWork.Dispose();
         foreach(var replay in WindowSystem.Windows.OfType<PvpStats.Windows.Replay.MatchReplayWindow>().ToArray())replay.Dispose();
         WindowSystem.RemoveAllWindows();
@@ -78,16 +81,20 @@ internal class WindowManager : IDisposable {
         _plugin.ClientState.Login -= OnLogin;
     }
 
-    private void OnLogin() {
-        Task.Delay(3000).ContinueWith(async (t) => {
+    private void OnLogin() => _ = RefreshAfterLoginAsync();
+
+    private async Task RefreshAfterLoginAsync() {
+        try {
+            await Task.Delay(3000, _lifetime.Token);
             if(_plugin.Configuration.EnableAutoPlayerLinking) {
-                //don't need to put this here anymore but the delay is annoying so we want to do it after first refresh
                 await _plugin.PlayerLinksService.BuildAutoLinksCache();
-                _ = _plugin.WindowManager.RefreshAll(true);
-            } else {
-                _ = _plugin.WindowManager.RefreshAll();
             }
-        });
+            _lifetime.Token.ThrowIfCancellationRequested();
+            await RefreshAll(_plugin.Configuration.EnableAutoPlayerLinking);
+        } catch(OperationCanceledException) when(_lifetime.IsCancellationRequested) {
+        } catch(Exception e) {
+            if(!_lifetime.IsCancellationRequested) _plugin.Log.Error(e, "Login refresh failed.");
+        }
     }
 
     internal void AddWindow(Window window) {
