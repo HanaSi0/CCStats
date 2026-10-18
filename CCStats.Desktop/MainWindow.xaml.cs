@@ -29,6 +29,7 @@ public partial class MainWindow : Window {
     private System.Windows.Forms.NotifyIcon? _tray;
     private readonly List<Window> _hiddenOwned=new();
     private readonly Queue<string> _pendingObservations=new();
+    private CCStats.Core.Capture.PlayerPvpProfile? _lastStoredProfile;
     private string? _smokeCloseChoice;
     private string? _lastSaved;
     private TextBlock? _captureStatus;
@@ -52,6 +53,9 @@ public partial class MainWindow : Window {
         _capture.Configure(_preferences.AutoRecord);
         _captureTimer.Tick+=async (_,_)=> {
             UpdateCaptureStatus();UpdateRankings();
+            if(!_exiting&&_capture.State.Profile is {} profile&&profile!=_lastStoredProfile) {
+                try {_library.SaveProfile(profile);_lastStoredProfile=profile;}catch(Exception error) when(error is IOException or UnauthorizedAccessException or LiteDB.LiteException) {StatusText.Text="个人资料暂未保存："+error.Message;}
+            }
             var saved=_capture.State.SavedPath;
             if(saved!=null&&saved!=_lastSaved) {_lastSaved=saved;_pendingObservations.Enqueue(saved);}
             if(!_busy&&_pendingObservations.TryDequeue(out var pending))await ImportAsync(pending,false);
@@ -144,6 +148,7 @@ public partial class MainWindow : Window {
         for(int i=0;i<_navigation.Count;i++) {_navigation[i].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));if(_page!=i||PageContent.Children.Count==0)throw new InvalidOperationException("Navigation failed: "+i);}
         await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+StatusText.Text);
         if(_library.All().Count!=1||DesktopPreferences.Load(_settingsPath).RecentFiles.Count!=1)throw new InvalidOperationException("Persistence failed");
+        for(int i=0;i<_navigation.Count;i++)ShowPage(i);
         SetupTray();
         foreach(var choice in new[]{"Tray","Exit"}) {
             var dialog=new CloseChoiceDialog(this);dialog.Loaded+=(_,_)=>dialog.SelectForCheck(choice,true);

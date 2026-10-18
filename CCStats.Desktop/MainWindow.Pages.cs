@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 namespace CCStats.Desktop;
 public partial class MainWindow {
-    private string LocalIdentity=>_preferences.Links.Canonical(_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer??"");
+    private string LocalIdentity=>_preferences.Links.Canonical(_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_capture.State.Profile?.Player??_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer??"");
     private List<MatchRecord> Filtered()=>RecordStatistics.Filter(_records,_search,_map,_result,_favorites,_mode).Where(r=>(_rank=="全部"||r.Rank==_rank)&&(!_fromDate.HasValue||r.StartUtc.ToLocalTime().Date>=_fromDate.Value.Date)&&(!_untilDate.HasValue||r.StartUtc.ToLocalTime().Date<=_untilDate.Value.Date)).ToList();
     private void ShowMatches() {
         var tools=new WrapPanel();tools.Children.Add(ActionButton("读取文件",OpenFile));
@@ -70,6 +70,8 @@ public partial class MainWindow {
     }
     private void ShowProfile() {
         var player=LocalIdentity.Length>0?LocalIdentity:"未选择角色";
+        var live=_capture.State.Profile;var profile=live!=null&&_preferences.Links.Canonical(live.Player)==player?live:_library.Profile(player);
+        if(profile!=null)Card("客户端个人资料",Text($"赛季 {profile.Season} · {profile.RankName} {profile.Riser} · {profile.Stars} 星 · 水晶积分 {profile.Credit:N0}"),Text($"练习赛 {profile.CasualMatches:N0} 场 / {profile.CasualWins:N0} 胜　段位赛 {profile.RankedMatches:N0} 场 / {profile.RankedWins:N0} 胜"),Text($"最近读取 {profile.ObservedAt.ToLocalTime():yyyy-MM-dd HH:mm:ss}；客户端累计计数与本机保存的场次分开显示。",true));
         var rows=_records.Where(r=>_preferences.Links.Canonical(r.LocalPlayer)==player&&!r.Observation&&r.Completed&&!r.Quarantined).ToArray();var latest=rows.FirstOrDefault();
         Card(player,Text($"本机记录 {rows.Length:N0} 场"),Text($"最近段位　{latest?.Rank??"未记录"}　积分　{latest?.Credit?.ToString()??"—"}"),Text("资料来自本机记录；未观测的赛季和成就不补造。",true));
         PageContent.Children.Add(TableFactory.Create(RecordStatistics.Aggregate(rows,"职业",player,_preferences.Links.Canonical),("职业","Name"),("出场","Appearances"),("胜率","WinRate"),("场均伤害","Damage"),("场均治疗","Healing")));

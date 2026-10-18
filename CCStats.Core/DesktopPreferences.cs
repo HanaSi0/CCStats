@@ -14,6 +14,7 @@ public sealed class DesktopPreferences {
     public static DesktopPreferences Load(string path) {
         try {
             var result = JsonSerializer.Deserialize<DesktopPreferences>(File.ReadAllText(path)) ?? new();
+            result.LocalPlayer??="";
             result.CustomColors??=new();
             result.Links??=new();
             var aliases=new Dictionary<string,string>(StringComparer.OrdinalIgnoreCase);

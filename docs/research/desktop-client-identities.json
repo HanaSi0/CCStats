@@ -1,0 +1,15 @@
+{
+  "source": "https://github.com/xivapi/ffxiv-datamining/tree/76d22160d687b0e0318071a098ab9eb9d531605f/csv/en",
+  "retrieved": "2026-10-19",
+  "sha256": {
+    "World": "511a4962288fe377f189a84a36b77ab4e0c22dcb6c7716ffb461e812a4d3f162",
+    "EObjName": "390392f7a51aed6795c2c80d3f287afe0c82483f3a19772d717fa840de037a9c",
+    "BNpcName": "08614d48fd45ab0db1b8705425a363b71dc143cccb961a5b916723c81edc0449"
+  },
+  "counts": {
+    "Worlds": 87,
+    "Objects": 20,
+    "Npcs": 28
+  },
+  "notes": "Exact English sheet-name matching only, map-scoped. Name identity does not establish trigger dimensions, activity, or a bridge-state mapping."
+}

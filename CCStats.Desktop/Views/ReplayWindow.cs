@@ -61,6 +61,7 @@ internal sealed class ReplayWindow : Window {
     }
     internal async Task VerifyAsync(string screenshot) {
         await _ready.Task.WaitAsync(TimeSpan.FromSeconds(40));
+        if(_bundle.Data.DirectorObserved&&_progress.Text.StartsWith("暂无",StringComparison.Ordinal))throw new InvalidOperationException("Observed director progress is incorrectly hidden");
         if(_mapVisual.Content==null||_viewport.Camera==null)throw new InvalidOperationException("3D map or camera missing");
         _threeD=false;_viewport.Visibility=Visibility.Hidden;_overlay.InvalidateVisual();await Task.Delay(100);
         if(_mapImage==null)throw new InvalidOperationException("Official 2D map missing");
@@ -107,7 +108,7 @@ internal sealed class ReplayWindow : Window {
         if(_busy||Math.Abs(_rendered-_seconds)<.06)return;_busy=true;var seconds=_seconds;_rendered=seconds;
         try {
             var now=_origin.AddSeconds(seconds);var frame=ReplayInterpolation.Sample(_bundle.Data,now);
-            _progress.Text=frame==null||_bundle.Match.Observation?"暂无该时刻的完整观测":$"星极队 {frame.AstraProgress/10f:F1}%　　◆　　灵极队 {frame.UmbraProgress/10f:F1}%";
+            _progress.Text=frame==null||(_bundle.Match.Observation&&!_bundle.Data.DirectorObserved)?"暂无该时刻的完整观测":$"星极队 {frame.AstraProgress/10f:F1}%　　◆　　灵极队 {frame.UmbraProgress/10f:F1}%";
             DrawTeam(_left,frame,1,now);DrawTeam(_right,frame,2,now);
             if(_threeD) {var model=await Task.Run(()=>MeshVisuals.Dynamic(ReplaySceneBuilder.Build(_bundle,_mesh,now,_effects,_trail,_clip)));if(!_closed)_dynamic.Content=model;}
             _overlay.InvalidateVisual();

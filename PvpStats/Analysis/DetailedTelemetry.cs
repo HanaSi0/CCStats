@@ -10,6 +10,11 @@ namespace PvpStats.Analysis;
 public sealed class DetailedTelemetry {
     public int Version { get; set; } = 2;
     public string GameVersion { get; set; } = "";
+    public string CaptureMethod { get; set; } = "";
+    public bool DirectorObserved { get; set; }
+    public bool EffectsPolled { get; set; }
+    public List<string> CaptureWarnings { get; set; } = new();
+    public List<ReplayArenaState> ArenaStates { get; set; } = new();
     public Dictionary<uint, string> StatusDescriptions { get; set; } = new();
     public Dictionary<uint, string> ActionDescriptions { get; set; } = new();
     public string MapTexture { get; set; } = "";
@@ -227,4 +232,8 @@ public static class DetailedAnalysis {
         }
         return result;
     }
+}
+
+public sealed record ReplayArenaState(DateTime Timestamp,uint LayoutId,ushort State,byte Flags) {
+    public ReplayArenaState():this(default,0,0,0) {}
 }

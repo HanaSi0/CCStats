@@ -50,7 +50,7 @@ try {
     var statuses=new byte[ClientLayout.StatusBytes];BinaryPrimitives.WriteUInt16LittleEndian(statuses.AsSpan(8),3054);BinaryPrimitives.WriteSingleLittleEndian(statuses.AsSpan(12),4.5f);
     var player=ClientLayout.DecodePlayer(header,21,statuses,DateTime.UtcNow)!;
     Check(player.X==12&&player.Y==3&&player.Z==-9&&player.HP==9000&&player.ClassJobId==24,"external player layout decodes coordinates, HP and job from a byte fixture");
-    Check(player.Team==0&&player.Player=="Test Player [世界 21]"&&player.Statuses.Single().Id==3054,"unknown teams/world names stay explicit; status IDs are captured");
+    Check(player.Team==0&&player.Player==ClientCatalog.PlayerName("Test Player",21)&&player.Statuses.Single().Id==3054,"unknown teams/world names stay explicit; status IDs are captured");
     header[0x90]=2;Check(ClientLayout.DecodePlayer(header,21,statuses,DateTime.UtcNow)==null,"NPC memory cannot be interpreted as player layout");header[0x90]=1;
     BinaryPrimitives.WriteSingleLittleEndian(header.AsSpan(0xB0),float.NaN);Check(ClientLayout.DecodePlayer(header,21,statuses,DateTime.UtcNow)==null,"invalid positions reject an incompatible snapshot");
     string observation;
@@ -66,5 +66,6 @@ try {
     Check(observed.IsObservation&&observed.Frames==120&&observed.Effects==0,"independent observation is importable and does not invent effect packets");
     Check(!File.Exists(observation+".partial"),"finished observation is atomically renamed to the usable export");
     await PortChecks.Run(Check);
+    await CaptureAdaptationChecks.Run(Check);
     Console.WriteLine($"Passed {passed} standalone core/import/capture fixture checks.");
 } finally {Directory.Delete(directory,true);}

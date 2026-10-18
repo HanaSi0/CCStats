@@ -8,13 +8,18 @@ public partial class MainWindow {
     private void ShowCapture() {
         var actions=new WrapPanel();actions.Children.Add(ActionButton("重新识别",(_,_)=>_capture.Connect(Path.Combine(_directory,"observations"))));
         actions.Children.Add(ActionButton("开始记录",(_,_)=>_capture.Record(true)));actions.Children.Add(ActionButton("结束本段",(_,_)=>_capture.Record(false)));
+        actions.Children.Add(ActionButton("导出采集诊断",async (_,_)=> {
+            var save=new Microsoft.Win32.SaveFileDialog {Filter="ZIP (*.zip)|*.zip",FileName="CCStats-采集诊断.zip"};if(save.ShowDialog(this)!=true)return;
+            var temp=save.FileName+"."+Guid.NewGuid().ToString("N")+".partial";
+            try {await CCStats.Core.Capture.CaptureDiagnostics.ExportAsync(_directory,temp,new {CapturedAt=DateTime.UtcNow,State=_capture.State,Layout=CCStats.Core.Capture.ClientLayout.Profile,Notes="包含采集状态与结算界面字段，不包含完整回放或任意内存转储。"});File.Move(temp,save.FileName,true);StatusText.Text="采集诊断已导出。";}catch(Exception error) {StatusText.Text="导出失败："+error.Message;}finally {if(File.Exists(temp))File.Delete(temp);}
+        }));
         _captureStatus=Text("",true);_capturePlayers=new ListBox {MaxHeight=330};Card("游戏连接",actions,_captureStatus,_capturePlayers);
-        Card("后台运行",Text("游戏启动后自动识别。进入水晶冲突后按设置自动记录，关闭窗口时可继续在托盘运行。",true),Text("当前独立读取为玩家位置、朝向、体力、职业与状态。尚未适配的队伍、水晶、结算和技能事件会保留缺失状态。",true));UpdateCaptureStatus();
+        Card("后台运行",Text("游戏启动后自动识别。进入水晶冲突后按设置自动记录，关闭窗口时可继续在托盘运行。",true),Text("读取已加载角色的位置、朝向、体力、职业、状态，并尝试读取队伍、推进、水晶、召唤物及保留的动作效果。完整结算与命中瞬间快照仍需适配，缺失数据不会补造。",true));UpdateCaptureStatus();
     }
     private void UpdateCaptureStatus() {
         if(_tray!=null) {var text=_capture.State.Recording?"CCStats · 后台记录中":_capture.State.Connected?"CCStats · 游戏已连接":"CCStats · 等待游戏";if(_tray.Text!=text)_tray.Text=text;}
         if(!IsVisible||_page!=9||_captureStatus==null||_capturePlayers==null)return;var state=_capture.State;
-        _captureStatus.Text=$"{state.Message}\n区域 {state.Territory} · {state.Players?.Length??0} 名已加载玩家 · {state.Frames:N0} 帧"+(state.SavedPath==null?"":"\n已保存："+state.SavedPath);
+        _captureStatus.Text=$"{state.Message}\n区域 {state.Territory} · {state.Players?.Length??0} 名已加载玩家 · {state.Frames:N0} 帧"+(state.DiagnosticError==null?"":"\n诊断暂未写入："+state.DiagnosticError)+(state.SavedPath==null?"":"\n已保存："+state.SavedPath);
         var players=state.Players??Array.Empty<string>();if(!_capturePlayers.Items.Cast<string>().SequenceEqual(players))_capturePlayers.ItemsSource=players;
     }
     private void ShowSettings() {

@@ -10,6 +10,7 @@
     <Compile Include="../PvpStats/Localization/*.cs" Link="Localization/%(Filename)%(Extension)" />
     <Compile Include="../PvpStats/Analysis/*.cs" Link="Analysis/%(Filename)%(Extension)" />
     <Compile Include="../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Resources/client-identities.json" LogicalName="CCStats.ClientIdentities.json" />
     <EmbeddedResource Include="../docs/exports/official-maps-2d/assets.json" LogicalName="CCStats.MapMetadata.json" />
     <EmbeddedResource Include="../PvpStats/Resources/ReplayMaps/*.gz" LogicalName="PvpStats.Resources.ReplayMaps.%(Filename)%(Extension)" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />

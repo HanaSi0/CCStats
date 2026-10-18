@@ -5,6 +5,7 @@ on:
     paths:
       - 'CCStats.Desktop/**'
       - 'CCStats.Core/**'
+      - 'PvpStats/Analysis/**'
       - 'tests/DesktopChecks/**'
       - '.github/workflows/desktop-validation.yml'
   workflow_dispatch:

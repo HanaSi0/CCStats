@@ -44,6 +44,7 @@ public sealed class PlayerScore {
 }
 public sealed class ReplayBundle {
     public MatchRecord Match {get;set;}=new();
+    public Capture.PlayerPvpProfile? ClientProfile {get;set;}
     public DetailedTelemetry Data {get;set;}=new();
     public List<ActionSummary> Actions {get;set;}=new();
     public List<ProgressSample> Progress {get;set;}=new();

@@ -23,7 +23,8 @@ public sealed class RecordLibrary : IDisposable {
             _db.BeginTrans();
             try {
                 records.Upsert(bundle.Match);
-                _db.GetCollection<BsonDocument>("replays").Upsert(new BsonDocument { ["_id"]=bundle.Match.Id,["Data"]=BsonMapper.Global.ToDocument(bundle.Data),["Actions"]=System.Text.Json.JsonSerializer.Serialize(bundle.Actions),["Progress"]=System.Text.Json.JsonSerializer.Serialize(bundle.Progress),["Timeline"]=System.Text.Json.JsonSerializer.Serialize(bundle.Timeline)});
+                _db.GetCollection<BsonDocument>("replays").Upsert(new BsonDocument { ["_id"]=bundle.Match.Id,["ClientProfile"]=System.Text.Json.JsonSerializer.Serialize(bundle.ClientProfile),["Data"]=BsonMapper.Global.ToDocument(bundle.Data),["Actions"]=System.Text.Json.JsonSerializer.Serialize(bundle.Actions),["Progress"]=System.Text.Json.JsonSerializer.Serialize(bundle.Progress),["Timeline"]=System.Text.Json.JsonSerializer.Serialize(bundle.Timeline)});
+                if(bundle.ClientProfile!=null)SaveProfile(bundle.ClientProfile);
                 _db.Commit();
             } catch {_db.Rollback();throw;}
         }
@@ -32,8 +33,10 @@ public sealed class RecordLibrary : IDisposable {
         var match=_db.GetCollection<MatchRecord>("records").FindById(id)??throw new InvalidDataException("记录不存在。");
         var replay=_db.GetCollection<BsonDocument>("replays").FindById(id);
         List<T> ReadList<T>(string key)=>replay!=null&&replay[key].IsString?System.Text.Json.JsonSerializer.Deserialize<List<T>>(replay[key].AsString)??new():new();
-        return new() {Match=match,Actions=ReadList<ActionSummary>("Actions"),Progress=ReadList<ProgressSample>("Progress"),Data=replay==null?new():BsonMapper.Global.ToObject<DetailedTelemetry>(replay["Data"].AsDocument),Timeline=replay==null?new():System.Text.Json.JsonSerializer.Deserialize<List<TimelineRow>>(replay["Timeline"].AsString)??new()};
+        return new() {Match=match,ClientProfile=replay!=null&&replay["ClientProfile"].IsString?System.Text.Json.JsonSerializer.Deserialize<Capture.PlayerPvpProfile>(replay["ClientProfile"].AsString):null,Actions=ReadList<ActionSummary>("Actions"),Progress=ReadList<ProgressSample>("Progress"),Data=replay==null?new():BsonMapper.Global.ToObject<DetailedTelemetry>(replay["Data"].AsDocument),Timeline=replay==null?new():System.Text.Json.JsonSerializer.Deserialize<List<TimelineRow>>(replay["Timeline"].AsString)??new()};
     }}
+    public void SaveProfile(Capture.PlayerPvpProfile profile) {lock(_gate) {if(Profile(profile.Player) is {} current&&current.ObservedAt>profile.ObservedAt)return;_db.GetCollection<BsonDocument>("profiles").Upsert(new BsonDocument {["_id"]=profile.Player,["Data"]=System.Text.Json.JsonSerializer.Serialize(profile)});}}
+    public Capture.PlayerPvpProfile? Profile(string player) {lock(_gate) {var row=_db.GetCollection<BsonDocument>("profiles").FindById(player);return row==null?null:System.Text.Json.JsonSerializer.Deserialize<Capture.PlayerPvpProfile>(row["Data"].AsString);}}
     public void Annotate(string id,bool favorite,string tags) {lock(_gate) {var c=_db.GetCollection<MatchRecord>("records");var row=c.FindById(id);if(row==null)return;row.Favorite=favorite;row.Tags=tags;c.Update(row);}}
     public void Delete(string id) {lock(_gate) {_db.BeginTrans();try {_db.GetCollection<MatchRecord>("records").Delete(id);_db.GetCollection<BsonDocument>("replays").Delete(id);_db.Commit();}catch {_db.Rollback();throw;}}}
     public void Dispose() {lock(_gate)_db.Dispose();}
