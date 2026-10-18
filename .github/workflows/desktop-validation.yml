@@ -1,0 +1,49 @@
+name: Validate desktop changes (no release)
+on:
+  push:
+    branches: ['review/claude-walkable']
+    paths:
+      - 'CCStats.Desktop/**'
+      - 'CCStats.Core/**'
+      - 'tests/DesktopChecks/**'
+      - '.github/workflows/desktop-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.402'
+      - name: Core and background recording checks
+        shell: pwsh
+        run: |
+          dotnet restore CCStats.Desktop.slnx --locked-mode
+          if ($LASTEXITCODE -ne 0) { throw 'Restore failed' }
+          dotnet run --project tests/DesktopChecks -c Release --no-restore
+          if ($LASTEXITCODE -ne 0) { throw 'Core checks failed' }
+          dotnet publish CCStats.Desktop/CCStats.Desktop.csproj -c Release --no-restore -o artifacts/internal-desktop
+          if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
+      - name: Window, tray, close dialog and replay checks
+        shell: pwsh
+        run: |
+          $report = Join-Path $PWD 'artifacts/desktop-validation.json'
+          $exe = Join-Path $PWD 'artifacts/internal-desktop/CCStats.Desktop.exe'
+          $app = Start-Process $exe -ArgumentList @('--smoke-test', $report) -PassThru
+          if (!$app.WaitForExit(120000)) { $app.Kill(); throw 'Window checks timed out' }
+          if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Window checks failed' }
+          $result = Get-Content $report | ConvertFrom-Json
+          if (!$result.success -or $result.navigation -ne 12 -or !$result.tray -or !$result.closeChoice -or !$result.replay) { throw 'Incomplete window checks' }
+          Get-Content $report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-validation-report
+          path: |
+            artifacts/desktop-validation.json
+            artifacts/desktop-validation.png
+            artifacts/desktop-validation.replay.png

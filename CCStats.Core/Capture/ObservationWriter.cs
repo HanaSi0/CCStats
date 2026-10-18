@@ -10,6 +10,7 @@ public sealed class ObservationWriter : IDisposable {
     private readonly uint _territory;
     private readonly DateTime _start=DateTime.UtcNow;
     private bool _finished;
+    public uint Territory=>_territory;
     public string Destination {get;}
     public int Frames {get;private set;}
     public ObservationWriter(string directory,uint territory) {

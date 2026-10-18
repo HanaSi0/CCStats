@@ -1,0 +1,39 @@
+using LiteDB;
+using System.Text.Json;
+using PvpStats.Analysis;
+
+namespace CCStats.Core.Library;
+
+public sealed class RecordLibrary : IDisposable {
+    private readonly LiteDatabase _db;
+    private readonly object _gate=new();
+    public RecordLibrary(string directory) {
+        Directory.CreateDirectory(directory);_db=new LiteDatabase(Path.Combine(directory,"library.db"));
+        _db.GetCollection<MatchRecord>("records").EnsureIndex(r=>r.StartUtc);
+    }
+    public List<MatchRecord> All() {lock(_gate)return _db.GetCollection<MatchRecord>("records").FindAll().OrderByDescending(r=>r.StartUtc).ToList();}
+    public void Save(ReplayBundle bundle) {
+        // Store movement in the existing compressed binary format, not expanded JSON in the database.
+        if(bundle.Data.Frames.Count>0)bundle.Data.Version=Math.Max(3,bundle.Data.Version);
+        bundle.Data.PrepareForStorage();
+        bundle.Match.FrameCount=bundle.Data.Frames.Count;
+        lock(_gate) {
+            var records=_db.GetCollection<MatchRecord>("records");var old=records.FindById(bundle.Match.Id);
+            if(old!=null) {bundle.Match.Favorite=old.Favorite;bundle.Match.Tags=old.Tags;}
+            _db.BeginTrans();
+            try {
+                records.Upsert(bundle.Match);
+                _db.GetCollection<BsonDocument>("replays").Upsert(new BsonDocument { ["_id"]=bundle.Match.Id,["Data"]=BsonMapper.Global.ToDocument(bundle.Data),["Timeline"]=System.Text.Json.JsonSerializer.Serialize(bundle.Timeline)});
+                _db.Commit();
+            } catch {_db.Rollback();throw;}
+        }
+    }
+    public ReplayBundle Load(string id) {lock(_gate) {
+        var match=_db.GetCollection<MatchRecord>("records").FindById(id)??throw new InvalidDataException("记录不存在。");
+        var replay=_db.GetCollection<BsonDocument>("replays").FindById(id);
+        return new() {Match=match,Data=replay==null?new():BsonMapper.Global.ToObject<DetailedTelemetry>(replay["Data"].AsDocument),Timeline=replay==null?new():System.Text.Json.JsonSerializer.Deserialize<List<TimelineRow>>(replay["Timeline"].AsString)??new()};
+    }}
+    public void Annotate(string id,bool favorite,string tags) {lock(_gate) {var c=_db.GetCollection<MatchRecord>("records");var row=c.FindById(id);if(row==null)return;row.Favorite=favorite;row.Tags=tags;c.Update(row);}}
+    public void Delete(string id) {lock(_gate) {_db.BeginTrans();try {_db.GetCollection<MatchRecord>("records").Delete(id);_db.GetCollection<BsonDocument>("replays").Delete(id);_db.Commit();}catch {_db.Rollback();throw;}}}
+    public void Dispose() {lock(_gate)_db.Dispose();}
+}

@@ -65,5 +65,6 @@ try {
     var observed=await ReplayFileReader.ReadAsync(observation);
     Check(observed.IsObservation&&observed.Frames==120&&observed.Effects==0,"independent observation is importable and does not invent effect packets");
     Check(!File.Exists(observation+".partial"),"finished observation is atomically renamed to the usable export");
+    await PortChecks.Run(Check);
     Console.WriteLine($"Passed {passed} standalone core/import/capture fixture checks.");
 } finally {Directory.Delete(directory,true);}

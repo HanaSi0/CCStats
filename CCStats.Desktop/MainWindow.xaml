@@ -9,10 +9,10 @@
         <StackPanel DockPanel.Dock="Top" Margin="0,4,0,24">
           <Image Source="Assets/icon.png" Width="64" Height="64" HorizontalAlignment="Left" Margin="0,0,0,14"/>
           <TextBlock Text="CCStats" FontSize="25" FontWeight="SemiBold"/>
-          <TextBlock Text="桌面版 · 0.1.0 预览" Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0"/>
+          <TextBlock Text="独立桌面工作台" Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0"/>
         </StackPanel>
         <TextBlock DockPanel.Dock="Bottom" Text="独立运行 · Windows x64" FontSize="12" Foreground="{StaticResource MutedBrush}" Margin="0,16,0,0"/>
-        <StackPanel x:Name="Navigation"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="Navigation"/></ScrollViewer>
       </DockPanel>
     </Border>
     <Grid Grid.Column="2">

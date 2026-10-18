@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace CCStats.Core.Import;
 
-/// <summary>Read a plugin replay export without editing it or accessing the plugin database.</summary>
+/// <summary>Read a replay export without editing its original data.</summary>
 public static class ReplayFileReader {
     public const long MaximumBytes = 128L * 1024 * 1024;
     public static async Task<ReplaySummary> ReadAsync(string path, CancellationToken token = default) {
@@ -12,9 +12,9 @@ public static class ReplayFileReader {
         using var document = await JsonDocument.ParseAsync(stream, new JsonDocumentOptions { MaxDepth = 64 }, token);
         return Read(document.RootElement, fullPath);
     }
-    private static ReplaySummary Read(JsonElement root, string path) {
+    internal static ReplaySummary Read(JsonElement root, string path) {
         if(root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("Telemetry", out var data) || data.ValueKind != JsonValueKind.Object)
-            throw new InvalidDataException("不是 CCStats 回放导出文件。请在插件地图回放中使用“导出观测记录”。");
+            throw new InvalidDataException("不是有效的 CCStats 回放文件，请选择包含观测数据的 JSON。");
         if(!root.TryGetProperty("MatchId",out var idElement) || idElement.ValueKind != JsonValueKind.String)
             throw new InvalidDataException("回放缺少比赛编号。");
         var id = idElement.GetString() ?? "";

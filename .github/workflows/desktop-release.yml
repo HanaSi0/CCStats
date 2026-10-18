@@ -52,7 +52,7 @@ jobs:
           if (!$app.WaitForExit(60000)) { $app.Kill(); throw 'Desktop startup timed out' }
           if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Desktop process failed' }
           $result = Get-Content $report | ConvertFrom-Json
-          if (!$result.success -or $result.navigation -ne 5 -or !$result.import -or !$result.persistence) { throw 'Desktop UI checks failed' }
+          if (!$result.success -or $result.navigation -ne 12 -or !$result.import -or !$result.persistence) { throw 'Desktop UI checks failed' }
           Get-Content $report
       - name: Package desktop artifacts
         shell: pwsh

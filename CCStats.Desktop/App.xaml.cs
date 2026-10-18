@@ -25,7 +25,7 @@ public partial class App : Application {
                 {"MatchId":"507f1f77bcf86cd799439011","TerritoryId":1034,"StartUtc":"2026-10-18T00:00:00Z","MatchEndTime":"2026-10-18T00:04:00Z","Telemetry":{"Frames":[{"Players":[{"Player":"Example One Ixion"},{"Player":"Example Two Titan"}]},{"Players":[]}],"Effects":[],"ReplaySkills":[],"MapMechanics":[]}}
                 """);
                 await window.RunSmokeChecksAsync(fixture,Path.ChangeExtension(output,"png"));
-                await File.WriteAllTextAsync(output,JsonSerializer.Serialize(new {success=true,os=Environment.OSVersion.ToString(),framework=System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,navigation=5,import=true,persistence=true,width=window.ActualWidth,height=window.ActualHeight}));
+                await File.WriteAllTextAsync(output,JsonSerializer.Serialize(new {success=true,os=Environment.OSVersion.ToString(),framework=System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,navigation=12,import=true,persistence=true,tray=true,closeChoice=true,replay=true,width=window.ActualWidth,height=window.ActualHeight}));
                 Shutdown(0);
             } catch(Exception error) {
                 await File.WriteAllTextAsync(output,JsonSerializer.Serialize(new {success=false,error=error.ToString()}));Shutdown(1);

@@ -9,17 +9,24 @@ using PvpStats.Analysis;
 
 namespace CCStats.Desktop.Capture;
 
-internal sealed class ExternalGameReader : IDisposable {
+internal sealed class ExternalGameReader : IObservedGameSource {
     private readonly Process _process;
     private readonly SafeProcessHandle _handle;
     private readonly long _objects,_gameMain;
     private readonly byte[] _table=new byte[ClientLayout.ObjectSlots*8],_header=new byte[ClientLayout.HeaderBytes],_statuses=new byte[ClientLayout.StatusBytes],_world=new byte[2],_territory=new byte[4];
     private readonly Dictionary<uint,(ushort World,DateTime At,List<ReplayBuff> Statuses)> _cache=new();
     public int ProcessId=>_process.Id;
-    public ExternalGameReader() {
+    internal static int FindGameProcess() {
         var processes=Process.GetProcessesByName("ffxiv_dx11");
-        if(processes.Length!=1) {foreach(var p in processes)p.Dispose();throw new InvalidOperationException(processes.Length==0?"未发现 ffxiv_dx11.exe，请先打开游戏并登录角色。":"发现多个游戏进程，请暂时只保留一个客户端后连接。");}
-        _process=processes[0];
+        try {
+            if(processes.Length==0)return 0;
+            GetWindowThreadProcessId(GetForegroundWindow(),out var active);
+            return processes.FirstOrDefault(p=>p.Id==active)?.Id??processes.OrderBy(p=>p.Id).First().Id;
+        } finally {foreach(var process in processes)process.Dispose();}
+    }
+    public ExternalGameReader(int processId) {
+        _process=Process.GetProcessById(processId);
+        if(_process.ProcessName!="ffxiv_dx11")throw new InvalidOperationException("所选进程不是游戏客户端。");
         _handle=OpenProcess(0x10|0x1000,false,_process.Id); // VM_READ | QUERY_LIMITED_INFORMATION only.
         try {
             if(_handle.IsInvalid)throw new InvalidOperationException("无法读取游戏进程，请确保软件与游戏使用相同用户权限。");
@@ -60,6 +67,8 @@ internal sealed class ExternalGameReader : IDisposable {
         return (territory,frame);
     }
     public void Dispose() {_handle.Dispose();_process.Dispose();}
+    [DllImport("user32.dll")]private static extern nint GetForegroundWindow();
+    [DllImport("user32.dll")]private static extern uint GetWindowThreadProcessId(nint window,out uint processId);
     [DllImport("kernel32.dll",SetLastError=true)]private static extern SafeProcessHandle OpenProcess(uint access,bool inherit,int processId);
     [DllImport("kernel32.dll",SetLastError=true)][return:MarshalAs(UnmanagedType.Bool)]private static extern bool ReadProcessMemory(SafeProcessHandle process,nint address,[Out]byte[] buffer,int size,out nuint read);
 }
