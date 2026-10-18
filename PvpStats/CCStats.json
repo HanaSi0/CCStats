@@ -6,7 +6,7 @@
   "InternalName": "CCStats",
   "RepoUrl": "https://github.com/HanaSi0/CCStats",
   "ApplicableVersion": "any",
-  "Changelog": "1.0.7：重新打包发布，保留 1.0.6 的七图裁边、出生区恢复与技能范围裁剪更新。",
+  "Changelog": "1.0.8：从原始模型重建九霄云上，修复出生区连接道路和中段侧路缺面；同步更新分层地面与技能范围显示高度。",
   "Tags": [
     "pvp",
     "crystalline conflict",
