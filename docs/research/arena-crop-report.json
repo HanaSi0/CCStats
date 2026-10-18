@@ -162,643 +162,1903 @@
   {
     "map": "cloud-nine",
     "name": "九霄云上",
-    "triangles": 141546,
-    "vertices": 217758,
-    "compressed_bytes": 2378239,
-    "sha256": "1b21ca34f7e95c74aa131f04c3a2fd76f7e04e6b76b78b632e1d2509f3d78c19",
-    "walk_cells": 26671,
-    "walk_cells_removed": 12564,
-    "walk_gap_cells": 236,
-    "walk_bytes": 83544,
-    "walk_sha256": "606460b92deafade4071c00e35d52f7e18dbdf016cd0389f2b05bb4de279ad46",
-    "filled_holes": [
-      {
-        "centre": [
-          0.25,
-          -16.75
-        ],
-        "area": 1.75,
-        "height": 0.36
-      }
-    ],
+    "triangles": 256860,
+    "vertices": 563952,
+    "compressed_bytes": 4659587,
+    "sha256": "8c55a145bd4206221bab15bc31b5e4372217b5612e165069f78fdab185c010e9",
+    "walk_cells": 31696,
+    "walk_cells_removed": 15864,
+    "walk_gap_cells": 202,
+    "walk_bytes": 97868,
+    "walk_sha256": "ede9e3f1602291ac7259e442b64dd86532f83eaaedfb49a5d0b09b90f7866825",
+    "filled_holes": [],
     "crop_margin": 3,
     "crop_cell": 0.5,
-    "before_triangles": 122926,
-    "restored_source_triangles": 15672,
-    "source_restorations": [
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub02.mdl/s5p3_a1_rub02",
-        "triangles": 64
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub02.mdl/s5p3_a1_rub02",
-        "triangles": 58
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub04.mdl/s5p3_a1_rub04",
-        "triangles": 43
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub04.mdl/s5p3_a1_rub04",
-        "triangles": 91
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub04.mdl/s5p3_a1_rub04",
-        "triangles": 43
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub04.mdl/s5p3_a1_rub04",
-        "triangles": 91
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 49
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 106
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 62
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 139
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 53
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 116
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 77
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 159
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 77
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 159
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 77
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
-        "triangles": 159
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub01.mdl/s5p3_a1_rub01",
-        "triangles": 124
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub01.mdl/s5p3_a1_rub01",
-        "triangles": 78
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf25.mdl",
-        "triangles": 170
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf25.mdl",
-        "triangles": 110
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck05.mdl/s5p3_a1_rck05",
-        "triangles": 172
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck05.mdl/s5p3_a1_rck05",
-        "triangles": 96
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck04.mdl",
-        "triangles": 82
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 137
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 62
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 426
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 338
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 502
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 140
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 151
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 338
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 338
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
-        "triangles": 112
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
-        "triangles": 72
-      },
-      {
-        "source": "BgPart_0000-0062.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf03.mdl/s5p3_a1_arf03",
-        "triangles": 18
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl02.mdl",
-        "triangles": 136
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl02.mdl",
-        "triangles": 136
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl01.mdl",
-        "triangles": 202
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl01.mdl",
-        "triangles": 216
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl01.mdl",
-        "triangles": 216
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl01.mdl",
-        "triangles": 216
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl01.mdl",
-        "triangles": 216
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf27.mdl",
-        "triangles": 120
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf27.mdl",
-        "triangles": 270
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf27.mdl",
-        "triangles": 298
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck08.mdl/s5p3_a1_rck08",
-        "triangles": 206
-      },
-      {
-        "source": "BgPart_0062-0083.glb",
-        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck08.mdl/s5p3_a1_rck08",
-        "triangles": 149
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/30",
-        "triangles": 59
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/31",
-        "triangles": 82
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/34",
-        "triangles": 245
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/35",
-        "triangles": 321
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/36",
-        "triangles": 555
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/38",
-        "triangles": 207
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/43",
-        "triangles": 25
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/44",
-        "triangles": 23
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/46",
-        "triangles": 180
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/47",
-        "triangles": 84
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/48",
-        "triangles": 452
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/49",
-        "triangles": 66
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/61",
-        "triangles": 66
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/62",
-        "triangles": 45
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/65",
-        "triangles": 196
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/66",
-        "triangles": 329
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/67",
-        "triangles": 451
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/68",
-        "triangles": 86
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/73",
-        "triangles": 1
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/74",
-        "triangles": 4
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/75",
-        "triangles": 10
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/76",
-        "triangles": 18
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/77",
-        "triangles": 3
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/78",
-        "triangles": 4
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/83",
-        "triangles": 3
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/84",
-        "triangles": 12
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/85",
-        "triangles": 43
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/86",
-        "triangles": 16
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/87",
-        "triangles": 94
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/88",
-        "triangles": 23
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/103",
-        "triangles": 601
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/104",
-        "triangles": 240
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/105",
-        "triangles": 189
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/109",
-        "triangles": 13
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/113",
-        "triangles": 23
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/114",
-        "triangles": 84
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/115",
-        "triangles": 447
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/116",
-        "triangles": 80
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/117",
-        "triangles": 154
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/120",
-        "triangles": 67
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/125",
-        "triangles": 30
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/133",
-        "triangles": 472
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/134",
-        "triangles": 251
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/135",
-        "triangles": 166
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/139",
-        "triangles": 13
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/143",
-        "triangles": 2
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/144",
-        "triangles": 43
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/149",
-        "triangles": 3
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/150",
-        "triangles": 18
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/151",
-        "triangles": 10
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/158",
-        "triangles": 94
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/159",
-        "triangles": 16
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/160",
-        "triangles": 37
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/167",
-        "triangles": 3
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/173",
-        "triangles": 10
-      },
-      {
-        "source": "Terrain_0000-0000.glb",
-        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/174",
-        "triangles": 33
-      }
-    ],
+    "before_triangles": 141546,
+    "restored_source_triangles": 256860,
     "bounds": [
       [
         -100.0,
-        -7.484375476837158,
+        -8.484375953674316,
         -99.0
       ],
       [
         100.062255859375,
-        13.665942192077637,
+        14.665942192077637,
         99.0
       ]
-    ]
+    ],
+    "source_restorations": [
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc53.mdl",
+        "triangles": 832,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf20.mdl/s5p3_a1_arf20",
+        "triangles": 4735,
+        "instances": 20
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub02.mdl/s5p3_a1_rub02",
+        "triangles": 4837,
+        "instances": 80
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub04.mdl/s5p3_a1_rub04",
+        "triangles": 4148,
+        "instances": 64
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub03.mdl/s5p3_a1_rub03",
+        "triangles": 23750,
+        "instances": 202
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf36.mdl/s5p3_a1_arf36",
+        "triangles": 2444,
+        "instances": 16
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf06.mdl/s5p3_a1_arf06",
+        "triangles": 11880,
+        "instances": 88
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf05.mdl/s5p3_a1_arf05",
+        "triangles": 9222,
+        "instances": 116
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf08.mdl/s5p3_a1_arf08",
+        "triangles": 2100,
+        "instances": 30
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub01.mdl/s5p3_a1_rub01",
+        "triangles": 5249,
+        "instances": 60
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub05.mdl/s5p3_a1_rub05_0",
+        "triangles": 729,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub05.mdl/s5p3_a1_rub05_1",
+        "triangles": 606,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub05.mdl/s5p3_a1_rub05_2",
+        "triangles": 1025,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub05.mdl/s5p3_a1_rub05_3",
+        "triangles": 715,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub05.mdl/s5p3_a1_rub05_4",
+        "triangles": 262,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf23.mdl/s5p3_a1_arf23_0",
+        "triangles": 879,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf23.mdl/s5p3_a1_arf23_2",
+        "triangles": 382,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf23.mdl/s5p3_a1_arf23_3",
+        "triangles": 963,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf23.mdl/s5p3_a1_arf23_4",
+        "triangles": 564,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf23.mdl/s5p3_a1_arf23_1",
+        "triangles": 652,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf54.mdl",
+        "triangles": 284,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf04.mdl/s5p3_a1_arf04",
+        "triangles": 9062,
+        "instances": 69
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf07.mdl/s5p3_a1_arf07",
+        "triangles": 2301,
+        "instances": 32
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf50.mdl",
+        "triangles": 3558,
+        "instances": 13
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_0",
+        "triangles": 806,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_1",
+        "triangles": 127,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_2",
+        "triangles": 1038,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_3",
+        "triangles": 899,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_4",
+        "triangles": 380,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_5",
+        "triangles": 1090,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_6",
+        "triangles": 127,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_7",
+        "triangles": 598,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf39.mdl/s5p3_a1_arf39_8",
+        "triangles": 400,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf12.mdl",
+        "triangles": 5391,
+        "instances": 9
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rub06.mdl",
+        "triangles": 2448,
+        "instances": 9
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf55.mdl",
+        "triangles": 488,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf33.mdl/s5p3_a1_arf33",
+        "triangles": 616,
+        "instances": 21
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf51.mdl/s5p3_a1_arf51",
+        "triangles": 504,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_0",
+        "triangles": 1122,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_1",
+        "triangles": 879,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_2",
+        "triangles": 476,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_3",
+        "triangles": 698,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_4",
+        "triangles": 402,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_5",
+        "triangles": 144,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_6",
+        "triangles": 637,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_7",
+        "triangles": 332,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_8",
+        "triangles": 54,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_9",
+        "triangles": 481,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf38.mdl/s5p3_a1_arf38_10",
+        "triangles": 141,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf53.mdl",
+        "triangles": 552,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf25.mdl",
+        "triangles": 2844,
+        "instances": 25
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck06.mdl/s5p3_a1_rck06",
+        "triangles": 6537,
+        "instances": 30
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf52.mdl/s5p3_a1_arf52_0",
+        "triangles": 273,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf52.mdl/s5p3_a1_arf52_2",
+        "triangles": 15,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck01.mdl",
+        "triangles": 1454,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck05.mdl/s5p3_a1_rck05",
+        "triangles": 9578,
+        "instances": 72
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck04.mdl",
+        "triangles": 2051,
+        "instances": 11
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf24.mdl/s5p3_a1_arf24",
+        "triangles": 12706,
+        "instances": 66
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck09.mdl",
+        "triangles": 2076,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf30.mdl/s5p3_a1_arf30",
+        "triangles": 564,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf13.mdl",
+        "triangles": 864,
+        "instances": 12
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf28.mdl/s5p3_a1_arf28",
+        "triangles": 790,
+        "instances": 9
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf31.mdl/s5p3_a1_arf31",
+        "triangles": 676,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf22.mdl/s5p3_a1_arf22_0",
+        "triangles": 2888,
+        "instances": 20
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf22.mdl/s5p3_a1_arf22_1",
+        "triangles": 2280,
+        "instances": 12
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf22.mdl/s5p3_a1_arf22_2",
+        "triangles": 192,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf11.mdl",
+        "triangles": 2856,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf34.mdl/s5p3_a1_arf34",
+        "triangles": 239,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf03.mdl/s5p3_a1_arf03",
+        "triangles": 3584,
+        "instances": 48
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf10.mdl/s5p3_a1_arf10",
+        "triangles": 1108,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck02.mdl",
+        "triangles": 492,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf35.mdl/s5p3_a1_arf35",
+        "triangles": 641,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf32.mdl/s5p3_a1_arf32",
+        "triangles": 127,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_0",
+        "triangles": 512,
+        "instances": 24
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_1",
+        "triangles": 748,
+        "instances": 24
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_2",
+        "triangles": 536,
+        "instances": 24
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_3",
+        "triangles": 960,
+        "instances": 24
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_4",
+        "triangles": 1316,
+        "instances": 24
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_5",
+        "triangles": 260,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_6",
+        "triangles": 456,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_7",
+        "triangles": 384,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0000-0062.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf14.mdl/s5p3_a1_arf14_8",
+        "triangles": 1600,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl02.mdl",
+        "triangles": 544,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf26.mdl/s5p3_a1_arf26_0",
+        "triangles": 4491,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf26.mdl/s5p3_a1_arf26_1",
+        "triangles": 2725,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf26.mdl/s5p3_a1_arf26_2",
+        "triangles": 394,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_0",
+        "triangles": 972,
+        "instances": 16
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_1",
+        "triangles": 908,
+        "instances": 16
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_2",
+        "triangles": 1036,
+        "instances": 12
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_3",
+        "triangles": 916,
+        "instances": 12
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_4",
+        "triangles": 628,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_5",
+        "triangles": 1704,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_6",
+        "triangles": 1424,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_7",
+        "triangles": 664,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf21.mdl/s5p3_a1_arf21_8",
+        "triangles": 752,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf16.mdl/s5p3_a1_arf16_0",
+        "triangles": 1766,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf16.mdl/s5p3_a1_arf16_1",
+        "triangles": 1528,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf16.mdl/s5p3_a1_arf16_2",
+        "triangles": 206,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck03.mdl",
+        "triangles": 947,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_grl01.mdl",
+        "triangles": 1080,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf00.mdl/s5p3_a1_arf00",
+        "triangles": 846,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf09.mdl/s5p3_a1_arf09",
+        "triangles": 268,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf27.mdl",
+        "triangles": 2400,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf02.mdl/s5p3_a1_arf02",
+        "triangles": 448,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_0",
+        "triangles": 429,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_1",
+        "triangles": 366,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_2",
+        "triangles": 330,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_3",
+        "triangles": 284,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_4",
+        "triangles": 131,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_5",
+        "triangles": 299,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_6",
+        "triangles": 289,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_7",
+        "triangles": 131,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_8",
+        "triangles": 345,
+        "instances": 5
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_9",
+        "triangles": 509,
+        "instances": 3
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_10",
+        "triangles": 277,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_11",
+        "triangles": 2,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf37.mdl/s5p3_a1_arf37_12",
+        "triangles": 229,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf29.mdl/s5p3_a1_arf29_0",
+        "triangles": 2876,
+        "instances": 10
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf29.mdl/s5p3_a1_arf29_1",
+        "triangles": 570,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf29.mdl/s5p3_a1_arf29_2",
+        "triangles": 268,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_rck08.mdl/s5p3_a1_rck08",
+        "triangles": 650,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_nat01.mdl/s5p3_a1_nat01_0",
+        "triangles": 96,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_nat01.mdl/s5p3_a1_nat01_2",
+        "triangles": 142,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_nat01.mdl/s5p3_a1_nat01_3",
+        "triangles": 146,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_nat01.mdl/s5p3_a1_nat01_4",
+        "triangles": 263,
+        "instances": 2
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_nat01.mdl/s5p3_a1_nat01_6",
+        "triangles": 165,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_nat01.mdl/s5p3_a1_nat01_7",
+        "triangles": 149,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_nat01.mdl/s5p3_a1_nat01_8",
+        "triangles": 142,
+        "instances": 1
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_0",
+        "triangles": 338,
+        "instances": 8
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_1",
+        "triangles": 214,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_2",
+        "triangles": 262,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_3",
+        "triangles": 242,
+        "instances": 6
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_4",
+        "triangles": 446,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_5",
+        "triangles": 488,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_6",
+        "triangles": 1814,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_7",
+        "triangles": 1666,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_8",
+        "triangles": 2510,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_9",
+        "triangles": 2570,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_10",
+        "triangles": 2494,
+        "instances": 4
+      },
+      {
+        "source": "BgPart_0062-0083.glb",
+        "resource": "BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf19.mdl/s5p3_a1_arf19_11",
+        "triangles": 1042,
+        "instances": 2
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc08.sgb/SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_brs01.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf40.mdl/s5p3_a1_arf40_0",
+        "triangles": 1128,
+        "instances": 3
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc08.sgb/SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_brs01.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf40.mdl/s5p3_a1_arf40_1",
+        "triangles": 708,
+        "instances": 3
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc08.sgb/SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_brs01.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf40.mdl/s5p3_a1_arf40_2",
+        "triangles": 1028,
+        "instances": 3
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc08.sgb/SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_brs01.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf40.mdl/s5p3_a1_arf40_3",
+        "triangles": 48,
+        "instances": 1
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc08.sgb/SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_brs01.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf41.mdl/s5p3_a1_arf41",
+        "triangles": 900,
+        "instances": 2
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc08.sgb/SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_brs01.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf42.mdl/s5p3_a1_arf42",
+        "triangles": 900,
+        "instances": 2
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc13.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf15.mdl/s5p3_a1_arf15_0",
+        "triangles": 562,
+        "instances": 10
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc13.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf15.mdl/s5p3_a1_arf15_1",
+        "triangles": 116,
+        "instances": 10
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc13.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf15.mdl/s5p3_a1_arf15_2",
+        "triangles": 1188,
+        "instances": 10
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc13.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf15.mdl/s5p3_a1_arf15_3",
+        "triangles": 390,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p3_a0_gmc13.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p3/bgparts/s5p3_a1_arf15.mdl/s5p3_a1_arf15_4",
+        "triangles": 686,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_0",
+        "triangles": 694,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_1",
+        "triangles": 684,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_2",
+        "triangles": 694,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_3",
+        "triangles": 292,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_4",
+        "triangles": 160,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_5",
+        "triangles": 292,
+        "instances": 4
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_6",
+        "triangles": 630,
+        "instances": 2
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_7",
+        "triangles": 620,
+        "instances": 2
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_8",
+        "triangles": 630,
+        "instances": 2
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc02.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc51.mdl/s5p1_a1_stc51_9",
+        "triangles": 440,
+        "instances": 2
+      },
+      {
+        "source": "SharedGroup_0000-0005.glb",
+        "resource": "SharedGroup_bg/ffxiv/pvp_xx/shared/for_bg/sgbg_s5p0_a0_gmc03.sgb/BgPart_bg/ffxiv/pvp_xx/pvp/s5p1/bgparts/s5p1_a1_stc52.mdl",
+        "triangles": 1664,
+        "instances": 2
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl",
+        "triangles": 397,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/5",
+        "triangles": 438,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/6",
+        "triangles": 16,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/7",
+        "triangles": 128,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/8",
+        "triangles": 206,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/9",
+        "triangles": 20,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/10",
+        "triangles": 267,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/11",
+        "triangles": 367,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/12",
+        "triangles": 5,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/14",
+        "triangles": 19,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/15",
+        "triangles": 108,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/16",
+        "triangles": 8,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/17",
+        "triangles": 16,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/18",
+        "triangles": 8,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0000.mdl/19",
+        "triangles": 2,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/26",
+        "triangles": 386,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/27",
+        "triangles": 122,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/28",
+        "triangles": 297,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/29",
+        "triangles": 47,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/30",
+        "triangles": 282,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/31",
+        "triangles": 253,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/32",
+        "triangles": 180,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/33",
+        "triangles": 4,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/34",
+        "triangles": 254,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/35",
+        "triangles": 319,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/36",
+        "triangles": 554,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/38",
+        "triangles": 711,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/39",
+        "triangles": 122,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/40",
+        "triangles": 281,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/41",
+        "triangles": 133,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/42",
+        "triangles": 150,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/43",
+        "triangles": 128,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/44",
+        "triangles": 81,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/45",
+        "triangles": 7,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/46",
+        "triangles": 180,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/47",
+        "triangles": 84,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/48",
+        "triangles": 447,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/49",
+        "triangles": 180,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/57",
+        "triangles": 39,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/58",
+        "triangles": 114,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/59",
+        "triangles": 152,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/60",
+        "triangles": 25,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/61",
+        "triangles": 190,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/62",
+        "triangles": 126,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/63",
+        "triangles": 17,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/65",
+        "triangles": 208,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/66",
+        "triangles": 349,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/67",
+        "triangles": 457,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/68",
+        "triangles": 198,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/72",
+        "triangles": 11,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/73",
+        "triangles": 1,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/74",
+        "triangles": 8,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/75",
+        "triangles": 10,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/76",
+        "triangles": 18,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/77",
+        "triangles": 3,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/78",
+        "triangles": 4,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/79",
+        "triangles": 4,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/80",
+        "triangles": 26,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/81",
+        "triangles": 1,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/82",
+        "triangles": 38,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/83",
+        "triangles": 5,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/84",
+        "triangles": 26,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/85",
+        "triangles": 43,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/86",
+        "triangles": 16,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/87",
+        "triangles": 94,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/88",
+        "triangles": 35,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/89",
+        "triangles": 15,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/90",
+        "triangles": 2,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/91",
+        "triangles": 20,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/92",
+        "triangles": 2,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/93",
+        "triangles": 21,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/94",
+        "triangles": 7,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0002.mdl/95",
+        "triangles": 38,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/103",
+        "triangles": 551,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/104",
+        "triangles": 319,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/105",
+        "triangles": 254,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/106",
+        "triangles": 4,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/107",
+        "triangles": 159,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/108",
+        "triangles": 253,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/109",
+        "triangles": 284,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/110",
+        "triangles": 47,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/111",
+        "triangles": 297,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/112",
+        "triangles": 81,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/113",
+        "triangles": 398,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/114",
+        "triangles": 708,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/115",
+        "triangles": 428,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/116",
+        "triangles": 84,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/117",
+        "triangles": 180,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/118",
+        "triangles": 7,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/119",
+        "triangles": 81,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/120",
+        "triangles": 130,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/121",
+        "triangles": 150,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/122",
+        "triangles": 133,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/123",
+        "triangles": 281,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/124",
+        "triangles": 133,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/125",
+        "triangles": 180,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/133",
+        "triangles": 463,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/134",
+        "triangles": 349,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/135",
+        "triangles": 208,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/137",
+        "triangles": 17,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/138",
+        "triangles": 126,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/139",
+        "triangles": 190,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/140",
+        "triangles": 25,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/141",
+        "triangles": 118,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/142",
+        "triangles": 54,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/143",
+        "triangles": 22,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/144",
+        "triangles": 169,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/149",
+        "triangles": 3,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/150",
+        "triangles": 18,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/151",
+        "triangles": 10,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/152",
+        "triangles": 8,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/153",
+        "triangles": 1,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/154",
+        "triangles": 34,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/155",
+        "triangles": 101,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/156",
+        "triangles": 33,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/157",
+        "triangles": 33,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/158",
+        "triangles": 94,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/159",
+        "triangles": 16,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/160",
+        "triangles": 43,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/161",
+        "triangles": 26,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/162",
+        "triangles": 5,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/163",
+        "triangles": 38,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/164",
+        "triangles": 1,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/165",
+        "triangles": 26,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/166",
+        "triangles": 4,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/167",
+        "triangles": 35,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/168",
+        "triangles": 7,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/169",
+        "triangles": 21,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/170",
+        "triangles": 2,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/171",
+        "triangles": 20,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/172",
+        "triangles": 2,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/173",
+        "triangles": 15,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0001.mdl/174",
+        "triangles": 38,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl",
+        "triangles": 410,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/175",
+        "triangles": 406,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/176",
+        "triangles": 16,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/177",
+        "triangles": 201,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/178",
+        "triangles": 131,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/179",
+        "triangles": 20,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/180",
+        "triangles": 17,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/181",
+        "triangles": 171,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/182",
+        "triangles": 335,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/183",
+        "triangles": 68,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/184",
+        "triangles": 5,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/185",
+        "triangles": 8,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/186",
+        "triangles": 16,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/187",
+        "triangles": 2,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/188",
+        "triangles": 108,
+        "instances": 1
+      },
+      {
+        "source": "Terrain_0000-0000.glb",
+        "resource": "Terrain_bg/ffxiv/pvp_xx/pvp/s5p3/bg/ffxiv/pvp_xx/pvp/s5p3/bgplate/0003.mdl/189",
+        "triangles": 8,
+        "instances": 1
+      }
+    ],
+    "full_source_rebuild": true,
+    "removed_fog_triangles": 0,
+    "official_png_sha256": "fc7a9d49e7c379981e7807a87e27b7c2e2c21728521d2f6572039350ac8af80b"
   },
   {
     "map": "harmonias",

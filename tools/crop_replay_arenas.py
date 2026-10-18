@@ -1,5 +1,6 @@
 """Crop display meshes to the official arena silhouette plus a wall margin.
-Restores previously box-clipped regions from original GLBs before cropping. Color, height and alpha
+Restores previously box-clipped regions from original GLBs before cropping.
+Use --rebuild-source-maps when earlier simplification also removed terrain inside the old bounds. Color, height and alpha
 are interpolated at cut edges. Display footprints are not game navigation or collision data.
 """
 from pathlib import Path
@@ -89,7 +90,7 @@ def outside_box(poly,lo,hi):
         for bound,sign in [(lo[2],-1),(hi[2],1)]:out.extend(triangles(plane(middle,2,bound,sign)))
     return out
 
-def additions(key,source_root,boundary,oldlo,oldhi):
+def additions(key,source_root,boundary,oldlo,oldhi,full_source=False):
     directory=source_root/SOURCE_DIRS[key]/'extracted';folders=list(directory.glob('InstanceExport-*'))
     if len(folders)!=1:raise ValueError('Need original GLBs in '+str(directory))
     folder=folders[0];out=[];texture_cache={};used=[]
@@ -99,6 +100,7 @@ def additions(key,source_root,boundary,oldlo,oldhi):
             if not batch['visible'] or DETAIL.search(path) or any(word in shader for word in ['fog','water','sky','lightshaft']):continue
             ts=batch['points'][batch['faces']].astype(np.float32);lo=ts.min(1);hi=ts.max(1)
             keep=(lo[:,0]<oldlo[0]-1e-4)|(hi[:,0]>oldhi[0]+1e-4)|(lo[:,2]<oldlo[2]-1e-4)|(hi[:,2]>oldhi[2]+1e-4)
+            if full_source:keep=np.ones(len(ts),bool)
             keep&=(hi[:,1]>=oldlo[1]-1)&(lo[:,1]<=oldhi[1]+1)
             ts=ts[keep]
             if not len(ts):continue
@@ -118,9 +120,16 @@ def additions(key,source_root,boundary,oldlo,oldhi):
             for poly in attr:
                 poly=plane(poly,1,oldlo[1]-1,1)
                 if len(poly)>=3:poly=plane(poly,1,oldhi[1]+1,-1)
-                if len(poly)>=3:new.extend(outside_box(poly,oldlo,oldhi))
+                if len(poly)>=3:new.extend(triangles(poly) if full_source else outside_box(poly,oldlo,oldhi))
             cropped=boundary.batch(np.array(new,np.float32)) if new else np.empty((0,3,7),np.float32)
             if len(cropped):out.append(cropped);used.append({'source':src.name,'resource':path,'triangles':len(cropped)})
+    if full_source:
+        summary={}
+        for row in used:
+            k=(row['source'],row['resource'])
+            if k not in summary:summary[k]=dict(source=k[0],resource=k[1],triangles=0,instances=0)
+            summary[k]['triangles']+=row['triangles'];summary[k]['instances']+=1
+        used=list(summary.values())
     return (np.concatenate(out) if out else np.empty((0,3,7),np.float32)),used
 
 def write(path,ts):
@@ -134,7 +143,7 @@ def write(path,ts):
     return data,vertices,faces
 
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--input',type=Path,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--originals-root',type=Path,required=True);ap.add_argument('--margin',type=float,default=3);ap.add_argument('--maps',nargs='*',default=sorted(mesh.MAPS));args=ap.parse_args()
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--input',type=Path,required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--originals-root',type=Path,required=True);ap.add_argument('--margin',type=float,default=3);ap.add_argument('--rebuild-source-maps',nargs='*',default=[],help='Replace whole maps from original geometry, including holes inside previous bounds');ap.add_argument('--maps',nargs='*',default=sorted(mesh.MAPS));args=ap.parse_args()
     args.output.mkdir(parents=True,exist_ok=True);reports=[];report_path=args.output/'crop-report.json'
     saved_reports={r['map']:r for r in json.loads(report_path.read_text())} if report_path.exists() else {}
     existing={r['map']:r for r in json.loads((args.input/'manifest.json').read_text())}
@@ -143,11 +152,14 @@ def main():
         attr=attributes(p,c,f)
         # The low desert fog plane is scenery, not a walkable/interactive surface.
         fog=((c[f]>>24)==224).all(1) if key=='red-sands' else np.zeros(len(f),bool)
-        cropped=boundary.batch(attr[~fog]);print(key+': restoring source regions beyond old bounds...',flush=True)
-        extra,sources=additions(key,args.originals_root,boundary,oldlo,oldhi);ts=np.concatenate([cropped,extra]);data,v,faces=write(args.output/(key+'.ccmap.gz'),ts)
+        full_source=key in args.rebuild_source_maps
+        cropped=np.empty((0,3,7),np.float32) if full_source else boundary.batch(attr[~fog]);print(key+(': rebuilding all core source geometry...' if full_source else ': restoring source regions beyond old bounds...'),flush=True)
+        extra,sources=additions(key,args.originals_root,boundary,oldlo,oldhi,full_source=full_source);ts=np.concatenate([cropped,extra]);data,v,faces=write(args.output/(key+'.ccmap.gz'),ts)
         opaque=(v['c'][faces]>>24).min(1)==255;tris=v['p'][faces[opaque]].astype(np.float64);lo=v['p'].min(0)[[0,2]];hi=v['p'].max(0)[[0,2]]
         print(key+': rebuilding standable display grid...',flush=True);grid=walk.build(tris,key,lo,hi);walkdata=grid.write(args.output/(key+'.ccwalk.gz'))
         report=existing[key]|{'triangles':len(faces),'vertices':len(v),'compressed_bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'walk_cells':len(grid.reach_col),'walk_cells_removed':grid.clipped,'walk_gap_cells':grid.filled,'walk_bytes':len(walkdata),'walk_sha256':hashlib.sha256(walkdata).hexdigest(),'crop_margin':args.margin,'crop_cell':.5,'before_triangles':len(f),'restored_source_triangles':len(extra),'source_restorations':sources,'bounds':[v['p'].min(0).tolist(),v['p'].max(0).tolist()]}
+        report['full_source_rebuild']=full_source
+        if full_source:report['filled_holes']=[] # Previous generated patches were replaced by original source surfaces.
         report['removed_fog_triangles']=int(fog.sum());report['official_png_sha256']=hashlib.sha256((walk.OFFICIAL_MAPS/(key+'.png')).read_bytes()).hexdigest()
         reports.append(report);saved_reports[key]=report;report_path.write_text(json.dumps([saved_reports[k] for k in sorted(saved_reports)],ensure_ascii=False,indent=2)+'\n')
         print(f'{key}: {len(f):,} -> {len(faces):,} faces; restored {len(extra):,}; {len(data)+len(walkdata):,} bytes; {time.time()-start:.1f}s',flush=True)

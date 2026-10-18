@@ -21,7 +21,7 @@ internal static class Replay3DChecks {
         b.Y=null;check(ReplayInterpolation.Sample(data,middle)!.Players[0].Y==a.Y,"missing future height does not fabricate a vertical path");b.Y=3;
         data.Frames[1].Timestamp=start.AddSeconds(10);check(ReferenceEquals(ReplayInterpolation.Sample(data,middle),data.Frames[0]),"3D playback preserves recording gaps");
         check(Marshal.SizeOf<ReplayVertex>()==16,"GPU vertex layout matches HLSL position/color input stride");
-        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,72126),(1033,1059,158569),(1034,1060,141546),(1116,1117,164653),(1138,1139,432346),(1293,1294,275315),(1357,1358,196557) };
+        var pairs=new(uint Normal,uint Custom,int Faces)[] { (1032,1058,72126),(1033,1059,158569),(1034,1060,256860),(1116,1117,164653),(1138,1139,432346),(1293,1294,275315),(1357,1358,196557) };
         foreach(var p in pairs) {
             check(ReplayMapMesh.MapKey(p.Normal)==ReplayMapMesh.MapKey(p.Custom),"normal and custom territory select the same exported arena: "+p.Normal);
             var mesh=ReplayMapMesh.LoadEmbedded(p.Normal);
@@ -35,6 +35,10 @@ internal static class Replay3DChecks {
         check(cloud.Min.Z<-96&&cloud.Max.Z>96,"Cloud Nine display mesh includes the two previously box-clipped starting platforms");
         check(cloud.Walk!.NearestAt(90,-90,7,out var northSpawn)&&northSpawn>5&&northSpawn<8,"Cloud Nine upper-right original starting platform has a restored usable floor");
         check(cloud.Walk!.NearestAt(-90,90,7,out var southSpawn)&&southSpawn>5&&southSpawn<8,"Cloud Nine lower-left original starting platform has a restored usable floor");
+        // These six locations were holes inside the old bounding box; checking only spawn extents missed them.
+        foreach(var restoredFloor in new (float X,float Z,float Y)[] { (64.25f,-51.75f,4.936f),(-2.75f,15.25f,.390f),(1.75f,-13.75f,.381f),(76.75f,-10.75f,2.5f),(-77.25f,9.25f,2.5f),(-60.75f,43.25f,3.983f) })
+            check(cloud.Walk!.NearestAt(restoredFloor.X,restoredFloor.Z,restoredFloor.Y,out var restored)&&MathF.Abs(restored-restoredFloor.Y)<.05f,"Cloud Nine original interior floor restored at "+restoredFloor.X+","+restoredFloor.Z);
+        check(cloud.Walk!.NearestAt(-60,0,3,out var checkpoint)&&MathF.Abs(checkpoint-3)<.05f,"Cloud Nine checkpoint uses the original platform top, not the former simplified height");
         check(ReplayMapMesh.MapKey(0)==null,"unsupported territories do not silently select the wrong map");
         using(var raw=new MemoryStream()) {
             using(var writer=new BinaryWriter(raw,System.Text.Encoding.UTF8,true)) { writer.Write(0x344D4343);writer.Write(3);writer.Write(3);foreach(var v in new[] { Vector3.Zero,Vector3.UnitX,Vector3.UnitZ }) {writer.Write(v.X);writer.Write(v.Y);writer.Write(v.Z);writer.Write(0xffffffffu);}writer.Write(0u);writer.Write(1u);writer.Write(99u); }

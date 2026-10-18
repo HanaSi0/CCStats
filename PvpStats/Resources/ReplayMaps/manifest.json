@@ -103,41 +103,35 @@
   {
     "map": "cloud-nine",
     "name": "九霄云上",
-    "triangles": 141546,
-    "vertices": 217758,
-    "compressed_bytes": 2378239,
-    "sha256": "1b21ca34f7e95c74aa131f04c3a2fd76f7e04e6b76b78b632e1d2509f3d78c19",
-    "walk_cells": 26671,
-    "walk_cells_removed": 12564,
-    "walk_gap_cells": 236,
-    "walk_bytes": 83544,
-    "walk_sha256": "606460b92deafade4071c00e35d52f7e18dbdf016cd0389f2b05bb4de279ad46",
-    "filled_holes": [
-      {
-        "centre": [
-          0.25,
-          -16.75
-        ],
-        "area": 1.75,
-        "height": 0.36
-      }
-    ],
+    "triangles": 256860,
+    "vertices": 563952,
+    "compressed_bytes": 4659587,
+    "sha256": "8c55a145bd4206221bab15bc31b5e4372217b5612e165069f78fdab185c010e9",
+    "walk_cells": 31696,
+    "walk_cells_removed": 15864,
+    "walk_gap_cells": 202,
+    "walk_bytes": 97868,
+    "walk_sha256": "ede9e3f1602291ac7259e442b64dd86532f83eaaedfb49a5d0b09b90f7866825",
+    "filled_holes": [],
     "crop_margin": 3,
     "crop_cell": 0.5,
-    "before_triangles": 122926,
-    "restored_source_triangles": 15672,
+    "before_triangles": 141546,
+    "restored_source_triangles": 256860,
     "bounds": [
       [
         -100.0,
-        -7.484375476837158,
+        -8.484375953674316,
         -99.0
       ],
       [
         100.062255859375,
-        13.665942192077637,
+        14.665942192077637,
         99.0
       ]
-    ]
+    ],
+    "full_source_rebuild": true,
+    "removed_fog_triangles": 0,
+    "official_png_sha256": "fc7a9d49e7c379981e7807a87e27b7c2e2c21728521d2f6572039350ac8af80b"
   },
   {
     "map": "harmonias",

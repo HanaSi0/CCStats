@@ -12,3 +12,5 @@
 - 原项目 MIT 许可及署名保留。GitHub 作者为 HanaSi0，README 致谢上游 SaMo/wrath16；不要删除 LICENSE.txt。
 
 最新进展：在 `review/claude-walkable` 上完成七图场外裁边，并从原始导出恢复九霄云上两处出生圆台和连接区域，详见 `docs/arena-crop.md`；随 1.0.6 交付。
+
+九霄云上后续修复（尚未发行）：完整核心原始 GLB 重建并按相同轮廓裁切，修复旧包围框内部缺面；256,860 面，分层地面 31,696 项，598 检查与双构建通过。查看 `docs/arena-crop.md` 末节及 `docs/research/cloud-nine-repair-verification.json`；旧网格比较有 64 项源模型高度变化，不宣称该比较零差异通过。

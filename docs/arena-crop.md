@@ -49,3 +49,13 @@ python3 tools/verify_cropped_arenas.py \
 ```
 
 原始导出目录使用本次用户文件布局：角力学校为 `extracted/InstanceExport-*`；其余为 `map-185315`、`map-185648`、`map-185833`、`map-190003`、`map-190404`、`map-190721` 下的 `extracted/InstanceExport-*`。全部依赖固定在 `tools/requirements-map-build.txt`。官方 PNG 已在仓库，原始 GLB 未纳入 Git。
+
+## 九霄云上内部缺面修复（1.0.7 之后）
+
+用户截图中的断口不仅出现在出生区，还出现在旧模型包围框内部。上一轮恢复仅查找框外原始几何，因此内部已经删掉的地面不会补回。现在九霄云上使用原始 GLB 的完整核心几何重建，再裁到相同官方轮廓与 3 单位余量；过滤植被、灯具、雾与其他装饰，不用生成平板填充缺失道路。其他六张资源未改动。
+
+已补回上方出生连接区、中间两条侧路及两端侧路的缺面，重建分层地面网格，六处旧版本缺地面的坐标纳入回归检查。原始检查点圆台顶面约 Y=3，替换了部分旧简化地面约 Y=2.3 的高度。与旧网格逐层比较有 64 个样本超过原 0.65 高度容差：63 个位于检查点、1 个位于上方侧路；保留记录，不把这项比较描述为完全无变化通过。
+
+本次优先恢复完整地面：九霄云上 141,546 → 256,860 面，模型与地面压缩合计约 4.76 MB；不宣称帧率提升。新增 [核对记录](research/cloud-nine-repair-verification.json)，上文七图面数与零差异结论均属于 1.0.6 历史验证结果。当前 [三维](previews/arena-crop/cloud-nine-3d.png) / [俯视](previews/arena-crop/cloud-nine-top.png) 图片已更新。尚未在游戏 Direct3D 中实测。
+
+重现时以 1.0.7 的资源目录作为输入，并向上文裁边命令添加 `--maps cloud-nine --rebuild-source-maps cloud-nine`。应在新的输出目录生成，随后合并九霄云上的 manifest 项。

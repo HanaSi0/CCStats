@@ -1,0 +1,48 @@
+{
+  "map": "cloud-nine",
+  "max_vertex_distance_from_official_floor": 3.606,
+  "previous_walk_layers": 26671,
+  "walk_layers_without_nearby_same_height_floor": 64,
+  "same_height_tolerance": 0.65,
+  "neighbor_radius": 0.5,
+  "new_walk_layers": 31696,
+  "baseline": "v1.0.7",
+  "full_source_rebuild": true,
+  "note": "64 old floor layers differ by >0.65 from rebuilt source floors; 63 at the two checkpoint disks and one beside the upper side path. Original source platform top is about 3.0, replacing former simplified values around 2.3. This is recorded as a height change, not a passed no-change assertion.",
+  "mesh_triangles": 256860,
+  "mesh_vertices": 563952,
+  "bytes": 4757455,
+  "regression_floor_samples": [
+    [
+      64.25,
+      -51.75,
+      4.936
+    ],
+    [
+      -2.75,
+      15.25,
+      0.39
+    ],
+    [
+      1.75,
+      -13.75,
+      0.381
+    ],
+    [
+      76.75,
+      -10.75,
+      2.5
+    ],
+    [
+      -77.25,
+      9.25,
+      2.5
+    ],
+    [
+      -60.75,
+      43.25,
+      3.983
+    ]
+  ],
+  "browser": "WebGL2 renders perspective and top views without JavaScript or GL errors; game Direct3D and FPS not tested."
+}
