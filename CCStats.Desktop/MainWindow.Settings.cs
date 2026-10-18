@@ -12,8 +12,8 @@ public partial class MainWindow {
         Card("后台运行",Text("游戏启动后自动识别。进入水晶冲突后按设置自动记录，关闭窗口时可继续在托盘运行。",true),Text("当前独立读取为玩家位置、朝向、体力、职业与状态。尚未适配的队伍、水晶、结算和技能事件会保留缺失状态。",true));UpdateCaptureStatus();
     }
     private void UpdateCaptureStatus() {
-        if(_tray!=null)_tray.Text=_capture.State.Recording?"CCStats · 后台记录中":_capture.State.Connected?"CCStats · 游戏已连接":"CCStats · 等待游戏";
-        if(_page!=9||_captureStatus==null||_capturePlayers==null)return;var state=_capture.State;
+        if(_tray!=null) {var text=_capture.State.Recording?"CCStats · 后台记录中":_capture.State.Connected?"CCStats · 游戏已连接":"CCStats · 等待游戏";if(_tray.Text!=text)_tray.Text=text;}
+        if(!IsVisible||_page!=9||_captureStatus==null||_capturePlayers==null)return;var state=_capture.State;
         _captureStatus.Text=$"{state.Message}\n区域 {state.Territory} · {state.Players?.Length??0} 名已加载玩家 · {state.Frames:N0} 帧"+(state.SavedPath==null?"":"\n已保存："+state.SavedPath);
         var players=state.Players??Array.Empty<string>();if(!_capturePlayers.Items.Cast<string>().SequenceEqual(players))_capturePlayers.ItemsSource=players;
     }

@@ -28,6 +28,8 @@ public partial class MainWindow : Window {
     private bool _busy,_exiting,_closed,_smoke;
     private System.Windows.Forms.NotifyIcon? _tray;
     private readonly List<Window> _hiddenOwned=new();
+    private readonly Queue<string> _pendingObservations=new();
+    private string? _smokeCloseChoice;
     private string? _lastSaved;
     private TextBlock? _captureStatus;
     private ListBox? _capturePlayers;
@@ -39,13 +41,18 @@ public partial class MainWindow : Window {
         _settingsPath=settingsPath??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"CCStatsDesktop","settings.json");
         _directory=Path.GetDirectoryName(_settingsPath)!;_preferences=DesktopPreferences.Load(_settingsPath);
         _library=new RecordLibrary(_directory);_records=_library.All();ApplyTheme();
+        if(!_smoke&&Directory.Exists(Path.Combine(_directory,"observations"))) {
+            var known=_records.Select(r=>r.SourcePath).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            foreach(var path in Directory.EnumerateFiles(Path.Combine(_directory,"observations"),"*.json"))if(!known.Contains(path))_pendingObservations.Enqueue(path);
+        }
         for(int i=0;i<Pages.Length;i++) {var index=i;var button=new Button {Content=Pages[i],HorizontalContentAlignment=HorizontalAlignment.Left,Margin=new Thickness(0,0,0,5),Padding=new Thickness(12,8,12,8)};button.Click+=(_,_)=>ShowPage(index);Navigation.Children.Add(button);_navigation.Add(button);}
         if(!_smoke)SetupTray();
         _capture.Configure(_preferences.AutoRecord);
         _captureTimer.Tick+=async (_,_)=> {
             UpdateCaptureStatus();UpdateRankings();
             var saved=_capture.State.SavedPath;
-            if(!_busy&&saved!=null&&saved!=_lastSaved) {_lastSaved=saved;await ImportAsync(saved,false);}
+            if(saved!=null&&saved!=_lastSaved) {_lastSaved=saved;_pendingObservations.Enqueue(saved);}
+            if(!_busy&&_pendingObservations.TryDequeue(out var pending))await ImportAsync(pending,false);
         };
         _captureTimer.Start();
         _processTimer.Tick+=(_,_)=>{if(_preferences.AutoDetectGame&&!_smoke&&!_exiting)_capture.Poll(Path.Combine(_directory,"observations"));};
@@ -108,7 +115,7 @@ public partial class MainWindow : Window {
     private void MinimizeToTray() {
         _hiddenOwned.Clear();
         foreach(var window in Application.Current.Windows.Cast<Window>().Where(w=>w!=this&&w.IsVisible&&(w is ReplayWindow||w is RecordDetailWindow)).ToArray()) {_hiddenOwned.Add(window);window.Hide();}
-        ShowInTaskbar=false;Hide();StatusText.Text="已在后台持续记录。";
+        ShowInTaskbar=false;Hide();StatusText.Text="已转入后台，游戏识别与采集保持启用。";
     }
     private void RestoreFromTray() {
         Show();ShowInTaskbar=true;WindowState=WindowState.Normal;
@@ -119,10 +126,10 @@ public partial class MainWindow : Window {
         if(_closed)return;e.Cancel=true;if(_exiting)return;
         var choice=_preferences.CloseBehavior;
         if(choice is not ("Tray" or "Exit")) {
-            var dialog=new CloseChoiceDialog(this);if(dialog.ShowDialog()!=true)return;choice=dialog.Choice;
+            var dialog=new CloseChoiceDialog(this);if(_smoke&&_smokeCloseChoice is {} forced)dialog.Loaded+=(_,_)=>dialog.SelectForCheck(forced,true);if(dialog.ShowDialog()!=true)return;choice=dialog.Choice;
             if(dialog.Remember) {_preferences.CloseBehavior=choice;SavePreferences();}
         }
-        if(choice=="Tray")MinimizeToTray();else _=ExitAsync();
+        if(choice=="Tray")_ = Dispatcher.BeginInvoke(new Action(MinimizeToTray));else _=ExitAsync();
     }
     private async Task ExitAsync() {
         if(_exiting)return;_exiting=true;_operations.Cancel();_processTimer.Stop();IsEnabled=false;
@@ -141,6 +148,9 @@ public partial class MainWindow : Window {
             if(dialog.ShowDialog()!=true||dialog.Choice!=choice||!dialog.Remember)throw new InvalidOperationException("Close choice dialog failed");
         }
         MinimizeToTray();if(IsVisible||ShowInTaskbar)throw new InvalidOperationException("Background hide failed");((System.Windows.Forms.ToolStripMenuItem)_tray!.ContextMenuStrip!.Items[0]).PerformClick();if(!IsVisible||!ShowInTaskbar)throw new InvalidOperationException("Tray restore failed");
+        _preferences.CloseBehavior="Ask";_smokeCloseChoice="Tray";Close();await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
+        if(IsVisible||_preferences.CloseBehavior!="Tray"||DesktopPreferences.Load(_settingsPath).CloseBehavior!="Tray")throw new InvalidOperationException("Native close dialog, remember and tray transition failed");
+        _smokeCloseChoice=null;RestoreFromTray();
         TableFactory.CheckSorting();
         await MeshVisuals.VerifyPaletteAsync(this);
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();

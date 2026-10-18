@@ -35,7 +35,7 @@ public partial class MainWindow {
         PageContent.Children.Add(_rankingGrid);_shownRanking=null;UpdateRankings();
     }
     private void UpdateRankings() {
-        if(_page!=3||_rankingText==null||_rankingGrid==null)return;
+        if(!IsVisible||_page!=3||_rankingText==null||_rankingGrid==null)return;
         var state=_rankings?[_rankingRegion].State;
         _rankingText.Text=state==null?"尚未启动联网检查。":$"来源：官方榜单　{state.Snapshot?.OfficialDate:yyyy-MM-dd}　{state.Snapshot?.Entries.Length??0} 人 · {state.Message}";
         if(state?.Snapshot is {} snapshot&&!ReferenceEquals(snapshot,_shownRanking)) {_shownRanking=snapshot;_rankingGrid.ItemsSource=snapshot.Entries;}
