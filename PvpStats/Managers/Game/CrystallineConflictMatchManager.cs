@@ -189,6 +189,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
             _castTargets = [];
             _lastEventTimer = -1f;
             _environmentCasts.Clear();_lastEnvironmentCastPoll=DateTime.MinValue;
+            _arenaTracks.Clear();_arenaNames.Clear();_lastArenaPoll=DateTime.MinValue;
             _scoreboardPayloadReceived = false;
             _plugin.Log.Information($"starting new match on {_currentMatch.Arena}");
             _plugin.DataQueue.QueueDataOperation(async () => {
@@ -1079,6 +1080,7 @@ internal partial class CrystallineConflictMatchManager : IDisposable {
         }
 
         try { CaptureEnvironmentCasts(now); }catch(Exception e) { _plugin.Log.Debug(e,"Environment cast sample unavailable."); }
+        try { CaptureArenaObjects(now); }catch(Exception e) { _plugin.Log.Debug(e,"Arena object sample unavailable."); }
         try { RecordSummons(now); }catch(Exception e) { _plugin.Log.Debug(e,"Summon object sample unavailable."); }
         CaptureMovement(now, director);
         if(_currentMatchTimeline != null) {

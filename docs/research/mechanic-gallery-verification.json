@@ -1,0 +1,170 @@
+[
+  {
+    "kind": "SprintZone",
+    "name": "冲刺带",
+    "render": true,
+    "motion": true,
+    "sha256": "2188d0231ea66251b23c213e9b59e27afacb5bd234c1a682b2476a3be532e6bc"
+  },
+  {
+    "kind": "Bomb",
+    "name": "爆弹怪",
+    "render": true,
+    "motion": true,
+    "sha256": "6fed0c1523e1f2c71571eba136eef26847b27e39426e2b7a41303590f612f2a5"
+  },
+  {
+    "kind": "BombCore",
+    "name": "爆弹怪之魂",
+    "render": true,
+    "motion": true,
+    "sha256": "e09a88d1ababff54611a1426588b9c78c67d5e57131fc8281ae6ecea566c6a07"
+  },
+  {
+    "kind": "JumpGlyph",
+    "name": "跳跃台",
+    "render": true,
+    "motion": true,
+    "sha256": "ecea815f98d2ef9a797799db27bb9a846eda6acc30c6257cc217f39e8649c32d"
+  },
+  {
+    "kind": "Turbulence",
+    "name": "湍流",
+    "render": true,
+    "motion": true,
+    "sha256": "f186c7696262756aa90a2b28803c2699c1f54fd141727dccb7999c2b154c4b7a"
+  },
+  {
+    "kind": "Feather",
+    "name": "黑陆行鸟的羽毛",
+    "render": true,
+    "motion": false,
+    "sha256": "54365e389b78a366141bcfbfaa093ad1abf832f2fec2ef401f9972d16a7c6fee"
+  },
+  {
+    "kind": "Twister",
+    "name": "龙卷",
+    "render": true,
+    "motion": true,
+    "sha256": "82af007e3b5513991152018b9e790c4e41aea1a57c2aa7ab8242150d31b3c677"
+  },
+  {
+    "kind": "GaleSphere",
+    "name": "风球",
+    "render": true,
+    "motion": true,
+    "sha256": "42bb7822b0da55428f2a14fa7a1e539211af43c7403190991c308e57410903dd"
+  },
+  {
+    "kind": "TrickFloor",
+    "name": "机关榻榻米",
+    "render": true,
+    "motion": true,
+    "sha256": "607d38fd644593401bd13bac6100dc18e6e8fb93914df8a4b6122e3841a83fee"
+  },
+  {
+    "kind": "TrickDoor",
+    "name": "机关门",
+    "render": true,
+    "motion": true,
+    "sha256": "fd667967096d4551ae761f78d51cd4a99a4eced5f1e2e705dfb5e1e47e32a2ef"
+  },
+  {
+    "kind": "Yojimbo",
+    "name": "机关保镖",
+    "render": true,
+    "motion": false,
+    "sha256": "d8487d25bf555fd3a4b289ceec72c21676dea82c9068718b5d037fad1d6b6c78"
+  },
+  {
+    "kind": "Onmyoji",
+    "name": "机关阴阳师",
+    "render": true,
+    "motion": false,
+    "sha256": "e6e9f36c380cfc09d001df3053640f5edb18dc3417e2a2d72b72e472171facbf"
+  },
+  {
+    "kind": "Gold",
+    "name": "金币",
+    "render": true,
+    "motion": true,
+    "sha256": "cc559172d0e46cabf2fc523493b59ea275f2d9b7d49120750c824ac78142466e"
+  },
+  {
+    "kind": "ShiftingSands",
+    "name": "流沙",
+    "render": true,
+    "motion": true,
+    "sha256": "2bf5d555a7a388a53711091200f51d2a3a744207f476ee61cfa8cbdf0da8821c"
+  },
+  {
+    "kind": "Antlion",
+    "name": "红沙蚁狮",
+    "render": true,
+    "motion": true,
+    "sha256": "9def1342c35900fa9210ad04d54d2cef84392c692b3049714aed63769fa69ab6"
+  },
+  {
+    "kind": "Sabotender",
+    "name": "仙人刺",
+    "render": true,
+    "motion": false,
+    "sha256": "29e442746f6f0517970705c4971c83fcb04497db1b61f13c06c669c6db3f06b0"
+  },
+  {
+    "kind": "Acutender",
+    "name": "仙人盾",
+    "render": true,
+    "motion": false,
+    "sha256": "e4f1ea81a8e18845f73d1fa1eb71a8951c61a5e3981e2d1c694c92f64bf71128"
+  },
+  {
+    "kind": "Oasis",
+    "name": "绿洲",
+    "render": true,
+    "motion": true,
+    "sha256": "3ef2cd8e74a3706dc9d3e1b1cad40c5877c5343180e494c27046b993b7441353"
+  },
+  {
+    "kind": "HeatWave",
+    "name": "热浪",
+    "render": true,
+    "motion": true,
+    "sha256": "c270695a674cf0c367fb3c0d808a4b1f9c55dbd70806a117c77c4d5d173fe672"
+  },
+  {
+    "kind": "Geyser",
+    "name": "间歇泉",
+    "render": true,
+    "motion": true,
+    "sha256": "6c74e543083bfe54cf559a0903d21d5c4562fcbc88165480839aff5a0537044c"
+  },
+  {
+    "kind": "Sandpearl",
+    "name": "沙漠之光",
+    "render": true,
+    "motion": true,
+    "sha256": "3ae1c96e7ef80756eb9e3ae90a65c13e2c8274136714df4f32dd55188f6f84fb"
+  },
+  {
+    "kind": "Aetherometer",
+    "name": "魔力检测点",
+    "render": true,
+    "motion": false,
+    "sha256": "5fe8b0dadd0669acc20c6fab6c0fd7578f5c4bda7bc02ece80fb0cf9bf2d7f3e"
+  },
+  {
+    "kind": "AetherBridge",
+    "name": "魔力桥",
+    "render": true,
+    "motion": false,
+    "sha256": "bb108321a2f5d3635ea99e6f59d2d05f73012a3a7fbc7168c80d6a1c08b28680"
+  },
+  {
+    "kind": "HealingGlyph",
+    "name": "治疗区",
+    "render": true,
+    "motion": true,
+    "sha256": "c19040e0b8cae72f1199a55111e4415bc769ed9679fbc9c2048510e3c3f21dba"
+  }
+]

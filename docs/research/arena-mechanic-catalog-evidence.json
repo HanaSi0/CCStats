@@ -1,0 +1,244 @@
+{
+  "BNpcName": {
+    "source": "https://github.com/xivapi/ffxiv-datamining/blob/master/csv/en/BNpcName.csv",
+    "sha256": "08614d48fd45ab0db1b8705425a363b71dc143cccb961a5b916723c81edc0449",
+    "rows": [
+      {
+        "#": "11351",
+        "Singular": "bomb core"
+      },
+      {
+        "#": "11352",
+        "Singular": "turbulence"
+      },
+      {
+        "#": "11353",
+        "Singular": "black chocobo feather"
+      },
+      {
+        "#": "12278",
+        "Singular": "clockwork yojimbo"
+      },
+      {
+        "#": "12279",
+        "Singular": "clockwork onmyoji"
+      },
+      {
+        "#": "12368",
+        "Singular": "gale sphere"
+      },
+      {
+        "#": "12521",
+        "Singular": "sabotender"
+      },
+      {
+        "#": "12522",
+        "Singular": "Red Sands antlion"
+      },
+      {
+        "#": "12523",
+        "Singular": "acutender"
+      }
+    ]
+  },
+  "Action": {
+    "source": "https://github.com/xivapi/ffxiv-datamining/blob/master/csv/en/Action.csv",
+    "sha256": "412b5ab49063e9d1eb688d9174f2aa42cc030f741254662ee914f837e2a33308",
+    "rows": [
+      {
+        "#": "28725",
+        "Name": "Elemental Impact",
+        "CastType": "2",
+        "EffectRange": "5",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "28726",
+        "Name": "Self-destruct",
+        "CastType": "11",
+        "EffectRange": "70",
+        "XAxisModifier": "10",
+        "TargetArea": "False"
+      },
+      {
+        "#": "28727",
+        "Name": "Turbulence",
+        "CastType": "6",
+        "EffectRange": "0",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "28728",
+        "Name": "Turbulence",
+        "CastType": "6",
+        "EffectRange": "0",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "28729",
+        "Name": "Biting Wind",
+        "CastType": "2",
+        "EffectRange": "5",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "28731",
+        "Name": "Typhoon",
+        "CastType": "2",
+        "EffectRange": "3",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "32364",
+        "Name": "Tatami Twist",
+        "CastType": "12",
+        "EffectRange": "10",
+        "XAxisModifier": "10",
+        "TargetArea": "False"
+      },
+      {
+        "#": "32365",
+        "Name": "Tsujigiri",
+        "CastType": "2",
+        "EffectRange": "15",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "32366",
+        "Name": "Onmyojutsu",
+        "CastType": "2",
+        "EffectRange": "30",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "32367",
+        "Name": "Well Paid",
+        "CastType": "1",
+        "EffectRange": "0",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "35751",
+        "Name": "Devour",
+        "CastType": "2",
+        "EffectRange": "6",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "35752",
+        "Name": "100,000 Needles",
+        "CastType": "2",
+        "EffectRange": "22",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "35753",
+        "Name": "Therapeutic Needles",
+        "CastType": "2",
+        "EffectRange": "22",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "35754",
+        "Name": "Landslip",
+        "CastType": "2",
+        "EffectRange": "22",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      },
+      {
+        "#": "35755",
+        "Name": "Sandpearl Shroud",
+        "CastType": "2",
+        "EffectRange": "2",
+        "XAxisModifier": "0",
+        "TargetArea": "True"
+      },
+      {
+        "#": "35756",
+        "Name": "Geyser",
+        "CastType": "2",
+        "EffectRange": "2",
+        "XAxisModifier": "0",
+        "TargetArea": "False"
+      }
+    ]
+  },
+  "Status": {
+    "source": "https://github.com/xivapi/ffxiv-datamining/blob/master/csv/en/Status.csv",
+    "sha256": "6cf96a495ec9b577794e5b402074bf1d8a86b7bda16cabcc77bf20cfdda526ed",
+    "rows": [
+      {
+        "#": "2994",
+        "Name": "Hardcore",
+        "Description": "Damage dealt is increased."
+      },
+      {
+        "#": "2995",
+        "Name": "Blackfeather Boost",
+        "Description": "Movement speed is increased while weaponskill and spell cast and recast time are reduced."
+      },
+      {
+        "#": "2996",
+        "Name": "Swift Sprint",
+        "Description": "Movement speed is greatly increased."
+      },
+      {
+        "#": "2997",
+        "Name": "Swift Sprint",
+        "Description": "Movement speed is greatly increased."
+      },
+      {
+        "#": "3125",
+        "Name": "Swift Sprint",
+        "Description": "Movement speed is greatly increased."
+      },
+      {
+        "#": "3518",
+        "Name": "Mini",
+        "Description": "Shrunk to a fraction of your normal size. Damage dealt and movement speed are reduced, while damage taken is increased."
+      },
+      {
+        "#": "3752",
+        "Name": "Oasal Balm",
+        "Description": "Regenerating HP over time."
+      },
+      {
+        "#": "3753",
+        "Name": "Oasal Balm",
+        "Description": "Regenerating HP over time."
+      },
+      {
+        "#": "3754",
+        "Name": "Heat Wave",
+        "Description": "Sustaining damage over time."
+      },
+      {
+        "#": "4385",
+        "Name": "Swift Sprint",
+        "Description": "Movement speed is greatly increased."
+      },
+      {
+        "#": "4709",
+        "Name": "Swift Sprint",
+        "Description": "Movement speed is greatly increased."
+      },
+      {
+        "#": "5355",
+        "Name": "Healing Glyph",
+        "Description": "Damage taken is reduced. Regenerating HP over time."
+      }
+    ]
+  }
+}

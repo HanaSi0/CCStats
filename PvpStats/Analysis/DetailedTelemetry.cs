@@ -49,6 +49,8 @@ public sealed class DetailedTelemetry {
     public Dictionary<uint, ReplayStatusInfo> ReplayStatuses { get; set; } = new();
     public List<ReplayMapEvent> MapMechanics { get; set; } = new();
     public bool MapMechanicsTruncated { get; set; }
+    public List<ReplayArenaObject> ArenaObjects { get; set; } = new();
+    public bool ArenaObjectsTruncated { get; set; }
     public List<ReplaySummonFrame> SummonFrames { get; set; } = new();
     public bool SummonsTruncated { get; set; }
     public List<ReplaySkillEvent> ReplaySkills { get; set; } = new();

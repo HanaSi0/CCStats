@@ -32,6 +32,6 @@ internal static class MapMechanicVisualChecks {
         bomb.Heading=MathF.PI/4;
         var cross=MapMechanicVisuals.Active(new[]{bomb},1033,now).Single();geometry.Clear();MapMechanicVisuals.Draw(geometry,cross,now,(_,_)=>0);
         check(geometry.Vertices.Length>0&&geometry.Vertices.ToArray().All(v=>LimitBreakVisuals.Finite(v.Position))&&geometry.Vertices.ToArray().Max(v=>v.Position.X)>49,"oriented bomb cross emits finite geometry at the client-table extent");
-        check(ReplayMechanicObservation.Caption(shield,shield.Timestamp)=="治疗针刺","historical events resolve mechanic names by action ID independent of Japanese NPC labels");
+        check(ReplayMechanicObservation.Caption(shield,shield.Timestamp)=="十万针灸","historical events resolve mechanic names by action ID independent of Japanese NPC labels");
     }
 }

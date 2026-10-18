@@ -74,6 +74,7 @@ internal sealed partial class MatchReplayWindow {
         if(ImGui.IsItemHovered())ImGui.SetTooltip("浅蓝为增益，浅红为伤害或控制；即时效果先明显显示再淡出，持续区域保留淡色与边框。扇形角度、南十字宽度及黄昏双向长度为参考；旧记录缺少落点时不补画。");
         ImGui.SameLine();ImGui.SetNextItemWidth(76*scale);if(ImGui.DragFloat("水晶参考圈###Replay3DRadius",ref _radius3D,.1f,1,12,"%.1f"))_cameraDirty=true;
         if(ImGui.IsItemHovered())ImGui.SetTooltip("参考半径默认 5 游戏单位，尚未验证为服务器实际判定半径。");
+        ImGui.SameLine();DrawMechanicGallery();
         if(_data.MovementDownsampled)ImGui.TextDisabled("此记录已降低采样密度；不补造缺失观测。");
         if(_data.Frames.Count==0)ImGui.TextDisabled("此比赛没有走位采样，仅可查看地图及已记录事件。");
         var now=_origin.AddSeconds(_seconds);
@@ -197,7 +198,7 @@ internal sealed partial class MatchReplayWindow {
                 prev=f;
             }
         }
-        if(frame!=null)foreach(var p in frame.Players)if(float.IsFinite(p.X)&&float.IsFinite(p.Z))_scene.Pawn(World(p),float.IsFinite(p.Heading)?p.Heading:0,p.HP==0,p.Player==_selected,p.Team);
+        if(frame!=null)foreach(var p in frame.Players)if(float.IsFinite(p.X)&&float.IsFinite(p.Z))_scene.Pawn(World(p),float.IsFinite(p.Heading)?p.Heading:0,p.HP==0,p.Player==_selected,p.Team,ArenaMechanicScene.Mini(p,now)?.4f:1);
         if(frame?.Crystal is {} crystal&&float.IsFinite(crystal.X)&&float.IsFinite(crystal.Z)) {
             var at=World(crystal);_scene.Diamond(at+new Vector3(0,.5f,0),1.4f,5.5f,ReplaySceneGeometry.Rgba(.25f,.75f,1));
             _scene.Ring(at+new Vector3(0,.08f,0),_radius3D,.15f,ReplaySceneGeometry.Rgba(.3f,.85f,1));
@@ -207,13 +208,38 @@ internal sealed partial class MatchReplayWindow {
             _scene.Ribbon(at+new Vector3(-1,0,-1),at+new Vector3(1,0,1),.3f,ReplaySceneGeometry.Rgba(1,.15f,.2f));_scene.Ribbon(at+new Vector3(-1,0,1),at+new Vector3(1,0,-1),.3f,ReplaySceneGeometry.Rgba(1,.15f,.2f));
         }
     }
+    private void DrawArenaActors(MovementFrame? frame,DateTime now) {
+        if(!_showMechanics)return;
+        float time=(float)(now-_origin).TotalSeconds;int start=_scene.Vertices.Length;
+        var actors=ArenaMechanicScene.Objects(_data,_match.TerritoryId,now).Concat(ArenaMechanicScene.Actions(_data,_match.TerritoryId,now))
+            .DistinctBy(a=>(a.Kind,a.ObjectId,X:(int)(a.Position.X*2),Z:(int)(a.Position.Z*2))).Take(64);
+        foreach(var actor in actors) {
+            if(_scene.Vertices.Length-start>24_000)break;
+            ArenaMechanicRenderer.Draw(_scene,actor,time);
+        }
+        // Status effects attach to the observed recipient; they never fabricate a persistent zone at the player's feet.
+        foreach(var effect in ArenaMechanicScene.Statuses(frame,_match.TerritoryId,now)) {
+            if(effect.Kind==ArenaMechanicKind.HeatWave||_scene.Vertices.Length-start>30_000)continue;
+            var rgb=ArenaMechanicRenderer.Tint(effect.Kind);var at=World(effect.Player);
+            _scene.Ring(at+Vector3.UnitY*.12f,1.3f,.12f,ReplaySceneGeometry.Rgba(rgb.X,rgb.Y,rgb.Z,.7f));
+            if(effect.Kind is ArenaMechanicKind.BombCore or ArenaMechanicKind.Feather)
+                _scene.Diamond(at+Vector3.UnitY*4,.25f,.7f,ReplaySceneGeometry.Rgba(rgb.X,rgb.Y,rgb.Z));
+        }
+    }
     private void BuildLBOverlay(MovementFrame? frame,DateTime now) {
         _lbOverlay.Clear();
+        DrawArenaActors(frame,now);
         if(_showMechanics)foreach(var visual in MapMechanicVisuals.Active(_data.MapMechanics,_match.TerritoryId,now)) {
             var recordedY=visual.Rule.Ground?visual.Event.TargetY:visual.Event.Y;
             var offset=recordedY.HasValue?visual.Center.Y-(_mesh?.EstimatedHeight(visual.Center.X,visual.Center.Z)??visual.Center.Y):0;
             using(_lbOverlay.ClipTo(_clipAreas?_mesh?.ArenaMask:null,recordedY??visual.Center.Y))MapMechanicVisuals.Draw(_lbOverlay,visual,now,(x,z)=>(_mesh?.EstimatedHeight(x,z)??visual.Center.Y)+offset);
             if(_lbOverlay.Vertices.Length>MechanicVertexBudget)break;
+        }
+        if(_showMechanics&&_mesh!=null) {
+            bool heat=ArenaMechanicScene.Statuses(frame,_match.TerritoryId,now).Any(s=>s.Kind==ArenaMechanicKind.HeatWave);
+            bool wind=ArenaMechanicScene.Actions(_data,_match.TerritoryId,now).Any(s=>s.Kind==ArenaMechanicKind.Turbulence);
+            if(heat||wind)using(_lbOverlay.ClipTo(_clipAreas?_mesh.ArenaMask:null))
+                ArenaMechanicRenderer.DrawGlobal(_lbOverlay,heat?ArenaMechanicKind.HeatWave:ArenaMechanicKind.Turbulence,_mesh.Min,_mesh.Max,(float)(now-_origin).TotalSeconds,(x,z)=>_mesh.EstimatedHeight(x,z));
         }
         if(!_showLB) { AddGuardBubbles(frame,now);return; }
         if(_lbEvents==null) {

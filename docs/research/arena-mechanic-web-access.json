@@ -1,0 +1,50 @@
+[
+  {
+    "key": "official-global",
+    "url": "https://na.finalfantasyxiv.com/lodestone/playguide/contentsguide/crystallineconflict/",
+    "checked_utc": "2026-10-18T10:07:09.836864+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "official-cn",
+    "url": "https://actff1.web.sdo.com/project/160810event/page6.html",
+    "checked_utc": "2026-10-18T10:07:09.837574+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "community-cloud",
+    "url": "https://ff14.huijiwiki.com/wiki/%E4%B9%9D%E9%9C%84%E4%BA%91%E4%B8%8A",
+    "checked_utc": "2026-10-18T10:07:09.838077+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "community-castletown",
+    "url": "https://ff14.huijiwiki.com/wiki/%E6%9C%BA%E5%85%B3%E5%A4%A7%E6%AE%BF",
+    "checked_utc": "2026-10-18T10:07:09.838504+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "community-bayside",
+    "url": "https://ffxiv.consolegameswiki.com/wiki/The_Bayside_Battleground",
+    "checked_utc": "2026-10-18T10:07:09.838981+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "community-cloud-en",
+    "url": "https://ffxiv.consolegameswiki.com/wiki/Cloud_Nine",
+    "checked_utc": "2026-10-18T10:07:09.839312+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "community-harmonias",
+    "url": "https://ffxiv.consolegameswiki.com/wiki/Archeia_Harmonias",
+    "checked_utc": "2026-10-18T10:07:09.839669+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "key": "community-castletown-en",
+    "url": "https://ffxiv.consolegameswiki.com/wiki/The_Clockwork_Castletown",
+    "checked_utc": "2026-10-18T10:07:09.840338+00:00",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  }
+]

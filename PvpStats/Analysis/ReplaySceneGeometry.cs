@@ -85,7 +85,14 @@ public sealed class ReplaySceneGeometry {
         }
     }
     public static bool GuardVisible(PlayerPosition player,DateTime now) => player.HP>0&&player.StatusTimestamp<=now&&player.Statuses.Any(s=>s.Id is 3054 or 3673&&(s.Remaining<=0||s.Remaining>(now-player.StatusTimestamp).TotalSeconds));
-    public void Pawn(Vector3 at,float heading,bool dead,bool selected,int team) {
+    public void Pawn(Vector3 at,float heading,bool dead,bool selected,int team,float scale=1) {
+        int first=_vertices.Count;PawnGeometry(at,heading,dead,selected,team);
+        if(!float.IsFinite(scale))scale=1;
+        scale=Math.Clamp(scale,.2f,1);
+        if(scale==1)return;
+        for(int i=first;i<_vertices.Count;i++) {var v=_vertices[i];_vertices[i]=new(at+(v.Position-at)*scale,v.Color);}
+    }
+    private void PawnGeometry(Vector3 at,float heading,bool dead,bool selected,int team) {
         var color=dead?Rgba(.45f,.46f,.49f):team==1?Rgba(.05f,.65f,1):Rgba(1,.12f,.2f);
         var basePoint=at+new Vector3(0,.2f,0);var apex=at+new Vector3(0,2.7f,0);
         var corners=new Vector3[3];

@@ -19,14 +19,14 @@ public static class MapMechanicVisuals {
         new(28726,"volcanic-heart","Self-destruct","自爆",MapMechanicEffect.Damage,70,MapMechanicShape.Cross,10),
         new(28729,"cloud-nine","Biting Wind","凛风",MapMechanicEffect.Damage,5),
         new(28731,"cloud-nine","Typhoon","台风",MapMechanicEffect.Knockback,3),
-        new(32364,"castletown","Tatami Twist","翻转榻榻米",MapMechanicEffect.Knockback,10,MapMechanicShape.Square,10),
+        new(32364,"castletown","Tatami Twist","榻榻米翻转",MapMechanicEffect.Knockback,10,MapMechanicShape.Square,10),
         new(32365,"castletown","Tsujigiri","辻斩",MapMechanicEffect.Damage,15),
         new(32366,"castletown","Onmyojutsu","阴阳术",MapMechanicEffect.Gaze,30),
         new(35751,"red-sands","Devour","吞噬",MapMechanicEffect.Damage,6),
         new(35752,"red-sands","100,000 Needles","十万针刺",MapMechanicEffect.SharedDamage,22),
-        new(35753,"red-sands","Therapeutic Needles","治疗针刺",MapMechanicEffect.Barrier,22),
+        new(35753,"red-sands","Therapeutic Needles","十万针灸",MapMechanicEffect.Barrier,22),
         new(35754,"red-sands","Landslip","流沙吸引",MapMechanicEffect.Pull,22),
-        new(35755,"red-sands","Sandpearl Shroud","砂珠庇护",MapMechanicEffect.Healing,2,Ground:true),
+        new(35755,"red-sands","Sandpearl Shroud","沙漠之光",MapMechanicEffect.Healing,2,Ground:true),
         new(35756,"red-sands","Geyser","间歇泉",MapMechanicEffect.Knockback,2),
     };
     private static readonly Dictionary<uint,MapMechanicRule> ById=Rules.ToDictionary(r=>r.ActionId);
@@ -109,13 +109,6 @@ public static class MapMechanicVisuals {
             Ring(visual.Size*(.25f+.75f*(age%1)));
         } else if(rule.Effect==MapMechanicEffect.SharedDamage) {
             Ring(visual.Size*.8f);
-        } else if(rule.Effect==MapMechanicEffect.Gaze) {
-            const float r=2;
-            for(int i=0;i<32;i++) {
-                float a=i*MathF.Tau/32,b=(i+1)*MathF.Tau/32;
-                Line(center+right*MathF.Cos(a)*r+forward*MathF.Sin(a),center+right*MathF.Cos(b)*r+forward*MathF.Sin(b));
-            }
-            Ring(.4f);
         }
     }
 }

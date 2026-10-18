@@ -8,6 +8,7 @@ using PvpStats.Types;
 using PvpStats.Types.Match;
 using PvpStats.Types.Player;
 
+if(args.Length>1&&args[0]=="--export-mechanics") { ArenaMechanicSceneChecks.Export(args[1]);return; }
 if(args.Length > 1 && args[0] == "--export-themes") {
     var palettes = Enumerable.Range(0, PvpStats.Settings.ThemeConfiguration.PresetNames.Length).Select(i => {
         var theme = PvpStats.Settings.ThemeConfiguration.Preset(i);
@@ -155,6 +156,7 @@ MovementCompatibilityChecks.Run(Check);
 Replay3DChecks.Run(Check);
 ReplayCameraMechanicChecks.Run(Check);
 MapMechanicVisualChecks.Run(Check);
+ArenaMechanicSceneChecks.Run(Check);
 ReplayAreaClipChecks.Run(Check);
 LBCaptureChecks.Run(Check);
 LimitBreakVisualChecks.Run(Check);

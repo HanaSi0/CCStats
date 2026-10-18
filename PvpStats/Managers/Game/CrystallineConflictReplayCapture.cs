@@ -60,8 +60,8 @@ internal partial class CrystallineConflictMatchManager {
         var data=_currentMatchTimeline?.Detailed;
         if(data==null||_scoreboardPayloadReceived)return false;
         lock(_detailedLock) {
-            if(data.MapMechanics.Count>=4096) { data.MapMechanicsTruncated=true;return false; }
-            data.MapMechanics.Add(entry);
+            if(data.MapMechanics.Count>=4096||data.EstimatedBytes+256>DetailedTelemetry.ByteBudget) { data.MapMechanicsTruncated=true;return false; }
+            data.MapMechanics.Add(entry);data.EstimatedBytes+=256;
             return true;
         }
     }
