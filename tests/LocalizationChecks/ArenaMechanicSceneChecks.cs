@@ -29,6 +29,23 @@ internal static class ArenaMechanicSceneChecks {
         check(!ArenaMechanicScene.Objects(data,1116,now.AddTicks(-1)).Any()&&!ArenaMechanicScene.Objects(data,1116,now.AddSeconds(1.3)).Any(),"objects neither leak from the future nor persist beyond observed lifetime and sampling grace");
         var json=JsonSerializer.Serialize(data);var restored=JsonSerializer.Deserialize<DetailedTelemetry>(json)!;
         check(restored.ArenaObjects.Single().ObjectId==actor.ObjectId,"new object tracks retain 64-bit game object identities in JSON exports");
+        var eyeCast=new ReplayMapEvent {ActionId=32366,SourceEntityId=42,Kind=ReplayMapEventKind.CastObserved,Timestamp=now.AddSeconds(1),ObservedUntil=now.AddSeconds(3),ExpectedEndTime=now.AddSeconds(3)};
+        check(ArenaMechanicScene.EyeOpenness(new[]{eyeCast},now,42)==0,"moving/waiting onmyoji keeps eye closed before a recorded cast");
+        check(ArenaMechanicScene.EyeOpenness(new[]{eyeCast},now.AddSeconds(1.1),42) is >0 and <1,"gaze eye smoothly opens after cast observation");
+        check(ArenaMechanicScene.EyeOpenness(new[]{eyeCast},now.AddSeconds(1.5),42)==1,"gaze eye is open while the actual cast continues");
+        check(ArenaMechanicScene.EyeOpenness(new[]{new ReplayMapEvent {ActionId=32366,SourceEntityId=0xE0000000,Timestamp=now.AddSeconds(1.2),Kind=ReplayMapEventKind.ActionResolved}},now.AddSeconds(1.5),0xE0000000)==0,"non-networked entity sentinel cannot identify a particular casting onmyoji");
+        check(ArenaMechanicScene.EyeOpenness(new[]{eyeCast},now.AddSeconds(1.5),43)==0,"another NPC's gaze cannot open this NPC's eye");
+        check(ArenaMechanicScene.EyeOpenness(new[]{eyeCast},now.AddSeconds(3.3),42)==0,"eye closes after the observed cast ends");
+        eyeCast.ObservedUntil=now.AddSeconds(1.4);eyeCast.ExpectedEndTime=now.AddSeconds(5);
+        check(ArenaMechanicScene.EyeOpenness(new[]{eyeCast},now.AddSeconds(1.8),42)==0,"an interrupted cast closes the eye without waiting for its formerly expected end");
+        var eyeResolve=new ReplayMapEvent {ActionId=32366,SourceEntityId=42,Timestamp=now.AddSeconds(2),Kind=ReplayMapEventKind.ActionResolved};
+        check(ArenaMechanicScene.EyeForEvent(eyeResolve,now.AddSeconds(2.2))==1&&ArenaMechanicScene.EyeForEvent(eyeResolve,now.AddSeconds(3.2))==0,"resolved gaze briefly emphasises an open eye then closes");
+        var movingEye=new ReplayArenaObject {ObjectId=actor.ObjectId,EntityId=42,Kind=ArenaMechanicKind.Onmyoji,Timestamp=now.AddSeconds(1.5),ObservedUntil=now.AddSeconds(1.5),X=12,Y=2,Z=20};
+        actor.EntityId=42;actor.ObservedUntil=now.AddSeconds(1.4);data.ArenaObjects.Add(movingEye);data.MapMechanics.Add(eyeResolve);
+        check(ArenaMechanicScene.Moving(data.ArenaObjects,movingEye,now.AddSeconds(1.6)),"recorded movement is detected from past poses of the same NPC");
+        data.MapMechanics.Clear();data.MapMechanics.Add(new(){ActionId=32366,SourceEntityId=42,Timestamp=now.AddSeconds(1.5),Kind=ReplayMapEventKind.ActionResolved});
+        check(ArenaMechanicScene.Objects(data,1116,now.AddSeconds(1.6)).Single().EyeOpen==0,"a moving onmyoji closes its eye even while a previous impact is fading");
+        data.ArenaObjects.Remove(movingEye);actor.ObservedUntil=now.AddSeconds(1);data.MapMechanics.Clear();
         var mapper=new BsonMapper();var doc=mapper.ToDocument(data);var fromDb=mapper.ToObject<DetailedTelemetry>(doc);
         check(fromDb.ArenaObjects.Single().Kind==actor.Kind,"mechanic tracks survive LiteDB storage and reload");
         var legacy=JsonSerializer.Deserialize<DetailedTelemetry>("{\"Version\":3}")!;
@@ -38,6 +55,7 @@ internal static class ArenaMechanicSceneChecks {
         data.ArenaObjects.Clear();check(ArenaMechanicScene.Actions(data,1116,now).Single().Kind==ArenaMechanicKind.Onmyoji,"older matches can show an eye from a recorded onmyoji action");
         data.MapMechanics.Clear();data.MapMechanics.Add(new() { Kind=ReplayMapEventKind.TimerTriggered,ActionId=28727,Timestamp=now,X=0,Y=0,Z=0 });
         check(!ArenaMechanicScene.Actions(data,1034,now).Any(),"a timer cannot manufacture a global turbulence event");
+        check(ArenaMechanicScene.FromObjectName("sprint zone","cloud-nine")==ArenaMechanicKind.SprintZone&&ArenaMechanicScene.FromObjectName("sprint zone",null)==ArenaMechanicKind.Unknown,"an actually identified sprint zone is supported in any known CC map, without inventing its existence");
         var frame=new MovementFrame {Timestamp=now,Players=new(){new(){Player="Example World",HP=100,X=3,Y=0,Z=5,StatusTimestamp=now,Statuses=new(){new(){Id=3754,Remaining=2}}}}};
         check(ArenaMechanicScene.Statuses(frame,1138,now).Single().Kind==ArenaMechanicKind.HeatWave&&!ArenaMechanicScene.Statuses(frame,1034,now).Any(),"heat wave rendering requires an actual arena-specific active status");
         frame.Players[0].Statuses[0].Remaining=0;
@@ -55,8 +73,9 @@ internal static class ArenaMechanicSceneChecks {
         var frames=new List<object>();
         foreach(var kind in ArenaMechanicScene.GalleryKinds) {
             var samples=new List<object>();
-            for(int i=0;i<8;i++) {
-                var g=new ReplaySceneGeometry();ArenaMechanicRenderer.Draw(g,new(kind,Vector3.Zero,Destination:kind is ArenaMechanicKind.AetherBridge or ArenaMechanicKind.TrickDoor?new(0,0,10):null,Progress:.65f,Reference:true),i/8f);
+            int count=kind==ArenaMechanicKind.Onmyoji?32:8;
+            for(int i=0;i<count;i++) {
+                var g=new ReplaySceneGeometry();ArenaMechanicRenderer.Draw(g,new(kind,Vector3.Zero,Destination:kind is ArenaMechanicKind.AetherBridge or ArenaMechanicKind.TrickDoor?new(0,0,10):null,Progress:.65f,Reference:true),kind==ArenaMechanicKind.Onmyoji?i*.125f:i/8f);
                 samples.Add(g.Vertices.ToArray().Select(v=>new object[]{v.Position.X,v.Position.Y,v.Position.Z,v.Color}).ToArray());
             }
             frames.Add(new {kind=kind.ToString(),name=ArenaMechanicScene.Name(kind),detail=ArenaMechanicGuide.Detail(kind),samples});

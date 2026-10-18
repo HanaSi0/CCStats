@@ -13,7 +13,7 @@ public static class ArenaMechanicGuide {
         ArenaMechanicKind.TrickFloor=>"机关榻榻米：停留后触发榻榻米翻转，造成伤害与击退，并解除防御。翻板是机制示意，不推断玩家是否必定中招。",
         ArenaMechanicKind.TrickDoor=>"机关门：单向传送，部分技能发动期间无法通行。没有实际出口记录时不连接出口，也不画反向通道。",
         ArenaMechanicKind.Yojimbo=>"机关狂欢 · 机关保镖：沿路线行进，在中点、战术点和终点附近发动周围物理攻击；移动跟随实际对象采样，伤害范围由动作记录驱动。",
-        ArenaMechanicKind.Onmyoji=>"机关狂欢 · 机关阴阳师：悬浮眼睛与范围线代表视线攻击；命中会缩小，降低输出和移速、增加承伤。不能将范围内所有玩家认定为中招。",
+        ArenaMechanicKind.Onmyoji=>"机关狂欢 · 机关阴阳师：移动或等待时闭眼，只有本体实际读条才睁眼；结算与中断后闭合，范围线代表视线攻击；命中会缩小，降低输出和移速、增加承伤。不能将范围内所有玩家认定为中招。",
         ArenaMechanicKind.Gold=>"机关狂欢：景山向场内撒金币，拾取金币堆增加极限槽。金币只按真实对象或动作落点显示，不随机生成。",
         ArenaMechanicKind.ShiftingSands=>"流沙：快速移动到指定地点。流动纹样与冲刺带的直箭头区别显示，不凭位移猜测精确入口或出口。",
         ArenaMechanicKind.Antlion=>"红沙蚁狮：吸入巢穴中央并拘束，随后跃出造成大伤害。国服写到达战术点，英文写通过检查点；回放按实际出怪及动作记录。",

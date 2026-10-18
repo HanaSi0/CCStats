@@ -21,7 +21,7 @@ internal sealed partial class MatchReplayWindow {
     private readonly ReplaySceneGeometry _lbOverlay=new();
     private bool _showLB=true,_clipAreas=true;
     // Clipped footprints split at cell edges; budgets leave room for pawns, trail and summons in the GPU buffer.
-    private const int MechanicVertexBudget=30_000,OverlayVertexBudget=120_000;
+    private const int MechanicVertexBudget=30_000,OverlayVertexBudget=120_000,ArenaObjectVertexBudget=100_000;
     private System.Collections.Generic.List<ReplaySkillEvent>? _lbEvents;
     private bool _disposed,_cameraDirty=true,_followPlayer;
     private string _renderError="";
@@ -214,12 +214,12 @@ internal sealed partial class MatchReplayWindow {
         var actors=ArenaMechanicScene.Objects(_data,_match.TerritoryId,now).Concat(ArenaMechanicScene.Actions(_data,_match.TerritoryId,now))
             .DistinctBy(a=>(a.Kind,a.ObjectId,X:(int)(a.Position.X*2),Z:(int)(a.Position.Z*2))).Take(64);
         foreach(var actor in actors) {
-            if(_scene.Vertices.Length-start>24_000)break;
+            if(_scene.Vertices.Length-start>ArenaObjectVertexBudget)break;
             ArenaMechanicRenderer.Draw(_scene,actor,time);
         }
         // Status effects attach to the observed recipient; they never fabricate a persistent zone at the player's feet.
         foreach(var effect in ArenaMechanicScene.Statuses(frame,_match.TerritoryId,now)) {
-            if(effect.Kind==ArenaMechanicKind.HeatWave||_scene.Vertices.Length-start>30_000)continue;
+            if(effect.Kind==ArenaMechanicKind.HeatWave||_scene.Vertices.Length-start>ArenaObjectVertexBudget+6_000)continue;
             var rgb=ArenaMechanicRenderer.Tint(effect.Kind);var at=World(effect.Player);
             _scene.Ring(at+Vector3.UnitY*.12f,1.3f,.12f,ReplaySceneGeometry.Rgba(rgb.X,rgb.Y,rgb.Z,.7f));
             if(effect.Kind is ArenaMechanicKind.BombCore or ArenaMechanicKind.Feather)

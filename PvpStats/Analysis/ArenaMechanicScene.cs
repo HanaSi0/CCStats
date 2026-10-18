@@ -16,6 +16,7 @@ public sealed class ReplayArenaObject {
     public DateTime ObservedUntil { get; set; }
     public ulong ObjectId { get; set; }
     public uint NameId { get; set; }
+    public uint EntityId { get; set; }
     public uint DataId { get; set; }
     public byte ObjectKind { get; set; }
     public byte EventState { get; set; }
@@ -32,7 +33,7 @@ public sealed class ReplayArenaObject {
     public Vector3 Position()=>new(X,Y,Z);
 }
 public sealed record ArenaMechanicInstance(ArenaMechanicKind Kind,Vector3 Position,float Heading=0,
-    float Radius=2,Vector3? Destination=null,float? Progress=null,bool Reference=false,ulong ObjectId=0);
+    float Radius=2,Vector3? Destination=null,float? Progress=null,bool Reference=false,ulong ObjectId=0,float EyeOpen=0);
 
 public static class ArenaMechanicScene {
     public static readonly ArenaMechanicKind[] GalleryKinds=Enum.GetValues<ArenaMechanicKind>().Where(k=>k!=ArenaMechanicKind.Unknown).ToArray();
@@ -47,7 +48,7 @@ public static class ArenaMechanicScene {
         ArenaMechanicKind.Aetherometer=>"魔力检测点",ArenaMechanicKind.AetherBridge=>"魔力桥",ArenaMechanicKind.HealingGlyph=>"治疗区",_=>"未知机关"
     };
     public static bool InMap(ArenaMechanicKind k,string? map)=>k switch {
-        ArenaMechanicKind.SprintZone=>map is "palaistra" or "volcanic-heart" or "bayside",
+        ArenaMechanicKind.SprintZone=>map is "palaistra" or "volcanic-heart" or "cloud-nine" or "castletown" or "red-sands" or "bayside" or "harmonias",
         ArenaMechanicKind.Bomb or ArenaMechanicKind.BombCore=>map=="volcanic-heart",
         ArenaMechanicKind.JumpGlyph=>map is "cloud-nine" or "bayside" or "harmonias",
         ArenaMechanicKind.Turbulence or ArenaMechanicKind.Feather or ArenaMechanicKind.Twister or ArenaMechanicKind.GaleSphere=>map=="cloud-nine",
@@ -84,7 +85,7 @@ public static class ArenaMechanicScene {
             .GroupBy(o=>o.ObjectId).Select(g=>g.OrderByDescending(o=>o.Timestamp).First())
             .OrderBy(o=>o.ObjectId).Take(64).Select(o=>new ArenaMechanicInstance(o.Kind,o.Position(),o.Heading,
                 Destination:o.TargetX.HasValue&&o.TargetY.HasValue&&o.TargetZ.HasValue&&LimitBreakVisuals.Finite(new(o.TargetX.Value,o.TargetY.Value,o.TargetZ.Value))?new(o.TargetX.Value,o.TargetY.Value,o.TargetZ.Value):null,
-                Progress:o.Progress,ObjectId:o.ObjectId));
+                Progress:o.Progress,ObjectId:o.ObjectId,EyeOpen:o.Kind==ArenaMechanicKind.Onmyoji&&!Moving(data.ArenaObjects,o,now)?EyeOpenness(data.MapMechanics,now,o.EntityId):0));
     }
     public static ArenaMechanicKind FromAction(uint action)=>action switch {
         28725 or 28726=>ArenaMechanicKind.Bomb,28727 or 28728=>ArenaMechanicKind.Turbulence,28731=>ArenaMechanicKind.Twister,
@@ -96,7 +97,7 @@ public static class ArenaMechanicScene {
         var map=ReplayMapMesh.MapKey(territory);
         foreach(var e in data.MapMechanics.Where(e=>e.Kind is ReplayMapEventKind.CastObserved or ReplayMapEventKind.ActionResolved)) {
             var kind=FromAction(e.ActionId);
-            if(!InMap(kind,map)||!ReplayMechanicObservation.Visible(e,now))continue;
+            if(!InMap(kind,map)||(!ReplayMechanicObservation.Visible(e,now)&&!(kind==ArenaMechanicKind.Onmyoji&&EyeForEvent(e,now)>0)))continue;
             if(e.Kind==ReplayMapEventKind.ActionResolved&&(now-e.Timestamp).TotalSeconds>1.1)continue;
             bool ground=e.ActionId==35755;
             float? x=ground?e.TargetX:e.X,z=ground?e.TargetZ:e.Z,y=ground?e.TargetY:e.Y;
@@ -104,8 +105,32 @@ public static class ArenaMechanicScene {
             var p=new Vector3(x.Value,y.Value,z.Value);if(!LimitBreakVisuals.Finite(p))continue;
             // Prefer observed object pose to duplicate action decorations. Existing AoE footprints stay separate.
             if(data.ArenaObjects.Any(o=>o.Timestamp<=now&&o.ObservedUntil.AddSeconds(.25)>=now&&o.Kind==kind&&Vector3.DistanceSquared(o.Position(),p)<9))continue;
-            yield return new(kind,p,float.IsFinite(e.Heading??0)?e.Heading??0:0,ObjectId:e.SourceEntityId);
+            yield return new(kind,p,float.IsFinite(e.Heading??0)?e.Heading??0:0,ObjectId:e.SourceEntityId,EyeOpen:kind==ArenaMechanicKind.Onmyoji?EyeForEvent(e,now):0);
         }
+    }
+    public static bool Moving(IEnumerable<ReplayArenaObject> tracks,ReplayArenaObject current,DateTime now) {
+        if(current.Timestamp>now||(now-current.Timestamp).TotalSeconds>.25)return false;
+        var previous=tracks.Where(o=>o.ObjectId==current.ObjectId&&o.Timestamp<current.Timestamp&&o.Kind==current.Kind)
+            .OrderByDescending(o=>o.Timestamp).FirstOrDefault();
+        return previous!=null&&(current.Timestamp-previous.ObservedUntil).TotalSeconds<.5&&Vector3.DistanceSquared(previous.Position(),current.Position())>.04f;
+    }
+    // Openness follows this NPC's observed cast/resolve, never its speed or merely reaching a waypoint.
+    public static float EyeOpenness(System.Collections.Generic.IEnumerable<ReplayMapEvent> events,DateTime now,uint source) =>
+        source is 0 or 0xE0000000?0:events.Where(e=>e.SourceEntityId==source).Select(e=>EyeForEvent(e,now)).DefaultIfEmpty(0).Max();
+    public static float EyeForEvent(ReplayMapEvent e,DateTime now) {
+        if(e.ActionId!=32366||now<e.Timestamp)return 0;
+        float Smooth(float v) {v=Math.Clamp(v,0,1);return v*v*(3-2*v);}
+        if(e.Kind==ReplayMapEventKind.ActionResolved)return Smooth((1.1f-(float)(now-e.Timestamp).TotalSeconds)/.5f);
+        if(e.Kind!=ReplayMapEventKind.CastObserved)return 0;
+        var end=e.ResolvedAt??e.ObservedUntil?.AddSeconds(.15)??e.Timestamp;
+        if(e.ExpectedEndTime.HasValue&&e.ExpectedEndTime.Value<end)end=e.ExpectedEndTime.Value;
+        float opening=Smooth((float)(now-e.Timestamp).TotalSeconds/.2f);
+        return opening*Smooth(1-(float)Math.Max(0,(now-end).TotalSeconds)/.2f);
+    }
+    public static float ReferenceEye(float time) {
+        var phase=(time%4+4)%4;
+        if(phase<1||phase>=3)return 0;
+        return Math.Clamp(Math.Min((phase-1)/.3f,(3-phase)/.4f),0,1);
     }
     public static bool Mini(PlayerPosition p,DateTime now)=>p.HP>0&&p.StatusTimestamp<=now&&
         p.Statuses.Any(s=>s.Id==3518&&float.IsFinite(s.Remaining)&&s.Remaining>(now-p.StatusTimestamp).TotalSeconds);

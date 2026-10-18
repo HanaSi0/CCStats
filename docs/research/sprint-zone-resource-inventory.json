@@ -1,0 +1,163 @@
+{
+  "source": "User-provided seven original InstanceExport GLBs; official area-map PNGs are already in docs/exports/official-maps-2d/images",
+  "result": "No VFX mesh batches or nodes named for VFX/trigger/sprint/speed/avfx found. This is an inventory of these exports, not proof that the original game scene has no sprint zones. Shared-group names alone do not identify a sprint zone. No precise speed-strip footprint has been extracted.",
+  "maps": {
+    "palaistra": {
+      "shared_groups": {
+        "sgbg_s5p1_a0_gmc06.sgb": 81,
+        "sgbg_s5p1_a0_brs01.sgb": 81,
+        "sgbg_s5p0_a0_gmc02.sgb": 32,
+        "sgbg_s5p0_a0_gmc03.sgb": 2,
+        "sgbg_s5p0_a0_gmc01.sgb": 32
+      },
+      "vfx_batches": 0,
+      "files": [
+        "SharedGroup_0000-0004.glb",
+        "BgPart_0024-0032.glb",
+        "BgPart_0000-0024.glb",
+        "Terrain_0000-0001.glb"
+      ],
+      "effect_or_trigger_node_names": []
+    },
+    "volcanic-heart": {
+      "shared_groups": {
+        "sgbg_s5p2_a0_brs01.sgb": 110,
+        "sgbg_s5p2_a0_gmc07.sgb": 110,
+        "sgbg_s5p0_a0_gmc02.sgb": 32,
+        "sgbg_s5p0_a0_gmc03.sgb": 2,
+        "sgbg_s5p0_a0_gmc01.sgb": 32
+      },
+      "vfx_batches": 0,
+      "files": [
+        "BgPart_0039-0072.glb",
+        "SharedGroup_0000-0004.glb",
+        "BgPart_0011-0039.glb",
+        "Terrain_0000-0001.glb",
+        "BgPart_0000-0011.glb"
+      ],
+      "effect_or_trigger_node_names": []
+    },
+    "cloud-nine": {
+      "shared_groups": {
+        "sgbg_s5p3_a0_gmc08.sgb": 54,
+        "sgbg_s5p3_a0_brs01.sgb": 54,
+        "sgbg_s5p3_a0_gmc13.sgb": 38,
+        "sgbg_s5p3_a1_stc02.sgb": 12,
+        "sgbg_s5p0_a0_gmc02.sgb": 32,
+        "sgbg_s5p0_a0_gmc03.sgb": 2
+      },
+      "vfx_batches": 0,
+      "files": [
+        "BgPart_0062-0083.glb",
+        "BgPart_0000-0062.glb",
+        "SharedGroup_0000-0005.glb",
+        "Terrain_0000-0000.glb"
+      ],
+      "effect_or_trigger_node_names": []
+    },
+    "castletown": {
+      "shared_groups": {
+        "sgbg_s5p4_a0_gmc02.sgb": 190,
+        "sgbg_s5p4_a0_brs01.sgb": 190,
+        "sgbg_s5p4_a0_gmc07.sgb": 80,
+        "sgbg_s5p4_a0_arf02.sgb": 40,
+        "sgbg_s5p4_a0_arf03.sgb": 40,
+        "sgbg_s5p4_a0_lmp03.sgb": 8,
+        "sgbg_s5p4_a0_gmc06.sgb": 16,
+        "sgbg_s5p4_a0_gmc05.sgb": 20,
+        "sgbg_s5p0_a0_gmc02.sgb": 32,
+        "sgbg_s5p0_a0_gmc03.sgb": 2,
+        "sgbg_s5p0_a0_gmc04.sgb": 42
+      },
+      "vfx_batches": 0,
+      "files": [
+        "SharedGroup_0000-0009.glb",
+        "BgPart_0027-0049.glb",
+        "BgPart_0000-0027.glb",
+        "BgPart_0049-0064.glb",
+        "BgPart_0064-0093.glb",
+        "Terrain_0000-0001.glb"
+      ],
+      "effect_or_trigger_node_names": []
+    },
+    "red-sands": {
+      "shared_groups": {
+        "sgbg_s5p5_a0_brs01.sgb": 214,
+        "sgbg_s5p5_a0_gmc02.sgb": 214,
+        "sgbg_s5p5_a0_gmc04.sgb": 32,
+        "sgbg_s5p5_a1_stc01.sgb": 164,
+        "sgbg_s5p5_a1_plr01a.sgb": 56,
+        "sgbg_s5p5_a1_wal20.sgb": 36,
+        "sgbg_s5p5_a1_wal25.sgb": 12,
+        "sgbg_s5p5_a1_wal32.sgb": 12,
+        "sgbg_s5p5_a1_wal32b.sgb": 12,
+        "sgbg_s5p5_a0_gmc03.sgb": 2
+      },
+      "vfx_batches": 0,
+      "files": [
+        "BgPart_0000-0048.glb",
+        "SharedGroup_0000-0004.glb",
+        "Terrain_0000-0000.glb",
+        "BgPart_0048-0077.glb"
+      ],
+      "effect_or_trigger_node_names": []
+    },
+    "bayside": {
+      "shared_groups": {
+        "sgbg_s5p6_a0_gmc05.sgb": 313,
+        "sgbg_s5p6_a0_brs01.sgb": 313,
+        "sgbg_s5p6_a0_fsh05.sgb": 166,
+        "sgbg_s5p6_a0_fsh01.sgb": 32,
+        "sgbg_s5p6_a0_fsh02.sgb": 176,
+        "sgbg_s5p6_a0_gmc01.sgb": 48,
+        "sgbg_s5p6_a0_stc01.sgb": 154,
+        "sgbg_s5p0_a0_gmc02.sgb": 32,
+        "sgbg_s5p0_a0_gmc03.sgb": 2,
+        "sgbg_s5p6_a0_fsh03.sgb": 3,
+        "sgbg_s5p6_a0_lig02a.sgb": 87,
+        "sgbg_s5p6_u0_trp26a.sgb": 24,
+        "sgbg_s5p6_u0_cha01.sgb": 16
+      },
+      "vfx_batches": 0,
+      "files": [
+        "BgPart_0000-0026.glb",
+        "BgPart_0045-0063.glb",
+        "BgPart_0063-0097.glb",
+        "Decal_0000-0000.glb",
+        "Terrain_0000-0000.glb",
+        "SharedGroup_0000-0003.glb",
+        "SharedGroup_0003-0011.glb",
+        "BgPart_0026-0045.glb"
+      ],
+      "effect_or_trigger_node_names": []
+    },
+    "harmonias": {
+      "shared_groups": {
+        "sgbg_s5p7_a0_gmc01.sgb": 16,
+        "sgbg_s5p7_a0_gmc03.sgb": 145,
+        "sgbg_s5p7_a0_brs01.sgb": 103,
+        "sgbg_s5p7_a0_lmp02.sgb": 158,
+        "sgbg_s5p7_a0_lmp04.sgb": 12,
+        "sgbg_s5p7_a0_gmc02.sgb": 2,
+        "sgbg_s5p7_a0_lmp03.sgb": 8,
+        "sgbg_s5p7_a0_stc01.sgb": 30,
+        "sgbg_s5p7_a0_lmp01.sgb": 12,
+        "sgbg_s5p0_a0_gmc02.sgb": 32,
+        "sgbg_s5p7_a0_arf01.sgb": 44,
+        "sgbg_s5p7_a0_gmc05.sgb": 4,
+        "sgbg_s5p7_a0_stc02.sgb": 26,
+        "sgbg_s5p0_a0_gmc03.sgb": 2,
+        "sgbg_s5p0_a0_gmc07.sgb": 30
+      },
+      "vfx_batches": 0,
+      "files": [
+        "SharedGroup_0000-0014.glb",
+        "BgPart_0000-0038.glb",
+        "BgPart_0038-0081.glb",
+        "Terrain_0000-0001.glb",
+        "BgPart_0081-0084.glb"
+      ],
+      "effect_or_trigger_node_names": []
+    }
+  }
+}

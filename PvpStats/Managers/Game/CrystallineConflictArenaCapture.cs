@@ -39,11 +39,11 @@ internal partial class CrystallineConflictMatchManager {
             ulong id=obj.GameObjectId;if(id==0||!seen.Add(id))continue;
             var native=(FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)obj.Address;
             byte state=native->EventState;ulong renderFlags=(ulong)native->RenderFlags;
-            if(_arenaTracks.TryGetValue(id,out var last)&&(now-last.ObservedUntil).TotalSeconds<.5&&last.Kind==kind&&last.NameId==nameId&&last.ObjectKind==(byte)obj.ObjectKind&&last.EventState==state&&last.RenderFlags==renderFlags&&last.DataId==obj.BaseId&&Vector3.DistanceSquared(last.Position(),obj.Position)<.04f&&MathF.Abs(MathF.IEEERemainder(last.Heading-obj.Rotation,MathF.Tau))<.1f) {
+            if(_arenaTracks.TryGetValue(id,out var last)&&(now-last.ObservedUntil).TotalSeconds<.5&&last.Kind==kind&&last.NameId==nameId&&last.EntityId==obj.EntityId&&last.ObjectKind==(byte)obj.ObjectKind&&last.EventState==state&&last.RenderFlags==renderFlags&&last.DataId==obj.BaseId&&Vector3.DistanceSquared(last.Position(),obj.Position)<.04f&&MathF.Abs(MathF.IEEERemainder(last.Heading-obj.Rotation,MathF.Tau))<.1f) {
                 last.ObservedUntil=now;continue;
             }
             if(data.ArenaObjects.Count>=16384||data.EstimatedBytes+192>DetailedTelemetry.ByteBudget) { data.ArenaObjectsTruncated=true;continue; }
-            var entry=new ReplayArenaObject { Timestamp=now,ObservedUntil=now,ObjectId=id,NameId=nameId,DataId=obj.BaseId,ObjectKind=(byte)obj.ObjectKind,EventState=state,RenderFlags=renderFlags,Kind=kind,
+            var entry=new ReplayArenaObject { Timestamp=now,ObservedUntil=now,ObjectId=id,EntityId=obj.EntityId,NameId=nameId,DataId=obj.BaseId,ObjectKind=(byte)obj.ObjectKind,EventState=state,RenderFlags=renderFlags,Kind=kind,
                 X=obj.Position.X,Y=obj.Position.Y,Z=obj.Position.Z,Heading=obj.Rotation };
             data.ArenaObjects.Add(entry);data.EstimatedBytes+=192;_arenaTracks[id]=entry;
         }
