@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 namespace CCStats.Desktop;
 public partial class MainWindow {
+    private string LocalIdentity=>_preferences.Links.Canonical(_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer??"");
     private List<MatchRecord> Filtered()=>RecordStatistics.Filter(_records,_search,_map,_result,_favorites).ToList();
     private void ShowMatches() {
         var tools=new WrapPanel();tools.Children.Add(ActionButton("读取文件",OpenFile));
@@ -34,38 +35,39 @@ public partial class MainWindow {
         catch(Exception ex) {StatusText.Text="无法打开记录："+ex.Message;}
     }
     private void ShowOverview() {
-        var rows=Filtered();var matches=rows.Where(r=>!r.Observation).ToArray();int wins=matches.Count(r=>r.Result=="胜利"),losses=matches.Count(r=>r.Result=="失败");
+        var rows=Filtered();var matches=rows.Where(r=>!r.Observation&&r.Completed&&!r.Quarantined).ToArray();int wins=matches.Count(r=>r.Result=="胜利"),losses=matches.Count(r=>r.Result=="失败");
         Card("总览",Text($"{matches.Length:N0} 场比赛 · {rows.Count(r=>r.Observation):N0} 段观测"),Text($"有效胜率　{RecordStatistics.Rate(wins,losses)}"),Text($"平均时长　{(matches.Length==0?"—":TimeSpan.FromSeconds(matches.Average(r=>r.DurationSeconds)).ToString(@"mm\:ss"))}",true));
         var groups=matches.GroupBy(r=>r.Map).Select(g=>new {Map=g.Key,Matches=g.Count(),Wins=g.Count(r=>r.Result=="胜利"),Losses=g.Count(r=>r.Result=="失败"),Rate=RecordStatistics.Rate(g.Count(r=>r.Result=="胜利"),g.Count(r=>r.Result=="失败"))});
         PageContent.Children.Add(TableFactory.Create(groups,("地图","Map"),("场数","Matches"),("胜场","Wins"),("败场","Losses"),("胜率与样本","Rate")));
     }
     private void ShowAggregate(bool jobs) {
-        var players=_records.Select(r=>r.LocalPlayer).Concat(_records.SelectMany(r=>r.Players.Select(p=>p.Name))).Where(n=>n.Length>0).Distinct().Order().ToArray();
-        var selected=_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer;
+        var players=_records.Select(r=>r.LocalPlayer).Concat(_records.SelectMany(r=>r.Players.Select(p=>p.Name))).Where(n=>n.Length>0).Select(_preferences.Links.Canonical).Distinct().Order().ToArray();
+        var selected=LocalIdentity.Length>0?LocalIdentity:null;
         var choice=new ComboBox {ItemsSource=new[]{"全部玩家"}.Concat(players),SelectedItem=selected??"全部玩家",MinWidth=280,Margin=new Thickness(0,0,0,12)};
+        var metric=new ComboBox {ItemsSource=new[]{"场均","每分钟","队伍贡献中位数"},SelectedIndex=0,MinWidth=200,Margin=new Thickness(0,0,0,12)};
         var content=new ContentControl();void Render() {
-            var player=choice.SelectedItem as string;var rows=RecordStatistics.Aggregate(Filtered(),jobs?"职业":"玩家",player=="全部玩家"?null:player,_preferences.Links.Canonical);
-            content.Content=TableFactory.Create(rows,(jobs?"职业":"玩家","Name"),("出场","Appearances"),("胜场","Wins"),("败场","Losses"),("有效胜率","WinRate"),("场均伤害","Damage"),("场均承伤","Taken"),("场均治疗","Healing"),("场均推车","Crystal"));
+            var player=choice.SelectedItem as string;var rows=RecordStatistics.Aggregate(Filtered(),jobs?"职业":"玩家",player=="全部玩家"?null:player,_preferences.Links.Canonical,metric.SelectedItem as string??"场均");
+            content.Content=TableFactory.Create(rows,(jobs?"职业":"玩家","Name"),("出场","Appearances"),("胜场","Wins"),("败场","Losses"),("有效胜率","WinRate"),("击杀","Kills"),("死亡","Deaths"),("助攻","Assists"),("伤害","Damage"),("承伤","Taken"),("治疗","Healing"),("推车时间","Crystal"));
         }
-        choice.SelectionChanged+=(_,_)=>Render();PageContent.Children.Add(choice);PageContent.Children.Add(content);Render();
+        choice.SelectionChanged+=(_,_)=>Render();metric.SelectionChanged+=(_,_)=>Render();PageContent.Children.Add(choice);PageContent.Children.Add(metric);PageContent.Children.Add(content);Render();
     }
     private void ShowRankTrend() {
-        var rows=Filtered().Where(r=>!r.Observation&&r.Credit.HasValue).OrderBy(r=>r.StartUtc).ToArray();
+        var rows=Filtered().Where(r=>!r.Observation&&r.Completed&&!r.Quarantined&&r.RankValue.HasValue).OrderBy(r=>r.StartUtc).ToArray();
         if(rows.Length==0) {Card("暂无段位记录",Text("已保存记录尚无段位或积分，采集到有效结算后会显示。",true));return;}
-        PageContent.Children.Add(new TrendView(rows.Select(r=>(r.StartUtc,(double)r.Credit!.Value)).ToArray()) {Height=280});
+        PageContent.Children.Add(new TrendView(rows.Select(r=>(r.StartUtc,(double)r.RankValue!.Value)).ToArray()) {Height=280});
         PageContent.Children.Add(TableFactory.Create(rows.Reverse(),("日期","StartLabel"),("段位","Rank"),("积分","Credit"),("结果","Result")));
     }
     private void ShowRecords() {
-        var rows=Filtered().Where(r=>!r.Observation).SelectMany(r=>r.Players.Where(p=>_preferences.LocalPlayer.Length==0?p.Name==r.LocalPlayer:p.Name==_preferences.LocalPlayer).Select(p=>(Match:r,Player:p))).ToArray();
+        var rows=Filtered().Where(r=>!r.Observation&&r.Completed&&!r.Quarantined).SelectMany(r=>r.Players.Where(p=>_preferences.Links.Canonical(p.Name)==(_preferences.LocalPlayer.Length==0?_preferences.Links.Canonical(r.LocalPlayer):LocalIdentity)).Select(p=>(Match:r,Player:p))).ToArray();
         if(rows.Length==0) {Card("暂无个人纪录",Text("在设置中选择完整角色名；有结算数据时显示个人纪录。",true));return;}
         var records=new[] {("单场伤害",rows.Where(x=>x.Player.Damage.HasValue).OrderByDescending(x=>x.Player.Damage).Select(x=>(x.Match,x.Player.Damage?.ToString("N0")))),("单场承伤",rows.Where(x=>x.Player.Taken.HasValue).OrderByDescending(x=>x.Player.Taken).Select(x=>(x.Match,x.Player.Taken?.ToString("N0")))),("单场治疗",rows.Where(x=>x.Player.Healing.HasValue).OrderByDescending(x=>x.Player.Healing).Select(x=>(x.Match,x.Player.Healing?.ToString("N0"))))};
         foreach(var (name,values) in records) {var first=values.FirstOrDefault();if(first.Match!=null)Card(name,Text(first.Item2??"—",false,24),Text(first.Match.StartLabel+" · "+first.Match.Map,true),ActionButton("查看对局",async (_,_)=>await OpenRecordAsync(first.Match)));}
     }
     private void ShowProfile() {
-        var player=_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer??"未选择角色";
-        var rows=_records.Where(r=>r.LocalPlayer==player&&!r.Observation).ToArray();var latest=rows.FirstOrDefault();
+        var player=LocalIdentity.Length>0?LocalIdentity:"未选择角色";
+        var rows=_records.Where(r=>_preferences.Links.Canonical(r.LocalPlayer)==player&&!r.Observation&&r.Completed&&!r.Quarantined).ToArray();var latest=rows.FirstOrDefault();
         Card(player,Text($"本机记录 {rows.Length:N0} 场"),Text($"最近段位　{latest?.Rank??"未记录"}　积分　{latest?.Credit?.ToString()??"—"}"),Text("资料来自本机记录；未观测的赛季和成就不补造。",true));
-        PageContent.Children.Add(TableFactory.Create(RecordStatistics.Aggregate(rows,"职业",player),("职业","Name"),("出场","Appearances"),("胜率","WinRate"),("场均伤害","Damage"),("场均治疗","Healing")));
+        PageContent.Children.Add(TableFactory.Create(RecordStatistics.Aggregate(rows,"职业",player,_preferences.Links.Canonical),("职业","Name"),("出场","Appearances"),("胜率","WinRate"),("场均伤害","Damage"),("场均治疗","Healing")));
     }
     private void ShowReplay() {
         PageContent.Children.Add(ActionButton("读取回放或战绩",OpenFile));

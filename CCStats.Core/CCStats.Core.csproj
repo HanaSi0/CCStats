@@ -6,6 +6,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../PvpStats/Helpers/MatchQuery.cs" Link="Helpers/MatchQuery.cs" />
     <Compile Include="../PvpStats/Localization/*.cs" Link="Localization/%(Filename)%(Extension)" />
     <Compile Include="../PvpStats/Analysis/*.cs" Link="Analysis/%(Filename)%(Extension)" />
     <Compile Include="../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />

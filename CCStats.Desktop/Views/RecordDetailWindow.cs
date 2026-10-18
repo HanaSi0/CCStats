@@ -18,6 +18,10 @@ internal sealed class RecordDetailWindow : Window {
         tools.Children.Add(Button("保存标签",(_,_)=>{library.Annotate(bundle.Match.Id,favorite.IsChecked==true,tags.Text);bundle.Match.Tags=tags.Text;bundle.Match.Favorite=favorite.IsChecked==true;Changed?.Invoke();}));
         tools.Children.Add(Button("地图回放",(_,_)=>new ReplayWindow(bundle){Owner=this}.Show()));
         tools.Children.Add(Button("导出 JSON",async (_,_)=>{var save=new SaveFileDialog {Filter="JSON (*.json)|*.json",FileName=bundle.Match.Id+".json"};if(save.ShowDialog(this)==true)try {await ReplayImport.ExportAsync(bundle,save.FileName);}catch(Exception ex){MessageBox.Show(this,ex.Message,"导出失败");}}));
+        tools.Children.Add(Button("复制结算表",(_,_)=> {
+            try {var csv="玩家,职业,击杀,死亡,助攻,造成伤害,受到伤害,治疗量,推车秒数\n"+string.Join('\n',bundle.Match.Players.Select(p=>string.Join(',',new[]{p.Name,p.Job,p.Kills?.ToString()??"",p.Deaths?.ToString()??"",p.Assists?.ToString()??"",p.Damage?.ToString()??"",p.Taken?.ToString()??"",p.Healing?.ToString()??"",p.CrystalSeconds?.ToString(System.Globalization.CultureInfo.InvariantCulture)??""}.Select(s=>"\""+s.Replace("\"","\"\"")+"\""))));Clipboard.SetText(csv);}catch(Exception ex){MessageBox.Show(this,ex.Message,"复制失败");}
+        }));
+        tools.Children.Add(Button("删除记录",(_,_)=>{if(MessageBox.Show(this,"仅删除资料库中的此记录，原始文件保留。是否继续？","删除记录",MessageBoxButton.YesNo)==MessageBoxResult.Yes){library.Delete(bundle.Match.Id);Changed?.Invoke();Close();}}));
         header.Children.Add(tools);DockPanel.SetDock(header,Dock.Top);root.Children.Add(header);
         var tabs=new TabControl();void Tab(string title,UIElement content)=>tabs.Items.Add(new TabItem {Header=title,Content=content});
         var settle=new StackPanel();settle.Children.Add(TableFactory.Create(bundle.Match.Players,("完整玩家名","Name"),("职业","Job"),("队伍","Team"),("击杀","Kills"),("死亡","Deaths"),("助攻","Assists"),("造成伤害","Damage"),("受到伤害","Taken"),("治疗量","Healing"),("推车秒数","CrystalSeconds")));
@@ -32,12 +36,19 @@ internal sealed class RecordDetailWindow : Window {
                 analysisHost.Content=TableFactory.Create(rows,("玩家","Player"),("观测伤害","Damage"),("观测承伤","Taken"),("观测治疗","Healing"),("吸血","Drain"),("防御期间承伤","GuardDamage"),("推算防御减伤","GuardPrevented"),("防御命中数","GuardHits"),("控制应用","Controls"),("控制秒数","ControlSeconds"),("防御期间抵抗","BlockedControls"),("待定记录","Pending"));
                 analysisStatus.Text=$"已完成；可推算 {result.estimates.Count(e=>e.Supported)} 条，条件不足 {result.estimates.Count(e=>!e.Supported)} 条。观测统计不等同完整结算。";
             } catch(Exception ex){analysisStatus.Text=ex.Message;}finally{button.IsEnabled=true;}
-        });analysis.Children.Add(calculate);analysis.Children.Add(analysisStatus);analysis.Children.Add(analysisHost);Tab("高级分析",analysis);
+        });calculate.IsEnabled=bundle.Data.Effects.Count>0;
+        if(!calculate.IsEnabled)analysisStatus.Text="此记录没有技能效果观测，不能推算伤害、防御减伤或技能控制数据。";
+        analysis.Children.Add(calculate);analysis.Children.Add(analysisStatus);analysis.Children.Add(analysisHost);Tab("高级分析",analysis);
         var events=bundle.Timeline.Concat(bundle.Data.ReplaySkills.Select(e=>new TimelineRow(e.Timestamp,"技能",e.Actor,e.TargetPlayer,ChineseText.ActionName(e.ActionId,$"技能 {e.ActionId}")))).Concat(bundle.Data.MapMechanics.Select(e=>new TimelineRow(e.Timestamp,"地图事件","","",e.Label))).Distinct().OrderBy(e=>e.Timestamp).ToArray();
         Tab("事件时间线",TableFactory.Create(events,("时间","Timestamp"),("类型","Kind"),("来源","Actor"),("目标","Target"),("事件","Description")));
-        Tab("推进曲线",new TrendView(bundle.Data.Frames.Select(f=>(f.Timestamp,(double)f.CrystalProgress)).Where((_,i)=>i%15==0).ToArray()){Height=360});
+        var curve=new StackPanel();var points=bundle.Progress.Where(p=>p.Series=="水晶位置").Select(p=>(p.Timestamp,(double)p.Points)).ToArray();
+        if(points.Length==0&&!bundle.Match.Observation)points=bundle.Data.Frames.Select(f=>(f.Timestamp,(double)f.CrystalProgress)).Where((_,i)=>i%15==0).ToArray();
+        if(points.Length>0)curve.Children.Add(new TrendView(points){Height=300});else curve.Children.Add(new TextBlock {Text="此记录尚无推进数据。",Foreground=Brushes.LightSteelBlue,Margin=new Thickness(12)});
+        var progressTable=TableFactory.Create(bundle.Progress,("时间","Timestamp"),("来源","Series"),("原始值","Points"));progressTable.Height=200;curve.Children.Add(progressTable);Tab("推进曲线",curve);
         var skills=bundle.Data.Effects.GroupBy(e=>new {e.Actor,e.ActionId}).Select(g=>new {Player=g.Key.Actor,Name=ChineseText.ActionName(g.Key.ActionId,$"技能 {g.Key.ActionId}"),Hits=g.Count(),Damage=g.Where(e=>DetailedAnalysis.IsDamage(e.Type)).Sum(e=>e.Amount),Healing=g.Where(e=>e.Type==4).Sum(e=>e.Amount)});
-        Tab("技能分析",TableFactory.Create(skills,("玩家","Player"),("技能","Name"),("效果条数","Hits"),("伤害","Damage"),("治疗","Healing")));
+        var skillPanel=new StackPanel();
+        if(bundle.Actions.Count>0)skillPanel.Children.Add(TableFactory.Create(bundle.Actions.Select(a=>new {a.Player,Name=a.Kind=="状态"?ChineseText.StatusName(a.ActionId,$"状态 {a.ActionId}"):ChineseText.ActionName(a.ActionId,$"技能 {a.ActionId}"),a.Casts,a.Targets,a.Damage,a.Healing,a.StatusHits,a.StatusMisses}),("玩家","Player"),("技能/状态","Name"),("使用次数","Casts"),("目标数","Targets"),("伤害","Damage"),("治疗","Healing"),("状态命中","StatusHits"),("状态抵抗","StatusMisses")));
+        skillPanel.Children.Add(TableFactory.Create(skills,("玩家","Player"),("技能","Name"),("效果条数","Hits"),("伤害","Damage"),("治疗","Healing")));Tab("技能分析",new ScrollViewer {Content=skillPanel});
         root.Children.Add(tabs);Content=root;
     }
 }

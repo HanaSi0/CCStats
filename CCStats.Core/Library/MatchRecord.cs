@@ -11,10 +11,15 @@ public sealed class MatchRecord {
     public string Mode {get;set;} = "未知";
     public int Winner {get;set;}
     public string Result {get;set;} = "未记录";
+    public bool Completed {get;set;}=true;
+    public bool Quarantined {get;set;}
+    public bool ScoreboardComplete {get;set;}
     public bool Observation {get;set;}
     public bool Favorite {get;set;}
     public string Tags {get;set;} = "";
     public int? Credit {get;set;}
+    public int? RankPoints {get;set;}
+    public int? RankValue=>RankPoints??Credit;
     public string Rank {get;set;} = "";
     public string SourcePath {get;set;} = "";
     public List<PlayerScore> Players {get;set;} = new();
@@ -39,10 +44,14 @@ public sealed class PlayerScore {
 public sealed class ReplayBundle {
     public MatchRecord Match {get;set;}=new();
     public DetailedTelemetry Data {get;set;}=new();
+    public List<ActionSummary> Actions {get;set;}=new();
+    public List<ProgressSample> Progress {get;set;}=new();
     public List<TimelineRow> Timeline {get;set;}=new();
 }
+public sealed record ActionSummary(string Player,uint ActionId,string Kind,int Casts,int Targets,long Damage,long Healing,int StatusHits,int StatusMisses);
+public sealed record ProgressSample(DateTime Timestamp,string Series,int Points);
 public sealed record TimelineRow(DateTime Timestamp,string Kind,string Actor,string Target,string Description);
-public sealed record AggregateRow(string Name,int Appearances,int Wins,int Losses,string WinRate,string Damage,string Taken,string Healing,string Crystal);
+public sealed record AggregateRow(string Name,int Appearances,int Wins,int Losses,string WinRate,string Damage,string Taken,string Healing,string Crystal,string Kills="—",string Deaths="—",string Assists="—");
 public static class JobNames {
     private static readonly string[] Names={"骑士","战士","暗黑骑士","绝枪战士","白魔法师","学者","占星术士","贤者","武僧","龙骑士","忍者","武士","钐镰客","蝰蛇剑士","吟游诗人","机工士","舞者","黑魔法师","召唤师","赤魔法师","绘灵法师"};
     private static readonly string[] Keys={"PLD","WAR","DRK","GNB","WHM","SCH","AST","SGE","MNK","DRG","NIN","SAM","RPR","VPR","BRD","MCH","DNC","BLM","SMN","RDM","PCT"};

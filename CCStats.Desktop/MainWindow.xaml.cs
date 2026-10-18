@@ -19,6 +19,7 @@ public partial class MainWindow : Window {
     private readonly DispatcherTimer _processTimer=new() {Interval=TimeSpan.FromSeconds(2)};
     private readonly string _settingsPath,_directory;
     private readonly DesktopPreferences _preferences;
+    private readonly CancellationTokenSource _operations=new();
     private readonly RecordLibrary _library;
     private readonly List<Button> _navigation=new();
     private List<MatchRecord> _records=new();
@@ -26,6 +27,7 @@ public partial class MainWindow : Window {
     private int _page;
     private bool _busy,_exiting,_closed,_smoke;
     private System.Windows.Forms.NotifyIcon? _tray;
+    private readonly List<Window> _hiddenOwned=new();
     private string? _lastSaved;
     private TextBlock? _captureStatus;
     private ListBox? _capturePlayers;
@@ -66,9 +68,9 @@ public partial class MainWindow : Window {
         if(_busy||_exiting)return;_busy=true;StatusText.Text="正在读取数据…";
         try {
             if(Path.GetExtension(path).Equals(".db",StringComparison.OrdinalIgnoreCase)) {
-                var imported=await Task.Run(()=>DatabaseImport.Read(path,_library));StatusText.Text=$"已读取 {imported.Imported} 场，跳过 {imported.Skipped} 条不完整记录。";
+                var imported=await Task.Run(()=>DatabaseImport.Read(path,_library,token:_operations.Token));StatusText.Text=$"已读取 {imported.Imported} 场，跳过 {imported.Skipped} 条不完整记录。";
             } else {
-                var bundle=await Task.Run(()=>ReplayImport.ReadAsync(path));await Task.Run(()=>_library.Save(bundle));_bundle=bundle;StatusText.Text="记录已加入本机资料库，原文件保持不变。";
+                var bundle=await Task.Run(()=>ReplayImport.ReadAsync(path,_operations.Token));await Task.Run(()=>_library.Save(bundle));_bundle=bundle;StatusText.Text="记录已加入本机资料库，原文件保持不变。";
             }
             _preferences.Remember(path);SavePreferences();_records=await Task.Run(_library.All);
             if(navigate)ShowPage(_bundle!=null?8:0);
@@ -103,8 +105,16 @@ public partial class MainWindow : Window {
         menu.Items.Add("退出软件",null,async (_,_)=>await Dispatcher.InvokeAsync(ExitAsync).Task.Unwrap());
         _tray.ContextMenuStrip=menu;_tray.DoubleClick+=(_,_)=>Dispatcher.Invoke(RestoreFromTray);
     }
-    private void MinimizeToTray() {ShowInTaskbar=false;Hide();StatusText.Text="已在后台持续记录。";}
-    private void RestoreFromTray() {Show();ShowInTaskbar=true;WindowState=WindowState.Normal;Activate();}
+    private void MinimizeToTray() {
+        _hiddenOwned.Clear();
+        foreach(var window in Application.Current.Windows.Cast<Window>().Where(w=>w!=this&&w.IsVisible&&(w is ReplayWindow||w is RecordDetailWindow)).ToArray()) {_hiddenOwned.Add(window);window.Hide();}
+        ShowInTaskbar=false;Hide();StatusText.Text="已在后台持续记录。";
+    }
+    private void RestoreFromTray() {
+        Show();ShowInTaskbar=true;WindowState=WindowState.Normal;
+        foreach(var window in _hiddenOwned)try {window.Show();}catch(InvalidOperationException) { }
+        _hiddenOwned.Clear();Activate();
+    }
     private void OnWindowClosing(object? sender,System.ComponentModel.CancelEventArgs e) {
         if(_closed)return;e.Cancel=true;if(_exiting)return;
         var choice=_preferences.CloseBehavior;
@@ -115,7 +125,7 @@ public partial class MainWindow : Window {
         if(choice=="Tray")MinimizeToTray();else _=ExitAsync();
     }
     private async Task ExitAsync() {
-        if(_exiting)return;_exiting=true;_processTimer.Stop();IsEnabled=false;
+        if(_exiting)return;_exiting=true;_operations.Cancel();_processTimer.Stop();IsEnabled=false;
         await _capture.StopAsync();
         while(_busy)await Task.Delay(50);
         _captureTimer.Stop();if(_rankings!=null)foreach(var service in _rankings)service.Dispose();_library.Dispose();_tray?.Dispose();_closed=true;
@@ -131,6 +141,8 @@ public partial class MainWindow : Window {
             if(dialog.ShowDialog()!=true||dialog.Choice!=choice||!dialog.Remember)throw new InvalidOperationException("Close choice dialog failed");
         }
         MinimizeToTray();if(IsVisible||ShowInTaskbar)throw new InvalidOperationException("Background hide failed");((System.Windows.Forms.ToolStripMenuItem)_tray!.ContextMenuStrip!.Items[0]).PerformClick();if(!IsVisible||!ShowInTaskbar)throw new InvalidOperationException("Tray restore failed");
+        TableFactory.CheckSorting();
+        await MeshVisuals.VerifyPaletteAsync(this);
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();
         var detail=new RecordDetailWindow(_bundle,_library){Owner=this};detail.Show();detail.Close();
         ShowPage(0);UpdateLayout();var bitmap=new RenderTargetBitmap((int)ActualWidth,(int)ActualHeight,96,96,PixelFormats.Pbgra32);bitmap.Render(this);

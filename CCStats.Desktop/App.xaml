@@ -22,6 +22,22 @@
         </ControlTemplate.Triggers>
       </ControlTemplate></Setter.Value></Setter>
     </Style>
+    <Style TargetType="ComboBox">
+      <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="Background" Value="{DynamicResource ButtonBrush}"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBox">
+        <Grid MinHeight="34">
+          <ToggleButton Focusable="False" Background="{TemplateBinding Background}" BorderThickness="0" IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+            <ToggleButton.Template><ControlTemplate TargetType="ToggleButton"><Border Background="{TemplateBinding Background}" CornerRadius="6"><ContentPresenter/></Border></ControlTemplate></ToggleButton.Template>
+          </ToggleButton>
+          <ContentPresenter Margin="10,4,27,4" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" VerticalAlignment="Center"/>
+          <TextBlock Text="▾" Margin="0,4,10,4" HorizontalAlignment="Right" IsHitTestVisible="False"/>
+          <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" Focusable="False">
+            <Border Background="{DynamicResource SurfaceBrush}" BorderBrush="#3C5278" BorderThickness="1" CornerRadius="6" MinWidth="{Binding ActualWidth,RelativeSource={RelativeSource TemplatedParent}}"><ScrollViewer MaxHeight="300"><ItemsPresenter/></ScrollViewer></Border>
+          </Popup>
+        </Grid>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="ComboBoxItem"><Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="Padding" Value="10,7"/></Style>
     <Style TargetType="TextBox"><Setter Property="Background" Value="#172138"/><Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="Padding" Value="8"/><Setter Property="Margin" Value="0,0,8,8"/></Style>
     <Style TargetType="ListBox"><Setter Property="Background" Value="#11192B"/><Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Padding" Value="8"/></Style>
     <Style TargetType="ListBoxItem"><Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="Padding" Value="10"/><Setter Property="HorizontalContentAlignment" Value="Stretch"/></Style>

@@ -15,7 +15,7 @@ internal static class PortChecks {
             using(var db=new LiteDatabase(source)) {
                 db.GetCollection<BsonDocument>("ccmatch").Insert(new BsonDocument {["_id"]=id,["TerritoryId"]=1034,["DutyStartTime"]=now,["MatchStartTime"]=now,["MatchEndTime"]=now.AddMinutes(4),["LocalPlayer"]=Alias("Own Player"),["MatchType"]="Ranked",["MatchWinner"]="Astra",["TimelineId"]=timelineId,["PostMatch"]=new BsonDocument {["RankAfter"]=new BsonDocument {["Tier"]="Crystal",["Credit"]=500},["Teams"]=new BsonDocument {["Astra"]=new BsonDocument {["TeamName"]="Astra",["PlayerStats"]=new BsonArray{player}}}}});
                 var detailed=new DetailedTelemetry {Version=3,Frames=new(){new(){Timestamp=now,Players=new(){new(){Player="Own Player Ixion",Team=1,X=0,Y=0,Z=0,HP=100,MaxHP=100,ClassJobId=19}}}}};detailed.PrepareForStorage();
-                db.GetCollection<BsonDocument>("cctimeline").Insert(new BsonDocument {["_id"]=timelineId,["Detailed"]=BsonMapper.Global.ToDocument(detailed)});
+                db.GetCollection<BsonDocument>("cctimeline").Insert(new BsonDocument {["_id"]=timelineId,["Detailed"]=BsonMapper.Global.ToDocument(detailed),["PlayerTargetedActionAnalytics"]=new BsonDocument {["Own Player Ixion"]=new BsonDocument {["29230"]=new BsonDocument {["Casts"]=1,["Targets"]=1,["PlayerAnalytics"]=new BsonDocument {["Opponent"]=new BsonDocument {["Damage"]=555,["Heal"]=50}}}}},["CrystalPosition"]=new BsonArray {new BsonDocument {["Timestamp"]=now,["Points"]=25}}});
             }
             var before=SHA256.HashData(await File.ReadAllBytesAsync(source));
             using(var library=new RecordLibrary(Path.Combine(directory,"owned"))) {
@@ -24,13 +24,20 @@ internal static class PortChecks {
                 var row=library.All().Single();check(row.Map=="九霄云上"&&row.Result=="胜利"&&row.Mode=="段位赛"&&row.Credit==500,"history match metadata and local result retain their meaning");
                 check(row.Players.Single().Damage==123456&&row.Players.Single().CrystalSeconds==32,"settlement retains all damage and push-time values");
                 var bundle=library.Load(row.Id);check(bundle.Data.Frames.Single().Players.Single().ClassJobId==19,"compressed historic movement remains available after import");
+                check(bundle.Actions.Single().Damage==555&&bundle.Actions.Single().Casts==1&&bundle.Progress.Single().Points==25,"legacy skill summaries and director timeline retain their numeric data");
                 library.Annotate(row.Id,true,"my note");DatabaseImport.Read(source,library);row=library.All().Single();check(row.Favorite&&row.Tags=="my note"&&library.All().Count==1,"repeat import deduplicates and preserves user annotations");
                 var export=Path.Combine(directory,"export.json");await ReplayImport.ExportAsync(library.Load(row.Id),export);var reimport=await ReplayImport.ReadAsync(export);
                 check(reimport.Match.Players.Single().Damage==123456&&reimport.Match.LocalPlayer=="Own Player Ixion"&&reimport.Match.Winner==1,"JSON export and reimport preserve complete scoreboard and perspective");
+                check(reimport.Actions.Single().Damage==555&&reimport.Progress.Single().Points==25,"legacy action and progress summaries survive JSON interchange");
                 check(RecordStatistics.Filter(library.All(),"Own -火山","全部","胜利",true).Count()==1,"combined query, exclusion, result and favorite filters agree");
                 check(RecordStatistics.Aggregate(library.All(),"职业","Own Player Ixion").Single().Wins==1,"default-player statistics use own team outcome");
                 var opponent=new PlayerScore {Name="Opponent",Team=2,Job="骑士"};row.Players.Add(opponent);
                 check(RecordStatistics.Aggregate(new[]{row},"职业","Opponent").Single().Losses==1,"opponent statistics reverse the local result rather than copying it");
+                check(RecordStatistics.Aggregate(new[]{row},"职业","Own Player Ixion",metric:"每分钟").Single().Damage==30864d.ToString("N0"),"per-minute damage uses actual match duration");
+                row.ScoreboardComplete=true;var ownMate=new PlayerScore {Name="Teammate",Team=1,Job="骑士",Damage=123456};row.Players.Add(ownMate);
+                check(RecordStatistics.Aggregate(new[]{row},"职业","Own Player Ixion",metric:"队伍贡献中位数").Single().Damage==.5d.ToString("P1"),"team contribution uses the correct side denominator");
+                ownMate.Damage=null;check(RecordStatistics.Aggregate(new[]{row},"职业","Own Player Ixion",metric:"队伍贡献中位数").Single().Damage=="—","missing teammate damage cannot become a fabricated contribution");
+                row.Quarantined=true;check(RecordStatistics.Aggregate(new[]{row},"职业").Count==0,"quarantined records stay out of valid statistics");row.Quarantined=false;
                 row.Observation=true;check(RecordStatistics.Aggregate(new[]{row},"职业").Count==0,"observation segments never become win-rate samples");
                 library.Delete(row.Id);check(library.All().Count==0,"owned record deletion removes the matching replay");
             }
@@ -46,6 +53,10 @@ internal static class PortChecks {
             check(capture.State.Recording&&capture.State.Frames>=3,"background capture records frames without any visible window");
             capture.Poll(directory);check(factories==1,"automatic polling cannot start a duplicate capture session");
             await capture.StopAsync();check(!capture.State.Connected&&!capture.State.Recording&&File.Exists(capture.State.SavedPath),"exit finalizes background data before disconnecting");
+            var firstPath=capture.State.SavedPath;
+            capture.Connect(Path.Combine(directory,"observations"));capture.Record(true);
+            for(int i=0;i<80&&(!capture.State.Recording||capture.State.Frames<3);i++)await Task.Delay(25);
+            await capture.StopAsync();check(factories==2&&capture.State.SavedPath!=firstPath,"a stopped recorder can reconnect and preserve a separate segment");
             var observed=await ReplayImport.ReadAsync(capture.State.SavedPath!);check(observed.Match.Observation&&observed.Data.Frames.Count>=3,"background output is a readable observation rather than a fabricated match");
             var unavailable=new IndependentCapture(()=>null);unavailable.Poll(directory);await unavailable.StopAsync();check(!unavailable.State.Connected,"waiting for a game has a clean cancellation path");
             var geometry=ReplaySceneBuilder.Build(observed,null,observed.Data.Frames[0].Timestamp,false,false);

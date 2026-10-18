@@ -54,6 +54,7 @@ internal sealed class ReplayWindow : Window {
         _canvas.MouseDown+=(_,e)=>{_lastMouse=e.GetPosition(_canvas);_canvas.CaptureMouse();_camera.BeginDrag(e.ChangedButton==MouseButton.Right,new((float)_lastMouse.X,(float)_lastMouse.Y),SizeVector());};
         _canvas.MouseMove+=(_,e)=>{if(_canvas.IsMouseCaptured){var p=e.GetPosition(_canvas);_camera.Drag(new((float)p.X,(float)p.Y),SizeVector());_lastMouse=p;ApplyCamera();}};
         _canvas.MouseUp+=(_,_)=>{_camera.EndDrag();_canvas.ReleaseMouseCapture();};_canvas.MouseWheel+=(_,e)=>{var p=e.GetPosition(_canvas);_camera.Zoom(e.Delta/120f,new((float)p.X,(float)p.Y),SizeVector());};_canvas.SizeChanged+=(_,_)=>ApplyCamera();
+        IsVisibleChanged+=(_,_)=>{if(_closed)return;if(IsVisible&&_ready.Task.IsCompletedSuccessfully){_lastClock=_clock.Elapsed.TotalSeconds;_timer.Start();}else _timer.Stop();};
         root.Children.Add(body);Content=root;_timer.Tick+=async (_,_)=>await TickAsync();Closed+=(_,_)=>{_closed=true;_timer.Stop();_mapVisual.Content=null;_dynamic.Content=null;};Loaded+=async (_,_)=>await LoadAsync();
     }
     internal async Task VerifyAsync(string screenshot) {
@@ -72,12 +73,20 @@ internal sealed class ReplayWindow : Window {
                 _mesh=await Task.Run(()=>ReplayMapMesh.LoadEmbedded(_bundle.Match.Territory));var model=await Task.Run(()=>MeshVisuals.StaticMap(_mesh));if(_closed)return;_mapVisual.Content=model;
                 _mapImage=new BitmapImage(new Uri("pack://application:,,,/Assets/Maps/"+key+".png"));
             }
-            ResetCamera();_lastClock=_clock.Elapsed.TotalSeconds;_timer.Start();await TickAsync();_ready.TrySetResult();
+            ResetCamera();_lastClock=_clock.Elapsed.TotalSeconds;if(IsVisible)_timer.Start();await TickAsync();_ready.TrySetResult();
         } catch(Exception ex){_info.Text="地图读取失败："+ex.Message;_ready.TrySetException(ex);}
     }
     private void ResetCamera() {
         var target=_mesh==null?NVector.Zero:(_mesh.Min+_mesh.Max)/2;target.Y=_mesh?.EstimatedHeight(target.X,target.Z)??0;
-        var extent=_mesh==null?150:Math.Max(_mesh.Max.X-_mesh.Min.X,_mesh.Max.Z-_mesh.Min.Z);_camera.Reset(target,extent*1.25f);ApplyCamera();
+        var extent=_mesh==null?150:Math.Max(_mesh.Max.X-_mesh.Min.X,_mesh.Max.Z-_mesh.Min.Z);float distance=extent;
+        for(int pass=0;pass<8;pass++) {
+            _camera.Reset(target,distance);if(_mesh==null)break;float needed=0;
+            foreach(var x in new[]{_mesh.Min.X,_mesh.Max.X})foreach(var y in new[]{_mesh.Min.Y,_mesh.Max.Y})foreach(var z in new[]{_mesh.Min.Z,_mesh.Max.Z}) {
+                var projected=Vector4.Transform(new Vector4(x,y,z,1),_camera.ViewProjection(SizeVector()));if(projected.W<=.01f){needed=Math.Max(needed,2);continue;}needed=Math.Max(needed,Math.Max(Math.Abs(projected.X/projected.W),Math.Abs(projected.Y/projected.W)));
+            }
+            if(needed<=.86f)break;distance=Math.Min(600,distance*Math.Max(1.1f,needed/.86f));
+        }
+        ApplyCamera();
     }
     private static Matrix3D Matrix(Matrix4x4 m)=>new(m.M11,m.M12,m.M13,m.M14,m.M21,m.M22,m.M23,m.M24,m.M31,m.M32,m.M33,m.M34,m.M41,m.M42,m.M43,m.M44);
     private void ApplyCamera() {
