@@ -15,6 +15,10 @@ internal static class CaptureAdaptationChecks {
         row[0xE8]=2;check(DirectorDecoder.Roster(roster)==null,"unknown director team never becomes an opponent");
         var own=new PlayerPosition {Player="Own [世界 21]",Team=1,ClassJobId=24,HP=100,MaxHP=100};var enemy=new PlayerPosition {Player="Enemy [世界 22]",Team=2,HP=100,MaxHP=100};
         var actors=new Dictionary<uint,ObservedActor> {[100]=new(100,0,0,1,1,2,3,0,own),[200]=new(200,0,0,1,4,5,6,0,enemy),[300]=new(300,100,6566,2,7,8,9,0)};
+        var statusData=new byte[ClientLayout.StatusBytes];BinaryPrimitives.WriteUInt16LittleEndian(statusData.AsSpan(8),1343);BinaryPrimitives.WriteInt32LittleEndian(statusData.AsSpan(12),BitConverter.SingleToInt32Bits(3));BinaryPrimitives.WriteUInt32LittleEndian(statusData.AsSpan(16),100);
+        var controls=ControlSourceDecoder.Resolve(ControlSourceDecoder.Decode(statusData),now,now.AddSeconds(.2),actors);
+        check(controls.Single().Source==own.Player&&Math.Abs(controls.Single().Remaining-2.8)<.001,"observed control duration retains the real status source and subtracts cache age");
+        check(ControlSourceDecoder.Resolve(ControlSourceDecoder.Decode(statusData),now,now.AddSeconds(4),actors).Count==0,"expired cached control cannot add false control duration");
         var journal=new ActionEffectJournal();var bytes=new byte[ClientLayout.EffectBytes];var batch=new ObservationBatch();
         journal.Observe(200,bytes,actors,now,batch);
         Fill(bytes,1,29230,100,200,3,100,0x40,1);

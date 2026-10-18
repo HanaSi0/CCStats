@@ -16,7 +16,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     private readonly string _version;
     private readonly byte[] _table=new byte[ClientLayout.ObjectSlots*8],_header=new byte[ClientLayout.HeaderBytes],_statuses=new byte[ClientLayout.StatusBytes],_world=new byte[2],_territory=new byte[4];
     private readonly byte[] _pointer=new byte[8],_nameId=new byte[4],_cast=new byte[ClientLayout.CastBytes],_effects=new byte[ClientLayout.EffectBytes],_roster=new byte[ClientLayout.DirectorPlayerBytes*10],_progress=new byte[ClientLayout.DirectorProgressBytes],_directorType=new byte[1],_mapStates=new byte[0x608];
-    private readonly Dictionary<uint,(ushort World,DateTime At,List<ReplayBuff> Statuses)> _cache=new();
+    private readonly Dictionary<uint,(ushort World,DateTime At,List<ReplayBuff> Statuses,List<ControlSource> Controls)> _cache=new();
     private readonly ActionEffectJournal _journal=new();
     private readonly Dictionary<uint,ReplayMapEvent> _casts=new();
     private Dictionary<uint,DirectorPlayer> _teams=new();
@@ -92,11 +92,10 @@ internal sealed class ExternalGameReader : IObservedGameSource {
                     if(!Read(address+ClientLayout.WorldOffset,_world)||!Read(address+ClientLayout.StatusOffset,_statuses))continue;
                     ushort world=BinaryPrimitives.ReadUInt16LittleEndian(_world);
                     var parsed=ClientLayout.DecodePlayer(_header,world,_statuses,now);if(parsed==null)continue;
-                    meta=(world,now,parsed.Statuses);_cache[id]=meta;
+                    meta=(world,now,parsed.Statuses,ControlSourceDecoder.Decode(_statuses));_cache[id]=meta;
                 }
                 player=ClientLayout.DecodePlayer(_header,meta.World,ReadOnlySpan<byte>.Empty,meta.At);if(player==null)continue;
                 player.Statuses=meta.Statuses;if(_teams.TryGetValue(id,out var team))player.Team=team.Team;
-                foreach(var status in player.Statuses.Where(s=>DetailedAnalysis.Controls.ContainsKey(s.Id)))player.Controls.Add(new(){StatusId=status.Id,Remaining=Math.Max(0,status.Remaining-(float)(now-meta.At).TotalSeconds)});
                 if(_teams.Count>0) {if(player.Team is 1 or 2)frame.Players.Add(player);}
                 else if(frame.Players.Count<10)frame.Players.Add(player);else batch.UnconfirmedRosterLimited=true;
                 if(slot==0)batch.LocalPlayer=player.Player;
@@ -105,6 +104,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             if(kind==2&&nameId==11350)crystals.Add(new(){X=x,Y=y,Z=z});
 
         }
+        foreach(var actor in actors.Values)if(actor.Player is {} player&&_cache.TryGetValue(actor.EntityId,out var status))player.Controls=ControlSourceDecoder.Resolve(status.Controls,status.At,now,actors);
         if(crystals.Count==1)frame.Crystal=crystals[0];
         if(arena) {
             foreach(var pair in actors) {
