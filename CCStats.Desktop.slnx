@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CCStats.Core/CCStats.Core.csproj" />
+  <Project Path="CCStats.Desktop/CCStats.Desktop.csproj" />
+  <Project Path="tests/DesktopChecks/DesktopChecks.csproj" />
+</Solution>

@@ -1,0 +1,112 @@
+name: Publish CCStats Desktop
+on:
+  push:
+    tags: ['desktop-v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Desktop tag (desktop-v0.1.0)
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: desktop-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.402'
+      - name: Validate standalone core
+        shell: pwsh
+        run: |
+          dotnet restore tests/DesktopChecks --locked-mode
+          if ($LASTEXITCODE -ne 0) { throw 'Core restore failed' }
+          dotnet run --project tests/DesktopChecks -c Release --no-restore
+          if ($LASTEXITCODE -ne 0) { throw 'Core checks failed' }
+      - name: Publish independent EXE
+        shell: pwsh
+        env:
+          DESKTOP_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if ($env:DESKTOP_TAG -notmatch '^desktop-v([0-9]+\.[0-9]+\.[0-9]+)$') { throw 'Invalid desktop tag' }
+          $version = $Matches[1]
+          [xml]$project = Get-Content CCStats.Desktop/CCStats.Desktop.csproj
+          if ($project.Project.PropertyGroup.Version -ne $version) { throw 'Tag/version mismatch' }
+          dotnet restore CCStats.Desktop/CCStats.Desktop.csproj --locked-mode
+          if ($LASTEXITCODE -ne 0) { throw 'Desktop restore failed' }
+          dotnet publish CCStats.Desktop/CCStats.Desktop.csproj -c Release --no-restore -o artifacts/desktop/publish
+          if ($LASTEXITCODE -ne 0) { throw 'Desktop publish failed' }
+      - name: Launch and exercise the actual Windows EXE
+        shell: pwsh
+        run: |
+          $report = Join-Path $PWD 'artifacts/desktop/windows-smoke.json'
+          $exe = Join-Path $PWD 'artifacts/desktop/publish/CCStats.Desktop.exe'
+          $app = Start-Process -FilePath $exe -ArgumentList @('--smoke-test', $report) -PassThru
+          if (!$app.WaitForExit(60000)) { $app.Kill(); throw 'Desktop startup timed out' }
+          if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Desktop process failed' }
+          $result = Get-Content $report | ConvertFrom-Json
+          if (!$result.success -or $result.navigation -ne 5 -or !$result.import -or !$result.persistence) { throw 'Desktop UI checks failed' }
+          Get-Content $report
+      - name: Package desktop artifacts
+        shell: pwsh
+        env:
+          DESKTOP_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          $version = $env:DESKTOP_TAG.Substring(9)
+          $root = Join-Path $PWD 'artifacts/desktop'
+          $publish = Join-Path $root 'publish'
+          Copy-Item "$publish/CCStats.Desktop.exe" "$root/CCStats.Desktop.exe"
+          Copy-Item LICENSE.txt "$root/LICENSE.txt"
+          Compress-Archive -Path "$publish/*" -DestinationPath "$root/CCStats-Desktop-$version-win-x64.zip"
+          $files = @("$root/CCStats.Desktop.exe", "$root/CCStats-Desktop-$version-win-x64.zip")
+          $lines = $files | ForEach-Object { $h = Get-FileHash $_ -Algorithm SHA256; "$($h.Hash.ToLower())  $([IO.Path]::GetFileName($_))" }
+          [IO.File]::WriteAllLines("$root/SHA256SUMS.txt", $lines, [Text.UTF8Encoding]::new($false))
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-release
+          path: |
+            artifacts/desktop/*.exe
+            artifacts/desktop/*.zip
+            artifacts/desktop/*.txt
+            artifacts/desktop/windows-smoke.json
+            artifacts/desktop/windows-smoke.png
+  plugin-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.402'
+      - name: Existing plugin logic checks
+        run: |
+          dotnet restore tests/LocalizationChecks --locked-mode
+          dotnet run --project tests/LocalizationChecks -c Release --no-restore
+  publish:
+    needs: [windows, plugin-regression]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: desktop-release
+          path: artifacts/desktop
+      - name: Publish separate desktop preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DESKTOP_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          set -euo pipefail
+          version="${DESKTOP_TAG#desktop-v}"
+          gh release create "$DESKTOP_TAG" --verify-tag --prerelease --latest=false --title "CCStats Desktop $version · Windows 预览" --notes-file "docs/release-notes/desktop-$version.md" artifacts/desktop/*

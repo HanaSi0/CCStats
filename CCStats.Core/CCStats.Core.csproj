@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../PvpStats/Analysis/*.cs" Link="Analysis/%(Filename)%(Extension)" />
+    <Compile Include="../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="../PvpStats/Resources/ReplayMaps/*.gz" LogicalName="PvpStats.Resources.ReplayMaps.%(Filename)%(Extension)" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
+    <PackageReference Include="LiteDB" Version="5.0.16" />
+  </ItemGroup>
+</Project>

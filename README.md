@@ -13,6 +13,12 @@ CCStats 正式发布。由 **HanaSi0** 开发与维护，将对局数据记录�
 - **随时查看榜单**：国际服官方榜单、大区切换、本机角色高亮与快速定位。
 - **按习惯使用**：中文界面、自定义配色、悬浮入口与旧 PvP Tracker 数据导入。
 
+## Windows 独立版
+
+[下载 Desktop 0.1.0 构建预览](https://github.com/HanaSi0/CCStats/releases/tag/desktop-v0.1.0) · [当前能力与后续移植](docs/desktop.md)
+
+独立 Windows x64 EXE，无需 Dalamud，提供回放文件概况和实验性只读采集。尚非插件完整替代版，采集布局需要实机验证。插件继续单独维护。
+
 ## 安装
 
 在国际服 Dalamud 的自定义插件库中添加：
