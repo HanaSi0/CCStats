@@ -24,7 +24,7 @@ public partial class MainWindow {
         filters.Children.Add(Choice(new[]{"全部"}.Concat(_records.Select(r=>r.Map).Distinct()).ToArray(),_map,s=>_map=s));
         filters.Children.Add(Choice(new[]{"全部","胜利","失败","未记录"},_result,s=>_result=s));
         filters.Children.Add(Choice(new[]{"全部","练习赛","段位赛","自定赛"},_mode,s=>_mode=s));
-        filters.Children.Add(Choice(new[]{"全部"}.Concat(_records.Select(r=>r.Rank).Where(r=>r.Length>0).Distinct()).ToArray(),_rank,s=>_rank=s));
+        filters.Children.Add(Choice(new[]{"全部"}.Concat(_records.Select(r=>r.Rank).Where(r=>!string.IsNullOrEmpty(r)).Distinct()).ToArray(),_rank,s=>_rank=s));
         var from=new DatePicker {SelectedDate=_fromDate,ToolTip="起始日期",Width=135,Margin=new Thickness(0,0,8,8)};from.SelectedDateChanged+=(_,_)=>_fromDate=from.SelectedDate;filters.Children.Add(from);
         var until=new DatePicker {SelectedDate=_untilDate,ToolTip="结束日期",Width=135,Margin=new Thickness(0,0,8,8)};until.SelectedDateChanged+=(_,_)=>_untilDate=until.SelectedDate;filters.Children.Add(until);
         foreach(var picker in new[]{from,until}) {picker.Foreground=Brushes.Black;var style=new Style(typeof(TextBlock));style.Setters.Add(new Setter(TextBlock.ForegroundProperty,Brushes.Black));picker.Resources[typeof(TextBlock)]=style;}
