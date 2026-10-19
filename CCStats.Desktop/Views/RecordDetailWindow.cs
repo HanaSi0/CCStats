@@ -11,6 +11,7 @@ internal sealed class RecordDetailWindow : Window {
     private readonly ReplayBundle _bundle;
     public event Action? Changed;
     public RecordDetailWindow(ReplayBundle bundle,RecordLibrary library) {
+        WindowCaption.Attach(this);
         _bundle=bundle;Title=(bundle.Match.Observation?"回放详情 · ":"对局详情 · ")+bundle.Match.Map;Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(18)};var header=new StackPanel();
         header.Children.Add(new TextBlock {Text=bundle.Match.Map+"　"+bundle.Match.StartLabel+"　"+bundle.Match.Result+"　"+bundle.Match.Duration,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),FontSize=21,Margin=new Thickness(0,0,0,14)});

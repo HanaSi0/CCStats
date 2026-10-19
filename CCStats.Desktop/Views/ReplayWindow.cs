@@ -37,6 +37,7 @@ internal sealed class ReplayWindow : Window {
     private Point _lastMouse;
     private BitmapImage? _mapImage;
     public ReplayWindow(ReplayBundle bundle,double startSeconds=0) {
+        WindowCaption.Attach(this);
         _bundle=bundle;_origin=bundle.Match.StartUtc;
         _duration=Math.Max(1,bundle.Match.DurationSeconds>0?bundle.Match.DurationSeconds:bundle.Data.Frames.LastOrDefault() is {} last?(last.Timestamp-_origin).TotalSeconds:1);
         _seconds=Math.Clamp(startSeconds,0,_duration);

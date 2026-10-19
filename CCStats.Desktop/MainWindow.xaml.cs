@@ -40,6 +40,7 @@ public partial class MainWindow : Window {
     public MainWindow(string? settingsPath=null) {
         InitializeComponent();_smoke=settingsPath!=null;
         VersionLabel.Text="v"+ProductVersion;
+        WindowCaption.Attach(this);
         Icon=new BitmapImage(new Uri("pack://application:,,,/Assets/icon.png"));
         _settingsPath=settingsPath??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"CCStatsDesktop","settings.json");
         _directory=Path.GetDirectoryName(_settingsPath)!;_preferences=DesktopPreferences.Load(_settingsPath);
@@ -174,7 +175,7 @@ public partial class MainWindow : Window {
         _smokeCloseChoice=null;RestoreFromTray();
         TableFactory.CheckSorting();
         var originalTheme=_preferences.Theme;
-        foreach(var theme in DesktopTheme.Names) {DesktopTheme.Apply(theme,new Dictionary<string,string>());if(DesktopTheme.Keys.Any(k=>Application.Current.Resources[k] is not SolidColorBrush))throw new InvalidOperationException("Incomplete theme: "+theme);}
+        foreach(var theme in DesktopTheme.Names) {DesktopTheme.Apply(theme,new Dictionary<string,string>());WindowCaption.Verify(this);if(DesktopTheme.Keys.Any(k=>Application.Current.Resources[k] is not SolidColorBrush))throw new InvalidOperationException("Incomplete theme: "+theme);}
         DesktopTheme.Apply("深海蓝",new Dictionary<string,string>{{"TextBrush","#123456"}});DesktopTheme.Apply("深海蓝",new Dictionary<string,string>());
         if(((SolidColorBrush)DesktopTheme.Brush("TextBrush")).Color!=Color.FromRgb(236,242,255))throw new InvalidOperationException("Theme reset leaves stale text colours");
         DesktopTheme.Apply(originalTheme,_preferences.CustomColors);
