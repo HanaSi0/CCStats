@@ -64,12 +64,12 @@ public partial class MainWindow {
     }
     private void ShowRecords() {
         var rows=Filtered().Where(r=>!r.Observation&&r.Completed&&!r.Quarantined).SelectMany(r=>r.Players.Where(p=>_preferences.Links.Canonical(p.Name)==(_preferences.LocalPlayer.Length==0?_preferences.Links.Canonical(r.LocalPlayer):LocalIdentity)).Select(p=>(Match:r,Player:p))).ToArray();
-        if(rows.Length==0) {Card("暂无个人纪录",Text("在设置中选择完整角色名；有结算数据时显示个人纪录。",true));return;}
+        if(rows.Length==0) {Card("暂无个人纪录",Text("登录游戏后自动识别角色；有结算数据时显示个人纪录。",true));return;}
         var records=new[] {("单场伤害",rows.Where(x=>x.Player.Damage.HasValue).OrderByDescending(x=>x.Player.Damage).Select(x=>(x.Match,x.Player.Damage?.ToString("N0")))),("单场承伤",rows.Where(x=>x.Player.Taken.HasValue).OrderByDescending(x=>x.Player.Taken).Select(x=>(x.Match,x.Player.Taken?.ToString("N0")))),("单场治疗",rows.Where(x=>x.Player.Healing.HasValue).OrderByDescending(x=>x.Player.Healing).Select(x=>(x.Match,x.Player.Healing?.ToString("N0"))))};
         foreach(var (name,values) in records) {var first=values.FirstOrDefault();if(first.Match!=null)Card(name,Text(first.Item2??"—",false,24),Text(first.Match.StartLabel+" · "+first.Match.Map,true),ActionButton("查看对局",async (_,_)=>await OpenRecordAsync(first.Match)));}
     }
     private void ShowProfile() {
-        var player=LocalIdentity.Length>0?LocalIdentity:"未选择角色";
+        var player=LocalIdentity.Length>0?LocalIdentity:"等待识别角色";
         var live=_capture.State.Profile;var profile=live!=null&&_preferences.Links.Canonical(live.Player)==player?live:_library.Profile(player);
         if(profile!=null)Card("客户端个人资料",Text($"赛季 {profile.Season} · {profile.RankName} {profile.Riser} · {profile.Stars} 星 · 水晶积分 {profile.Credit:N0}"),Text($"练习赛 {profile.CasualMatches:N0} 场 / {profile.CasualWins:N0} 胜　段位赛 {profile.RankedMatches:N0} 场 / {profile.RankedWins:N0} 胜"),Text($"最近读取 {profile.ObservedAt.ToLocalTime():yyyy-MM-dd HH:mm:ss}；客户端累计计数与本机保存的场次分开显示。",true));
         var rows=_records.Where(r=>_preferences.Links.Canonical(r.LocalPlayer)==player&&!r.Observation&&r.Completed&&!r.Quarantined).ToArray();var latest=rows.FirstOrDefault();

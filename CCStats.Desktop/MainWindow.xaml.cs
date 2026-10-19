@@ -13,7 +13,7 @@ using System.Windows.Threading;
 
 namespace CCStats.Desktop;
 public partial class MainWindow : Window {
-    private static readonly string[] Pages={"战绩查询","数据概览","段位趋势","榜单","职业分析","玩家分析","个人纪录","个人资料","回放文件","自动采集","设置","关于"};
+    private static readonly string[] Pages={"战绩查询","数据概览","段位趋势","榜单","职业分析","玩家分析","个人纪录","个人资料","回放文件","设置","关于"};
     private readonly IndependentCapture _capture=new(()=>ExternalGameReader.FindGameProcess() is var pid && pid>0?new ExternalGameReader(pid):null);
     private readonly DispatcherTimer _captureTimer=new() {Interval=TimeSpan.FromMilliseconds(200)};
     private readonly DispatcherTimer _processTimer=new() {Interval=TimeSpan.FromSeconds(2)};
@@ -32,17 +32,18 @@ public partial class MainWindow : Window {
     private CCStats.Core.Capture.PlayerPvpProfile? _lastStoredProfile;
     private string? _smokeCloseChoice;
     private string? _lastSaved;
-    private TextBlock? _captureStatus;
-    private ListBox? _capturePlayers;
     private string _search="",_map="全部",_result="全部";
     private bool _favorites;
     private string _mode="全部",_rank="全部";
     private DateTime? _fromDate,_untilDate;
     public MainWindow(string? settingsPath=null) {
         InitializeComponent();_smoke=settingsPath!=null;
+        VersionLabel.Text="v"+ProductVersion;
         Icon=new BitmapImage(new Uri("pack://application:,,,/Assets/icon.png"));
         _settingsPath=settingsPath??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"CCStatsDesktop","settings.json");
         _directory=Path.GetDirectoryName(_settingsPath)!;_preferences=DesktopPreferences.Load(_settingsPath);
+        // Retired manual settings must not disable the always-on background workflow.
+        _preferences.LocalPlayer="";_preferences.AutoDetectGame=true;_preferences.AutoRecord=true;
         _library=new RecordLibrary(_directory);_records=_library.All();ApplyTheme();
         if(!_smoke&&Directory.Exists(Path.Combine(_directory,"observations"))) {
             var known=_records.Select(r=>r.SourcePath).ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -50,7 +51,7 @@ public partial class MainWindow : Window {
         }
         for(int i=0;i<Pages.Length;i++) {var index=i;var button=new Button {Content=Pages[i],HorizontalContentAlignment=HorizontalAlignment.Left,Margin=new Thickness(0,0,0,5),Padding=new Thickness(12,8,12,8)};button.Click+=(_,_)=>ShowPage(index);Navigation.Children.Add(button);_navigation.Add(button);}
         if(!_smoke)SetupTray();
-        _capture.Configure(_preferences.AutoRecord);
+        _capture.Configure(true);
         _captureTimer.Tick+=async (_,_)=> {
             UpdateCaptureStatus();UpdateRankings();
             if(!_exiting&&_capture.State.Profile is {} profile&&profile!=_lastStoredProfile) {
@@ -60,11 +61,12 @@ public partial class MainWindow : Window {
             if(!_busy&&_pendingObservations.TryDequeue(out var pending))await ImportAsync(pending,false);
         };
         _captureTimer.Start();
-        _processTimer.Tick+=(_,_)=>{if(_preferences.AutoDetectGame&&!_smoke&&!_exiting)_capture.Poll(Path.Combine(_directory,"observations"));};
+        _processTimer.Tick+=(_,_)=>{if(!_smoke&&!_exiting)_capture.Poll(Path.Combine(_directory,"observations"));};
         _processTimer.Start();Closing+=OnWindowClosing;
         Loaded+=async (_,_)=>{if(!_smoke)await StartRankingsAsync();};
         ShowPage(0);
     }
+    private static string ProductVersion=>typeof(MainWindow).Assembly.GetName().Version?.ToString(3)??"0.1.0";
     private TextBlock Text(string value,bool muted=false,double size=14)=>new() {Text=value,FontSize=size,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,10),Foreground=(Brush)FindResource(muted?"MutedBrush":"TextBrush")};
     private void Card(string title,params UIElement[] children) {
         var content=new StackPanel();content.Children.Add(Text(title,false,18));foreach(var child in children)content.Children.Add(child);
@@ -92,7 +94,7 @@ public partial class MainWindow : Window {
     private void ShowPage(int page) {
         _page=page;PageContent.Children.Clear();
         for(int i=0;i<_navigation.Count;i++)_navigation[i].Background=i==page?(Brush)FindResource("AccentBrush"):(Brush)FindResource("ButtonBrush");
-        PageTitle.Text=Pages[page];PageSubtitle.Text=page==9?"自动识别游戏 · 后台记录":page==8?"时间轴、战术水晶与已记录事件":"水晶冲突 · 本机数据中心";
+        PageTitle.Text=Pages[page];PageSubtitle.Text=page==8?"时间轴、战术水晶与已记录事件":"水晶冲突 · 本机数据中心";
         switch(page) {
             case 0:ShowMatches();break;
             case 1:ShowOverview();break;
@@ -103,9 +105,11 @@ public partial class MainWindow : Window {
             case 6:ShowRecords();break;
             case 7:ShowProfile();break;
             case 8:ShowReplay();break;
-            case 9:ShowCapture();break;
-            case 10:ShowSettings();break;
-            case 11:Card("CCStats Desktop",Text("作者：HanaSi0"),Text("独立 Windows 应用，自动识别游戏进程。",true),Text("基于 SaMo / wrath16 的 PvPStats 开源代码，遵循 MIT 许可。完整许可随软件提供。",true));break;
+            case 9:ShowSettings();break;
+            case 10:
+                Card("CCStats Desktop",Text("水晶冲突战绩记录与复盘工具",false,20),Text("版本 "+ProductVersion,true),Text("作者：HanaSi0"),Text("自动识别游戏进程，在后台记录对局数据，提供战绩管理、统计分析与二维、三维回放。",true));
+                Card("数据与隐私",Text("游戏数据以只读方式访问，记录保存在本机。软件不会修改游戏文件或游戏内状态。",true),Text("当前采集适配仍在验证中；未确认的数据保留为空，不计入完整对局统计。",true));
+                Card("开源许可",Text("基于 SaMo / wrath16 的 PvPStats 开源项目开发，遵循 MIT 许可。完整许可与第三方声明随软件提供。",true));break;
         }
     }
     private void Window_DragOver(object sender,DragEventArgs e) {e.Effects=e.Data.GetDataPresent(DataFormats.FileDrop)?DragDropEffects.Copy:DragDropEffects.None;e.Handled=true;}
@@ -144,6 +148,10 @@ public partial class MainWindow : Window {
         _=Dispatcher.BeginInvoke(new Action(Close));
     }
     internal async Task RunSmokeChecksAsync(string fixture,string screenshot) {
+        if(_navigation.Count!=11||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动采集"))throw new InvalidOperationException("Simplified navigation or product version failed");
+        ShowPage(9);
+        if(PageContent.Children.OfType<Border>().Select(b=>b.Child).OfType<StackPanel>().SelectMany(p=>p.Children.OfType<TextBox>()).Any(t=>t.ToolTip?.ToString()?.Contains("统计默认本人")==true))throw new InvalidOperationException("Manual default character setting remains");
+        if(!_preferences.AutoDetectGame||!_preferences.AutoRecord||_preferences.LocalPlayer.Length!=0)throw new InvalidOperationException("Automatic capture defaults failed");
         for(int i=0;i<_navigation.Count;i++) {_navigation[i].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));if(_page!=i||PageContent.Children.Count==0)throw new InvalidOperationException("Navigation failed: "+i);}
         await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+StatusText.Text);
         if(_library.All().Count!=1||DesktopPreferences.Load(_settingsPath).RecentFiles.Count!=1)throw new InvalidOperationException("Persistence failed");
