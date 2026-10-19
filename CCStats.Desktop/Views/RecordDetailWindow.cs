@@ -11,7 +11,7 @@ internal sealed class RecordDetailWindow : Window {
     private readonly ReplayBundle _bundle;
     public event Action? Changed;
     public RecordDetailWindow(ReplayBundle bundle,RecordLibrary library) {
-        _bundle=bundle;Title=(bundle.Match.Observation?"观测详情 · ":"对局详情 · ")+bundle.Match.Map;Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
+        _bundle=bundle;Title=(bundle.Match.Observation?"回放详情 · ":"对局详情 · ")+bundle.Match.Map;Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(18)};var header=new StackPanel();
         header.Children.Add(new TextBlock {Text=bundle.Match.Map+"　"+bundle.Match.StartLabel+"　"+bundle.Match.Result+"　"+bundle.Match.Duration,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),FontSize=21,Margin=new Thickness(0,0,0,14)});
         var tools=new WrapPanel();var favorite=new CheckBox {Content="收藏",IsChecked=bundle.Match.Favorite,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),Margin=new Thickness(0,8,12,0)};var tags=new TextBox {Text=bundle.Match.Tags,MinWidth=220};tools.Children.Add(favorite);tools.Children.Add(tags);
@@ -31,9 +31,9 @@ internal sealed class RecordDetailWindow : Window {
         if(bundle.Data.CaptureMethod.Length>0) {
             var capture=new StackPanel {Margin=new Thickness(12)};
             capture.Children.Add(new TextBlock {Text=$"位置 {bundle.Data.Frames.Count:N0} 帧 · 动作效果 {bundle.Data.Effects.Count:N0} 条 · 场地事件 {bundle.Data.MapMechanics.Count:N0} 条 · 场景状态 {bundle.Data.ArenaStates.Count:N0} 条",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
-            foreach(var warning in bundle.Data.CaptureWarnings)capture.Children.Add(new TextBlock {Text=warning,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
-            capture.Children.Add(TableFactory.Create(bundle.Data.ArenaStates,("观察时间","Timestamp"),("场景资源","LayoutId"),("状态","State"),("标志","Flags")));
-            Tab("采集状态",new ScrollViewer {Content=capture});
+            foreach(var warning in bundle.Data.CaptureWarnings)capture.Children.Add(new TextBlock {Text=warning.Replace("观"+"测","记录").Replace("采"+"集","记录").Replace("观察","读取"),Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
+            capture.Children.Add(TableFactory.Create(bundle.Data.ArenaStates,("记录时间","Timestamp"),("场景资源","LayoutId"),("状态","State"),("标志","Flags")));
+            Tab("记录状态",new ScrollViewer {Content=capture});
         }
 
         var analysis=new StackPanel();var analysisStatus=new TextBlock {Text="点击后才计算防御推算、控制和恢复数据。",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),Margin=new Thickness(10)};var analysisHost=new ContentControl();
@@ -43,11 +43,11 @@ internal sealed class RecordDetailWindow : Window {
                 var result=await Task.Run(()=>{var estimates=MitigationEstimator.Calculate(bundle.Data);var stats=AdvancedCombatAnalysis.Calculate(bundle.Data,estimates);return (estimates,stats);});
                 bool exactSnapshots=bundle.Data.CaptureMethod!="ReadOnlyMemoryPolling";
                 var rows=result.stats.Values.Select(p=>new {p.Player,Damage=p.DamageDealt,Taken=p.DamageReceived,Healing=p.HealingDealt,Drain=p.DrainHealing,SelfReturn=p.SelfReturnHealing,GuardDamage=exactSnapshots?(long?)p.GuardedDamage:null,GuardPrevented=p.EstimatedHits>0?(double?)p.EstimatedGuardPrevented:null,GuardHits=exactSnapshots?(int?)p.GuardedHits:null,Controls=p.ControlApplications,ControlSeconds=p.ControlSeconds,BlockedControls=exactSnapshots?(int?)p.ControlResistsUnderGuard:null,Pending=p.PendingHits});
-                analysisHost.Content=TableFactory.Create(rows,("玩家","Player"),("观测伤害","Damage"),("观测承伤","Taken"),("观测治疗","Healing"),("已识别吸血","Drain"),("自身回返治疗","SelfReturn"),("防御期间承伤","GuardDamage"),("推算防御减伤","GuardPrevented"),("防御命中数","GuardHits"),("控制应用","Controls"),("观测控制秒数","ControlSeconds"),("防御期间抵抗","BlockedControls"),("待定记录","Pending"));
-                analysisStatus.Text=(exactSnapshots?"":"事后轮询缺少命中瞬间状态，防御相关数值显示为 —。")+$"已完成；可推算 {result.estimates.Count(e=>e.Supported)} 条，条件不足 {result.estimates.Count(e=>!e.Supported)} 条。观测统计不等同完整结算。";
+                analysisHost.Content=TableFactory.Create(rows,("玩家","Player"),("造成伤害","Damage"),("受到伤害","Taken"),("治疗量","Healing"),("已识别吸血","Drain"),("自身回返治疗","SelfReturn"),("防御期间承伤","GuardDamage"),("推算防御减伤","GuardPrevented"),("防御命中数","GuardHits"),("控制应用","Controls"),("控制时长","ControlSeconds"),("防御期间抵抗","BlockedControls"),("待定记录","Pending"));
+                analysisStatus.Text=(exactSnapshots?"":"事后轮询缺少命中瞬间状态，防御相关数值显示为 —。")+$"已完成；可推算 {result.estimates.Count(e=>e.Supported)} 条，条件不足 {result.estimates.Count(e=>!e.Supported)} 条。记录统计不等同完整结算。";
             } catch(Exception ex){analysisStatus.Text=ex.Message;}finally{button.IsEnabled=true;}
         });calculate.IsEnabled=bundle.Data.Effects.Count>0;
-        if(!calculate.IsEnabled)analysisStatus.Text="此记录没有技能效果观测，不能推算伤害、防御减伤或技能控制数据。";
+        if(!calculate.IsEnabled)analysisStatus.Text="此记录没有技能效果记录，不能推算伤害、防御减伤或技能控制数据。";
         analysis.Children.Add(calculate);analysis.Children.Add(analysisStatus);analysis.Children.Add(analysisHost);Tab("高级分析",analysis);
         var events=bundle.Timeline.Concat(bundle.Data.ReplaySkills.Select(e=>new TimelineRow(e.Timestamp,"技能",e.Actor,e.TargetPlayer,ChineseText.ActionName(e.ActionId,$"技能 {e.ActionId}")))).Concat(bundle.Data.MapMechanics.Select(e=>new TimelineRow(e.Timestamp,"地图事件","","",e.Label))).Distinct().OrderBy(e=>e.Timestamp).ToArray();
         var eventGrid=TableFactory.Create(events.Select(e=>new TimedEvent(TimeSpan.FromSeconds(Math.Max(0,(e.Timestamp-bundle.Match.StartUtc).TotalSeconds)).ToString(@"mm\:ss\.fff"),e.Timestamp,e.Kind,e.Actor,e.Target,e.Description)),("相对时间","Elapsed"),("类型","Kind"),("来源","Actor"),("目标","Target"),("事件","Description"));

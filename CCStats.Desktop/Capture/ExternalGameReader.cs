@@ -72,7 +72,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     public (uint Territory,MovementFrame Frame) Sample() {
         if(_process?.HasExited==true)throw new InvalidOperationException("游戏进程已退出。");
         if(!Read(_gameMain+ClientLayout.TerritoryOffset,_territory)||!Read(_objects+ClientLayout.ObjectArrayOffset,_table))throw new InvalidDataException("客户端地址不可读，请重新连接或等待版本适配。");
-        uint territory=BinaryPrimitives.ReadUInt32LittleEndian(_territory);if(territory>100000)throw new InvalidDataException("区域编号异常，已停止采集。");
+        uint territory=BinaryPrimitives.ReadUInt32LittleEndian(_territory);if(territory>100000)throw new InvalidDataException("区域编号异常，已停止记录。");
         if(territory!=0&&territory!=_lastTerritory) {Reset();_lastTerritory=territory;}
         var now=DateTime.UtcNow;var frame=new MovementFrame {Timestamp=now,AstraProgress=-1,UmbraProgress=-1};var batch=new ObservationBatch {GameVersion=_version};Telemetry=batch;
         bool arena=ReplayMapMesh.MapKey(territory)!=null,detail=arena&&(now-_lastDetail).TotalSeconds>=.2;

@@ -64,6 +64,57 @@
         </ControlTemplate.Triggers>
       </ControlTemplate></Setter.Value></Setter>
     </Style>
+    <Style TargetType="Expander">
+      <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Expander">
+        <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="10" Padding="10">
+          <StackPanel>
+            <ToggleButton Content="{TemplateBinding Header}" HorizontalContentAlignment="Left" IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}">
+              <ToggleButton.Template><ControlTemplate TargetType="ToggleButton">
+                <Border x:Name="HeaderFrame" Background="Transparent" CornerRadius="6" Padding="8,6">
+                  <DockPanel><TextBlock x:Name="Arrow" Text="▸" Width="22"/><ContentPresenter/></DockPanel>
+                </Border>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="IsChecked" Value="True"><Setter TargetName="Arrow" Property="Text" Value="▾"/></Trigger>
+                  <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="HeaderFrame" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger>
+                  <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="HeaderFrame" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate></ToggleButton.Template>
+            </ToggleButton>
+            <ContentPresenter x:Name="ExpandedContent" ContentSource="Content" Margin="8,12,0,0" Visibility="Collapsed"/>
+          </StackPanel>
+        </Border>
+        <ControlTemplate.Triggers><Trigger Property="IsExpanded" Value="True"><Setter TargetName="ExpandedContent" Property="Visibility" Value="Visible"/></Trigger></ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
+    <Style TargetType="ScrollBar">
+      <Setter Property="Background" Value="{DynamicResource InputBrush}"/><Setter Property="Width" Value="12"/><Setter Property="MinWidth" Value="0"/><Setter Property="MinHeight" Value="0"/>
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar">
+        <Grid Background="{TemplateBinding Background}">
+          <Track x:Name="PART_Track" Orientation="{TemplateBinding Orientation}" IsDirectionReversed="True" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" ViewportSize="{TemplateBinding ViewportSize}" Value="{Binding Value,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}">
+            <Track.DecreaseRepeatButton><RepeatButton x:Name="PageBefore" Command="ScrollBar.PageUpCommand" Focusable="False"><RepeatButton.Template><ControlTemplate><Border Background="Transparent"/></ControlTemplate></RepeatButton.Template></RepeatButton></Track.DecreaseRepeatButton>
+            <Track.Thumb><Thumb x:Name="ScrollThumb" MinHeight="32" MinWidth="8" Focusable="False">
+              <Thumb.Template><ControlTemplate TargetType="Thumb"><Grid Background="Transparent"><Border x:Name="ThumbBody" Margin="2" Background="{DynamicResource BorderBrush}" CornerRadius="5"/></Grid>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ThumbBody" Property="Background" Value="{DynamicResource AccentBrush}"/></Trigger>
+                  <Trigger Property="IsDragging" Value="True"><Setter TargetName="ThumbBody" Property="Background" Value="{DynamicResource MutedBrush}"/></Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate></Thumb.Template>
+            </Thumb></Track.Thumb>
+            <Track.IncreaseRepeatButton><RepeatButton x:Name="PageAfter" Command="ScrollBar.PageDownCommand" Focusable="False"><RepeatButton.Template><ControlTemplate><Border Background="Transparent"/></ControlTemplate></RepeatButton.Template></RepeatButton></Track.IncreaseRepeatButton>
+          </Track>
+        </Grid>
+        <ControlTemplate.Triggers>
+          <Trigger Property="Orientation" Value="Horizontal">
+            <Setter Property="Width" Value="Auto"/><Setter Property="Height" Value="12"/>
+            <Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="False"/>
+            <Setter TargetName="ScrollThumb" Property="MinHeight" Value="8"/><Setter TargetName="ScrollThumb" Property="MinWidth" Value="32"/>
+            <Setter TargetName="PageBefore" Property="Command" Value="ScrollBar.PageLeftCommand"/><Setter TargetName="PageAfter" Property="Command" Value="ScrollBar.PageRightCommand"/>
+          </Trigger>
+          <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.4"/></Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate></Setter.Value></Setter>
+    </Style>
     <Style TargetType="Slider">
       <Setter Property="Height" Value="36"/><Setter Property="IsMoveToPointEnabled" Value="True"/><Setter Property="FocusVisualStyle" Value="{x:Null}"/>
       <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Slider">

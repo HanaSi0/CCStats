@@ -11,7 +11,6 @@
           <TextBlock Text="CCStats" FontSize="25" FontWeight="SemiBold"/>
           <TextBlock x:Name="VersionLabel" Foreground="{DynamicResource MutedBrush}" Margin="0,4,0,0"/>
         </StackPanel>
-        <TextBlock DockPanel.Dock="Bottom" Text="独立运行 · Windows x64" FontSize="12" Foreground="{DynamicResource MutedBrush}" Margin="0,16,0,0"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="Navigation"/></ScrollViewer>
       </DockPanel>
     </Border>
@@ -19,12 +18,16 @@
       <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
       <StackPanel Margin="6,5,0,22">
         <TextBlock x:Name="PageTitle" FontSize="27" FontWeight="SemiBold"/>
-        <TextBlock x:Name="PageSubtitle" Foreground="{DynamicResource MutedBrush}" Margin="0,7,0,0"/>
       </StackPanel>
       <ScrollViewer x:Name="PageScroll" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel x:Name="PageContent" Margin="6,0,8,0"/>
       </ScrollViewer>
-      <TextBlock x:Name="StatusText" Grid.Row="2" Foreground="{DynamicResource MutedBrush}" Margin="6,16,0,0" Text="就绪"/>
+      <TextBlock x:Name="StatusText" Grid.Row="2" Foreground="{DynamicResource MutedBrush}">
+        <TextBlock.Style><Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+          <Setter Property="Margin" Value="6,12,0,0"/>
+          <Style.Triggers><Trigger Property="Text" Value=""><Setter Property="Visibility" Value="Collapsed"/></Trigger></Style.Triggers>
+        </Style></TextBlock.Style>
+      </TextBlock>
     </Grid>
   </Grid>
 </Window>

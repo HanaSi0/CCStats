@@ -14,7 +14,7 @@ public static class CaptureDiagnostics {
         }finally {if(File.Exists(temp))File.Delete(temp);}
     }
     public static void SaveObservationSummary(string recordingDirectory,string id,object summary) {
-        if(id.Length!=24||!id.All(Uri.IsHexDigit))throw new InvalidDataException("观测编号无效。");
+        if(id.Length!=24||!id.All(Uri.IsHexDigit))throw new InvalidDataException("记录编号无效。");
         var directory=Path.Combine(recordingDirectory,"diagnostics");Directory.CreateDirectory(directory);var path=Path.Combine(directory,"Observation-"+id+".json");
         var temp=path+".partial";
         try {File.WriteAllText(temp,JsonSerializer.Serialize(summary));File.Move(temp,path,true);foreach(var old in Directory.EnumerateFiles(directory,"Observation-*.json").OrderByDescending(File.GetLastWriteTimeUtc).Skip(12))File.Delete(old);}

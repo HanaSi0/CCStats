@@ -14,7 +14,7 @@ public static class ReplayFileReader {
     }
     internal static ReplaySummary Read(JsonElement root, string path) {
         if(root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("Telemetry", out var data) || data.ValueKind != JsonValueKind.Object)
-            throw new InvalidDataException("不是有效的 CCStats 回放文件，请选择包含观测数据的 JSON。");
+            throw new InvalidDataException("不是有效的 CCStats 回放文件，请选择包含记录数据的 JSON。");
         if(!root.TryGetProperty("MatchId",out var idElement) || idElement.ValueKind != JsonValueKind.String)
             throw new InvalidDataException("回放缺少比赛编号。");
         var id = idElement.GetString() ?? "";

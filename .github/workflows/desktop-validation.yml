@@ -44,7 +44,7 @@ jobs:
           if (!$app.WaitForExit(120000)) { $app.Kill(); throw 'Window checks timed out' }
           if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Window checks failed' }
           $result = Get-Content $report | ConvertFrom-Json
-          if (!$result.success -or $result.navigation -ne 11 -or !$result.tray -or !$result.closeChoice -or !$result.replay) { throw 'Incomplete window checks' }
+          if (!$result.success -or $result.navigation -ne 9 -or !$result.tray -or !$result.closeChoice -or !$result.replay) { throw 'Incomplete window checks' }
           Get-Content $report
       - uses: actions/upload-artifact@v4
         if: always()

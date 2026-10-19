@@ -53,10 +53,10 @@ internal sealed class IndependentCapture {
                     if(request&&frame.Players.Count>0&&territory>0) {writer??=new ObservationWriter(directory,territory);writer.Append(territory,frame,game.Telemetry);}
                     if(frame.Timestamp-lastPublished>=TimeSpan.FromMilliseconds(200)) {
                         lastPublished=frame.Timestamp;
-                        State=new(true,writer!=null,$"PID {game.ProcessId} · 目标采样 30 Hz · 状态 5 Hz"+(game.Telemetry is {} telemetry?$" · 队伍 {(frame.Players.Any(p=>p.Team is 1 or 2)?"已读取":"未确认")} · 水晶 {(frame.Crystal!=null?"已读取":"未观察")} · 事件槽 {(telemetry.EffectsPolled?"读取中":"未确认")}":""),territory,writer?.Frames??0,frame.Players.Select(p=>$"{p.Player}　职业 {JobNames.Name(p.ClassJobId)}　HP {p.HP:N0}/{p.MaxHP:N0}").ToArray(),saved,game.Telemetry?.Profile,diagnosticError??_summaryError,game.Telemetry?.GameVersion??"",game.Telemetry?.ChannelStatus,game.Telemetry?.LocalPlayer??"");
+                        State=new(true,writer!=null,$"PID {game.ProcessId} · 目标采样 30 Hz · 状态 5 Hz"+(game.Telemetry is {} telemetry?$" · 队伍 {(frame.Players.Any(p=>p.Team is 1 or 2)?"已读取":"未确认")} · 水晶 {(frame.Crystal!=null?"已读取":"未读取")} · 事件槽 {(telemetry.EffectsPolled?"读取中":"未确认")}":""),territory,writer?.Frames??0,frame.Players.Select(p=>$"{p.Player}　职业 {JobNames.Name(p.ClassJobId)}　HP {p.HP:N0}/{p.MaxHP:N0}").ToArray(),saved,game.Telemetry?.Profile,diagnosticError??_summaryError,game.Telemetry?.GameVersion??"",game.Telemetry?.ChannelStatus,game.Telemetry?.LocalPlayer??"");
                     }
                 } while(await timer.WaitForNextTickAsync(token));
-            } catch(OperationCanceledException) when(token.IsCancellationRequested) {State=State with {Message="已暂停采集。"};}
+            } catch(OperationCanceledException) when(token.IsCancellationRequested) {State=State with {Message="已暂停记录。"};}
             catch(Exception error) {_nextAttempt=DateTime.UtcNow.AddSeconds(30);State=State with {Message="暂未连接："+error.Message+" 将延后重试。"};}
             finally {
                 try {if(writer!=null) {saved=Finish(writer);}}

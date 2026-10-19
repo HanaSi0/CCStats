@@ -28,10 +28,10 @@ public static class ClientLayout {
             if(offset+pattern.Length>image.Length)break;
             bool match=true;
             for(int i=1;i<pattern.Length;i++)if(pattern[i].HasValue&&pattern[i]!=image[offset+i]) {match=false;break;}
-            if(match) {if(found>=0)throw new InvalidDataException("客户端签名不唯一，未启动采集。");found=offset;}
+            if(match) {if(found>=0)throw new InvalidDataException("客户端签名不唯一，未启动记录。");found=offset;}
             offset++;
         }
-        if(found<0)throw new InvalidDataException("当前客户端签名尚未适配，未启动采集。");return found;
+        if(found<0)throw new InvalidDataException("当前客户端签名尚未适配，未启动记录。");return found;
     }
     private static float Float(ReadOnlySpan<byte> data,int at)=>BitConverter.Int32BitsToSingle(BinaryPrimitives.ReadInt32LittleEndian(data[at..]));
     public static PlayerPosition? DecodePlayer(ReadOnlySpan<byte> header,ushort world,ReadOnlySpan<byte> status,DateTime now) {

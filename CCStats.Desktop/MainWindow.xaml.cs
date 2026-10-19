@@ -13,7 +13,7 @@ using System.Windows.Threading;
 
 namespace CCStats.Desktop;
 public partial class MainWindow : Window {
-    private static readonly string[] Pages={"战绩查询","数据概览","段位趋势","榜单","职业分析","玩家分析","个人纪录","个人资料","回放文件","设置","关于"};
+    private static readonly string[] Pages={"战绩查询","数据概览","段位趋势","榜单","数据分析","个人中心","回放文件","设置","关于"};
     private readonly IndependentCapture _capture=new(()=>ExternalGameReader.FindGameProcess() is var pid && pid>0?new ExternalGameReader(pid):null);
     private readonly DispatcherTimer _captureTimer=new() {Interval=TimeSpan.FromMilliseconds(200)};
     private readonly DispatcherTimer _processTimer=new() {Interval=TimeSpan.FromSeconds(2)};
@@ -32,6 +32,7 @@ public partial class MainWindow : Window {
     private CCStats.Core.Capture.PlayerPvpProfile? _lastStoredProfile;
     private string? _smokeCloseChoice;
     private string? _lastSaved;
+    private string _shownLogin="";
     private string _search="",_map="全部",_result="全部";
     private bool _favorites,_observationsView;
     private string _mode="全部",_rank="全部";
@@ -54,6 +55,8 @@ public partial class MainWindow : Window {
         _capture.Configure(true);
         _captureTimer.Tick+=async (_,_)=> {
             UpdateCaptureStatus();UpdateRankings();
+            if(!_exiting&&_shownLogin!=_capture.State.LocalPlayer){_shownLogin=_capture.State.LocalPlayer;if(_page is 4 or 5)ShowPage(_page);}
+            UpdateLoggedPlayer();
             if(!_exiting&&_capture.State.Profile is {} profile&&profile!=_lastStoredProfile) {
                 try {_library.SaveProfile(profile);_lastStoredProfile=profile;}catch(Exception error) when(error is IOException or UnauthorizedAccessException or LiteDB.LiteException) {StatusText.Text="个人资料暂未保存："+error.Message;}
             }
@@ -90,28 +93,26 @@ public partial class MainWindow : Window {
                 var bundle=await Task.Run(()=>ReplayImport.ReadAsync(path,_operations.Token));await Task.Run(()=>_library.Save(bundle));_bundle=bundle;StatusText.Text="记录已加入本机资料库，原文件保持不变。";
             }
             _preferences.Remember(path);SavePreferences();_records=await Task.Run(_library.All);
-            if(navigate)ShowPage(_bundle!=null?8:0);
+            if(navigate)ShowPage(_bundle!=null?6:0);
         } catch(Exception ex) {StatusText.Text="读取失败："+ex.Message;}
         finally {_busy=false;}
     }
     private void ShowPage(int page) {
         _page=page;PageContent.Children.Clear();PageScroll.ScrollToTop();
         for(int i=0;i<_navigation.Count;i++){_navigation[i].SetResourceReference(Control.BackgroundProperty,i==page?"AccentBrush":"ButtonBrush");_navigation[i].SetResourceReference(Control.ForegroundProperty,i==page?"OnAccentBrush":"TextBrush");}
-        PageTitle.Text=Pages[page];PageSubtitle.Text=page==8?"时间轴、战术水晶与已记录事件":"水晶冲突 · 本机数据中心";
+        PageTitle.Text=Pages[page];
         switch(page) {
             case 0:ShowMatches();break;
             case 1:ShowOverview();break;
             case 2:ShowRankTrend();break;
             case 3:ShowRankings();break;
-            case 4:ShowAggregate(true);break;
-            case 5:ShowAggregate(false);break;
-            case 6:ShowRecords();break;
-            case 7:ShowProfile();break;
-            case 8:ShowReplay();break;
-            case 9:ShowSettings();break;
-            case 10:
+            case 4:ShowAnalysis();break;
+            case 5:ShowProfile();if(LocalIdentity.Length>0)ShowRecords();break;
+            case 6:ShowReplay();break;
+            case 7:ShowSettings();break;
+            case 8:
                 Card("CCStats Desktop",Text("水晶冲突战绩记录与复盘工具",false,20),Text("版本 "+ProductVersion,true),Text("作者：HanaSi0"),Text("自动识别游戏进程，在后台记录对局数据，提供战绩管理、统计分析与二维、三维回放。",true));
-                Card("数据与隐私",Text("游戏数据以只读方式访问，记录保存在本机。软件不会修改游戏文件或游戏内状态。",true),Text("当前采集适配仍在验证中；未确认的数据保留为空，不计入完整对局统计。",true));
+                Card("数据与隐私",Text("游戏数据以只读方式访问，记录保存在本机。软件不会修改游戏文件或游戏内状态。",true),Text("部分数据仍在验证中；缺少结算的记录不计入比赛场次和胜率。",true));
                 Card("开源许可",Text("基于 SaMo / wrath16 的 PvPStats 开源项目开发，遵循 MIT 许可。完整许可与第三方声明随软件提供。",true));break;
         }
     }
@@ -127,7 +128,7 @@ public partial class MainWindow : Window {
     private void MinimizeToTray() {
         _hiddenOwned.Clear();
         foreach(var window in Application.Current.Windows.Cast<Window>().Where(w=>w!=this&&w.IsVisible&&(w is ReplayWindow||w is RecordDetailWindow)).ToArray()) {_hiddenOwned.Add(window);window.Hide();}
-        ShowInTaskbar=false;Hide();StatusText.Text="已转入后台，游戏识别与采集保持启用。";
+        ShowInTaskbar=false;Hide();StatusText.Text="";
     }
     private void RestoreFromTray() {
         Show();ShowInTaskbar=true;WindowState=WindowState.Normal;
@@ -151,11 +152,14 @@ public partial class MainWindow : Window {
         _=Dispatcher.BeginInvoke(new Action(Close));
     }
     internal async Task RunSmokeChecksAsync(string fixture,string screenshot) {
-        if(_navigation.Count!=11||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动采集"))throw new InvalidOperationException("Simplified navigation or product version failed");
-        ShowPage(9);
+        if(_navigation.Count!=9||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动记录"))throw new InvalidOperationException("Simplified navigation or product version failed");
+        ShowPage(7);
         if(PageContent.Children.OfType<Border>().Select(b=>b.Child).OfType<StackPanel>().SelectMany(p=>p.Children.OfType<TextBox>()).Any(t=>t.ToolTip?.ToString()?.Contains("统计默认本人")==true))throw new InvalidOperationException("Manual default character setting remains");
         if(!_preferences.AutoDetectGame||!_preferences.AutoRecord||_preferences.LocalPlayer.Length!=0)throw new InvalidOperationException("Automatic capture defaults failed");
         for(int i=0;i<_navigation.Count;i++) {_navigation[i].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));if(_page!=i||PageContent.Children.Count==0)throw new InvalidOperationException("Navigation failed: "+i);}
+        ShowPage(4);var analysisTabs=PageContent.Children.OfType<TabControl>().Single();
+        if(analysisTabs.Items.Count!=2)throw new InvalidOperationException("Combined analysis tabs missing");analysisTabs.SelectedIndex=1;
+        ShowPage(7);if(PageContent.Children.OfType<Expander>().Single().IsExpanded)throw new InvalidOperationException("Custom colours must start collapsed");
         await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+StatusText.Text);
         if(_library.All().Count!=1||DesktopPreferences.Load(_settingsPath).RecentFiles.Count!=1)throw new InvalidOperationException("Persistence failed");
         for(int i=0;i<_navigation.Count;i++)ShowPage(i);
@@ -174,7 +178,13 @@ public partial class MainWindow : Window {
         DesktopTheme.Apply("深海蓝",new Dictionary<string,string>{{"TextBrush","#123456"}});DesktopTheme.Apply("深海蓝",new Dictionary<string,string>());
         if(((SolidColorBrush)DesktopTheme.Brush("TextBrush")).Color!=Color.FromRgb(236,242,255))throw new InvalidOperationException("Theme reset leaves stale text colours");
         DesktopTheme.Apply(originalTheme,_preferences.CustomColors);
-        _observationsView=true;ShowPage(0);PageContent.Children.OfType<DateRangeFilter>().Single().Verify();
+        _observationsView=true;ShowPage(0);
+        var advanced=PageContent.Children.OfType<Expander>().Single();
+        advanced.IsExpanded=true;UpdateLayout();((StackPanel)advanced.Content).Children.OfType<DateRangeFilter>().Single().Verify();
+        advanced.IsExpanded=false;UpdateLayout();
+        PageScroll.ScrollToVerticalOffset(Math.Min(40,PageScroll.ScrollableHeight));await Dispatcher.Yield(DispatcherPriority.Loaded);
+        if(PageScroll.ScrollableHeight>1&&PageScroll.VerticalOffset<1)throw new InvalidOperationException("Themed scrolling failed");
+        PageScroll.ScrollToTop();
         UpdateLayout();await TableFactory.VerifySelectionAsync(PageContent.Children.OfType<DataGrid>().Single());
         await MeshVisuals.VerifyPaletteAsync(this);
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();
