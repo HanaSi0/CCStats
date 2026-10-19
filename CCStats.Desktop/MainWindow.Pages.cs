@@ -49,11 +49,14 @@ public partial class MainWindow {
         try {_bundle=await Task.Run(()=>_library.Load(record.Id));_records=await Task.Run(_library.All);if(_page==0)ShowPage(0);var window=new RecordDetailWindow(_bundle,_library);window.Owner=this;window.Changed+=async ()=>{_records=await Task.Run(_library.All);if(_page==0)ShowPage(0);};window.Show();}
         catch(Exception ex) {Notify("records","无法打开记录："+ex.Message);}
     }
+    private string _overviewSearch="";
     private void ShowOverview() {
-        var rows=Filtered();var matches=rows.Where(r=>!r.Observation&&r.Completed&&!r.Quarantined).ToArray();int wins=matches.Count(r=>r.Result=="胜利"),losses=matches.Count(r=>r.Result=="失败");
-        Card("总览",Text($"{matches.Length:N0} 场已结算比赛 · {rows.Count(r=>r.Observation):N0} 份回放"),Text($"有效胜率　{RecordStatistics.Rate(wins,losses)}"),Text($"平均时长　{(matches.Length==0?"—":TimeSpan.FromSeconds(matches.Average(r=>r.DurationSeconds)).ToString(@"mm\:ss"))}",true));
-        var groups=matches.GroupBy(r=>r.Map).Select(g=>new {Map=g.Key,Matches=g.Count(),Wins=g.Count(r=>r.Result=="胜利"),Losses=g.Count(r=>r.Result=="失败"),Rate=RecordStatistics.Rate(g.Count(r=>r.Result=="胜利"),g.Count(r=>r.Result=="失败"))});
-        PageContent.Children.Add(TableFactory.Create(groups,("地图","Map"),("场数","Matches"),("胜场","Wins"),("败场","Losses"),("胜率与样本","Rate")));
+        var tools=new WrapPanel();var search=new TextBox {Text=_overviewSearch,Width=320,ToolTip="搜索地图、玩家、职业或标签"};tools.Children.Add(search);
+        void Apply(){_overviewSearch=search.Text;ShowPage(1);}search.KeyDown+=(_,e)=>{if(e.Key==System.Windows.Input.Key.Enter){Apply();e.Handled=true;}};
+        tools.Children.Add(ActionButton("搜索",(_,_)=>Apply()));tools.Children.Add(ActionButton("清除",(_,_)=>{_overviewSearch="";ShowPage(1);}));PageContent.Children.Add(tools);
+        var rows=RecordStatistics.Filter(_records,_overviewSearch,"全部","全部",false).Where(r=>!r.Quarantined).ToArray();var matches=rows.Where(r=>!r.Observation&&r.Completed).ToArray();int wins=matches.Count(r=>r.Result=="胜利"),losses=matches.Count(r=>r.Result=="失败");
+        Card("总览",Text($"{rows.Length:N0} 条记录 · {matches.Length:N0} 场比赛 · {rows.Count(r=>r.Observation):N0} 份回放"),Text($"有效胜率　{RecordStatistics.Rate(wins,losses)}"),Text("未读取到结算的回放也会显示，胜率仅由有结果的比赛计算。",true));
+        PageContent.Children.Add(TableFactory.Create(RecordStatistics.Overview(rows),("地图","Map"),("全部记录","Records"),("比赛","Matches"),("回放","Replays"),("胜场","Wins"),("败场","Losses"),("胜率与样本","Rate")));
     }
     private int _analysisTab;
     private void ShowAnalysis() {

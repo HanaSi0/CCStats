@@ -7,6 +7,11 @@ public static class RecordStatistics {
             return PvpStats.Helpers.MatchQuery.Matches(text,terms);
         });
     }
+    public static OverviewRow[] Overview(IEnumerable<MatchRecord> records)=>records.Where(r=>!r.Quarantined).GroupBy(r=>r.Map).Select(g=>{
+        var matches=g.Where(r=>!r.Observation&&r.Completed).ToArray();int wins=matches.Count(r=>r.Result=="胜利"),losses=matches.Count(r=>r.Result=="失败");
+        return new OverviewRow(g.Key,g.Count(),matches.Length,g.Count(r=>r.Observation),wins,losses,Rate(wins,losses));
+    }).OrderByDescending(r=>r.Records).ToArray();
+    public sealed record OverviewRow(string Map,int Records,int Matches,int Replays,int Wins,int Losses,string Rate);
     public static string Rate(int wins,int losses)=>wins+losses==0?"—":$"{(double)wins/(wins+losses):P1} · {wins}/{wins+losses}";
     public static List<AggregateRow> Aggregate(IEnumerable<MatchRecord> records,string group,string? player=null,Func<string,string>? canonical=null,string metric="场均") {
         canonical??=name=>name;
