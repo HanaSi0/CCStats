@@ -174,7 +174,7 @@ public partial class MainWindow : Window {
         DesktopTheme.Apply("深海蓝",new Dictionary<string,string>{{"TextBrush","#123456"}});DesktopTheme.Apply("深海蓝",new Dictionary<string,string>());
         if(((SolidColorBrush)DesktopTheme.Brush("TextBrush")).Color!=Color.FromRgb(236,242,255))throw new InvalidOperationException("Theme reset leaves stale text colours");
         DesktopTheme.Apply(originalTheme,_preferences.CustomColors);
-        ShowPage(0);PageContent.Children.OfType<DateRangeFilter>().Single().Verify();
+        _observationsView=true;ShowPage(0);PageContent.Children.OfType<DateRangeFilter>().Single().Verify();
         UpdateLayout();TableFactory.VerifySelection(PageContent.Children.OfType<DataGrid>().Single());
         await MeshVisuals.VerifyPaletteAsync(this);
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();

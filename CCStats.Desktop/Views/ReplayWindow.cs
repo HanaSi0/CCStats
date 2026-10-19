@@ -27,7 +27,7 @@ internal sealed class ReplayWindow : Window {
     private readonly TextBlock _info=new() {Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush")};
     private readonly TextBlock _progress=new() {Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),HorizontalAlignment=HorizontalAlignment.Center,Margin=new Thickness(0,8,0,8)};
     private readonly StackPanel _left=new(),_right=new();
-    private readonly Grid _canvas=new() {Background=new SolidColorBrush(Color.FromRgb(7,13,23)),ClipToBounds=true};
+    private readonly Grid _canvas=new() {Background=DesktopTheme.Brush("InputBrush"),ClipToBounds=true};
     private readonly DispatcherTimer _timer=new() {Interval=TimeSpan.FromMilliseconds(33)};
     private readonly Stopwatch _clock=Stopwatch.StartNew();
     private ReplayMapMesh? _mesh;
