@@ -175,18 +175,20 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             long unit=BinaryPrimitives.ReadInt64LittleEndian(_units.AsSpan(8+i*8));if(!Read(unit,_unit))continue;
             var nameBytes=_unit.AsSpan(8,32);int end=nameBytes.IndexOf((byte)0);if(end<1)continue;
             var name=System.Text.Encoding.ASCII.GetString(nameBytes[..end]);
-            if(!name.StartsWith("PvPResult",StringComparison.Ordinal)&&!name.StartsWith("PvPColosseumResult",StringComparison.Ordinal))continue;
+            if(!SettlementTextProbe.IsResultPanel(name))continue;
             if((U(_unit,0x198)&(2u<<20))==0)continue;
-            int length=BinaryPrimitives.ReadUInt16LittleEndian(_unit.AsSpan(0x1E2));if(length is <1 or >2048)continue;
-            long address=BinaryPrimitives.ReadInt64LittleEndian(_unit.AsSpan(0x178));var bytes=new byte[length*16];if(!Read(address,bytes))continue;
+            int length=BinaryPrimitives.ReadUInt16LittleEndian(_unit.AsSpan(0x1E2));if(length>2048)continue;
+            long address=BinaryPrimitives.ReadInt64LittleEndian(_unit.AsSpan(0x178));var bytes=new byte[length*16];if(length>0&&!Read(address,bytes))continue;
             var values=ClientUiDecoder.Decode(bytes,length,(pointer,wide)=> {
                 var text=new byte[512];if(!Read(pointer,text))return "";
                 if(wide) {int n=0;while(n+1<text.Length&&(text[n]!=0||text[n+1]!=0))n+=2;return System.Text.Encoding.Unicode.GetString(text,0,n);}
                 int n8=Array.IndexOf(text,(byte)0);return System.Text.Encoding.UTF8.GetString(text,0,n8<0?text.Length:n8);
             });
-            var hash=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(values)));
+            var texts=SettlementTextProbe.Read(unit,(at,size)=>{var data=new byte[size];return Read(at,data)?data:null;});
+            if(values.Count==0&&texts.Count==0)continue;
+            var hash=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(new{Values=values,TextNodes=texts})));
             if(_panelHashes.GetValueOrDefault(name)==hash)continue;_panelHashes[name]=hash;
-            batch.SettlementPanels.Add(new(now,name,values));
+            batch.SettlementPanels.Add(new(now,name,values){TextNodes=texts});
         }
     }
     private void Reset() {_cache.Clear();_journal.Reset();_casts.Clear();_teams.Clear();_mapEffects.Clear();_lastDirector=0;_lastProgress=null;_lastDetail=DateTime.MinValue;}

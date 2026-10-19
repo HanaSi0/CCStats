@@ -44,6 +44,13 @@ internal static class CaptureAdaptationChecks {
         var eventObject=ArenaObjectDecoder.Decode(eventHeader,0,1116,3,now);
         check(eventObject is {EntityId:0,Kind:ArenaMechanicKind.Gold,ObjectId:>0}&&eventObject.ObjectId!=ArenaObjectDecoder.Decode(eventHeader,0,1116,4,now)!.ObjectId,"event objects without network entity IDs retain distinct scene identities and mechanism classification");
         eventHeader[0x90]=2;check(ArenaObjectDecoder.Decode(eventHeader,0,1116,3,now)==null,"an unidentified NPC cannot be rendered as an active map mechanism");
+        check(SettlementTextProbe.IsResultPanel("ColosseumRecord")&&!SettlementTextProbe.IsResultPanel("ChatLog"),"native PVP result panel identity is recognized while unrelated UI is excluded");
+        var memory=new Dictionary<long,byte[]>();var uld=new byte[0x58];BinaryPrimitives.WriteUInt16LittleEndian(uld.AsSpan(0x42),1);BinaryPrimitives.WriteInt64LittleEndian(uld.AsSpan(0x50),0x30000);memory[0x20028]=uld;
+        var list=new byte[8];BinaryPrimitives.WriteInt64LittleEndian(list,0x40000);memory[0x30000]=list;
+        var node=new byte[0xD8];BinaryPrimitives.WriteUInt32LittleEndian(node.AsSpan(8),77);BinaryPrimitives.WriteUInt16LittleEndian(node.AsSpan(0x40),3);BinaryPrimitives.WriteInt64LittleEndian(node.AsSpan(0xD0),0x50000);memory[0x40000]=node;
+        var label=new byte[512];Encoding.UTF8.GetBytes("Damage Dealt").CopyTo(label,0);memory[0x50000]=label;
+        var labels=SettlementTextProbe.Read(0x20000,(address,size)=>memory.TryGetValue(address,out var value)&&value.Length>=size?value.AsSpan(0,size).ToArray():null);
+        check(labels.Single().Text=="Damage Dealt"&&labels.Single().NodeId==77&&Encoding.UTF8.GetString(labels.Single().EncodedText)=="Damage Dealt","result label probes preserve semantic headers and their exact bounded text bytes");
         var directory=Path.Combine(Path.GetTempPath(),"ccstats-adaptation-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
         try {
             string path;

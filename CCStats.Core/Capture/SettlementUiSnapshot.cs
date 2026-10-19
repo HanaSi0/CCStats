@@ -2,7 +2,9 @@ using System.Buffers.Binary;
 using System.Globalization;
 namespace CCStats.Core.Capture;
 public sealed record ClientUiValue(int Index,int Type,string Value);
-public sealed record SettlementUiSnapshot(DateTime ObservedAt,string Panel,List<ClientUiValue> Values);
+public sealed record SettlementUiSnapshot(DateTime ObservedAt,string Panel,List<ClientUiValue> Values) {
+    public List<ClientUiText> TextNodes {get;init;}=new();
+}
 public static class ClientUiDecoder {
     // No pointers, vectors or arbitrary memory are exported. Only bounded primitive values in result panels.
     public static List<ClientUiValue> Decode(ReadOnlySpan<byte> bytes,int count,Func<long,bool,string> readString) {

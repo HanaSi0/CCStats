@@ -9,6 +9,12 @@ on:
       - 'tests/DesktopChecks/**'
       - '.github/workflows/desktop-validation.yml'
   workflow_dispatch:
+    inputs:
+      include_test_package:
+        description: '另存内部测试包（不创建发行版或更新下载库）'
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
 jobs:
@@ -48,3 +54,14 @@ jobs:
             artifacts/desktop-validation.json
             artifacts/desktop-validation.png
             artifacts/desktop-validation.replay.png
+
+      - name: Package manually requested test build
+        if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
+        shell: pwsh
+        run: Compress-Archive -Path artifacts/internal-desktop/* -DestinationPath artifacts/CCStats-Desktop-internal.zip
+      - uses: actions/upload-artifact@v4
+        if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
+        with:
+          name: CCStats-Desktop-internal-test
+          path: artifacts/CCStats-Desktop-internal.zip
+          retention-days: 7
