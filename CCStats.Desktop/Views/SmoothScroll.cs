@@ -21,13 +21,14 @@ internal static class SmoothScroll {
         };
         viewer.PreviewMouseDown+=(_,_)=>Stop(viewer);viewer.PreviewKeyDown+=(_,_)=>Stop(viewer);viewer.Unloaded+=(_,_)=>Stop(viewer);
     }
-    internal static bool ScrollBy(ScrollViewer viewer,double amount) {
+    internal static bool ScrollBy(ScrollViewer viewer,double amount)=>ScrollByCore(viewer,amount,UiMotion.Enabled&&SystemParameters.ClientAreaAnimation);
+    private static bool ScrollByCore(ScrollViewer viewer,double amount,bool animate) {
         if(viewer.ScrollableHeight<=0||amount==0)return false;
         var state=States.GetValue(viewer,_=>new State());double current=viewer.VerticalOffset;
         var target=Math.Clamp((state.Moving||state.Pending?state.Target:current)+amount,0,viewer.ScrollableHeight);
         if(Math.Abs(target-current)<.1&&!state.Moving&&!state.Pending)return false;
         Stop(viewer);state.Target=target;
-        if(!UiMotion.Enabled||!SystemParameters.ClientAreaAnimation){QueueOffset(viewer,state,target);return true;}
+        if(!animate){QueueOffset(viewer,state,target);return true;}
         state.Moving=true;int generation=++state.Generation;viewer.SetValue(OffsetProperty,current);
         var animation=new DoubleAnimation(current,target,TimeSpan.FromMilliseconds(190)){EasingFunction=new CubicEase{EasingMode=EasingMode.EaseOut}};
         animation.Completed+=(_,_)=>{if(generation!=state.Generation)return;state.Moving=false;viewer.SetValue(OffsetProperty,target);viewer.BeginAnimation(OffsetProperty,null);QueueOffset(viewer,state,target);};
@@ -49,12 +50,12 @@ internal static class SmoothScroll {
         bool enabled=UiMotion.Enabled;
         try {
             window.Show();window.UpdateLayout();Attach(viewer);UiMotion.Enabled=true;
-            ScrollBy(viewer,140);ScrollBy(viewer,60);ScrollBy(viewer,-50);
+            ScrollByCore(viewer,140,true);ScrollByCore(viewer,60,true);ScrollByCore(viewer,-50,true);
             await Task.Delay(35);
-            if(SystemParameters.ClientAreaAnimation&&(viewer.VerticalOffset<=0||viewer.VerticalOffset>=150))throw new InvalidOperationException("Wheel scrolling does not ease between positions");
+            if(viewer.VerticalOffset<=0||viewer.VerticalOffset>=150)throw new InvalidOperationException("Wheel scrolling does not ease between positions");
             await Task.Delay(250);
             if(Math.Abs(viewer.VerticalOffset-150)>1)throw new InvalidOperationException($"Accumulated wheel input lost distance or direction: actual {viewer.VerticalOffset}, target {States.GetValue(viewer,_=>new State()).Target}, moving {States.GetValue(viewer,_=>new State()).Moving}");
-            UiMotion.Enabled=false;ScrollBy(viewer,50);await System.Windows.Threading.Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Loaded);
+            UiMotion.Enabled=false;ScrollBy(viewer,70);ScrollBy(viewer,20);ScrollBy(viewer,-40);await System.Windows.Threading.Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Loaded);
             if(Math.Abs(viewer.VerticalOffset-200)>1)throw new InvalidOperationException("Reduced motion scrolling is not immediate");
         } finally {UiMotion.Enabled=enabled;window.Close();}
     }
