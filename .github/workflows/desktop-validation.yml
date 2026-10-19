@@ -19,6 +19,10 @@ permissions:
   contents: read
 jobs:
   windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [Global, China]
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
@@ -37,7 +41,7 @@ jobs:
             foreach ($zone in $zones) {
               Set-TimeZone -Id $zone
               Write-Host "Validating record time in $zone"
-              dotnet run --project tests/DesktopChecks -c Release --no-restore
+              dotnet run --project tests/DesktopChecks -c Release --no-restore -p:CCStatsEdition=${{ matrix.edition }}
               if ($LASTEXITCODE -ne 0) { throw "Core checks failed in $zone" }
             }
           } finally {
@@ -45,7 +49,7 @@ jobs:
           }
           New-Item -ItemType Directory -Force artifacts | Out-Null
           @{ Success = $true; Zones = $zones } | ConvertTo-Json | Set-Content -Encoding utf8 artifacts/time-zone-validation.json
-          dotnet publish CCStats.Desktop/CCStats.Desktop.csproj -c Release --no-restore -o artifacts/internal-desktop
+          dotnet publish CCStats.Desktop/CCStats.Desktop.csproj -c Release --no-restore -p:CCStatsEdition=${{ matrix.edition }} -o artifacts/internal-desktop
           if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
       - name: Window, tray, close dialog and replay checks
         shell: pwsh
@@ -60,7 +64,9 @@ jobs:
             if ($app.ExitCode -ne 0) { if (Test-Path $report) { Get-Content $report }; throw 'Window checks failed' }
             $result = Get-Content $report | ConvertFrom-Json
             if ($result.utcOffsetMinutes -ne 540) { throw 'Replay checks did not run in the requested non-UTC timezone' }
-            if (!$result.success -or $result.navigation -ne 9 -or !$result.tray -or !$result.closeChoice -or !$result.replay) { throw 'Incomplete window checks' }
+            $expectedNavigation = if ('${{ matrix.edition }}' -eq 'China') { 8 } else { 9 }
+            if ($result.edition -ne '${{ matrix.edition }}' -or $result.rankingsEnabled -ne ('${{ matrix.edition }}' -ne 'China')) { throw 'Distribution or leaderboard isolation failed' }
+            if (!$result.success -or $result.navigation -ne $expectedNavigation -or !$result.tray -or !$result.closeChoice -or !$result.replay) { throw 'Incomplete window checks' }
             Get-Content $report
           } finally {
             Set-TimeZone -Id $previousZone
@@ -68,7 +74,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: desktop-validation-report
+          name: desktop-validation-report-${{ matrix.edition }}
           path: |
             artifacts/desktop-validation.json
             artifacts/time-zone-validation.json
@@ -83,10 +89,10 @@ jobs:
         if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
         shell: pwsh
         run: |
-          @{ Commit = '${{ github.sha }}'; BuiltAtUtc = [DateTime]::UtcNow.ToString('O'); Kind = 'Internal sampling build'; WindowsChecks = (Get-Content artifacts/desktop-validation.json | ConvertFrom-Json) } | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 artifacts/internal-desktop/build-info.json
+          @{ Commit = '${{ github.sha }}'; BuiltAtUtc = [DateTime]::UtcNow.ToString('O'); Kind = 'Internal sampling build'; Edition = '${{ matrix.edition }}'; WindowsChecks = (Get-Content artifacts/desktop-validation.json | ConvertFrom-Json) } | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 artifacts/internal-desktop/build-info.json
       - uses: actions/upload-artifact@v4
         if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
         with:
-          name: CCStats-Desktop-internal-test
+          name: ${{ matrix.edition == 'China' && 'CCStats-Desktop-CN-internal-test' || 'CCStats-Desktop-internal-test' }}
           path: artifacts/internal-desktop/
           retention-days: 7

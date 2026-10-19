@@ -11,7 +11,9 @@ public static class ClientCatalog {
     }
     private static readonly Lazy<Catalog> Data=new(()=> {
         using var stream=typeof(ClientCatalog).Assembly.GetManifestResourceStream("CCStats.ClientIdentities.json")??throw new InvalidDataException("缺少客户端名称资料。");
-        return JsonSerializer.Deserialize<Catalog>(stream)??throw new InvalidDataException("客户端名称资料损坏。");
+        var catalog=JsonSerializer.Deserialize<Catalog>(stream)??throw new InvalidDataException("客户端名称资料损坏。");
+        if(Distribution.IsChina){using var china=typeof(ClientCatalog).Assembly.GetManifestResourceStream("CCStats.ChinaWorlds.json")??throw new InvalidDataException("缺少国服服务器资料。");using var document=JsonDocument.Parse(china);foreach(var world in document.RootElement.GetProperty("Worlds").EnumerateObject())catalog.Worlds[uint.Parse(world.Name,System.Globalization.CultureInfo.InvariantCulture)]=world.Value.GetString()!;}
+        return catalog;
     });
     public static string PlayerName(string name,ushort world)=>Data.Value.Worlds.TryGetValue(world,out var server)?$"{name} {server}":$"{name} [世界 {world}]";
     public static ArenaMechanicKind Mechanic(byte objectKind,uint nameId,uint dataId,uint territory) {

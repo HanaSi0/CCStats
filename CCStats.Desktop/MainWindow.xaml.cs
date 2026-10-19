@@ -14,6 +14,8 @@ using System.Windows.Threading;
 namespace CCStats.Desktop;
 public partial class MainWindow : Window {
     private static readonly string[] Pages={"战绩查询","数据概览","段位趋势","榜单","数据分析","个人中心","回放文件","设置","关于"};
+    private static readonly int[] EnabledPages=Enumerable.Range(0,Pages.Length).Where(i=>i!=3||!Distribution.IsChina).ToArray();
+    internal int NavigationCount=>_navigation.Count;
     private readonly IndependentCapture _capture=new(()=>ExternalGameReader.FindGameProcess() is var pid && pid>0?new ExternalGameReader(pid):null);
     private readonly DispatcherTimer _captureTimer=new() {Interval=TimeSpan.FromMilliseconds(200)};
     private readonly DispatcherTimer _processTimer=new() {Interval=TimeSpan.FromSeconds(1)};
@@ -42,7 +44,7 @@ public partial class MainWindow : Window {
         VersionLabel.Text="v"+ProductVersion;
         WindowCaption.Attach(this);
         Icon=new BitmapImage(new Uri("pack://application:,,,/Assets/icon.png"));
-        _settingsPath=settingsPath??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"CCStatsDesktop","settings.json");
+        _settingsPath=settingsPath??Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),Distribution.DataDirectoryName,"settings.json");
         _directory=Path.GetDirectoryName(_settingsPath)!;_preferences=DesktopPreferences.Load(_settingsPath);
         // Retired manual settings must not disable the always-on background workflow.
         _preferences.LocalPlayer="";_preferences.AutoDetectGame=true;_preferences.AutoRecord=true;
@@ -51,7 +53,7 @@ public partial class MainWindow : Window {
             var known=_records.Select(r=>r.SourcePath).ToHashSet(StringComparer.OrdinalIgnoreCase);
             foreach(var path in Directory.EnumerateFiles(Path.Combine(_directory,"observations"),"*.json"))if(!known.Contains(path))_pendingObservations.Enqueue(path);
         }
-        for(int i=0;i<Pages.Length;i++) {var index=i;var button=new Button {Content=Pages[i],HorizontalContentAlignment=HorizontalAlignment.Left,Margin=new Thickness(0,0,0,5),Padding=new Thickness(12,8,12,8)};button.Click+=(_,_)=>ShowPage(index);Navigation.Children.Add(button);_navigation.Add(button);}
+        foreach(var i in EnabledPages) {var index=i;var button=new Button {Content=Pages[i],CommandParameter=i,HorizontalContentAlignment=HorizontalAlignment.Left,Margin=new Thickness(0,0,0,5),Padding=new Thickness(12,8,12,8)};button.Click+=(_,_)=>ShowPage(index);Navigation.Children.Add(button);_navigation.Add(button);}
         if(!_smoke)SetupTray();
         _capture.Configure(true);
         _captureTimer.Tick+=async (_,_)=> {
@@ -99,8 +101,9 @@ public partial class MainWindow : Window {
         finally {_busy=false;}
     }
     private void ShowPage(int page) {
+        if(!EnabledPages.Contains(page))page=0;
         _page=page;_noticeViews.Clear();PageContent.Children.Clear();PageScroll.ScrollToTop();
-        for(int i=0;i<_navigation.Count;i++){_navigation[i].Tag=i==page?"Selected":null;}
+        for(int i=0;i<_navigation.Count;i++){_navigation[i].Tag=Equals(_navigation[i].CommandParameter,page)?"Selected":null;}
         PageTitle.Text=Pages[page];
         switch(page) {
             case 0:ShowMatches();break;
@@ -112,7 +115,7 @@ public partial class MainWindow : Window {
             case 6:ShowReplay();break;
             case 7:ShowSettings();break;
             case 8:
-                Card("CCstats",Text("水晶冲突战绩记录与复盘工具",false,20),Text("版本 "+ProductVersion,true),Text("作者：HanaSi0"),Text("自动识别游戏进程，在后台记录对局数据，提供战绩管理、统计分析与二维、三维回放。",true));
+                Card("CCstats",Text("水晶冲突战绩记录与复盘工具",false,20),Text("版本 "+ProductVersion+(Distribution.IsChina?" · 国服版":""),true),Text("作者：HanaSi0"),Text("自动识别游戏进程，在后台记录对局数据，提供战绩管理、统计分析与二维、三维回放。",true));
                 Card("数据与隐私",Text("游戏数据以只读方式访问，记录保存在本机。软件不会修改游戏文件或游戏内状态。",true),Text("部分数据仍在验证中；缺少结算的记录不计入比赛场次和胜率。",true));
                 Card("开源许可",Text("基于 SaMo / wrath16 的 PvPStats 开源项目开发，遵循 MIT 许可。完整许可与第三方声明随软件提供。",true));break;
         }
@@ -155,25 +158,26 @@ public partial class MainWindow : Window {
         if(_exiting)return;_exiting=true;_operations.Cancel();_processTimer.Stop();IsEnabled=false;
         await _capture.StopAsync();
         while(_busy)await Task.Delay(50);
-        _captureTimer.Stop();if(_rankings!=null)foreach(var service in _rankings)service.Dispose();_library.Dispose();_tray?.Dispose();_closed=true;
+        _captureTimer.Stop();DisposeRankings();_library.Dispose();_tray?.Dispose();_closed=true;
         _=Dispatcher.BeginInvoke(new Action(Close));
     }
     internal async Task RunSmokeChecksAsync(string fixture,string screenshot) {
         await StartupSplash.VerifyAsync();
         await VerifyFeatureFeedbackAsync();
         await SmoothScroll.VerifyAsync(this);
-        if(_navigation.Count!=9||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动记录"))throw new InvalidOperationException("Simplified navigation or product version failed");
+        if(_navigation.Count!=(Distribution.IsChina?8:9)||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动记录"))throw new InvalidOperationException("Simplified navigation or product version failed");
+        if(Distribution.IsChina&&(_navigation.Any(b=>Equals(b.Content,"榜单"))||typeof(Distribution).Assembly.GetType("PvpStats.Leaderboards.LeaderboardService")!=null))throw new InvalidOperationException("China edition retains leaderboard UI or service");
         ShowPage(7);
         if(PageContent.Children.OfType<Border>().Select(b=>b.Child).OfType<StackPanel>().SelectMany(p=>p.Children.OfType<TextBox>()).Any(t=>t.ToolTip?.ToString()?.Contains("统计默认本人")==true))throw new InvalidOperationException("Manual default character setting remains");
         if(!_preferences.AutoDetectGame||!_preferences.AutoRecord||_preferences.LocalPlayer.Length!=0)throw new InvalidOperationException("Automatic capture defaults failed");
-        for(int i=0;i<_navigation.Count;i++) {_navigation[i].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));if(_page!=i||PageContent.Children.Count==0)throw new InvalidOperationException("Navigation failed: "+i);}
+        for(int i=0;i<_navigation.Count;i++) {_navigation[i].RaiseEvent(new RoutedEventArgs(Button.ClickEvent));if(_page!=EnabledPages[i]||PageContent.Children.Count==0)throw new InvalidOperationException("Navigation failed: "+i);}
         ShowPage(4);var analysisTabs=PageContent.Children.OfType<TabControl>().Single();
         if(analysisTabs.Items.Count!=2)throw new InvalidOperationException("Combined analysis tabs missing");analysisTabs.SelectedIndex=1;
         ShowPage(7);if(PageContent.Children.OfType<Expander>().Single().IsExpanded)throw new InvalidOperationException("Custom colours must start collapsed");
         await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+_notices.GetValueOrDefault("files"));
         ShowPage(0);if(PageContent.Children.OfType<DataGrid>().Single().Items.Count!=1)throw new InvalidOperationException("Pending replay is missing from the match list");
         if(_library.All().Count!=1||DesktopPreferences.Load(_settingsPath).RecentFiles.Count!=1)throw new InvalidOperationException("Persistence failed");
-        for(int i=0;i<_navigation.Count;i++)ShowPage(i);
+        foreach(var page in EnabledPages)ShowPage(page);
         SetupTray();
         foreach(var choice in new[]{"Tray","Exit"}) {
             var dialog=new CloseChoiceDialog(this);dialog.Loaded+=(_,_)=>dialog.SelectForCheck(choice,true);

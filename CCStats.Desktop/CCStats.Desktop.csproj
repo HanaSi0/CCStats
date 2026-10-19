@@ -21,12 +21,15 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="MainWindow.Rankings.cs" Condition="'$(CCStatsEdition)' == 'China'" />
+    <Compile Remove="MainWindow.Rankings.Disabled.cs" Condition="'$(CCStatsEdition)' != 'China'" />
     <Using Remove="System.Windows.Forms" />
     <Using Remove="System.Drawing" />
     <ProjectReference Include="../CCStats.Core/CCStats.Core.csproj" />
     <Resource Include="../docs/exports/official-maps-2d/images/*.png" Link="Assets/Maps/%(Filename)%(Extension)" />
     <Resource Include="../images/icon.png" Link="Assets/icon.png" />
-    <Content Include="README.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="README-CN.txt" Condition="'$(CCStatsEdition)' == 'China'" Link="README.txt" TargetPath="README.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Condition="'$(CCStatsEdition)' != 'China'" Include="README.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="ThirdParty/*.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="../LICENSE.txt" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>

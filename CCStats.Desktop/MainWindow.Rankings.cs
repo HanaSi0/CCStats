@@ -13,6 +13,7 @@ public partial class MainWindow {
     private Style? _rankingRowBase;
     private RankingSnapshot? _shownRanking;
     private string? _rankingIdentity;
+    private void DisposeRankings(){if(_rankings!=null)foreach(var service in _rankings)service.Dispose();}
     private async Task StartRankingsAsync() {
         _rankings=await Task.Run(()=>RankingRegion.All.Select(r=>new LeaderboardService(Path.Combine(_directory,"leaderboards",r.Key))).ToArray());
         if(_exiting) {foreach(var service in _rankings)service.Dispose();return;}

@@ -6,8 +6,13 @@ using PvpStats.Analysis;
 internal static class NativeReaderChecks {
     internal static async Task Run(Action<bool,string> check) {
         check(ExternalGameReader.IsGameExecutable("FFXIV_DX11")&&ExternalGameReader.IsGameExecutable("ffxiv")&&!ExternalGameReader.IsGameExecutable("ffxivlauncher"),"client names are case insensitive and launcher processes are excluded");
+#if !CCSTATS_CHINA
         var ranking=new PvpStats.Leaderboards.RankingEntry {CharacterName="Own Player",World="Ixion [Mana]"};
         check(PvpStats.Leaderboards.RankingIdentity.MatchesFullIdentity(ranking," Own  Player Ixion ")&&!PvpStats.Leaderboards.RankingIdentity.MatchesFullIdentity(ranking,"Own Player Titan"),"desktop ranking identity normalizes names and DC suffixes without matching another home world");
+#else
+        check(CCStats.Core.Distribution.IsChina&&typeof(ClientCatalog).Assembly.GetType("PvpStats.Leaderboards.LeaderboardService")==null,"China edition excludes leaderboard implementation");
+        check(ClientCatalog.PlayerName("测试角色",1167)=="测试角色 红玉海"&&CCStats.Core.Distribution.DataDirectoryName=="CCStatsDesktop-CN","China edition identifies server names and isolates local records");
+#endif
         var memory=new Dictionary<long,byte[]>();
         void Put(long at,byte[] bytes)=>memory[at]=bytes;
         byte[] Pointer(long value){var b=new byte[8];BinaryPrimitives.WriteInt64LittleEndian(b,value);return b;}
