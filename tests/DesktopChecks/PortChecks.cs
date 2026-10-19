@@ -57,6 +57,8 @@ internal static class PortChecks {
             capture.Connect(Path.Combine(directory,"observations"));capture.Record(true);
             for(int i=0;i<80&&(!capture.State.Recording||capture.State.Frames<3);i++)await Task.Delay(25);
             await capture.StopAsync();check(factories==2&&capture.State.SavedPath!=firstPath,"a stopped recorder can reconnect and preserve a separate segment");
+            var completed=new List<string>();while(capture.TryDequeueCompleted(out var saved))completed.Add(saved);
+            check(completed.SequenceEqual(new[]{firstPath,capture.State.SavedPath}),"rapid finalization and reconnection retain every completed segment for background import");
             var observed=await ReplayImport.ReadAsync(capture.State.SavedPath!);check(observed.Match.Observation&&observed.Data.Frames.Count>=3,"background output is a readable observation rather than a fabricated match");
             var unavailable=new IndependentCapture(()=>null);unavailable.Poll(directory);await unavailable.StopAsync();check(!unavailable.State.Connected,"waiting for a game has a clean cancellation path");
             var geometry=ReplaySceneBuilder.Build(observed,null,observed.Data.Frames[0].Timestamp,false,false);

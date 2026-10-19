@@ -6,7 +6,7 @@ using System.Windows.Media;
 namespace CCStats.Desktop;
 public partial class MainWindow {
     private void ShowCapture() {
-        var actions=new WrapPanel();actions.Children.Add(ActionButton("重新识别",(_,_)=>_capture.Connect(Path.Combine(_directory,"observations"))));
+        var actions=new WrapPanel();actions.Children.Add(ActionButton("重新识别",async (_,_)=>await _capture.ReconnectAsync(Path.Combine(_directory,"observations"))));
         actions.Children.Add(ActionButton("开始记录",(_,_)=>_capture.Record(true)));actions.Children.Add(ActionButton("结束本段",(_,_)=>_capture.Record(false)));
         actions.Children.Add(ActionButton("导出采集诊断",async (_,_)=> {
             var save=new Microsoft.Win32.SaveFileDialog {Filter="ZIP (*.zip)|*.zip",FileName="CCStats-采集诊断.zip"};if(save.ShowDialog(this)!=true)return;

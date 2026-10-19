@@ -56,8 +56,7 @@ public partial class MainWindow : Window {
             if(!_exiting&&_capture.State.Profile is {} profile&&profile!=_lastStoredProfile) {
                 try {_library.SaveProfile(profile);_lastStoredProfile=profile;}catch(Exception error) when(error is IOException or UnauthorizedAccessException or LiteDB.LiteException) {StatusText.Text="个人资料暂未保存："+error.Message;}
             }
-            var saved=_capture.State.SavedPath;
-            if(saved!=null&&saved!=_lastSaved) {_lastSaved=saved;_pendingObservations.Enqueue(saved);}
+            while(_capture.TryDequeueCompleted(out var saved))if(saved!=_lastSaved) {_lastSaved=saved;_pendingObservations.Enqueue(saved);}
             if(!_busy&&_pendingObservations.TryDequeue(out var pending))await ImportAsync(pending,false);
         };
         _captureTimer.Start();

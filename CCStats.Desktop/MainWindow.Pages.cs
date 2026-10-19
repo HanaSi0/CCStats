@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 namespace CCStats.Desktop;
 public partial class MainWindow {
-    private string LocalIdentity=>_preferences.Links.Canonical(_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_capture.State.Profile?.Player??_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer??"");
+    private string LocalIdentity=>_preferences.Links.Canonical(_preferences.LocalPlayer.Length>0?_preferences.LocalPlayer:_capture.State.LocalPlayer.Length>0?_capture.State.LocalPlayer:_capture.State.Profile?.Player??_records.FirstOrDefault(r=>r.LocalPlayer.Length>0)?.LocalPlayer??"");
     private List<MatchRecord> Filtered()=>RecordStatistics.Filter(_records,_search,_map,_result,_favorites,_mode).Where(r=>(_rank=="全部"||r.Rank==_rank)&&(!_fromDate.HasValue||r.StartUtc.ToLocalTime().Date>=_fromDate.Value.Date)&&(!_untilDate.HasValue||r.StartUtc.ToLocalTime().Date<=_untilDate.Value.Date)).ToList();
     private void ShowMatches() {
         var tools=new WrapPanel();tools.Children.Add(ActionButton("读取文件",OpenFile));

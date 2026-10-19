@@ -3,9 +3,13 @@ using CCStats.Core.Capture;
 using PvpStats.Analysis;
 using CCStats.Core.Library;
 namespace CCStats.Desktop.Capture;
-internal sealed record CaptureState(bool Connected,bool Recording,string Message,uint Territory=0,int Frames=0,string[]? Players=null,string? SavedPath=null,PlayerPvpProfile? Profile=null,string? DiagnosticError=null,string GameVersion="",IReadOnlyDictionary<string,string>? ChannelStatus=null);
+internal sealed record CaptureState(bool Connected,bool Recording,string Message,uint Territory=0,int Frames=0,string[]? Players=null,string? SavedPath=null,PlayerPvpProfile? Profile=null,string? DiagnosticError=null,string GameVersion="",IReadOnlyDictionary<string,string>? ChannelStatus=null,string LocalPlayer="");
 internal sealed class IndependentCapture {
     private readonly Func<IObservedGameSource?> _factory;
+    private readonly System.Collections.Concurrent.ConcurrentQueue<string> _completed=new();
+    public bool TryDequeueCompleted(out string path)=>_completed.TryDequeue(out path!);
+    private string Finish(ObservationWriter writer) {writer.Dispose();if(!File.Exists(writer.Destination))throw new IOException("记录尚未完成，保留临时文件。");_completed.Enqueue(writer.Destination);return writer.Destination;}
+    public async Task ReconnectAsync(string directory) {await StopAsync();Connect(directory);}
     public IndependentCapture(Func<IObservedGameSource?> factory)=>_factory=factory;
     private CancellationTokenSource? _lifetime;
     private Task? _worker;
@@ -34,17 +38,17 @@ internal sealed class IndependentCapture {
                     }
                     if(territory!=lastTerritory&&territory!=0) {_manualPaused=false;lastTerritory=territory;}
                     bool request=Volatile.Read(ref _record)!=0||(_autoRecord&&!_manualPaused&&ReplayMapMesh.MapKey(territory)!=null);
-                    if(writer!=null&&(!request||territory!=writer.Territory||writer.ShouldRollOver)) {writer.Dispose();saved=writer.Destination;writer=null;}
+                    if(writer!=null&&(!request||territory!=writer.Territory||writer.ShouldRollOver)) {saved=Finish(writer);writer=null;}
                     if(request&&frame.Players.Count>0&&territory>0) {writer??=new ObservationWriter(directory,territory);writer.Append(territory,frame,game.Telemetry);}
                     if(frame.Timestamp-lastPublished>=TimeSpan.FromMilliseconds(200)) {
                         lastPublished=frame.Timestamp;
-                        State=new(true,writer!=null,$"PID {game.ProcessId} · 目标采样 30 Hz · 状态 5 Hz"+(game.Telemetry is {} telemetry?$" · 队伍 {(telemetry.DirectorAvailable?"已读取":"未确认")} · 水晶 {(frame.Crystal!=null?"已读取":"未观察")} · 事件槽 {(telemetry.EffectsPolled?"读取中":"未确认")}":""),territory,writer?.Frames??0,frame.Players.Select(p=>$"{p.Player}　职业 {JobNames.Name(p.ClassJobId)}　HP {p.HP:N0}/{p.MaxHP:N0}").ToArray(),saved,game.Telemetry?.Profile,diagnosticError,game.Telemetry?.GameVersion??"",game.Telemetry?.ChannelStatus);
+                        State=new(true,writer!=null,$"PID {game.ProcessId} · 目标采样 30 Hz · 状态 5 Hz"+(game.Telemetry is {} telemetry?$" · 队伍 {(telemetry.DirectorAvailable?"已读取":"未确认")} · 水晶 {(frame.Crystal!=null?"已读取":"未观察")} · 事件槽 {(telemetry.EffectsPolled?"读取中":"未确认")}":""),territory,writer?.Frames??0,frame.Players.Select(p=>$"{p.Player}　职业 {JobNames.Name(p.ClassJobId)}　HP {p.HP:N0}/{p.MaxHP:N0}").ToArray(),saved,game.Telemetry?.Profile,diagnosticError,game.Telemetry?.GameVersion??"",game.Telemetry?.ChannelStatus,game.Telemetry?.LocalPlayer??"");
                     }
                 } while(await timer.WaitForNextTickAsync(token));
             } catch(OperationCanceledException) when(token.IsCancellationRequested) {State=State with {Message="已暂停采集。"};}
             catch(Exception error) {_nextAttempt=DateTime.UtcNow.AddSeconds(30);State=State with {Message="暂未连接："+error.Message+" 将延后重试。"};}
             finally {
-                try {if(writer!=null) {writer.Dispose();saved=writer.Destination;}}
+                try {if(writer!=null) {saved=Finish(writer);}}
                 catch(Exception error) {State=State with {Message="记录收尾失败，保留临时文件："+error.Message};}
                 Interlocked.Exchange(ref _record,0);State=State with {Connected=false,Recording=false,SavedPath=saved};
             }
