@@ -19,6 +19,8 @@ internal static class SettlementChecks {
         check(ActionCatalog.Name(29676)=="Wyrmwave"&&ActionCatalog.Name(28726)=="Self-destruct","bundled official action names cover skills and map attacks without numeric-only labels");
         check(ReplayEventReport.Build(scene).Length==2&&ReplayEventReport.Build(scene).All(e=>e.Actor=="爆弹怪"),"timeline includes real effect events with named scene sources");
         check(SkillReport.Name(29676)=="真龙波","autonomous summon actions resolve a display name instead of a skill number");
+        var castsOnly=new ReplayBundle();castsOnly.Data.ReplaySkills.AddRange(new[]{new ReplaySkillEvent {Actor="Player0",ActionId=29676,Sequence=1,SourceEntityId=10},new ReplaySkillEvent {Actor="Player0",ActionId=29676,Sequence=1,SourceEntityId=10,Resolved=true},new ReplaySkillEvent {Actor="Player0",ActionId=29676,Sequence=2,SourceEntityId=10}});
+        var castRow=SkillReport.Build(castsOnly).Single();check(castRow.Casts==2&&castRow.Damage==null&&castRow.Healing==null&&castRow.Hits==null,"skills with cast evidence and no retained hits remain visible without invented zero damage or duplicate phases");
         var roster=new ReplayBundle();roster.Match.Players.Add(new(){Name="Own"});roster.Data.Frames.Add(new(){Players=new(){new(){Player="Own",Team=0}}});roster.Data.Frames.Add(new(){Players=new(){new(){Player="Own",Team=1}}});ReplayRoster.Reconcile(roster);check(roster.Match.Players[0].Team==1&&roster.Data.Frames[0].Players[0].Team==1,"a later uniquely confirmed roster repairs unknown team labels in saved frames");
     }
 }
