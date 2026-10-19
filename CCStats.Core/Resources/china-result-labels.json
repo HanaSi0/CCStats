@@ -1,0 +1,21 @@
+{
+  "Commit": "2c6741cffe3cfe70f093c54c463791364e515d8d",
+  "Source": "https://github.com/thewakingsands/ffxiv-datamining-cn/blob/2c6741cffe3cfe70f093c54c463791364e515d8d/Addon.csv",
+  "Sha256": "b3bac0d06dd8e94190b844e098c1a62a0a7dfa29bfb29a4142759c17256a8f40",
+  "Labels": {
+    "给与伤害": "Damage",
+    "打倒敌人次数": "Kills",
+    "无法战斗次数": "Deaths",
+    "总伤害量": "Damage",
+    "总治疗量": "Healing",
+    "助攻次数": "Assists",
+    "怪物讨伐数": "Kills",
+    "造成伤害": "Damage",
+    "总受伤量": "Taken",
+    "押运时长": "Crystal"
+  },
+  "TeamOutcomes": {
+    "星极队获胜！": 1,
+    "灵极队获胜！": 2
+  }
+}

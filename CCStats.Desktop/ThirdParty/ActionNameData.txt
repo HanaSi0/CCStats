@@ -6,7 +6,8 @@ FINAL FANTASY XIV game data and names belong to SQUARE ENIX.
 
 Localized result column labels: the same commit, csv/{en,ja,de,fr}/Addon.csv.
 
-China edition world names:
+China edition world names and result column labels:
 https://github.com/thewakingsands/ffxiv-datamining-cn
 Pinned commit: 2c6741cffe3cfe70f093c54c463791364e515d8d
 World.csv source SHA-256 recorded in CCStats.Core/Resources/china-worlds.json.
+Addon.csv source SHA-256 recorded in CCStats.Core/Resources/china-result-labels.json.

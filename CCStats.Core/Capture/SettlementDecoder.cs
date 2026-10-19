@@ -14,7 +14,8 @@ public static class SettlementDecoder {
         ["HP Restored"]="Healing",["Healing"]="Healing",["治疗量"]="Healing",["回復量"]="Healing",
         ["Time on Crystal"]="Crystal",["Crystal Time"]="Crystal",["推车时间"]="Crystal",["クリスタル運搬時間"]="Crystal"
     };
-    static SettlementDecoder(){using var stream=typeof(SettlementDecoder).Assembly.GetManifestResourceStream("CCStats.ResultColumnLabels.json")??throw new InvalidDataException("缺少结算列名称资料。");using var document=System.Text.Json.JsonDocument.Parse(stream);foreach(var label in document.RootElement.GetProperty("Labels").EnumerateObject())Columns[label.Name]=label.Value.GetString()!;}
+    private static readonly Dictionary<string,int> TeamOutcomes=new();
+    static SettlementDecoder(){using var stream=typeof(SettlementDecoder).Assembly.GetManifestResourceStream("CCStats.ResultColumnLabels.json")??throw new InvalidDataException("缺少结算列名称资料。");using var document=System.Text.Json.JsonDocument.Parse(stream);foreach(var label in document.RootElement.GetProperty("Labels").EnumerateObject())Columns[label.Name]=label.Value.GetString()!;if(Distribution.IsChina){using var cn=typeof(SettlementDecoder).Assembly.GetManifestResourceStream("CCStats.ChinaResultLabels.json")??throw new InvalidDataException("缺少国服结算名称资料。");using var localized=System.Text.Json.JsonDocument.Parse(cn);foreach(var label in localized.RootElement.GetProperty("Labels").EnumerateObject())Columns[label.Name]=label.Value.GetString()!;foreach(var result in localized.RootElement.GetProperty("TeamOutcomes").EnumerateObject())TeamOutcomes[Clean(result.Name)]=result.Value.GetInt32();}}
     private static string Clean(string text)=>string.Join(' ',text.Normalize(NormalizationForm.FormKC).Split((char[]?)null,StringSplitOptions.RemoveEmptyEntries));
     public static bool Apply(ReplayBundle bundle) {
         if(bundle.Match.ScoreboardComplete&&!bundle.Match.Observation||bundle.Match.Players.Count!=10||bundle.Match.Players.Select(p=>p.Name).Distinct().Count()!=10)return false;
@@ -44,7 +45,8 @@ public static class SettlementDecoder {
             bundle.Match.ScoreboardComplete=true;
             var outcomes=nodes.Select(n=>n.Text.TrimEnd('!','！').ToUpperInvariant()).Select(n=>n switch {"VICTORY" or "WIN" or "勝利" or "胜利" or "VICTOIRE" or "SIEG"=>1,"DEFEAT" or "LOSE" or "敗北" or "失败" or "DÉFAITE" or "NIEDERLAGE"=>2,_=>0}).Where(n=>n!=0).Distinct().ToArray();
             var self=roster.FirstOrDefault(p=>p.Name==bundle.Match.LocalPlayer);
-            if(outcomes.Length==1&&self?.Team is 1 or 2&&roster.Count(p=>p.Team==1)==5&&roster.Count(p=>p.Team==2)==5){bundle.Match.Winner=outcomes[0]==1?self.Team:3-self.Team;bundle.Match.Result=outcomes[0]==1?"胜利":"失败";bundle.Match.Completed=true;bundle.Match.Observation=false;}
+            var winners=nodes.Where(n=>TeamOutcomes.ContainsKey(n.Text)).Select(n=>TeamOutcomes[n.Text]).ToHashSet();if(outcomes.Length==1&&self?.Team is 1 or 2)winners.Add(outcomes[0]==1?self.Team:3-self.Team);
+            if(winners.Count==1&&outcomes.Length<=1&&self?.Team is 1 or 2&&roster.Count(p=>p.Team==1)==5&&roster.Count(p=>p.Team==2)==5){bundle.Match.Winner=winners.Single();bundle.Match.Result=bundle.Match.Winner==self.Team?"胜利":"失败";bundle.Match.Completed=true;bundle.Match.Observation=false;}
             return true;
         }
         return false;
