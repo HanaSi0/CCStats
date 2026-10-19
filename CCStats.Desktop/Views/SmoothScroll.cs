@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 namespace CCStats.Desktop.Views;
 internal static class SmoothScroll {
-    private sealed class State {public double Target;public bool Moving;}
+    private sealed class State {public double Target;public bool Moving;public int Generation;}
     private static readonly ConditionalWeakTable<ScrollViewer,State> States=new();
     private static readonly DependencyProperty OffsetProperty=DependencyProperty.RegisterAttached("Offset",typeof(double),typeof(SmoothScroll),new PropertyMetadata(0d,(sender,args)=>((ScrollViewer)sender).ScrollToVerticalOffset((double)args.NewValue)));
     public static void Attach(ScrollViewer viewer) {
@@ -28,14 +28,14 @@ internal static class SmoothScroll {
         if(Math.Abs(target-current)<.1&&!state.Moving)return false;
         Stop(viewer);state.Target=target;
         if(!UiMotion.Enabled||!SystemParameters.ClientAreaAnimation){viewer.ScrollToVerticalOffset(target);return true;}
-        state.Moving=true;viewer.SetValue(OffsetProperty,current);
+        state.Moving=true;int generation=++state.Generation;viewer.SetValue(OffsetProperty,current);
         var animation=new DoubleAnimation(current,target,TimeSpan.FromMilliseconds(190)){EasingFunction=new CubicEase{EasingMode=EasingMode.EaseOut}};
-        animation.Completed+=(_,_)=>{state.Moving=false;viewer.SetValue(OffsetProperty,target);viewer.BeginAnimation(OffsetProperty,null);};
+        animation.Completed+=(_,_)=>{if(generation!=state.Generation)return;state.Moving=false;viewer.SetValue(OffsetProperty,target);viewer.BeginAnimation(OffsetProperty,null);};
         viewer.BeginAnimation(OffsetProperty,animation,HandoffBehavior.SnapshotAndReplace);return true;
     }
     private static void Stop(ScrollViewer viewer) {
         if(!States.TryGetValue(viewer,out var state)||!state.Moving)return;
-        double current=viewer.VerticalOffset;state.Moving=false;viewer.SetValue(OffsetProperty,current);viewer.BeginAnimation(OffsetProperty,null);state.Target=current;
+        double current=viewer.VerticalOffset;++state.Generation;state.Moving=false;viewer.SetValue(OffsetProperty,current);viewer.BeginAnimation(OffsetProperty,null);state.Target=current;
     }
     internal static async Task VerifyAsync(Window owner) {
         var viewer=new ScrollViewer {Content=new Border{Height=2000},VerticalScrollBarVisibility=ScrollBarVisibility.Auto};
@@ -47,7 +47,7 @@ internal static class SmoothScroll {
             await Task.Delay(35);
             if(SystemParameters.ClientAreaAnimation&&(viewer.VerticalOffset<=0||viewer.VerticalOffset>=150))throw new InvalidOperationException("Wheel scrolling does not ease between positions");
             await Task.Delay(250);
-            if(Math.Abs(viewer.VerticalOffset-150)>1)throw new InvalidOperationException("Accumulated wheel input lost distance or direction");
+            if(Math.Abs(viewer.VerticalOffset-150)>1)throw new InvalidOperationException($"Accumulated wheel input lost distance or direction: actual {viewer.VerticalOffset}, target {States.GetValue(viewer,_=>new State()).Target}, moving {States.GetValue(viewer,_=>new State()).Moving}");
             UiMotion.Enabled=false;ScrollBy(viewer,50);await System.Windows.Threading.Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Loaded);
             if(Math.Abs(viewer.VerticalOffset-200)>1)throw new InvalidOperationException("Reduced motion scrolling is not immediate");
         } finally {UiMotion.Enabled=enabled;window.Close();}
