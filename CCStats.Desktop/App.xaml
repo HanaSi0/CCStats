@@ -13,11 +13,15 @@
     <SolidColorBrush x:Key="AlternateBrush" Color="#1C263B" />
     <SolidColorBrush x:Key="OnAccentBrush" Color="White" />
     <Style TargetType="TextBlock"><Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="TextWrapping" Value="Wrap"/></Style>
+    <Style x:Key="KeyboardFocus" TargetType="Control">
+      <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Control"><Border Margin="2" CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource TextBrush}" IsHitTestVisible="False"/></ControlTemplate></Setter.Value></Setter>
+    </Style>
     <Style TargetType="Button">
+      <Setter Property="FocusVisualStyle" Value="{StaticResource KeyboardFocus}"/>
       <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="Background" Value="{DynamicResource ButtonBrush}"/>
       <Setter Property="Padding" Value="16,10"/><Setter Property="Margin" Value="0,0,8,8"/><Setter Property="Cursor" Value="Hand"/>
       <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
-        <Border x:Name="Frame" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
+        <Border x:Name="Frame" Background="{TemplateBinding Background}" BorderThickness="3,0,0,0" BorderBrush="Transparent" CornerRadius="8" Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
           <Border.RenderTransform><ScaleTransform/></Border.RenderTransform>
           <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
         </Border>
@@ -34,8 +38,8 @@
               <DoubleAnimation Storyboard.TargetName="Frame" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.1"/>
             </Storyboard></BeginStoryboard></MultiDataTrigger.ExitActions>
           </MultiDataTrigger>
-          <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Frame" Property="BorderBrush" Value="{DynamicResource BorderBrush}"/><Setter TargetName="Frame" Property="BorderThickness" Value="2"/></Trigger>
-          <Trigger Property="IsPressed" Value="True"><Setter TargetName="Frame" Property="Background" Value="{DynamicResource AccentBrush}"/></Trigger>
+          <Trigger Property="Tag" Value="Selected"><Setter TargetName="Frame" Property="Background" Value="{DynamicResource SelectionBrush}"/><Setter Property="Foreground" Value="{DynamicResource OnAccentBrush}"/><Setter Property="FontWeight" Value="SemiBold"/><Setter TargetName="Frame" Property="BorderBrush" Value="{DynamicResource TextBrush}"/><Setter TargetName="Frame" Property="BorderThickness" Value="3,0,0,0"/></Trigger>
+          <Trigger Property="IsPressed" Value="True"><Setter TargetName="Frame" Property="Opacity" Value="0.72"/></Trigger>
           <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
         </ControlTemplate.Triggers>
       </ControlTemplate></Setter.Value></Setter>
@@ -46,9 +50,9 @@
         <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}" CornerRadius="8" Padding="10"><ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent"/></Border>
       </Grid>
     </ControlTemplate></Setter.Value></Setter></Style>
-    <Style TargetType="TabItem"><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabItem">
+    <Style TargetType="TabItem"><Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="FocusVisualStyle" Value="{StaticResource KeyboardFocus}"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabItem">
       <Border x:Name="TabFrame" Background="{DynamicResource ButtonBrush}" CornerRadius="6" Padding="14,9" Margin="0,0,6,0"><ContentPresenter ContentSource="Header"/></Border>
-      <ControlTemplate.Triggers><Trigger Property="IsSelected" Value="True"><Setter TargetName="TabFrame" Property="Background" Value="{DynamicResource AccentBrush}"/></Trigger></ControlTemplate.Triggers>
+      <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="TabFrame" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger><Trigger Property="IsSelected" Value="True"><Setter TargetName="TabFrame" Property="Background" Value="{DynamicResource SelectionBrush}"/><Setter Property="Foreground" Value="{DynamicResource OnAccentBrush}"/><Setter Property="FontWeight" Value="SemiBold"/></Trigger></ControlTemplate.Triggers>
     </ControlTemplate></Setter.Value></Setter></Style>
     <Style TargetType="ComboBox">
       <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="Background" Value="{DynamicResource ButtonBrush}"/>
@@ -81,25 +85,25 @@
       <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Expander">
         <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="10" Padding="10">
           <StackPanel>
-            <ToggleButton Content="{TemplateBinding Header}" HorizontalContentAlignment="Left" IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}">
+            <ToggleButton x:Name="HeaderToggle" FocusVisualStyle="{StaticResource KeyboardFocus}" Cursor="Hand" Foreground="{DynamicResource TextBrush}" Content="{TemplateBinding Header}" HorizontalContentAlignment="Left" IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}">
               <ToggleButton.Template><ControlTemplate TargetType="ToggleButton">
-                <Border x:Name="HeaderFrame" Background="Transparent" CornerRadius="6" Padding="8,6">
+                <Border x:Name="HeaderFrame" Background="Transparent" BorderBrush="Transparent" BorderThickness="3,0,0,0" CornerRadius="6" Padding="8,8">
                   <DockPanel><TextBlock x:Name="Arrow" Text="▸" Width="22"/><ContentPresenter/></DockPanel>
                 </Border>
                 <ControlTemplate.Triggers>
-                  <Trigger Property="IsChecked" Value="True"><Setter TargetName="Arrow" Property="Text" Value="▾"/></Trigger>
+                  <Trigger Property="IsChecked" Value="True"><Setter TargetName="Arrow" Property="Text" Value="▾"/><Setter TargetName="HeaderFrame" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/><Setter Property="FontWeight" Value="SemiBold"/></Trigger>
                   <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="HeaderFrame" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger>
-                  <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="HeaderFrame" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger>
+                  <Trigger Property="IsPressed" Value="True"><Setter TargetName="HeaderFrame" Property="Opacity" Value="0.72"/></Trigger>
                 </ControlTemplate.Triggers>
               </ControlTemplate></ToggleButton.Template>
             </ToggleButton>
-            <ContentPresenter x:Name="ExpandedContent" ContentSource="Content" Margin="8,12,0,0" Visibility="Collapsed"/>
+            <ContentPresenter x:Name="ExpandedContent" ContentSource="Content" Margin="8,12,0,0" Visibility="Collapsed"><ContentPresenter.RenderTransform><TranslateTransform/></ContentPresenter.RenderTransform></ContentPresenter>
           </StackPanel>
         </Border>
         <ControlTemplate.Triggers><Trigger Property="IsExpanded" Value="True"><Setter TargetName="ExpandedContent" Property="Visibility" Value="Visible"/></Trigger>
           <MultiDataTrigger>
             <MultiDataTrigger.Conditions><Condition Binding="{Binding IsExpanded,RelativeSource={RelativeSource Self}}" Value="True"/><Condition Binding="{Binding Source={x:Static SystemParameters.ClientAreaAnimation}}" Value="True"/></MultiDataTrigger.Conditions>
-            <MultiDataTrigger.EnterActions><BeginStoryboard><Storyboard><DoubleAnimation Storyboard.TargetName="ExpandedContent" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.17"/></Storyboard></BeginStoryboard></MultiDataTrigger.EnterActions>
+            <MultiDataTrigger.EnterActions><BeginStoryboard><Storyboard><DoubleAnimation Storyboard.TargetName="ExpandedContent" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.17"/><DoubleAnimation Storyboard.TargetName="ExpandedContent" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="-5" To="0" Duration="0:0:0.17"/></Storyboard></BeginStoryboard></MultiDataTrigger.EnterActions>
           </MultiDataTrigger>
         </ControlTemplate.Triggers>
       </ControlTemplate></Setter.Value></Setter>

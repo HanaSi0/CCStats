@@ -15,12 +15,12 @@ public partial class MainWindow {
         var advancedContent=new StackPanel();
         var advanced=new Expander {Header="高级",IsExpanded=_advancedExpanded,Content=advancedContent,Margin=new Thickness(0,0,0,12)};
         advanced.Expanded+=(_,_)=>_advancedExpanded=true;advanced.Collapsed+=(_,_)=>_advancedExpanded=false;
-        PageContent.Children.Add(advanced);
+        PageContent.Children.Add(advanced);PageContent.Children.Add(Notice("records"));
         var tools=new WrapPanel();tools.Children.Add(ActionButton("读取文件",OpenFile));
         tools.Children.Add(ActionButton("导出 CSV",async (_,_)=> {
             var save=new SaveFileDialog {Filter="CSV (*.csv)|*.csv",FileName="CCStats-战绩.csv"};if(save.ShowDialog(this)!=true)return;
             string Csv(string s)=>"\""+s.Replace("\"","\"\"")+"\"";
-            try {var text="时间,地图,类型,结果,时长,标签\n"+string.Join('\n',Filtered().Where(r=>r.Observation==_observationsView).Select(r=>string.Join(',',new[]{r.StartLabel,r.Map,r.Mode,r.Result,r.Duration,r.Tags}.Select(Csv))));await File.WriteAllTextAsync(save.FileName,text,new UTF8Encoding(true));StatusText.Text="已导出当前筛选的全部记录。";}catch(Exception ex) {StatusText.Text=ex.Message;}
+            try {var text="时间,地图,类型,结果,时长,标签\n"+string.Join('\n',Filtered().Where(r=>r.Observation==_observationsView).Select(r=>string.Join(',',new[]{r.StartLabel,r.Map,r.Mode,r.Result,r.Duration,r.Tags}.Select(Csv))));await File.WriteAllTextAsync(save.FileName,text,new UTF8Encoding(true));Notify("records","已导出当前筛选的全部记录。");}catch(Exception ex) {Notify("records",ex.Message);}
         }));
         tools.Children.Add(ActionButton("刷新",async (_,_)=>{_records=await Task.Run(_library.All);ShowPage(0);}));advancedContent.Children.Add(tools);
         var filters=new WrapPanel();var search=new TextBox {Text=_search,Width=250,ToolTip="搜索玩家、职业、地图、标签；空格同时匹配，减号排除"};
@@ -32,11 +32,11 @@ public partial class MainWindow {
         filters.Children.Add(Choice(new[]{"全部"}.Concat(_records.Select(r=>r.Rank).Where(r=>!string.IsNullOrEmpty(r)).Distinct()).ToArray(),_rank,s=>_rank=s));
         var dateRange=new DateRangeFilter(_fromDate,_untilDate);dateRange.Changed+=(from,until)=>{_fromDate=from;_untilDate=until;};
         var favorite=new CheckBox {Content="仅收藏",IsChecked=_favorites,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),Margin=new Thickness(4,5,8,0)};filters.Children.Add(favorite);
-        filters.Children.Add(ActionButton("应用筛选",(_,_)=>{_search=search.Text;_favorites=favorite.IsChecked==true;ShowPage(0);}));advancedContent.Children.Add(filters);advancedContent.Children.Add(dateRange);
+        filters.Children.Add(ActionButton("应用筛选",(_,_)=>{_search=search.Text;_favorites=favorite.IsChecked==true;ShowPage(0);Notify("records","筛选已应用。");}));advancedContent.Children.Add(filters);advancedContent.Children.Add(dateRange);
         var scopes=new WrapPanel();
         foreach(var (label,scope) in new[]{("比赛记录",false),("回放记录",true)}) {
             var count=_records.Count(r=>r.Observation==scope);var button=ActionButton($"{label} ({count:N0})",(_,_)=>{_observationsView=scope;ShowPage(0);});
-            if(_observationsView==scope)button.Background=(Brush)FindResource("AccentBrush");scopes.Children.Add(button);
+            button.Tag=_observationsView==scope?"Selected":null;scopes.Children.Add(button);
         }
         PageContent.Children.Add(scopes);
         var rows=Filtered().Where(r=>r.Observation==_observationsView).ToList();Card($"{rows.Count:N0} 条"+(_observationsView?"回放记录":"比赛记录"),Text("双击记录查看结算、事件、分析和回放；缺失数值显示为 —。",true));
@@ -47,7 +47,7 @@ public partial class MainWindow {
     }
     private async Task OpenRecordAsync(MatchRecord record) {
         try {_bundle=await Task.Run(()=>_library.Load(record.Id));var window=new RecordDetailWindow(_bundle,_library);window.Owner=this;window.Changed+=async ()=>{_records=await Task.Run(_library.All);if(_page==0)ShowPage(0);};window.Show();}
-        catch(Exception ex) {StatusText.Text="无法打开记录："+ex.Message;}
+        catch(Exception ex) {Notify("records","无法打开记录："+ex.Message);}
     }
     private void ShowOverview() {
         var rows=Filtered();var matches=rows.Where(r=>!r.Observation&&r.Completed&&!r.Quarantined).ToArray();int wins=matches.Count(r=>r.Result=="胜利"),losses=matches.Count(r=>r.Result=="失败");
@@ -88,6 +88,7 @@ public partial class MainWindow {
     }
     private TextBlock? _loggedPlayer;
     private void ShowProfile() {
+        PageContent.Children.Add(Notice("profile"));
         _loggedPlayer=Text("",false,20);
         Card("本机已登录角色",_loggedPlayer);UpdateLoggedPlayer();
     }
@@ -98,7 +99,7 @@ public partial class MainWindow {
         _loggedPlayer.Text=string.IsNullOrWhiteSpace(player)?"未登录角色":player;
     }
     private void ShowReplay() {
-        PageContent.Children.Add(ActionButton("读取回放或战绩",OpenFile));
+        PageContent.Children.Add(ActionButton("读取回放或战绩",OpenFile));PageContent.Children.Add(Notice("files"));
         if(_bundle==null) {Card("尚未选择回放",Text("双击战绩记录或读取 JSON 后，可以播放时间轴、查看事件与地图。",true));return;}
         Card(_bundle.Match.Map,Text(_bundle.Match.StartLabel+" · "+_bundle.Match.Duration),ActionButton("打开完整回放",(_,_)=>new ReplayWindow(_bundle) {Owner=this}.Show()));
         PageContent.Children.Add(TableFactory.Create(_bundle.Match.Players,("玩家","Name"),("职业","Job"),("击杀","Kills"),("死亡","Deaths"),("助攻","Assists"),("伤害","Damage"),("承伤","Taken"),("治疗","Healing"),("推车秒数","CrystalSeconds")));

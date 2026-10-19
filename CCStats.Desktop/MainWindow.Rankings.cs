@@ -18,20 +18,20 @@ public partial class MainWindow {
         if(_exiting) {foreach(var service in _rankings)service.Dispose();return;}
         foreach(var (region,index) in RankingRegion.All.Select((r,i)=>(r,i))) {
             if(_exiting)return;
-            try {await Task.Run(()=>_rankings[index].CheckDateAsync(region with {Site=0}));}catch(Exception ex) {StatusText.Text="榜单暂未更新："+ex.Message;}
+            try {await Task.Run(()=>_rankings[index].CheckDateAsync(region with {Site=0}));}catch(Exception ex) {Notify("rankings","榜单暂未更新："+ex.Message);}
         }
     }
     private void ShowRankings() {
         var tools=new WrapPanel();var regions=new ComboBox {ItemsSource=RankingRegion.All.Select(r=>r.Name),SelectedIndex=_rankingRegion,MinWidth=150,Margin=new Thickness(0,0,10,10)};
-        regions.SelectionChanged+=(_,_)=>{_rankingRegion=regions.SelectedIndex;_shownRanking=null;UpdateRankings();};tools.Children.Add(regions);
+        regions.SelectionChanged+=(_,_)=>{Notify("rankings","");_rankingRegion=regions.SelectedIndex;_shownRanking=null;UpdateRankings();};tools.Children.Add(regions);
         tools.Children.Add(ActionButton("手动更新",async (_,_)=> {
-            if(_rankings==null)return;try {var index=_rankingRegion;await Task.Run(()=>_rankings[index].CheckDateAsync(RankingRegion.All[index] with {Site=0},true));UpdateRankings();}catch(Exception ex){StatusText.Text=ex.Message;}
+            if(_rankings==null){Notify("rankings","榜单服务正在启动，请稍后重试。");return;}var index=_rankingRegion;Notify("rankings","正在更新当前榜单…");try {await Task.Run(()=>_rankings[index].CheckDateAsync(RankingRegion.All[index] with {Site=0},true));if(index==_rankingRegion){UpdateRankings();Notify("rankings","榜单检查已完成。");}}catch(Exception ex){if(index==_rankingRegion)Notify("rankings",ex.Message);}
         }));
         tools.Children.Add(ActionButton("定位本人",(_,_)=> {
             if(_rankingGrid==null)return;var name=LocalIdentity;
             var row=_rankingGrid.Items.Cast<RankingEntry>().FirstOrDefault(e=>name.Equals(e.CharacterName+" "+e.World,StringComparison.OrdinalIgnoreCase));
-            if(row==null) {StatusText.Text="未在当前榜单找到当前登录角色。";return;}_rankingGrid.SelectedItem=row;_rankingGrid.ScrollIntoView(row);
-        }));PageContent.Children.Add(tools);
+            if(row==null) {Notify("rankings",name.Length==0?"请先登录游戏角色，再定位本人。":"未在当前榜单找到当前登录角色。");return;}_rankingGrid.SelectedItem=row;_rankingGrid.ScrollIntoView(row);Notify("rankings","已定位当前登录角色。");
+        }));PageContent.Children.Add(tools);PageContent.Children.Add(Notice("rankings"));
         _rankingText=Text("正在读取本机榜单…",true);PageContent.Children.Add(_rankingText);
         _rankingGrid=TableFactory.Create(Array.Empty<RankingEntry>(),("名次","Rank"),("完整玩家名","CharacterName"),("服务器","World"),("段位","Tier"),("阶位","Division"),("积分","Rating"),("胜场","Victories"),("名次变化","RankChange"));
         _rankingRowBase=_rankingGrid.RowStyle;_rankingIdentity=null;

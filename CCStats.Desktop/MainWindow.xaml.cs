@@ -59,7 +59,7 @@ public partial class MainWindow : Window {
             if(!_exiting&&_shownLogin!=_capture.State.LocalPlayer){_shownLogin=_capture.State.LocalPlayer;if(_page is 4 or 5)ShowPage(_page);}
             UpdateLoggedPlayer();
             if(!_exiting&&_capture.State.Profile is {} profile&&profile!=_lastStoredProfile) {
-                try {_library.SaveProfile(profile);_lastStoredProfile=profile;}catch(Exception error) when(error is IOException or UnauthorizedAccessException or LiteDB.LiteException) {StatusText.Text="个人资料暂未保存："+error.Message;}
+                try {_library.SaveProfile(profile);_lastStoredProfile=profile;}catch(Exception error) when(error is IOException or UnauthorizedAccessException or LiteDB.LiteException) {Notify("profile","个人资料暂未保存："+error.Message);}
             }
             while(_capture.TryDequeueCompleted(out var saved))if(saved!=_lastSaved) {_lastSaved=saved;_pendingObservations.Enqueue(saved);}
             if(!_busy&&_pendingObservations.TryDequeue(out var pending))await ImportAsync(pending,false);
@@ -80,27 +80,27 @@ public partial class MainWindow : Window {
         var border=new Border {CornerRadius=new CornerRadius(12),Padding=new Thickness(18),Margin=new Thickness(0,0,0,14),Child=content};border.SetResourceReference(Border.BackgroundProperty,"SurfaceBrush");PageContent.Children.Add(border);
     }
     private Button ActionButton(string title,RoutedEventHandler handler) {var b=new Button {Content=title,HorizontalAlignment=HorizontalAlignment.Left};b.Click+=handler;return b;}
-    private void SavePreferences() {try {_preferences.Save(_settingsPath);}catch(Exception ex) when(ex is IOException or UnauthorizedAccessException) {StatusText.Text="设置未能保存："+ex.Message;}}
+    private bool SavePreferences() {try {_preferences.Save(_settingsPath);return true;}catch(Exception ex) when(ex is IOException or UnauthorizedAccessException) {Notify("settings","设置未能保存："+ex.Message);return false;}}
     private async void OpenFile(object sender,RoutedEventArgs e) {
         var dialog=new OpenFileDialog {Filter="CCStats 数据 (*.json;*.db)|*.json;*.db|回放 JSON (*.json)|*.json|历史数据库 (*.db)|*.db",Title="打开战绩或回放数据",Multiselect=false};
         if(dialog.ShowDialog(this)==true)await ImportAsync(dialog.FileName);
     }
     public async Task ImportAsync(string path,bool navigate=true) {
-        if(_busy||_exiting)return;_busy=true;StatusText.Text="正在读取数据…";
+        if(_busy||_exiting)return;_busy=true;var scope=Path.GetExtension(path).Equals(".db",StringComparison.OrdinalIgnoreCase)?"records":"files";if(navigate){ShowPage(scope=="records"?0:6);Notify(scope,"正在读取数据…");}
         try {
             if(Path.GetExtension(path).Equals(".db",StringComparison.OrdinalIgnoreCase)) {
-                var imported=await Task.Run(()=>DatabaseImport.Read(path,_library,token:_operations.Token));StatusText.Text=$"已读取 {imported.Imported} 场，跳过 {imported.Skipped} 条不完整记录。";
+                var imported=await Task.Run(()=>DatabaseImport.Read(path,_library,token:_operations.Token));if(navigate)Notify(scope,$"已读取 {imported.Imported} 场，跳过 {imported.Skipped} 条不完整记录。");
             } else {
-                var bundle=await Task.Run(()=>ReplayImport.ReadAsync(path,_operations.Token));await Task.Run(()=>_library.Save(bundle));_bundle=bundle;StatusText.Text="记录已加入本机资料库，原文件保持不变。";
+                var bundle=await Task.Run(()=>ReplayImport.ReadAsync(path,_operations.Token));await Task.Run(()=>_library.Save(bundle));_bundle=bundle;if(navigate)Notify(scope,"记录已加入本机资料库，原文件保持不变。");
             }
             _preferences.Remember(path);SavePreferences();_records=await Task.Run(_library.All);
-            if(navigate)ShowPage(_bundle!=null?6:0);
-        } catch(Exception ex) {StatusText.Text="读取失败："+ex.Message;}
+            if(navigate)ShowPage(scope=="records"?0:6);
+        } catch(Exception ex) {Notify(scope,"读取失败："+ex.Message);}
         finally {_busy=false;}
     }
     private void ShowPage(int page) {
-        _page=page;PageContent.Children.Clear();PageScroll.ScrollToTop();
-        for(int i=0;i<_navigation.Count;i++){_navigation[i].SetResourceReference(Control.BackgroundProperty,i==page?"AccentBrush":"ButtonBrush");_navigation[i].SetResourceReference(Control.ForegroundProperty,i==page?"OnAccentBrush":"TextBrush");}
+        _page=page;_noticeViews.Clear();PageContent.Children.Clear();PageScroll.ScrollToTop();
+        for(int i=0;i<_navigation.Count;i++){_navigation[i].Tag=i==page?"Selected":null;}
         PageTitle.Text=Pages[page];
         switch(page) {
             case 0:ShowMatches();break;
@@ -119,7 +119,7 @@ public partial class MainWindow : Window {
         if(!_smoke)UiMotion.Enter(PageContent);
     }
     private void Window_DragOver(object sender,DragEventArgs e) {e.Effects=e.Data.GetDataPresent(DataFormats.FileDrop)?DragDropEffects.Copy:DragDropEffects.None;e.Handled=true;}
-    private async void Window_Drop(object sender,DragEventArgs e) {if(e.Data.GetData(DataFormats.FileDrop) is string[] {Length:1} paths)await ImportAsync(paths[0]);else StatusText.Text="请一次拖入一个数据文件。";}
+    private async void Window_Drop(object sender,DragEventArgs e) {if(e.Data.GetData(DataFormats.FileDrop) is string[] {Length:1} paths)await ImportAsync(paths[0]);else {ShowPage(6);Notify("files","请一次拖入一个数据文件。");}}
     private void SetupTray() {
         _tray=new System.Windows.Forms.NotifyIcon {Icon=System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath!),Text="CCStats · 后台记录",Visible=true};
         var menu=new System.Windows.Forms.ContextMenuStrip();
@@ -130,7 +130,7 @@ public partial class MainWindow : Window {
     private void MinimizeToTray() {
         _hiddenOwned.Clear();
         foreach(var window in Application.Current.Windows.Cast<Window>().Where(w=>w!=this&&w.IsVisible&&(w is ReplayWindow||w is RecordDetailWindow)).ToArray()) {_hiddenOwned.Add(window);window.Hide();}
-        ShowInTaskbar=false;Hide();StatusText.Text="";
+        ShowInTaskbar=false;Hide();
     }
     private void RestoreFromTray() {
         Show();ShowInTaskbar=true;WindowState=WindowState.Normal;
@@ -155,6 +155,7 @@ public partial class MainWindow : Window {
     }
     internal async Task RunSmokeChecksAsync(string fixture,string screenshot) {
         await StartupSplash.VerifyAsync();
+        await VerifyFeatureFeedbackAsync();
         if(_navigation.Count!=9||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动记录"))throw new InvalidOperationException("Simplified navigation or product version failed");
         ShowPage(7);
         if(PageContent.Children.OfType<Border>().Select(b=>b.Child).OfType<StackPanel>().SelectMany(p=>p.Children.OfType<TextBox>()).Any(t=>t.ToolTip?.ToString()?.Contains("统计默认本人")==true))throw new InvalidOperationException("Manual default character setting remains");
@@ -163,7 +164,7 @@ public partial class MainWindow : Window {
         ShowPage(4);var analysisTabs=PageContent.Children.OfType<TabControl>().Single();
         if(analysisTabs.Items.Count!=2)throw new InvalidOperationException("Combined analysis tabs missing");analysisTabs.SelectedIndex=1;
         ShowPage(7);if(PageContent.Children.OfType<Expander>().Single().IsExpanded)throw new InvalidOperationException("Custom colours must start collapsed");
-        await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+StatusText.Text);
+        await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+_notices.GetValueOrDefault("files"));
         if(_library.All().Count!=1||DesktopPreferences.Load(_settingsPath).RecentFiles.Count!=1)throw new InvalidOperationException("Persistence failed");
         for(int i=0;i<_navigation.Count;i++)ShowPage(i);
         SetupTray();

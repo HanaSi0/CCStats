@@ -10,7 +10,7 @@ public partial class MainWindow {
         return ActionButton("导出诊断",async (_,_)=> {
             var save=new Microsoft.Win32.SaveFileDialog {Filter="ZIP (*.zip)|*.zip",FileName="CCStats-诊断.zip"};if(save.ShowDialog(this)!=true)return;
             var temp=save.FileName+"."+Guid.NewGuid().ToString("N")+".partial";
-            try {await _capture.FlushAsync().WaitAsync(TimeSpan.FromSeconds(5));await CCStats.Core.Capture.CaptureDiagnostics.ExportAsync(_directory,temp,new {CapturedAt=DateTime.UtcNow,SoftwareVersion=typeof(MainWindow).Assembly.GetName().Version?.ToString(),SoftwareBuild=typeof(MainWindow).Module.ModuleVersionId,State=_capture.State,Layout=CCStats.Core.Capture.ClientLayout.Profile,Notes="包含记录状态、结算界面字段和记录汇总，不包含完整回放或任意内存转储。"});File.Move(temp,save.FileName,true);StatusText.Text="诊断已导出。";}catch(Exception error) {StatusText.Text="导出失败："+error.Message;}finally {if(File.Exists(temp))File.Delete(temp);}
+            try {await _capture.FlushAsync().WaitAsync(TimeSpan.FromSeconds(5));await CCStats.Core.Capture.CaptureDiagnostics.ExportAsync(_directory,temp,new {CapturedAt=DateTime.UtcNow,SoftwareVersion=typeof(MainWindow).Assembly.GetName().Version?.ToString(),SoftwareBuild=typeof(MainWindow).Module.ModuleVersionId,State=_capture.State,Layout=CCStats.Core.Capture.ClientLayout.Profile,Notes="包含记录状态、结算界面字段和记录汇总，不包含完整回放或任意内存转储。"});File.Move(temp,save.FileName,true);Notify("diagnostics","诊断已导出。");}catch(Exception error) {Notify("diagnostics","导出失败："+error.Message);}finally {if(File.Exists(temp))File.Delete(temp);}
         });
     }
     private void UpdateCaptureStatus() {
@@ -30,12 +30,13 @@ public partial class MainWindow {
         }));
         colors.Children.Add(ActionButton("重置配色",(_,_)=>{_preferences.CustomColors.Clear();SavePreferences();ApplyTheme();ShowPage(7);}));var custom=new Expander {Header="自定义颜色",Content=colors,IsExpanded=_customColorsExpanded,Margin=new Thickness(0,0,0,14)};
         custom.Expanded+=(_,_)=>_customColorsExpanded=true;custom.Collapsed+=(_,_)=>_customColorsExpanded=false;PageContent.Children.Add(custom);
-        PageContent.Children.Add(ActionButton("保存设置",(_,_)=> {_preferences.CloseBehavior=close.SelectedIndex switch {1=>"Exit",2=>"Tray",_=>"Ask"};_preferences.Theme=theme.SelectedItem as string??"深海蓝";SavePreferences();ApplyTheme();ShowPage(7);StatusText.Text="设置已保存。";}));
+        PageContent.Children.Add(ActionButton("保存设置",(_,_)=> {_preferences.CloseBehavior=close.SelectedIndex switch {1=>"Exit",2=>"Tray",_=>"Ask"};_preferences.Theme=theme.SelectedItem as string??"深海蓝";var saved=SavePreferences();ApplyTheme();ShowPage(7);if(saved)Notify("settings","设置已保存。");}));
+        PageContent.Children.Add(Notice("settings"));
         var alias=new TextBox {ToolTip="别名角色的完整姓名",MinWidth=260};var main=new TextBox {ToolTip="主角色的完整姓名",MinWidth=260};
-        Card("角色关联",Text("将不同角色归入同一身份，原始记录保持不变。",true),Text("别名角色",true),alias,Text("主角色",true),main,ActionButton("添加关联",(_,_)=>{try {_preferences.Links.Link(alias.Text,main.Text);SavePreferences();ShowPage(7);}catch(Exception ex) {StatusText.Text=ex.Message;}}));
+        Card("角色关联",Notice("links"),Text("将不同角色归入同一身份，原始记录保持不变。",true),Text("别名角色",true),alias,Text("主角色",true),main,ActionButton("添加关联",(_,_)=>{try {_preferences.Links.Link(alias.Text,main.Text);SavePreferences();ShowPage(7);}catch(Exception ex) {Notify("links",ex.Message);}}));
         foreach(var link in _preferences.Links.Aliases.ToArray())PageContent.Children.Add(ActionButton(link.Key+" → "+link.Value+"　移除",(_,_)=>{_preferences.Links.Aliases.Remove(link.Key);SavePreferences();ShowPage(7);}));
-        Card("支持与诊断",DiagnosticExportButton());
-        Card("数据目录",Text(_directory,true),ActionButton("打开数据目录",(_,_)=>{try {Process.Start(new ProcessStartInfo {FileName=_directory,UseShellExecute=true});}catch(Exception ex){StatusText.Text=ex.Message;}}));
+        Card("支持与诊断",DiagnosticExportButton(),Notice("diagnostics"));
+        Card("数据目录",Notice("directory"),Text(_directory,true),ActionButton("打开数据目录",(_,_)=>{try {Process.Start(new ProcessStartInfo {FileName=_directory,UseShellExecute=true});}catch(Exception ex){Notify("directory",ex.Message);}}));
     }
     private void ApplyTheme() {
         DesktopTheme.Apply(_preferences.Theme,_preferences.CustomColors);
