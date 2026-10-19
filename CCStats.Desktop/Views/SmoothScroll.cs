@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 namespace CCStats.Desktop.Views;
 internal static class SmoothScroll {
-    private sealed class State {public double Target;public bool Moving;public int Generation;}
+    private sealed class State {public double Target;public bool Moving,Pending;public int Generation;}
     private static readonly ConditionalWeakTable<ScrollViewer,State> States=new();
     private static readonly DependencyProperty OffsetProperty=DependencyProperty.RegisterAttached("Offset",typeof(double),typeof(SmoothScroll),new PropertyMetadata(0d,(sender,args)=>((ScrollViewer)sender).ScrollToVerticalOffset((double)args.NewValue)));
     public static void Attach(ScrollViewer viewer) {
@@ -24,18 +24,24 @@ internal static class SmoothScroll {
     internal static bool ScrollBy(ScrollViewer viewer,double amount) {
         if(viewer.ScrollableHeight<=0||amount==0)return false;
         var state=States.GetValue(viewer,_=>new State());double current=viewer.VerticalOffset;
-        var target=Math.Clamp((state.Moving?state.Target:current)+amount,0,viewer.ScrollableHeight);
-        if(Math.Abs(target-current)<.1&&!state.Moving)return false;
+        var target=Math.Clamp((state.Moving||state.Pending?state.Target:current)+amount,0,viewer.ScrollableHeight);
+        if(Math.Abs(target-current)<.1&&!state.Moving&&!state.Pending)return false;
         Stop(viewer);state.Target=target;
-        if(!UiMotion.Enabled||!SystemParameters.ClientAreaAnimation){viewer.ScrollToVerticalOffset(target);return true;}
+        if(!UiMotion.Enabled||!SystemParameters.ClientAreaAnimation){QueueOffset(viewer,state,target);return true;}
         state.Moving=true;int generation=++state.Generation;viewer.SetValue(OffsetProperty,current);
         var animation=new DoubleAnimation(current,target,TimeSpan.FromMilliseconds(190)){EasingFunction=new CubicEase{EasingMode=EasingMode.EaseOut}};
-        animation.Completed+=(_,_)=>{if(generation!=state.Generation)return;state.Moving=false;viewer.SetValue(OffsetProperty,target);viewer.BeginAnimation(OffsetProperty,null);};
+        animation.Completed+=(_,_)=>{if(generation!=state.Generation)return;state.Moving=false;viewer.SetValue(OffsetProperty,target);viewer.BeginAnimation(OffsetProperty,null);QueueOffset(viewer,state,target);};
         viewer.BeginAnimation(OffsetProperty,animation,HandoffBehavior.SnapshotAndReplace);return true;
     }
+    private static void QueueOffset(ScrollViewer viewer,State state,double target) {
+        state.Pending=true;state.Target=target;int generation=++state.Generation;
+        viewer.ScrollToVerticalOffset(target);
+        // ScrollViewer applies commands during layout, even with animations disabled.
+        _=viewer.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Loaded,new Action(()=>{if(generation==state.Generation)state.Pending=false;}));
+    }
     private static void Stop(ScrollViewer viewer) {
-        if(!States.TryGetValue(viewer,out var state)||!state.Moving)return;
-        double current=viewer.VerticalOffset;++state.Generation;state.Moving=false;viewer.SetValue(OffsetProperty,current);viewer.BeginAnimation(OffsetProperty,null);state.Target=current;
+        if(!States.TryGetValue(viewer,out var state)||(!state.Moving&&!state.Pending))return;
+        double current=viewer.VerticalOffset;++state.Generation;state.Moving=false;state.Pending=false;viewer.SetValue(OffsetProperty,current);viewer.BeginAnimation(OffsetProperty,null);state.Target=current;
     }
     internal static async Task VerifyAsync(Window owner) {
         var viewer=new ScrollViewer {Content=new Border{Height=2000},VerticalScrollBarVisibility=ScrollBarVisibility.Auto};
