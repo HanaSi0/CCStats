@@ -8,7 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>CCStats.Desktop</AssemblyName>
-    <Version>0.1.0</Version>
+    <Version Condition="'$(CCStatsEdition)' != 'China'">0.1.3</Version>
+    <Version Condition="'$(CCStatsEdition)' == 'China'">0.1.0</Version>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
@@ -32,5 +33,8 @@
     <Content Condition="'$(CCStatsEdition)' != 'China'" Include="README.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="ThirdParty/*.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Include="../LICENSE.txt" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Lumina" Version="6.5.1" />
   </ItemGroup>
 </Project>

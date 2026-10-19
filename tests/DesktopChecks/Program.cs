@@ -70,5 +70,6 @@ try {
     await NativeReaderChecks.Run(Check);
     await TimeZoneChecks.Run(Check);
     SettlementChecks.Run(Check);
+    ReplayUpgradeChecks.Run(Check);
     Console.WriteLine($"Passed {passed} standalone core/import/capture fixture checks.");
 } finally {Directory.Delete(directory,true);}

@@ -59,6 +59,7 @@ public static class ClientLayout {
         reason="position-hp-job";
         if(!float.IsFinite(x)||!float.IsFinite(y)||!float.IsFinite(z)||!float.IsFinite(heading)||MathF.Abs(x)>100000||MathF.Abs(y)>100000||MathF.Abs(z)>100000||max==0||max>10000000||hp>max||job is 0 or >100)return null;
         var result=new PlayerPosition {Player=ClientCatalog.PlayerName(name,world),X=x,Y=y,Z=z,Heading=heading,HP=hp,MaxHP=max,ClassJobId=job,StatusTimestamp=now};
+        var mana=BinaryPrimitives.ReadUInt32LittleEndian(header[0x1B4..]);var maxMana=BinaryPrimitives.ReadUInt32LittleEndian(header[0x1B8..]);if(maxMana is >0 and <=1000000&&mana<=maxMana){result.MP=mana;result.MaxMP=maxMana;}
         // Team is deliberately unknown. Relative hostility is not an Astra/Umbra identity.
         if(status.Length>=StatusBytes)for(int i=0;i<60;i++) {
             var row=status.Slice(8+i*16,16);var statusId=BinaryPrimitives.ReadUInt16LittleEndian(row);if(statusId==0)continue;

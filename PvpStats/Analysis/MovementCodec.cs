@@ -13,7 +13,8 @@ public static class MovementCodec {
         if(frames.Count>MaxFrames)throw new InvalidDataException("Too many movement frames.");
         using var raw=new MemoryStream();
         using(var w=new BinaryWriter(raw,Encoding.UTF8,true)) {
-            w.Write(0x43434D33); w.Write(frames.Count);
+            bool mana=frames.Any(f=>f.Players.Any(p=>p.MP.HasValue&&p.MaxMP.HasValue));
+            w.Write(mana?0x43434D34:0x43434D33); w.Write(frames.Count);
             var names=frames.SelectMany(f=>f.Players).SelectMany(p=>new[]{p.Player}.Concat(p.Controls.Select(s=>s.Source))).Where(s=>s.Length>0).Distinct().ToArray();
             if(names.Length>512)throw new InvalidDataException("Too many identities.");
             var indices=names.Select((s,i)=>(s,i)).ToDictionary(p=>p.s,p=>(ushort)p.i);
@@ -27,7 +28,7 @@ public static class MovementCodec {
                 w.Write((byte)f.Players.Count);
                 foreach(var p in f.Players) {
                     if(p.Controls.Count>32)throw new InvalidDataException("Too many control statuses.");
-                    w.Write(indices[p.Player]); w.Write((byte)p.Team); w.Write(p.X); w.Write(p.Z); w.Write(p.Heading); w.Write(p.HP); w.Write(p.MaxHP); w.Write((byte)p.Controls.Count);
+                    w.Write(indices[p.Player]); w.Write((byte)p.Team); w.Write(p.X); w.Write(p.Z); w.Write(p.Heading); w.Write(p.HP); w.Write(p.MaxHP);if(mana){bool known=p.MP.HasValue&&p.MaxMP.HasValue;w.Write(known);if(known){w.Write(p.MP!.Value);w.Write(p.MaxMP!.Value);}} w.Write((byte)p.Controls.Count);
                     foreach(var s in p.Controls) { w.Write(s.StatusId); w.Write(indices.GetValueOrDefault(s.Source,ushort.MaxValue)); w.Write(s.Remaining); }
                     w.Write(p.Y.HasValue);if(p.Y.HasValue)w.Write(p.Y.Value);
                     w.Write(p.ClassJobId);
@@ -52,9 +53,10 @@ public static class MovementCodec {
         while((read=zip.Read(buffer))>0) { if(raw.Length+read>RawBudget)throw new InvalidDataException("Movement payload is too large."); raw.Write(buffer,0,read); }
         raw.Position=0; using var r=new BinaryReader(raw,Encoding.UTF8);
         var magic=r.ReadInt32();
-        if(magic!=0x43434D31&&magic!=0x43434D32&&magic!=0x43434D33)throw new InvalidDataException("Unsupported movement payload.");
+        if(magic!=0x43434D31&&magic!=0x43434D32&&magic!=0x43434D33&&magic!=0x43434D34)throw new InvalidDataException("Unsupported movement payload.");
         var extended=magic>=0x43434D32;
-        var height=magic==0x43434D33;
+        var height=magic>=0x43434D33;
+        var mana=magic==0x43434D34;
         var snapshots=new Dictionary<string,PlayerPosition>();
         var count=r.ReadInt32(); if(count<0||count>MaxFrames)throw new InvalidDataException("Invalid frame count.");
         var namesCount=r.ReadUInt16(); if(namesCount>512)throw new InvalidDataException("Invalid roster count.");
@@ -67,6 +69,7 @@ public static class MovementCodec {
             var players=r.ReadByte(); if(players>10)throw new InvalidDataException("Invalid player count.");
             for(int j=0;j<players;j++) {
                 var p=new PlayerPosition { Player=Name(r.ReadUInt16()),Team=r.ReadByte(),X=r.ReadSingle(),Z=r.ReadSingle(),Heading=r.ReadSingle(),HP=r.ReadUInt32(),MaxHP=r.ReadUInt32() };
+                if(mana&&r.ReadBoolean()){p.MP=r.ReadUInt32();p.MaxMP=r.ReadUInt32();if(p.MaxMP is 0 or >1000000||p.MP>p.MaxMP)throw new InvalidDataException("Invalid mana values.");}
                 var controls=r.ReadByte(); if(controls>32)throw new InvalidDataException("Invalid status count.");
                 for(int k=0;k<controls;k++)p.Controls.Add(new() { StatusId=r.ReadUInt32(),Source=Name(r.ReadUInt16()),Remaining=r.ReadSingle() });
                 if(extended) {

@@ -85,6 +85,8 @@ public sealed class PlayerPosition {
     public float Heading { get; set; }
     public uint HP { get; set; }
     public uint MaxHP { get; set; }
+    public uint? MP { get; set; }
+    public uint? MaxMP { get; set; }
     public List<ObservedControl> Controls { get; set; } = new();
     public uint ClassJobId { get; set; }
     public DateTime StatusTimestamp { get; set; }

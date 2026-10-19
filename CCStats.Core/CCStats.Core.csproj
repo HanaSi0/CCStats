@@ -12,6 +12,7 @@
     <Compile Include="../PvpStats/Analysis/*.cs" Link="Analysis/%(Filename)%(Extension)" />
     <Compile Condition="'$(CCStatsEdition)' != 'China'" Include="../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />
     <EmbeddedResource Include="Resources/result-column-labels.json" LogicalName="CCStats.ResultColumnLabels.json" />
+    <EmbeddedResource Include="Resources/status-catalog.json" LogicalName="CCStats.StatusCatalog.json" />
     <EmbeddedResource Include="Resources/action-names.json" LogicalName="CCStats.ActionNames.json" />
     <EmbeddedResource Condition="'$(CCStatsEdition)' == 'China'" Include="Resources/china-result-labels.json" LogicalName="CCStats.ChinaResultLabels.json" />
     <EmbeddedResource Condition="'$(CCStatsEdition)' == 'China'" Include="Resources/china-worlds.json" LogicalName="CCStats.ChinaWorlds.json" />

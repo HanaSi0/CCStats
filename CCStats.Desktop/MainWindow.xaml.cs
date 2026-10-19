@@ -67,11 +67,14 @@ public partial class MainWindow : Window {
             if(!_busy&&_pendingObservations.TryDequeue(out var pending))await ImportAsync(pending,false);
         };
         _captureTimer.Start();
-        _processTimer.Tick+=(_,_)=>{if(!_smoke&&!_exiting)_capture.Poll(Path.Combine(_directory,"observations"));};
+        _processTimer.Tick+=(_,_)=>{if(!_smoke&&!_exiting){_capture.Poll(Path.Combine(_directory,"observations"));UpdateGameResources();}};
         if(!_smoke)_capture.Poll(Path.Combine(_directory,"observations"));_processTimer.Start();Closing+=OnWindowClosing;
         Loaded+=async (_,_)=>{if(!_smoke)await StartRankingsAsync();};
+        if(!_smoke)_=StatusIcons.ConfigureAsync(_directory,_preferences.GameDataPath);
         ShowPage(0);
     }
+    private DateTime _resourceProbe;private int _resourcePid;
+    private void UpdateGameResources(){if(DateTime.UtcNow-_resourceProbe<TimeSpan.FromSeconds(5))return;_resourceProbe=DateTime.UtcNow;try{int pid=ExternalGameReader.FindGameProcess();if(pid==0||(pid==_resourcePid&&StatusIcons.Error.Length==0))return;using var process=System.Diagnostics.Process.GetProcessById(pid);var folder=Path.GetDirectoryName(process.MainModule?.FileName);if(folder==null)return;_resourcePid=pid;if(_preferences.GameDataPath!=folder){_preferences.GameDataPath=folder;SavePreferences();}_=StatusIcons.ConfigureAsync(_directory,folder);}catch(Exception ex) when(ex is System.ComponentModel.Win32Exception or InvalidOperationException or ArgumentException){}}
     private static string ProductVersion=>typeof(MainWindow).Assembly.GetName().Version?.ToString(3)??"0.1.0";
     private TextBlock Text(string value,bool muted=false,double size=14) {
         var text=new TextBlock {Text=value,FontSize=size,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,10)};
@@ -163,6 +166,8 @@ public partial class MainWindow : Window {
     }
     internal async Task RunSmokeChecksAsync(string fixture,string screenshot) {
         await StartupSplash.VerifyAsync();
+        await UiMotion.VerifyAsync();
+        ReplayTeamPanel.Verify();
         await VerifyFeatureFeedbackAsync();
         await SmoothScroll.VerifyAsync(this);
         if(_navigation.Count!=(Distribution.IsChina?8:9)||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动记录"))throw new InvalidOperationException("Simplified navigation or product version failed");
@@ -177,6 +182,7 @@ public partial class MainWindow : Window {
         await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+_notices.GetValueOrDefault("files"));
         ShowPage(0);if(PageContent.Children.OfType<DataGrid>().Single().Items.Count!=1)throw new InvalidOperationException("Pending replay is missing from the match list");
         if(_library.All().Count!=1||DesktopPreferences.Load(_settingsPath).RecentFiles.Count!=1)throw new InvalidOperationException("Persistence failed");
+        ShowPage(1);if(PageContent.Children.OfType<DataGrid>().Single().Items.Count!=1)throw new InvalidOperationException("Old replay is absent from overview");
         foreach(var page in EnabledPages)ShowPage(page);
         SetupTray();
         foreach(var choice in new[]{"Tray","Exit"}) {

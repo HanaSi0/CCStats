@@ -2,11 +2,34 @@
   "version": 1,
   "dependencies": {
     "net10.0-windows7.0": {
+      "Lumina": {
+        "type": "Direct",
+        "requested": "[6.5.1, )",
+        "resolved": "6.5.1",
+        "contentHash": "NuwDFo2Ba7Eo7vT8q3cB+K/tSrPDe4U/u3sKVR1zLRPZpRGUxY0NkTQ3aY8DisQ7AL7hm39vOnNSg7q+RtU8eg==",
+        "dependencies": {
+          "BCnEncoder.Net": "2.2.1",
+          "Microsoft.Extensions.ObjectPool": "8.0.7"
+        }
+      },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
         "requested": "[10.0.13, )",
         "resolved": "10.0.13",
         "contentHash": "40yrBMsLEcjixBR4G+FiUaBPvxXIPSKJ2OgSrbOZcmSDBda4Sb0k7BWrfDpIvn3IvvDzwOL/tEPa6gDQfh6aRw=="
+      },
+      "BCnEncoder.Net": {
+        "type": "Transitive",
+        "resolved": "2.2.1",
+        "contentHash": "tI5+/OQo0kciLqWrViRjpOH+IL3FjexYnoWZajiGV41g/EM9CGbWsxsPzBDmpoxNkrV9uox/EtIhCIi9chBSFw==",
+        "dependencies": {
+          "CommunityToolkit.HighPerformance": "8.4.0"
+        }
+      },
+      "CommunityToolkit.HighPerformance": {
+        "type": "Transitive",
+        "resolved": "8.4.0",
+        "contentHash": "flxspiBs0G/0GMp7IK2J2ijV9bTG6hEwFc/z6ekHqB6nwRJ4Ry2yLdx+TkbCUYFCl4XhABkAwomeKbT6zM2Zlg=="
       },
       "HtmlAgilityPack": {
         "type": "Transitive",
@@ -17,6 +40,11 @@
         "type": "Transitive",
         "resolved": "5.0.16",
         "contentHash": "DMUYdRlgNbrSlyWzdQ4GqW934ntNHBGWMTNQlOL4hWz8WnveY6V9ZGo2ntPrSATW7kat8v5VoCXGSzToPiwZWw=="
+      },
+      "Microsoft.Extensions.ObjectPool": {
+        "type": "Transitive",
+        "resolved": "8.0.7",
+        "contentHash": "2yLweyqmpuuFSRo+I3sLHMxmnAgNcI537kBJiyv49U2ZEqo00jZcG8lrnD8uCiOJp9IklYyTZULtbsXoFVzsjQ=="
       },
       "ccstats.core": {
         "type": "Project",

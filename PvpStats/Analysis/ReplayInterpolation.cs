@@ -20,7 +20,7 @@ public static class ReplayInterpolation {
             result.Players.Add(new PlayerPosition { Player=a.Player,Team=a.Team,X=float.Lerp(a.X,b.X,alpha),Z=float.Lerp(a.Z,b.Z,alpha),
                 Y=a.Y.HasValue&&b.Y.HasValue?float.Lerp(a.Y.Value,b.Y.Value,alpha):a.Y,
                 Heading=a.Heading+MathF.IEEERemainder(b.Heading-a.Heading,MathF.Tau)*alpha,
-                HP=a.HP,MaxHP=a.MaxHP,ClassJobId=a.ClassJobId,Controls=a.Controls,Statuses=a.Statuses,StatusTimestamp=a.StatusTimestamp });
+                HP=a.HP,MaxHP=a.MaxHP,MP=a.MP,MaxMP=a.MaxMP,ClassJobId=a.ClassJobId,Controls=a.Controls,Statuses=a.Statuses,StatusTimestamp=a.StatusTimestamp });
         }
         if(first.Crystal is {} c&&next.Crystal is {} d&&CanBlend(c.X,c.Z,d.X,d.Z,gap,8))result.Crystal=new() {
             X=float.Lerp(c.X,d.X,alpha),Z=float.Lerp(c.Z,d.Z,alpha),Y=c.Y.HasValue&&d.Y.HasValue?float.Lerp(c.Y.Value,d.Y.Value,alpha):c.Y };

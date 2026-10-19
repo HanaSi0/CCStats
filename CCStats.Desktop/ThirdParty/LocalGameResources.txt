@@ -1,0 +1,9 @@
+Status names and icon IDs: xivapi/ffxiv-datamining, pinned commit 76d22160d687b0e0318071a098ab9eb9d531605f, csv/en/Status.csv.
+Source SHA-256 is recorded in CCStats.Core/Resources/status-catalog.json.
+Status artwork is read from the user's installed game using Lumina; no game textures are bundled.
+FINAL FANTASY XIV names and artwork are copyright SQUARE ENIX CO., LTD.
+
+Local resource reader: Lumina 6.5.1 (WTFPL; full license included).
+Texture decoder: BCnEncoder.Net 2.2.1 (MIT).
+Supporting libraries: Microsoft.Extensions.ObjectPool 8.0.7 and CommunityToolkit.HighPerformance 8.4.0 (MIT).
+No game resource files are modified.

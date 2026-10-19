@@ -5,6 +5,8 @@ namespace CCStats.Core;
 public sealed class DesktopPreferences {
     public Dictionary<string,string> CustomColors {get;set;}=new();
     public string CloseBehavior {get;set;}="Ask";
+    public bool ReduceMotion {get;set;}
+    public string GameDataPath {get;set;}="";
     public bool AutoRecord {get;set;}=true;
     public string Theme {get;set;}="深海蓝";
     public bool AutoDetectGame {get;set;}=true;

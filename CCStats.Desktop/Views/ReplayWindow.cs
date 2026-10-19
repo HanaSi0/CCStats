@@ -26,7 +26,7 @@ internal sealed class ReplayWindow : Window {
     private readonly Slider _time=new() {Minimum=0,Margin=new Thickness(0,2,0,2),SmallChange=1d/30,LargeChange=5,IsMoveToPointEnabled=true,ToolTip="点击跳转；拖动定位；方向键逐帧，PageUp / PageDown 跳转 5 秒"};
     private readonly TextBlock _info=new() {Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush")};
     private readonly TextBlock _progress=new() {Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),HorizontalAlignment=HorizontalAlignment.Center,Margin=new Thickness(0,8,0,8)};
-    private readonly StackPanel _left=new(),_right=new();
+    private readonly ReplayTeamPanel _left=new(1),_right=new(2);
     private readonly Grid _canvas=new() {Background=DesktopTheme.Brush("InputBrush"),ClipToBounds=true};
     private readonly DispatcherTimer _timer=new() {Interval=TimeSpan.FromMilliseconds(33)};
     private readonly Stopwatch _clock=Stopwatch.StartNew();
@@ -68,7 +68,7 @@ internal sealed class ReplayWindow : Window {
         _canvas.MouseMove+=(_,e)=>{if(_canvas.IsMouseCaptured){var p=e.GetPosition(_canvas);_camera.Drag(new((float)p.X,(float)p.Y),SizeVector());_lastMouse=p;ApplyCamera();}};
         _canvas.MouseUp+=(_,_)=>{_camera.EndDrag();_canvas.ReleaseMouseCapture();};_canvas.MouseWheel+=(_,e)=>{var p=e.GetPosition(_canvas);_camera.Zoom(e.Delta/120f,new((float)p.X,(float)p.Y),SizeVector());};_canvas.SizeChanged+=(_,_)=>ApplyCamera();
         IsVisibleChanged+=(_,_)=>{if(_closed)return;if(IsVisible&&_ready.Task.IsCompletedSuccessfully){_lastClock=_clock.Elapsed.TotalSeconds;_timer.Start();}else _timer.Stop();};
-        root.Children.Add(body);Content=root;_timer.Tick+=async (_,_)=>await TickAsync();Closed+=(_,_)=>{_closed=true;_timer.Stop();_mapVisual.Content=null;_dynamic.Content=null;};Loaded+=async (_,_)=>await LoadAsync();
+        root.Children.Add(body);Content=root;Loaded+=(_,_)=>UiMotion.Enter(root);_timer.Tick+=async (_,_)=>await TickAsync();Closed+=(_,_)=>{_closed=true;_timer.Stop();_mapVisual.Content=null;_dynamic.Content=null;};Loaded+=async (_,_)=>await LoadAsync();
     }
     internal async Task VerifyAsync(string screenshot) {
         await _ready.Task.WaitAsync(TimeSpan.FromSeconds(40));
@@ -134,7 +134,7 @@ internal sealed class ReplayWindow : Window {
         try {
             var now=_origin.AddSeconds(seconds);var frame=ReplayInterpolation.Sample(_bundle.Data,now);
             _progress.Text=frame==null||frame.AstraProgress<0||frame.UmbraProgress<0||(_bundle.Match.Observation&&!_bundle.Data.DirectorObserved)?"暂无该时刻的完整记录":$"星极队 {frame.AstraProgress/10f:F1}%　　◆　　灵极队 {frame.UmbraProgress/10f:F1}%";
-            if(Math.Abs(seconds-_lastPanels)>=.2||!_playing) {DrawTeam(_left,frame,1,now);DrawTeam(_right,frame,2,now);_lastPanels=seconds;}
+            if(Math.Abs(seconds-_lastPanels)>=.2||!_playing) {_left.Update(frame,now);_right.Update(frame,now);_lastPanels=seconds;}
             if(frame?.Players.Count is null or 0)_progress.Text="该时刻没有角色位置记录";
             if(_threeD) {var effects=_effects;var trail=_trail;var clip=_clip;
                 var result=await Task.Run(()=> {
@@ -145,18 +145,6 @@ internal sealed class ReplayWindow : Window {
                 });var model=result.Model;_renderWarning=result.Warning;if(!_closed)_dynamic.Content=model;}
             _overlay.InvalidateVisual();
         } catch(Exception ex){_info.Text="本帧未显示："+ex.Message;}finally{_busy=false;}
-    }
-    private static void DrawTeam(StackPanel panel,MovementFrame? frame,int team,DateTime now) {
-        panel.Children.Clear();panel.Children.Add(new TextBlock {Text=team==1?"星极队":"灵极队",Foreground=team==1?Brushes.DeepSkyBlue:Brushes.Coral,FontSize=18,Margin=new Thickness(8)});
-        var players=frame?.Players.Where(p=>p.Team==team||(team==1&&p.Team==0)).ToArray()??Array.Empty<PlayerPosition>();
-        foreach(var p in players) {
-            var card=new StackPanel {Margin=new Thickness(6,5,6,5)};
-            card.Children.Add(new TextBlock {Text=JobNames.Name(p.ClassJobId)+" · "+p.Player,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),TextWrapping=TextWrapping.Wrap});
-            card.Children.Add(new ProgressBar {Minimum=0,Maximum=Math.Max(1,p.MaxHP),Value=p.HP,Height=10,Margin=new Thickness(0,5,0,2)});
-            card.Children.Add(new TextBlock {Text=$"{p.HP:N0}/{p.MaxHP:N0}"+(p.Team==0?" · 队伍未知":""),Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),FontSize=11});
-            var buffs=p.Statuses.Select(s=>(Status:s,Remaining:s.Remaining-(now-p.StatusTimestamp).TotalSeconds)).Where(x=>x.Status.Remaining<=0||x.Remaining>0).Select(x=>ChineseText.StatusName(x.Status.Id,$"状态 {x.Status.Id}")+(x.Status.Remaining>0?$" {Math.Ceiling(x.Remaining):0}":""));
-            card.Children.Add(new TextBlock {Text=string.Join(" · ",buffs),Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),FontSize=11,TextWrapping=TextWrapping.Wrap});panel.Children.Add(card);
-        }
     }
     private sealed class Overlay(ReplayWindow owner):FrameworkElement {
         protected override void OnRender(DrawingContext dc) {

@@ -23,6 +23,8 @@ public partial class MainWindow {
         Card("关闭窗口时",close,Text("最小化到托盘后仍会读取游戏并写入记录；右下角托盘图标可重新打开窗口或退出。",true));
         theme.SelectionChanged+=(_,_)=>{if(theme.SelectedItem is string selected){_preferences.Theme=selected;SavePreferences();ApplyTheme();}};
         Card("颜色主题",theme);
+        var reduced=new CheckBox {Content="减少动画",IsChecked=_preferences.ReduceMotion};reduced.SetResourceReference(Control.ForegroundProperty,"TextBrush");reduced.Checked+=(_,_)=>{_preferences.ReduceMotion=true;SavePreferences();UiMotion.Enabled=false;};reduced.Unchecked+=(_,_)=>{_preferences.ReduceMotion=false;SavePreferences();UiMotion.Enabled=!_smoke;};Card("界面动效",reduced,Text("页面采用轻量渐入、分层位移和柔和缩放；同时遵循系统动画设置。",true));
+        Card("状态图标",Text(StatusIcons.Error.Length==0?"已连接本机游戏资源，图标会缓存供回放使用。":"启动游戏后会自动定位本机资源，无需开始比赛；图标读取后会保存在本机。",true));
         var colors=new WrapPanel();
         foreach(var (label,key) in new[]{("背景","BackgroundBrush"),("面板","SurfaceBrush"),("按钮","ButtonBrush"),("强调","AccentBrush"),("正文","TextBrush"),("次要文字","MutedBrush"),("悬停","HoverBrush"),("选中","SelectionBrush"),("边框","BorderBrush"),("输入区","InputBrush")})colors.Children.Add(ActionButton(label+"颜色",(_,_)=> {
             var current=((SolidColorBrush)FindResource(key)).Color;using var dialog=new System.Windows.Forms.ColorDialog {FullOpen=true,Color=System.Drawing.Color.FromArgb(current.R,current.G,current.B)};
@@ -39,6 +41,7 @@ public partial class MainWindow {
         Card("数据目录",Notice("directory"),Text(_directory,true),ActionButton("打开数据目录",(_,_)=>{try {Process.Start(new ProcessStartInfo {FileName=_directory,UseShellExecute=true});}catch(Exception ex){Notify("directory",ex.Message);}}));
     }
     private void ApplyTheme() {
+        UiMotion.Enabled=!_smoke&&!_preferences.ReduceMotion;
         DesktopTheme.Apply(_preferences.Theme,_preferences.CustomColors);
         SetResourceReference(BackgroundProperty,"BackgroundBrush");
     }
