@@ -3,6 +3,7 @@ namespace CCStats.Core.Capture;
 
 /// <summary>Supplemental data read in the same sampling cycle. Never implies packet completeness.</summary>
 public sealed class ObservationBatch {
+    public Dictionary<string,string> ChannelStatus {get;}=new();
     public string GameVersion {get;set;}="";
     public string LocalPlayer {get;set;}="";
     public PlayerPvpProfile? Profile {get;set;}

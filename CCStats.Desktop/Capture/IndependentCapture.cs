@@ -3,7 +3,7 @@ using CCStats.Core.Capture;
 using PvpStats.Analysis;
 using CCStats.Core.Library;
 namespace CCStats.Desktop.Capture;
-internal sealed record CaptureState(bool Connected,bool Recording,string Message,uint Territory=0,int Frames=0,string[]? Players=null,string? SavedPath=null,PlayerPvpProfile? Profile=null,string? DiagnosticError=null);
+internal sealed record CaptureState(bool Connected,bool Recording,string Message,uint Territory=0,int Frames=0,string[]? Players=null,string? SavedPath=null,PlayerPvpProfile? Profile=null,string? DiagnosticError=null,string GameVersion="",IReadOnlyDictionary<string,string>? ChannelStatus=null);
 internal sealed class IndependentCapture {
     private readonly Func<IObservedGameSource?> _factory;
     public IndependentCapture(Func<IObservedGameSource?> factory)=>_factory=factory;
@@ -38,7 +38,7 @@ internal sealed class IndependentCapture {
                     if(request&&frame.Players.Count>0&&territory>0) {writer??=new ObservationWriter(directory,territory);writer.Append(territory,frame,game.Telemetry);}
                     if(frame.Timestamp-lastPublished>=TimeSpan.FromMilliseconds(200)) {
                         lastPublished=frame.Timestamp;
-                        State=new(true,writer!=null,$"PID {game.ProcessId} · 目标采样 30 Hz · 状态 5 Hz"+(game.Telemetry is {} telemetry?$" · 队伍 {(telemetry.DirectorAvailable?"已读取":"未确认")} · 水晶 {(frame.Crystal!=null?"已读取":"未观察")} · 事件槽 {(telemetry.EffectsPolled?"读取中":"未确认")}":""),territory,writer?.Frames??0,frame.Players.Select(p=>$"{p.Player}　职业 {JobNames.Name(p.ClassJobId)}　HP {p.HP:N0}/{p.MaxHP:N0}").ToArray(),saved,game.Telemetry?.Profile,diagnosticError);
+                        State=new(true,writer!=null,$"PID {game.ProcessId} · 目标采样 30 Hz · 状态 5 Hz"+(game.Telemetry is {} telemetry?$" · 队伍 {(telemetry.DirectorAvailable?"已读取":"未确认")} · 水晶 {(frame.Crystal!=null?"已读取":"未观察")} · 事件槽 {(telemetry.EffectsPolled?"读取中":"未确认")}":""),territory,writer?.Frames??0,frame.Players.Select(p=>$"{p.Player}　职业 {JobNames.Name(p.ClassJobId)}　HP {p.HP:N0}/{p.MaxHP:N0}").ToArray(),saved,game.Telemetry?.Profile,diagnosticError,game.Telemetry?.GameVersion??"",game.Telemetry?.ChannelStatus);
                     }
                 } while(await timer.WaitForNextTickAsync(token));
             } catch(OperationCanceledException) when(token.IsCancellationRequested) {State=State with {Message="已暂停采集。"};}

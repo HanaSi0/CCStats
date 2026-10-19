@@ -8,7 +8,7 @@ public static class CaptureDiagnostics {
         var name="Settlement-"+DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff")+"-"+Guid.NewGuid().ToString("N")[..8]+".json";
         var path=Path.Combine(directory,name);var temp=path+".partial";
         try {
-            File.WriteAllText(temp,JsonSerializer.Serialize(new {ClientLayout.Profile,batch.GameVersion,Territory=territory,batch.LocalPlayer,batch.DirectorAvailable,batch.EffectsPolled,Panels=batch.SettlementPanels}));File.Move(temp,path);
+            File.WriteAllText(temp,JsonSerializer.Serialize(new {ClientLayout.Profile,batch.GameVersion,Territory=territory,batch.LocalPlayer,batch.DirectorAvailable,batch.EffectsPolled,batch.ChannelStatus,Panels=batch.SettlementPanels}));File.Move(temp,path);
             // Keep diagnostics bounded independently of user-owned recordings.
             foreach(var old in Directory.EnumerateFiles(directory,"Settlement-*.json").OrderByDescending(File.GetLastWriteTimeUtc).Skip(64))File.Delete(old);
         }finally {if(File.Exists(temp))File.Delete(temp);}

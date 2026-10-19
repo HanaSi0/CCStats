@@ -58,7 +58,9 @@ jobs:
       - name: Package manually requested test build
         if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
         shell: pwsh
-        run: Compress-Archive -Path artifacts/internal-desktop/* -DestinationPath artifacts/CCStats-Desktop-internal.zip
+        run: |
+          @{ Commit = '${{ github.sha }}'; BuiltAtUtc = [DateTime]::UtcNow.ToString('O'); Kind = 'Internal sampling build'; WindowsChecks = (Get-Content artifacts/desktop-validation.json | ConvertFrom-Json) } | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 artifacts/internal-desktop/build-info.json
+          Compress-Archive -Path artifacts/internal-desktop/* -DestinationPath artifacts/CCStats-Desktop-internal.zip
       - uses: actions/upload-artifact@v4
         if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
         with:

@@ -13,7 +13,8 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     private readonly Process _process;
     private readonly SafeProcessHandle _handle;
     private readonly long _objects,_gameMain,_eventFramework,_profileAddress,_atkStage;
-    private readonly string _version;
+    private readonly string _version="";
+    private string _directorStatus="尚未读取",_profileStatus="尚未读取",_uiStatus="尚未读取";
     private readonly byte[] _table=new byte[ClientLayout.ObjectSlots*8],_header=new byte[ClientLayout.HeaderBytes],_statuses=new byte[ClientLayout.StatusBytes],_world=new byte[2],_territory=new byte[4];
     private readonly byte[] _pointer=new byte[8],_nameId=new byte[4],_cast=new byte[ClientLayout.CastBytes],_effects=new byte[ClientLayout.EffectBytes],_roster=new byte[ClientLayout.DirectorPlayerBytes*10],_progress=new byte[ClientLayout.DirectorProgressBytes],_directorType=new byte[1],_mapStates=new byte[0x608];
     private readonly Dictionary<uint,(ushort World,DateTime At,List<ReplayBuff> Statuses,List<ControlSource> Controls)> _cache=new();
@@ -61,7 +62,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             try {_eventFramework=Resolve(ClientLayout.EventFrameworkSignature);}catch(InvalidDataException) {_eventFramework=0;}
             try {_profileAddress=Resolve(ClientLayout.PvpProfileSignature);}catch(InvalidDataException) {_profileAddress=0;}
             try {_atkStage=Resolve(ClientLayout.AtkStageSignature);}catch(InvalidDataException) {_atkStage=0;}
-        } catch {_handle.Dispose();_process.Dispose();throw;}
+        } catch(Exception error) {_handle.Dispose();_process.Dispose();if(_version.Length>0)throw new InvalidDataException($"客户端 {_version}：{error.Message}",error);throw;}
     }
     private bool Read(long address,byte[] buffer)=>address>0x10000&&address<0x0000800000000000-buffer.Length&&ReadProcessMemory(_handle,(nint)address,buffer,buffer.Length,out var size)&&size==(nuint)buffer.Length;
     private long Pointer(long address)=>Read(address,_pointer)?BinaryPrimitives.ReadInt64LittleEndian(_pointer):0;
@@ -132,20 +133,30 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             _lastProfileRead=now;
             if(Read(_profileAddress,_profileBytes)&&PlayerPvpProfile.Decode(_profileBytes,batch.LocalPlayer,now) is {} profile) {
                 if(_profile==null||profile with {ObservedAt=_profile.ObservedAt}!=_profile)_profile=profile;
-            } else _profile=null;
+                _profileStatus="已校验个人资料";
+            } else {_profile=null;_profileStatus=_profileAddress==0?"资料签名未匹配":_profileBytes[0]==0?"资料尚未加载":"资料不可读或校验失败";}
         }
         batch.Profile=_profile;
         if(arena)_lastArenaSeen=now;
         if(now-_lastArenaSeen<TimeSpan.FromSeconds(60)&&now-_lastUiRead>=TimeSpan.FromSeconds(2)) {_lastUiRead=now;ReadResultPanels(now,batch);}
+        batch.ChannelStatus["director"]=_directorStatus;batch.ChannelStatus["profile"]=_profileStatus;batch.ChannelStatus["resultPanel"]=_uiStatus;
+        batch.ChannelStatus["loadedActors"]=actors.Count.ToString();batch.ChannelStatus["capturedPlayers"]=frame.Players.Count.ToString();batch.ChannelStatus["newEffects"]=batch.Effects.Count.ToString();
         if(_cache.Count>1000)_cache.Clear();return (territory,frame);
     }
     private void ReadDirector(ObservationBatch batch) {
         _lastProgress=null;_teams.Clear();
+        if(_eventFramework==0) {_directorStatus="事件框架签名未匹配";return;}
         long framework=Pointer(_eventFramework);long director=framework>0?Pointer(framework+ClientLayout.ActiveDirectorOffset):0;
         if(director!=_lastDirector) {_mapEffects.Clear();_lastDirector=director;}
-        if(director==0||!Read(director+ClientLayout.DirectorTypeOffset,_directorType)||_directorType[0]!=5)return;
+        if(director==0) {_directorStatus="未加载副本控制器";return;}
+        if(!Read(director+ClientLayout.DirectorTypeOffset,_directorType)) {_directorStatus="副本类型不可读";return;}
+        if(_directorType[0]!=5) {_directorStatus=$"当前不是水晶冲突控制器（类型 {_directorType[0]}）";return;}
         long roster=Pointer(director+ClientLayout.DirectorPlayerPointerOffset);
-        if(!Read(roster,_roster)||DirectorDecoder.Roster(_roster) is not {} players||!Read(director+ClientLayout.DirectorProgressOffset,_progress)||DirectorDecoder.Progress(_progress) is not {} progress)return;
+        if(!Read(roster,_roster)) {_directorStatus="参赛名单不可读";return;}
+        if(DirectorDecoder.Roster(_roster) is not {} players) {_directorStatus="参赛名单校验失败";return;}
+        if(!Read(director+ClientLayout.DirectorProgressOffset,_progress)) {_directorStatus="推进状态不可读";return;}
+        if(DirectorDecoder.Progress(_progress) is not {} progress) {_directorStatus="推进状态范围校验失败";return;}
+        _directorStatus=$"已校验 {players.Count} 名参赛者和推进状态";
         _teams=players.ToDictionary(p=>p.EntityId);_lastProgress=progress;batch.DirectorAvailable=true;
         // Native managed map-effect state persists after the activating event, including bridge timelines.
         if(Read(director+0xDE0,_mapStates)) {
@@ -169,14 +180,16 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     }
     private void ReadResultPanels(DateTime now,ObservationBatch batch) {
         long stage=Pointer(_atkStage),manager=stage>0?Pointer(stage+0x20):0;
-        if(manager==0||!Read(manager+0x6900,_units))return;
-        int count=BinaryPrimitives.ReadUInt16LittleEndian(_units.AsSpan(0x808));if(count>256)return;
+        if(manager==0||!Read(manager+0x6900,_units)) {_uiStatus=_atkStage==0?"界面签名未匹配":"界面列表尚不可读";return;}
+        int count=BinaryPrimitives.ReadUInt16LittleEndian(_units.AsSpan(0x808));if(count>256) {_uiStatus="界面列表数量校验失败";return;}
+        _uiStatus="尚未打开结果窗口";
         for(int i=0;i<count;i++) {
             long unit=BinaryPrimitives.ReadInt64LittleEndian(_units.AsSpan(8+i*8));if(!Read(unit,_unit))continue;
             var nameBytes=_unit.AsSpan(8,32);int end=nameBytes.IndexOf((byte)0);if(end<1)continue;
             var name=System.Text.Encoding.ASCII.GetString(nameBytes[..end]);
             if(!SettlementTextProbe.IsResultPanel(name))continue;
             if((U(_unit,0x198)&(2u<<20))==0)continue;
+            _uiStatus="已检测到结果窗口 "+name;
             int length=BinaryPrimitives.ReadUInt16LittleEndian(_unit.AsSpan(0x1E2));if(length>2048)continue;
             long address=BinaryPrimitives.ReadInt64LittleEndian(_unit.AsSpan(0x178));var bytes=new byte[length*16];if(length>0&&!Read(address,bytes))continue;
             var values=ClientUiDecoder.Decode(bytes,length,(pointer,wide)=> {
@@ -185,6 +198,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
                 int n8=Array.IndexOf(text,(byte)0);return System.Text.Encoding.UTF8.GetString(text,0,n8<0?text.Length:n8);
             });
             var texts=SettlementTextProbe.Read(unit,(at,size)=>{var data=new byte[size];return Read(at,data)?data:null;});
+            _uiStatus=$"{name}：{values.Count} 个基本字段 / {texts.Count} 条文本";
             if(values.Count==0&&texts.Count==0)continue;
             var hash=Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(new{Values=values,TextNodes=texts})));
             if(_panelHashes.GetValueOrDefault(name)==hash)continue;_panelHashes[name]=hash;

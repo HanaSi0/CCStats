@@ -79,6 +79,7 @@ internal static class CaptureAdaptationChecks {
             for(int i=0;i<80&&capture.State.Frames<3;i++)await Task.Delay(25);
             await capture.StopAsync();var automatic=await ReplayImport.ReadAsync(capture.State.SavedPath!);
             check(automatic.Data.Effects.Count==automatic.Data.Frames.Count&&automatic.Data.DirectorObserved&&automatic.Data.Frames[0].Players[0].Team==2,"automatic background capture consumes supplemental source channels in the same cycle as movement");
+            check(capture.State.GameVersion=="test-build"&&capture.State.ChannelStatus?["director"]=="ok","diagnostics retain the client build and individual channel state after capture stops");
             var zip=Path.Combine(directory,"diagnostics.zip");await CaptureDiagnostics.ExportAsync(directory,zip,new {State="fixture"});
             using(var archive=System.IO.Compression.ZipFile.OpenRead(zip))check(archive.Entries.Count==2&&archive.Entries.Any(e=>e.FullName=="status.json"),"diagnostic export includes bounded settlement fields and status without recording arbitrary memory");
         } finally {Directory.Delete(directory,true);}
@@ -87,7 +88,7 @@ internal static class CaptureAdaptationChecks {
         public int ProcessId=>1;
         public ObservationBatch? Telemetry {get;private set;}
         public (uint Territory,MovementFrame Frame) Sample() {
-            var now=DateTime.UtcNow;Telemetry=new(){DirectorAvailable=true,EffectsPolled=true};Telemetry.Effects.Add(new(){Timestamp=now,ActionId=29230,Actor="Own",Target="Other",Type=3,Amount=100});
+            var now=DateTime.UtcNow;Telemetry=new(){GameVersion="test-build",DirectorAvailable=true,EffectsPolled=true};Telemetry.ChannelStatus["director"]="ok";Telemetry.Effects.Add(new(){Timestamp=now,ActionId=29230,Actor="Own",Target="Other",Type=3,Amount=100});
             return (1034,new(){Timestamp=now,Players=new(){new(){Player="Own",Team=2,ClassJobId=24,HP=100,MaxHP=100}}});
         }
         public void Dispose() {}
