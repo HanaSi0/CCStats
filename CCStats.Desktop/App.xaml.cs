@@ -17,6 +17,7 @@ public partial class App : Application {
         var temp=output!=null?Path.Combine(Path.GetTempPath(),"CCStats-Desktop-Smoke-"+Guid.NewGuid().ToString("N")):null;
         UiMotion.Enabled=output==null;
         EventManager.RegisterClassHandler(typeof(TabControl),Selector.SelectionChangedEvent,new SelectionChangedEventHandler((sender,args)=>{if(sender is TabControl tabs&&args.Source==tabs&&tabs.SelectedContent is FrameworkElement content)UiMotion.Enter(content);}));
+        EventManager.RegisterClassHandler(typeof(ScrollViewer),FrameworkElement.LoadedEvent,new RoutedEventHandler((sender,_)=>SmoothScroll.Attach((ScrollViewer)sender)));
         StartupSplash? splash=null;MainWindow window;
         try {
             if(output==null){splash=new StartupSplash();splash.Show();await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);}

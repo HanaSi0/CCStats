@@ -36,11 +36,14 @@ internal sealed class ReplayWindow : Window {
     private double _seconds,_speed=1,_lastClock,_rendered=-1;
     private Point _lastMouse;
     private BitmapImage? _mapImage;
+    private double _lastPanels=double.NegativeInfinity;private string _renderWarning="",_mapWarning="";
     public ReplayWindow(ReplayBundle bundle,double startSeconds=0) {
         WindowCaption.Attach(this);
         _bundle=bundle;_origin=bundle.Match.StartUtc;
         _duration=Math.Max(1,bundle.Match.DurationSeconds>0?bundle.Match.DurationSeconds:bundle.Data.Frames.LastOrDefault() is {} last?(last.Timestamp-_origin).TotalSeconds:1);
         _seconds=Math.Clamp(startSeconds,0,_duration);
+        // Older files can start well before their first valid position sample.
+        if(startSeconds==0&&bundle.Data.Frames.FirstOrDefault(f=>f.Players.Count>0) is {} first)_seconds=Math.Clamp((first.Timestamp-_origin).TotalSeconds,0,_duration);
         Title="地图回放 · "+bundle.Match.Map;Width=1450;Height=920;MinWidth=1000;MinHeight=680;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(12)};var top=new StackPanel();var actions=new WrapPanel();
         Button Button(string text,Action click) {var b=new Button {Content=text};b.Click+=(_,_)=>click();return b;}
@@ -70,6 +73,7 @@ internal sealed class ReplayWindow : Window {
     internal async Task VerifyAsync(string screenshot) {
         await _ready.Task.WaitAsync(TimeSpan.FromSeconds(40));
         if(_bundle.Data.DirectorObserved&&_progress.Text.StartsWith("暂无",StringComparison.Ordinal))throw new InvalidOperationException("Observed director progress is incorrectly hidden");
+        if(ReplayInterpolation.Sample(_bundle.Data,_origin.AddSeconds(_seconds))?.Players.Count>0&&(_dynamic.Content==null||_dynamic.Content.Bounds.IsEmpty))throw new InvalidOperationException("Recorded characters have no visible dynamic geometry");
         if(_mapVisual.Content==null||_viewport.Camera==null)throw new InvalidOperationException("3D map or camera missing");
         _time.ApplyTemplate();UpdateLayout();var savedSeconds=_seconds;_playing=true;_resumeAfterScrub=true;_scrubbing=true;
         Seek(new Point(_time.ActualWidth/2,_time.ActualHeight/2));
@@ -91,14 +95,17 @@ internal sealed class ReplayWindow : Window {
     private async Task LoadAsync() {
         try {
             if(ReplayMapMesh.MapKey(_bundle.Match.Territory) is {} key) {
-                _mesh=await Task.Run(()=>ReplayMapMesh.LoadEmbedded(_bundle.Match.Territory));var model=await Task.Run(()=>MeshVisuals.StaticMap(_mesh));if(_closed)return;_mapVisual.Content=model;
-                _mapImage=new BitmapImage(new Uri("pack://application:,,,/Assets/Maps/"+key+".png"));
+                try {var cached=await ReplayMapCache.LoadAsync(_bundle.Match.Territory);_mesh=cached.Mesh;if(_closed)return;_mapVisual.Content=cached.Model;}
+                catch(Exception error) when(error is not OutOfMemoryException){_mapWarning=" · 地图模型暂不可用："+error.Message;}
+                try {_mapImage=new BitmapImage(new Uri("pack://application:,,,/Assets/Maps/"+key+".png"));}
+                catch(Exception error) when(error is not OutOfMemoryException){_mapWarning+=" · 平面地图暂不可用："+error.Message;}
             }
             ResetCamera();_lastClock=_clock.Elapsed.TotalSeconds;if(IsVisible)_timer.Start();await TickAsync();_ready.TrySetResult();
         } catch(Exception ex){_info.Text="地图读取失败："+ex.Message;_ready.TrySetException(ex);}
     }
     private void ResetCamera() {
-        var target=_mesh==null?NVector.Zero:(_mesh.Min+_mesh.Max)/2;target.Y=_mesh?.EstimatedHeight(target.X,target.Z)??0;
+        var players=ReplayInterpolation.Sample(_bundle.Data,_origin.AddSeconds(_seconds))?.Players;
+        var target=_mesh==null&&players?.Count>0?new NVector(players.Average(p=>p.X),players.Average(p=>p.Y??0),players.Average(p=>p.Z)):_mesh==null?NVector.Zero:(_mesh.Min+_mesh.Max)/2;target.Y=_mesh?.EstimatedHeight(target.X,target.Z)??0;
         var extent=_mesh==null?150:Math.Max(_mesh.Max.X-_mesh.Min.X,_mesh.Max.Z-_mesh.Min.Z);float distance=extent;
         for(int pass=0;pass<8;pass++) {
             _camera.Reset(target,distance);if(_mesh==null)break;float needed=0;
@@ -122,13 +129,20 @@ internal sealed class ReplayWindow : Window {
         double clock=_clock.Elapsed.TotalSeconds;float delta=(float)Math.Min(.1,clock-_lastClock);_lastClock=clock;
         if(_playing)_seconds=Math.Min(_duration,_seconds+delta*_speed);if(_seconds>=_duration)_playing=false;
         if(_camera.Update(delta,SizeVector()))ApplyCamera();if(!_scrubbing){_syncingTime=true;try{_time.Value=_seconds;}finally{_syncingTime=false;}}
-        _info.Text=$"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss}　{_bundle.Data.Frames.Count:N0} 帧　左键平移 · 右键旋转 · 滚轮缩放";
+        _info.Text=$"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss}　{_bundle.Data.Frames.Count:N0} 帧　左键平移 · 右键旋转 · 滚轮缩放"+_mapWarning+_renderWarning;
         if(_busy||Math.Abs(_rendered-_seconds)<.03)return;_busy=true;var seconds=_seconds;_rendered=seconds;
         try {
             var now=_origin.AddSeconds(seconds);var frame=ReplayInterpolation.Sample(_bundle.Data,now);
             _progress.Text=frame==null||frame.AstraProgress<0||frame.UmbraProgress<0||(_bundle.Match.Observation&&!_bundle.Data.DirectorObserved)?"暂无该时刻的完整记录":$"星极队 {frame.AstraProgress/10f:F1}%　　◆　　灵极队 {frame.UmbraProgress/10f:F1}%";
-            DrawTeam(_left,frame,1,now);DrawTeam(_right,frame,2,now);
-            if(_threeD) {var model=await Task.Run(()=>MeshVisuals.Dynamic(ReplaySceneBuilder.Build(_bundle,_mesh,now,_effects,_trail,_clip)));if(!_closed)_dynamic.Content=model;}
+            if(Math.Abs(seconds-_lastPanels)>=.2||!_playing) {DrawTeam(_left,frame,1,now);DrawTeam(_right,frame,2,now);_lastPanels=seconds;}
+            if(frame?.Players.Count is null or 0)_progress.Text="该时刻没有角色位置记录";
+            if(_threeD) {var effects=_effects;var trail=_trail;var clip=_clip;
+                var result=await Task.Run(()=> {
+                    try {return (Model:MeshVisuals.Dynamic(ReplaySceneBuilder.Build(_bundle,_mesh,now,effects,trail,clip)),Warning:"");}
+                    catch(Exception error) when(error is not OutOfMemoryException) {
+                        return (Model:MeshVisuals.Dynamic(ReplaySceneBuilder.Build(_bundle,_mesh,now,false,false,clip)),Warning:" · 部分效果未显示："+error.Message);
+                    }
+                });var model=result.Model;_renderWarning=result.Warning;if(!_closed)_dynamic.Content=model;}
             _overlay.InvalidateVisual();
         } catch(Exception ex){_info.Text="本帧未显示："+ex.Message;}finally{_busy=false;}
     }

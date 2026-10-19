@@ -5,6 +5,11 @@ using System.Text.RegularExpressions;
 namespace PvpStats.Leaderboards;
 public static class RankingIdentity {
     private static string Normalize(string value) => Regex.Replace(value.Normalize(NormalizationForm.FormKC).Trim(), @"\s+", " ");
+    public static bool MatchesFullIdentity(RankingEntry entry,string identity) {
+        if(string.IsNullOrWhiteSpace(identity))return false;
+        identity=Normalize(identity);int split=identity.LastIndexOf(' ');
+        return split>0&&Matches(entry,identity[..split],identity[(split+1)..]);
+    }
     public static bool Matches(RankingEntry entry, string name, string homeWorld) {
         if(string.IsNullOrWhiteSpace(name)||string.IsNullOrWhiteSpace(homeWorld)) return false;
         var world=Normalize(entry.World);

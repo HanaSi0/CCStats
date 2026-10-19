@@ -13,7 +13,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     private readonly Process? _process;
     private readonly SafeProcessHandle? _handle;
     private readonly Func<long,byte[],bool>? _fixtureRead;
-    private readonly long _objects,_gameMain,_eventFramework,_profileAddress,_atkStage,_localPlayerAddress;
+    private readonly long _objects,_gameMain,_eventFramework,_profileAddress,_atkStage,_localPlayerAddress,_control;
     private readonly string _version="";
     private string _directorStatus="尚未读取",_profileStatus="尚未读取",_uiStatus="尚未读取";
     private readonly byte[] _table=new byte[ClientLayout.ObjectSlots*8],_header=new byte[ClientLayout.HeaderBytes],_statuses=new byte[ClientLayout.StatusBytes],_world=new byte[2],_territory=new byte[4];
@@ -29,21 +29,33 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     private readonly Dictionary<string,string> _panelHashes=new();
     private readonly byte[] _profileBytes=new byte[0x8C];
     private DateTime _lastProfileRead;private PlayerPvpProfile? _profile;
-    private DateTime _lastDetail;private DirectorSnapshot? _lastProgress;
+    private DateTime _lastEffects;private DateTime _lastDetail;private DirectorSnapshot? _lastProgress;
     public ObservationBatch? Telemetry {get;private set;}
     public int ProcessId=>_process?.Id??0;
     internal ExternalGameReader(Func<long,byte[],bool> read,long objects,long gameMain,long eventFramework=0,long localPlayerAddress=0) {_fixtureRead=read;_objects=objects;_gameMain=gameMain;_eventFramework=eventFramework;_localPlayerAddress=localPlayerAddress;_version="fixture";}
+    internal static bool IsGameExecutable(string name)=>name.Equals("ffxiv_dx11",StringComparison.OrdinalIgnoreCase)||name.Equals("ffxiv",StringComparison.OrdinalIgnoreCase);
     internal static int FindGameProcess() {
-        var processes=Process.GetProcessesByName("ffxiv_dx11");
-        try {
-            if(processes.Length==0)return 0;
-            GetWindowThreadProcessId(GetForegroundWindow(),out var active);
-            return processes.FirstOrDefault(p=>p.Id==active)?.Id??processes.OrderBy(p=>p.Id).First().Id;
-        } finally {foreach(var process in processes)process.Dispose();}
+        if(!OperatingSystem.IsWindows())return 0;
+        var candidates=new HashSet<int>();
+        foreach(var name in new[]{"ffxiv_dx11","ffxiv"}) {
+            var processes=Process.GetProcessesByName(name);
+            try {foreach(var process in processes)if(!process.HasExited)candidates.Add(process.Id);}finally {foreach(var process in processes)process.Dispose();}
+        }
+        // Window ownership works for renamed client executables too. Never choose a launcher.
+        EnumWindows((window,_)=> {
+            var name=new System.Text.StringBuilder(128);GetClassName(window,name,name.Capacity);
+            if(name.ToString().Equals("FFXIVGAME",StringComparison.OrdinalIgnoreCase)) {GetWindowThreadProcessId(window,out var id);if(id>0)candidates.Add((int)id);}
+            return true;
+        },0);
+        GetWindowThreadProcessId(GetForegroundWindow(),out var active);
+        return candidates.Contains((int)active)?(int)active:candidates.OrderBy(id=>id).FirstOrDefault();
     }
     public ExternalGameReader(int processId) {
         _process=Process.GetProcessById(processId);
-        if(_process.ProcessName!="ffxiv_dx11")throw new InvalidOperationException("所选进程不是游戏客户端。");
+        if(!IsGameExecutable(_process.ProcessName)) {
+            bool gameWindow=false;EnumWindows((window,_)=>{GetWindowThreadProcessId(window,out var owner);var name=new System.Text.StringBuilder(128);if(owner==processId){GetClassName(window,name,name.Capacity);gameWindow|=name.ToString()=="FFXIVGAME";}return true;},0);
+            if(!gameWindow){_process.Dispose();throw new InvalidOperationException("所选进程不是游戏客户端。");}
+        }
         _handle=OpenProcess(0x10|0x1000,false,_process.Id);
         try {
             if(_handle.IsInvalid)throw new InvalidOperationException("无法读取游戏进程，请确保软件与游戏使用相同用户权限。");
@@ -52,7 +64,10 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             _version=File.Exists(versionPath)&&new FileInfo(versionPath).Length<128?File.ReadAllText(versionPath).Trim():FileVersionInfo.GetVersionInfo(module.FileName).FileVersion??"";
             using var stream=File.OpenRead(module.FileName);using var pe=new PEReader(stream);
             var section=pe.PEHeaders.SectionHeaders.Single(s=>s.Name==".text");
-            var bytes=pe.GetSectionData(section.VirtualAddress).GetContent().ToArray();
+            var bytes=new byte[Math.Max(section.VirtualSize,section.SizeOfRawData)];
+            if(bytes.Length>64*1024*1024)throw new InvalidDataException("客户端代码段大小异常。");
+            // Scan the loaded code, which may differ from the on-disk image after client startup.
+            if(!Read(module.BaseAddress.ToInt64()+section.VirtualAddress,bytes))bytes=pe.GetSectionData(section.VirtualAddress).GetContent().ToArray();
             long Resolve(string signature) {
                 int offset=ClientLayout.FindUnique(bytes,signature);
                 long rva=section.VirtualAddress+offset+7L+BinaryPrimitives.ReadInt32LittleEndian(bytes.AsSpan(offset+3,4));
@@ -64,6 +79,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             try {_eventFramework=Resolve(ClientLayout.EventFrameworkSignature);}catch(InvalidDataException) {_eventFramework=0;}
             try {_profileAddress=Resolve(ClientLayout.PvpProfileSignature);}catch(InvalidDataException) {_profileAddress=0;}
             try {_localPlayerAddress=Resolve(ClientLayout.LocalPlayerSignature);}catch(InvalidDataException) {_localPlayerAddress=0;}
+            try {_control=Resolve(ClientLayout.ControlSignature);}catch(InvalidDataException) {_control=0;}
             try {_atkStage=Resolve(ClientLayout.AtkStageSignature);}catch(InvalidDataException) {_atkStage=0;}
         } catch(Exception error) {_handle.Dispose();_process.Dispose();if(_version.Length>0)throw new InvalidDataException($"客户端 {_version}：{error.Message}",error);throw;}
     }
@@ -71,22 +87,34 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     private long Pointer(long address)=>Read(address,_pointer)?BinaryPrimitives.ReadInt64LittleEndian(_pointer):0;
     public (uint Territory,MovementFrame Frame) Sample() {
         if(_process?.HasExited==true)throw new InvalidOperationException("游戏进程已退出。");
-        if(!Read(_gameMain+ClientLayout.TerritoryOffset,_territory)||!Read(_objects+ClientLayout.ObjectArrayOffset,_table))throw new InvalidDataException("客户端地址不可读，请重新连接或等待版本适配。");
+        if(!Read(_gameMain+ClientLayout.TerritoryOffset,_territory))throw new InvalidDataException("客户端地址不可读，请重新连接或等待版本适配。");
         uint territory=BinaryPrimitives.ReadUInt32LittleEndian(_territory);if(territory>100000)throw new InvalidDataException("区域编号异常，已停止记录。");
         if(territory!=0&&territory!=_lastTerritory) {Reset();_lastTerritory=territory;}
-        var now=DateTime.UtcNow;var frame=new MovementFrame {Timestamp=now,AstraProgress=-1,UmbraProgress=-1};var batch=new ObservationBatch {GameVersion=_version};Telemetry=batch;
+        bool objectsReadable=Read(_objects+ClientLayout.ObjectArrayOffset,_table);if(!objectsReadable)Array.Clear(_table);
+        var now=DateTime.UtcNow;var frame=new MovementFrame {Timestamp=now,AstraProgress=-1,UmbraProgress=-1};var batch=new ObservationBatch {GameVersion=_version};Telemetry=batch;batch.ChannelStatus["objectTable"]=objectsReadable?"已读取":"对象列表暂不可读，保留登录身份通道";
         bool arena=ReplayMapMesh.MapKey(territory)!=null,detail=arena&&(now-_lastDetail).TotalSeconds>=.2;
         if(detail) {ReadDirector(batch);_lastDetail=now;}
+        bool effectPoll=arena&&(now-_lastEffects).TotalSeconds>=.1;if(effectPoll)_lastEffects=now;
         batch.DirectorAvailable=_lastProgress!=null;
         if(_lastProgress is {} progress) {frame.CrystalProgress=progress.CrystalProgress;frame.AstraProgress=progress.AstraProgress;frame.UmbraProgress=progress.UmbraProgress;}
-        long localAddress=Pointer(_localPlayerAddress);
+        long localAddress=_localPlayerAddress!=0?Pointer(_localPlayerAddress):0;
+        if(localAddress==0&&_control!=0) {
+            long candidate=Pointer(_control+ClientLayout.ControlLocalPlayerOffset);
+            var entity=new byte[4];var localHeader=new byte[ClientLayout.HeaderBytes];
+            if(Read(_control+ClientLayout.ControlLocalEntityOffset,entity)&&Read(candidate,localHeader)&&localHeader[0x90]==1&&U(entity,0)==U(localHeader,0x78))localAddress=candidate;
+        }
+        // Login is independent of HP/job validity (loading, job switches, noncombat classes).
+        if(localAddress!=0) {
+            var identityHeader=new byte[ClientLayout.HeaderBytes];var identityWorld=new byte[2];
+            if(Read(localAddress,identityHeader)&&Read(localAddress+ClientLayout.WorldOffset,identityWorld))batch.LocalPlayer=ClientLayout.DecodeIdentity(identityHeader,BinaryPrimitives.ReadUInt16LittleEndian(identityWorld))??"";
+        }
         int headerReads=0,pcSeen=0,worldFailures=0,statusFailures=0,rejected=0,rosterMatches=0;
         var rejections=new Dictionary<string,int>();
         var sceneIds=new Dictionary<string,int>();
         var actors=new Dictionary<uint,ObservedActor>();var addresses=new Dictionary<uint,long>();var crystals=new List<CrystalPosition>();
         // All loaded object slots, including NPCs and event objects outside the camera view.
         for(int slot=0;slot<ClientLayout.ObjectSlots;slot++) {
-            long address=BinaryPrimitives.ReadInt64LittleEndian(_table.AsSpan(slot*8,8));if(!Read(address,_header))continue;headerReads++;
+            long address=BinaryPrimitives.ReadInt64LittleEndian(_table.AsSpan(slot*8,8));if(!arena&&address!=localAddress)continue;if(!Read(address,_header))continue;headerReads++;
             byte kind=_header[0x90];if(kind is not (1 or 2 or 7))continue;
             uint id=U(_header,0x78);
             float x=F(_header,0xB0),y=F(_header,0xB4),z=F(_header,0xB8),heading=F(_header,0xC0);
@@ -112,10 +140,11 @@ internal sealed class ExternalGameReader : IObservedGameSource {
                 if(player==null) {rejected++;rejections[reason]=rejections.GetValueOrDefault(reason)+1;continue;}
                 player.Statuses=meta.Statuses;if(_teams.TryGetValue(id,out var team)&&team.Job==player.ClassJobId&&ClientCatalog.PlayerName(team.Name,team.World)==player.Player) {player.Team=team.Team;rosterMatches++;}
                 // A valid-looking but stale/mismatched roster must not erase every loaded PC.
+                if(arena&&(_header[ClientLayout.CombatFlagsOffset]&2)!=0)batch.CombatActive=true;
                 if(frame.Players.Count<10)frame.Players.Add(player);
                 else if(player.Team is 1 or 2&&frame.Players.FindIndex(p=>p.Team==0) is var replace&&replace>=0)frame.Players[replace]=player;
                 else batch.UnconfirmedRosterLimited=true;
-                if(address==localAddress&&meta.World!=0)batch.LocalPlayer=player.Player;
+
             }
             actors[id]=new(id,U(_header,0x88),nameId,kind,x,y,z,heading,player);addresses[id]=address;
             if(kind==2&&nameId==11350)crystals.Add(new(){X=x,Y=y,Z=z});
@@ -129,7 +158,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             foreach(var pair in actors) {
                 var actor=pair.Value;if(actor.Kind==7||actor.NameId==11350)continue;
                 int before=batch.Skills.Count;
-                if(Read(addresses[pair.Key]+ClientLayout.EffectOffset,_effects))_journal.Observe(pair.Key,_effects,actors,now,batch);
+                if(effectPoll&&Read(addresses[pair.Key]+ClientLayout.EffectOffset,_effects))_journal.Observe(pair.Key,_effects,actors,now,batch);
                 if((detail||batch.Skills.Count>before)&&Read(addresses[pair.Key]+ClientLayout.CastOffset,_cast)) {
                     if(detail)ReadCast(actor,now,batch);
                     foreach(var skill in batch.Skills.Skip(before)) {
@@ -147,7 +176,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
             }
         }
         if(batch.LocalPlayer.Length==0) {_profile=null;_lastProfileRead=DateTime.MinValue;}
-        batch.ChannelStatus["login"]=_localPlayerAddress==0?"本地角色签名未匹配":localAddress==0?"未登录角色":batch.LocalPlayer.Length==0?"角色加载中或身份字段未确认":"已确认登录角色";
+        batch.ChannelStatus["login"]=_localPlayerAddress==0&&_control==0?"本地角色签名未匹配":localAddress==0?"未登录角色":batch.LocalPlayer.Length==0?"角色加载中或身份字段未确认":"已确认登录角色";
         if(batch.LocalPlayer.Length>0&&_profile!=null&&_profile.Player!=batch.LocalPlayer) {_profile=null;_lastProfileRead=DateTime.MinValue;}
         if(batch.LocalPlayer.Length>0&&now-_lastProfileRead>=TimeSpan.FromSeconds(2)) {
             _lastProfileRead=now;
@@ -235,6 +264,9 @@ internal sealed class ExternalGameReader : IObservedGameSource {
     private static float F(ReadOnlySpan<byte> data,int at)=>BitConverter.Int32BitsToSingle(BinaryPrimitives.ReadInt32LittleEndian(data[at..]));
     private static bool Finite(float x,float y,float z,float heading)=>float.IsFinite(x)&&float.IsFinite(y)&&float.IsFinite(z)&&float.IsFinite(heading)&&MathF.Abs(x)<100000&&MathF.Abs(y)<100000&&MathF.Abs(z)<100000;
     public void Dispose() {_handle?.Dispose();_process?.Dispose();}
+    private delegate bool WindowVisitor(nint window,nint parameter);
+    [DllImport("user32.dll")][return:MarshalAs(UnmanagedType.Bool)]private static extern bool EnumWindows(WindowVisitor visitor,nint parameter);
+    [DllImport("user32.dll",CharSet=CharSet.Unicode)]private static extern int GetClassName(nint window,System.Text.StringBuilder name,int capacity);
     [DllImport("user32.dll")]private static extern nint GetForegroundWindow();
     [DllImport("user32.dll")]private static extern uint GetWindowThreadProcessId(nint window,out uint processId);
     [DllImport("kernel32.dll",SetLastError=true)]private static extern SafeProcessHandle OpenProcess(uint access,bool inherit,int processId);

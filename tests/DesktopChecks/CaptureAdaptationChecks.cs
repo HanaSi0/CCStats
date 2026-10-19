@@ -85,8 +85,8 @@ internal static class CaptureAdaptationChecks {
             batch.SettlementPanels.Add(new(now,"PvPResult",values));CaptureDiagnostics.SavePanels(Path.Combine(directory,"observations"),1034,batch);
             var capture=new CCStats.Desktop.Capture.IndependentCapture(()=>new EnrichedSource());capture.Connect(Path.Combine(directory,"automatic"));
             for(int i=0;i<80&&capture.State.Frames<3;i++)await Task.Delay(25);
-            await capture.FlushAsync();check(capture.State.Connected,"diagnostic flush closes the current segment while keeping the game source connected");
-            await capture.StopAsync();var automatic=await ReplayImport.ReadAsync(capture.State.SavedPath!);
+            await capture.FlushAsync();check(capture.State.Connected,"diagnostic flush persists buffered data without disconnecting or splitting the match");
+            await capture.StopAsync();var completed=new List<string>();while(capture.TryDequeueCompleted(out var saved))completed.Add(saved);check(completed.Count==1,"exporting diagnostics during combat does not create a second recording");var automatic=await ReplayImport.ReadAsync(capture.State.SavedPath!);
             check(automatic.Data.Effects.Count==automatic.Data.Frames.Count&&automatic.Data.DirectorObserved&&automatic.Data.Frames[0].Players[0].Team==2,"automatic background capture consumes supplemental source channels in the same cycle as movement");
             check(capture.State.LocalPlayer==""&&automatic.Match.LocalPlayer=="Own"&&capture.State.GameVersion=="test-build"&&capture.State.ChannelStatus?["director"]=="ok","stopping clears the active login while saved observations retain identity and diagnostics retain client/channel state");
             var zip=Path.Combine(directory,"diagnostics.zip");await CaptureDiagnostics.ExportAsync(directory,zip,new {State="fixture"});
@@ -97,7 +97,7 @@ internal static class CaptureAdaptationChecks {
         public int ProcessId=>1;
         public ObservationBatch? Telemetry {get;private set;}
         public (uint Territory,MovementFrame Frame) Sample() {
-            var now=DateTime.UtcNow;Telemetry=new(){LocalPlayer="Own",GameVersion="test-build",DirectorAvailable=true,EffectsPolled=true};Telemetry.ChannelStatus["director"]="ok";Telemetry.Effects.Add(new(){Timestamp=now,ActionId=29230,Actor="Own",Target="Other",Type=3,Amount=100});
+            var now=DateTime.UtcNow;Telemetry=new(){LocalPlayer="Own",GameVersion="test-build",CombatActive=true,DirectorAvailable=true,EffectsPolled=true};Telemetry.ChannelStatus["director"]="ok";Telemetry.Effects.Add(new(){Timestamp=now,ActionId=29230,Actor="Own",Target="Other",Type=3,Amount=100});
             return (1034,new(){Timestamp=now,Players=new(){new(){Player="Own",Team=2,ClassJobId=24,HP=100,MaxHP=100}}});
         }
         public void Dispose() {}

@@ -27,7 +27,7 @@ internal sealed class IndependentCapture {
         if(!automatic)_nextAttempt=DateTime.MinValue;
         _lifetime?.Dispose();_lifetime=new();var token=_lifetime.Token;
         _worker=Task.Run(async ()=> {
-            ObservationWriter? writer=null;string? saved=null;var lastPublished=DateTime.MinValue;var lastProbe=DateTime.MinValue;DateTime? loadingSince=null;uint lastTerritory=0;string? diagnosticError=null;
+            ObservationWriter? writer=null;string? saved=null;var lastPublished=DateTime.MinValue;var lastProbe=DateTime.MinValue;uint lastTerritory=0;string? diagnosticError=null;var activity=new MatchActivityGate();var preroll=new Queue<(uint Territory,MovementFrame Frame,ObservationBatch? Batch)>();
             try {
                 using var game=_factory();
                 if(game==null) {State=new(false,false,"等待游戏启动：会自动识别并连接，无需手动选择进程。");return;}
@@ -44,20 +44,30 @@ internal sealed class IndependentCapture {
                         try {CaptureDiagnostics.SaveProbe(directory,territory,probe);}catch(Exception error) when(error is IOException or UnauthorizedAccessException) {diagnosticError=error.Message;}
                     }
                     if(territory!=lastTerritory&&territory!=0) {_manualPaused=false;lastTerritory=territory;}
-                    if(territory==0)loadingSince??=frame.Timestamp;else loadingSince=null;
-                    bool loadingGrace=territory==0&&writer!=null&&frame.Timestamp-loadingSince<TimeSpan.FromSeconds(3);
-                    bool request=Volatile.Read(ref _record)!=0||(_autoRecord&&!_manualPaused&&(ReplayMapMesh.MapKey(territory)!=null||loadingGrace));
+                    // A loading screen has no frames to append; wait for a nonzero territory or process exit, rather than splitting on an arbitrary timeout.
+                    bool loadingGrace=territory==0&&writer!=null;
+                    bool active=activity.Update(territory,frame,game.Telemetry);
+                    if(territory>0&&ReplayMapMesh.MapKey(territory)!=null&&frame.Players.Count>0){preroll.Enqueue((territory,frame,game.Telemetry));while(preroll.Count>60||preroll.TryPeek(out var oldest)&&(oldest.Territory!=territory||frame.Timestamp-oldest.Frame.Timestamp>TimeSpan.FromSeconds(2)))preroll.Dequeue();}
+                    else if(!loadingGrace)preroll.Clear();
+                    bool request=Volatile.Read(ref _record)!=0||(_autoRecord&&!_manualPaused&&(active||loadingGrace));
                     var flush=Volatile.Read(ref _flush);
-                    if(writer!=null&&(flush!=null||!request||(!loadingGrace&&territory!=writer.Territory)||writer.ShouldRollOver)) {saved=Finish(writer);writer=null;}
-                    if(flush!=null) {Interlocked.CompareExchange(ref _flush,null,flush);flush.TrySetResult();}
-                    if(request&&frame.Players.Count>0&&territory>0) {writer??=new ObservationWriter(directory,territory);writer.Append(territory,frame,game.Telemetry);}
+                    if(writer!=null&&(!request||(!loadingGrace&&territory!=writer.Territory)||writer.ShouldRollOver)) {saved=Finish(writer);writer=null;}
+                    if(flush!=null) {writer?.Flush();Interlocked.CompareExchange(ref _flush,null,flush);flush.TrySetResult();}
+                    if(request&&frame.Players.Count>0&&territory>0) {
+                        if(writer==null) {
+                            writer=new ObservationWriter(directory,territory,preroll.TryPeek(out var first)?first.Frame.Timestamp:frame.Timestamp);
+                            foreach(var sample in preroll)writer.Append(sample.Territory,sample.Frame,sample.Batch);
+                            if(preroll.Count==0)writer.Append(territory,frame,game.Telemetry);
+                        } else writer.Append(territory,frame,game.Telemetry);
+                        preroll.Clear();
+                    }
                     if(frame.Timestamp-lastPublished>=TimeSpan.FromMilliseconds(200)) {
                         lastPublished=frame.Timestamp;
                         State=new(true,writer!=null,$"PID {game.ProcessId} · 目标采样 30 Hz · 状态 5 Hz"+(game.Telemetry is {} telemetry?$" · 队伍 {(frame.Players.Any(p=>p.Team is 1 or 2)?"已读取":"未确认")} · 水晶 {(frame.Crystal!=null?"已读取":"未读取")} · 事件槽 {(telemetry.EffectsPolled?"读取中":"未确认")}":""),territory,writer?.Frames??0,frame.Players.Select(p=>$"{p.Player}　职业 {JobNames.Name(p.ClassJobId)}　HP {p.HP:N0}/{p.MaxHP:N0}").ToArray(),saved,game.Telemetry?.Profile,diagnosticError??_summaryError,game.Telemetry?.GameVersion??"",game.Telemetry?.ChannelStatus,game.Telemetry?.LocalPlayer??"");
                     }
                 } while(await timer.WaitForNextTickAsync(token));
             } catch(OperationCanceledException) when(token.IsCancellationRequested) {State=State with {Message="已暂停记录。"};}
-            catch(Exception error) {_nextAttempt=DateTime.UtcNow.AddSeconds(30);State=State with {Message="暂未连接："+error.Message+" 将延后重试。"};}
+            catch(Exception error) {_nextAttempt=DateTime.UtcNow.AddSeconds(3);State=State with {Message="暂未连接："+error.Message+" 将延后重试。"};}
             finally {
                 try {if(writer!=null) {saved=Finish(writer);}}
                 catch(Exception error) {State=State with {Message="记录收尾失败，保留临时文件："+error.Message};}

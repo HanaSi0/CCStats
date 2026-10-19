@@ -8,6 +8,7 @@ public static class ReplayImport {
         await using var stream=File.OpenRead(path);using var json=await JsonDocument.ParseAsync(stream,cancellationToken:token);
         var root=json.RootElement;var summary=Import.ReplayFileReader.Read(root,Path.GetFullPath(path));var data=root.GetProperty("Telemetry").Deserialize<DetailedTelemetry>()??new();
         if(data.Frames.Count>180000||data.Effects.Count>1000000)throw new InvalidDataException("记录超出容量限制。");
+        data.Frames.Sort((a,b)=>a.Timestamp.CompareTo(b.Timestamp));
         var bundle=new ReplayBundle {Match=new() {Id=summary.MatchId,StartUtc=summary.StartUtc.UtcDateTime,EndUtc=summary.EndUtc?.UtcDateTime,Territory=summary.TerritoryId,Observation=summary.IsObservation,SourcePath=Path.GetFullPath(path)},Data=data};
         if(root.TryGetProperty("Record",out var metadata)&&metadata.ValueKind==JsonValueKind.Object) {var record=metadata.Deserialize<MatchRecord>();if(record!=null&&record.Id==summary.MatchId) {record.Observation|=summary.IsObservation;bundle.Match=record;bundle.Match.SourcePath=Path.GetFullPath(path);}}
         if(root.TryGetProperty("ClientProfile",out var profile)&&profile.ValueKind==JsonValueKind.Object)bundle.ClientProfile=profile.Deserialize<Capture.PlayerPvpProfile>();

@@ -86,17 +86,21 @@ public partial class MainWindow {
         var records=new[] {("单场伤害",rows.Where(x=>x.Player.Damage.HasValue).OrderByDescending(x=>x.Player.Damage).Select(x=>(x.Match,x.Player.Damage?.ToString("N0")))),("单场承伤",rows.Where(x=>x.Player.Taken.HasValue).OrderByDescending(x=>x.Player.Taken).Select(x=>(x.Match,x.Player.Taken?.ToString("N0")))),("单场治疗",rows.Where(x=>x.Player.Healing.HasValue).OrderByDescending(x=>x.Player.Healing).Select(x=>(x.Match,x.Player.Healing?.ToString("N0"))))};
         foreach(var (name,values) in records) {var first=values.FirstOrDefault();if(first.Match!=null)Card(name,Text(first.Item2??"—",false,24),Text(first.Match.StartLabel+" · "+first.Match.Map,true),ActionButton("查看对局",async (_,_)=>await OpenRecordAsync(first.Match)));}
     }
-    private TextBlock? _loggedPlayer;
+    private TextBlock? _loggedPlayer,_connectionState;
     private void ShowProfile() {
         PageContent.Children.Add(Notice("profile"));
         _loggedPlayer=Text("",false,20);
-        Card("本机已登录角色",_loggedPlayer);UpdateLoggedPlayer();
+        _connectionState=Text("",true);Card("本机已登录角色",_loggedPlayer,_connectionState);UpdateLoggedPlayer();
     }
     private void UpdateLoggedPlayer() {
         if(_page!=5||_loggedPlayer==null)return;
         // Display the actual login identity, without alias merging or historical fallbacks.
         var player=_capture.State.Connected?_capture.State.LocalPlayer:"";
-        _loggedPlayer.Text=string.IsNullOrWhiteSpace(player)?"未登录角色":player;
+        _loggedPlayer.Text=string.IsNullOrWhiteSpace(player)?"尚未确认登录角色":player;
+        if(_connectionState!=null) {
+            var state=_capture.State;
+            _connectionState.Text=!state.Connected?state.Message:state.LocalPlayer.Length==0?(state.ChannelStatus?.GetValueOrDefault("login")??"等待角色加载"):state.Recording?"游戏已连接 · 正在记录对局":"游戏已连接 · 等待对局开始";
+        }
     }
     private void ShowReplay() {
         PageContent.Children.Add(ActionButton("读取回放或战绩",OpenFile));PageContent.Children.Add(Notice("files"));

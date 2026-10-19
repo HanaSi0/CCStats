@@ -5,7 +5,7 @@ namespace CCStats.Core.Capture;
 /// <summary>Bounded streaming observations, including supplemental events. Does not fabricate a settlement.</summary>
 public sealed class ObservationWriter : IDisposable {
     private readonly FileStream _file;private readonly Utf8JsonWriter _json;
-    private readonly uint _territory;private readonly DateTime _start=DateTime.UtcNow;
+    private readonly uint _territory;private readonly DateTime _start;
     private readonly DetailedTelemetry _details=new(){CaptureMethod="ReadOnlyMemoryPolling",SampleIntervalSeconds=1.0/30};
     private readonly Dictionary<(uint,uint,uint,bool),ReplaySkillEvent> _skills=new();
     private readonly Dictionary<ulong,ReplayArenaObject> _objects=new();
@@ -20,7 +20,8 @@ public sealed class ObservationWriter : IDisposable {
     public uint Territory=>_territory;
     public string Destination {get;}
     public int Frames {get;private set;}
-    public ObservationWriter(string directory,uint territory) {
+    public ObservationWriter(string directory,uint territory,DateTime? start=null) {
+        _start=start??DateTime.UtcNow;
         Directory.CreateDirectory(directory);_territory=territory;
         Destination=Path.Combine(directory,"Observation-"+DateTime.UtcNow.ToString("yyyyMMdd-HHmmss")+"-"+Guid.NewGuid().ToString("N")[..8]+".json");
         _file=new FileStream(Destination+".partial",FileMode.CreateNew,FileAccess.Write,FileShare.Read,65536);_json=new Utf8JsonWriter(_file);
@@ -28,6 +29,7 @@ public sealed class ObservationWriter : IDisposable {
         _json.WriteNumber("TerritoryId",territory);_json.WriteString("StartUtc",_start);_json.WriteString("CaptureProfile",ClientLayout.Profile);
         _json.WriteStartObject("Telemetry");_json.WriteNumber("Version",2);_json.WriteNumber("SampleIntervalSeconds",1.0/30);_json.WriteStartArray("Frames");
     }
+    public void Flush() {if(!_finished){_json.Flush();_file.Flush();}}
     public void Append(uint territory,MovementFrame frame,ObservationBatch? batch=null) {
         if(_finished)throw new InvalidOperationException("记录已经结束。");
         if(territory!=_territory)throw new InvalidOperationException("地图已切换，本段记录已结束。");
@@ -88,7 +90,7 @@ public sealed class ObservationWriter : IDisposable {
             Write("Effects",_details.Effects);Write("EffectsTruncated",_details.EffectsTruncated);Write("ReplaySkills",_details.ReplaySkills);Write("ReplaySkillsTruncated",_details.ReplaySkillsTruncated);
             Write("MapMechanics",_details.MapMechanics);Write("MapMechanicsTruncated",_details.MapMechanicsTruncated);Write("ArenaObjects",_details.ArenaObjects);Write("ArenaObjectsTruncated",_details.ArenaObjectsTruncated);
             Write("SummonFrames",_details.SummonFrames);Write("SummonsTruncated",_details.SummonsTruncated);Write("ArenaStates",_details.ArenaStates);
-            _json.WriteEndObject();Write("ClientProfile",_profile);_json.WriteString("LocalPlayer",_localPlayer);_json.WriteString("MatchEndTime",DateTime.UtcNow);_json.WriteEndObject();_json.Flush();
+            _json.WriteEndObject();Write("ClientProfile",_profile);_json.WriteString("LocalPlayer",_localPlayer);_json.WriteString("MatchEndTime",_lastFrame.HasValue&&_lastFrame>_start?_lastFrame.Value:_start);_json.WriteEndObject();_json.Flush();
         } finally {_json.Dispose();_file.Dispose();}
         File.Move(Destination+".partial",Destination);
         try {

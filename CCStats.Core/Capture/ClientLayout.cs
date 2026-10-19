@@ -9,6 +9,8 @@ namespace CCStats.Core.Capture;
 public static class ClientLayout {
     public const string Profile = "FFXIVClientStructs-d6397a7-experimental";
     public const string ObjectsSignature = "48 8D 35 ?? ?? ?? ?? 81 FA";
+    public const string ControlSignature="4C 8D 35 ?? ?? ?? ?? 48 8B 09";
+    public const int ControlLocalPlayerOffset=0x76A0,ControlLocalEntityOffset=0x7698,CombatFlagsOffset=0x1D4;
     public const string LocalPlayerSignature = "48 8B 2D ?? ?? ?? ?? 75";
     public const string AtkStageSignature = "48 8B 05 ?? ?? ?? ?? 4C 8B 40 18 45 8B 40 18";
     public const string PvpProfileSignature = "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 3C ?? 75 ?? B8 ?? ?? ?? ?? EB ?? B8";
@@ -32,6 +34,12 @@ public static class ClientLayout {
             offset++;
         }
         if(found<0)throw new InvalidDataException("当前客户端签名尚未适配，未启动记录。");return found;
+    }
+    public static string? DecodeIdentity(ReadOnlySpan<byte> header,ushort world) {
+        if(header.Length<HeaderBytes||header[0x90]!=1||world==0)return null;
+        uint id=BinaryPrimitives.ReadUInt32LittleEndian(header[0x78..]);if(id is 0 or 0xE0000000)return null;
+        var bytes=header.Slice(0x30,64);int end=bytes.IndexOf((byte)0);if(end<=0)return null;
+        try {var name=new UTF8Encoding(false,true).GetString(bytes[..end]);return name.Any(char.IsControl)?null:ClientCatalog.PlayerName(name,world);}catch(DecoderFallbackException){return null;}
     }
     private static float Float(ReadOnlySpan<byte> data,int at)=>BitConverter.Int32BitsToSingle(BinaryPrimitives.ReadInt32LittleEndian(data[at..]));
     public static PlayerPosition? DecodePlayer(ReadOnlySpan<byte> header,ushort world,ReadOnlySpan<byte> status,DateTime now) {

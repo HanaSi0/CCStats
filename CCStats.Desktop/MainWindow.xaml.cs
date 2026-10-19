@@ -16,7 +16,7 @@ public partial class MainWindow : Window {
     private static readonly string[] Pages={"战绩查询","数据概览","段位趋势","榜单","数据分析","个人中心","回放文件","设置","关于"};
     private readonly IndependentCapture _capture=new(()=>ExternalGameReader.FindGameProcess() is var pid && pid>0?new ExternalGameReader(pid):null);
     private readonly DispatcherTimer _captureTimer=new() {Interval=TimeSpan.FromMilliseconds(200)};
-    private readonly DispatcherTimer _processTimer=new() {Interval=TimeSpan.FromSeconds(2)};
+    private readonly DispatcherTimer _processTimer=new() {Interval=TimeSpan.FromSeconds(1)};
     private readonly string _settingsPath,_directory;
     private readonly DesktopPreferences _preferences;
     private readonly CancellationTokenSource _operations=new();
@@ -66,7 +66,7 @@ public partial class MainWindow : Window {
         };
         _captureTimer.Start();
         _processTimer.Tick+=(_,_)=>{if(!_smoke&&!_exiting)_capture.Poll(Path.Combine(_directory,"observations"));};
-        _processTimer.Start();Closing+=OnWindowClosing;
+        if(!_smoke)_capture.Poll(Path.Combine(_directory,"observations"));_processTimer.Start();Closing+=OnWindowClosing;
         Loaded+=async (_,_)=>{if(!_smoke)await StartRankingsAsync();};
         ShowPage(0);
     }
@@ -156,6 +156,7 @@ public partial class MainWindow : Window {
     internal async Task RunSmokeChecksAsync(string fixture,string screenshot) {
         await StartupSplash.VerifyAsync();
         await VerifyFeatureFeedbackAsync();
+        await SmoothScroll.VerifyAsync(this);
         if(_navigation.Count!=9||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动记录"))throw new InvalidOperationException("Simplified navigation or product version failed");
         ShowPage(7);
         if(PageContent.Children.OfType<Border>().Select(b=>b.Child).OfType<StackPanel>().SelectMany(p=>p.Children.OfType<TextBox>()).Any(t=>t.ToolTip?.ToString()?.Contains("统计默认本人")==true))throw new InvalidOperationException("Manual default character setting remains");

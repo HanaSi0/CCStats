@@ -8,6 +8,7 @@ public sealed class ObservationBatch {
     public string LocalPlayer {get;set;}="";
     public PlayerPvpProfile? Profile {get;set;}
     public bool UnconfirmedRosterLimited {get;set;}
+    public bool CombatActive {get;set;}
     public bool DirectorAvailable {get;set;}
     public bool EffectsPolled {get;set;}
     public List<ObservedEffect> Effects {get;}=new();
