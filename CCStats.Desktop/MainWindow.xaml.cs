@@ -33,7 +33,7 @@ public partial class MainWindow : Window {
     private string? _smokeCloseChoice;
     private string? _lastSaved;
     private string _search="",_map="全部",_result="全部";
-    private bool _favorites;
+    private bool _favorites,_observationsView;
     private string _mode="全部",_rank="全部";
     private DateTime? _fromDate,_untilDate;
     public MainWindow(string? settingsPath=null) {
@@ -67,10 +67,13 @@ public partial class MainWindow : Window {
         ShowPage(0);
     }
     private static string ProductVersion=>typeof(MainWindow).Assembly.GetName().Version?.ToString(3)??"0.1.0";
-    private TextBlock Text(string value,bool muted=false,double size=14)=>new() {Text=value,FontSize=size,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,10),Foreground=(Brush)FindResource(muted?"MutedBrush":"TextBrush")};
+    private TextBlock Text(string value,bool muted=false,double size=14) {
+        var text=new TextBlock {Text=value,FontSize=size,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,10)};
+        text.SetResourceReference(TextBlock.ForegroundProperty,muted?"MutedBrush":"TextBrush");return text;
+    }
     private void Card(string title,params UIElement[] children) {
         var content=new StackPanel();content.Children.Add(Text(title,false,18));foreach(var child in children)content.Children.Add(child);
-        PageContent.Children.Add(new Border {Background=(Brush)FindResource("SurfaceBrush"),CornerRadius=new CornerRadius(12),Padding=new Thickness(18),Margin=new Thickness(0,0,0,14),Child=content});
+        var border=new Border {CornerRadius=new CornerRadius(12),Padding=new Thickness(18),Margin=new Thickness(0,0,0,14),Child=content};border.SetResourceReference(Border.BackgroundProperty,"SurfaceBrush");PageContent.Children.Add(border);
     }
     private Button ActionButton(string title,RoutedEventHandler handler) {var b=new Button {Content=title,HorizontalAlignment=HorizontalAlignment.Left};b.Click+=handler;return b;}
     private void SavePreferences() {try {_preferences.Save(_settingsPath);}catch(Exception ex) when(ex is IOException or UnauthorizedAccessException) {StatusText.Text="设置未能保存："+ex.Message;}}
@@ -93,7 +96,7 @@ public partial class MainWindow : Window {
     }
     private void ShowPage(int page) {
         _page=page;PageContent.Children.Clear();
-        for(int i=0;i<_navigation.Count;i++)_navigation[i].Background=i==page?(Brush)FindResource("AccentBrush"):(Brush)FindResource("ButtonBrush");
+        for(int i=0;i<_navigation.Count;i++){_navigation[i].SetResourceReference(Control.BackgroundProperty,i==page?"AccentBrush":"ButtonBrush");_navigation[i].SetResourceReference(Control.ForegroundProperty,i==page?"OnAccentBrush":"TextBrush");}
         PageTitle.Text=Pages[page];PageSubtitle.Text=page==8?"时间轴、战术水晶与已记录事件":"水晶冲突 · 本机数据中心";
         switch(page) {
             case 0:ShowMatches();break;
@@ -166,6 +169,13 @@ public partial class MainWindow : Window {
         if(IsVisible||_preferences.CloseBehavior!="Tray"||DesktopPreferences.Load(_settingsPath).CloseBehavior!="Tray")throw new InvalidOperationException("Native close dialog, remember and tray transition failed");
         _smokeCloseChoice=null;RestoreFromTray();
         TableFactory.CheckSorting();
+        var originalTheme=_preferences.Theme;
+        foreach(var theme in DesktopTheme.Names) {DesktopTheme.Apply(theme,new Dictionary<string,string>());if(DesktopTheme.Keys.Any(k=>Application.Current.Resources[k] is not SolidColorBrush))throw new InvalidOperationException("Incomplete theme: "+theme);}
+        DesktopTheme.Apply("深海蓝",new Dictionary<string,string>{{"TextBrush","#123456"}});DesktopTheme.Apply("深海蓝",new Dictionary<string,string>());
+        if(((SolidColorBrush)DesktopTheme.Brush("TextBrush")).Color!=Color.FromRgb(236,242,255))throw new InvalidOperationException("Theme reset leaves stale text colours");
+        DesktopTheme.Apply(originalTheme,_preferences.CustomColors);
+        ShowPage(0);PageContent.Children.OfType<DateRangeFilter>().Single().Verify();
+        UpdateLayout();TableFactory.VerifySelection(PageContent.Children.OfType<DataGrid>().Single());
         await MeshVisuals.VerifyPaletteAsync(this);
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();
         var detail=new RecordDetailWindow(_bundle,_library){Owner=this};detail.Show();detail.Close();

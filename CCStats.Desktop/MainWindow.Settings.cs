@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using CCStats.Desktop.Views;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,11 +18,12 @@ public partial class MainWindow {
     }
     private void ShowSettings() {
         var close=new ComboBox {ItemsSource=new[]{"每次询问","立即退出","最小化到托盘"},SelectedIndex=_preferences.CloseBehavior switch {"Exit"=>1,"Tray"=>2,_=>0},MinWidth=240,Margin=new Thickness(0,0,0,12)};
-        var theme=new ComboBox {ItemsSource=new[]{"深海蓝","石墨灰","森林绿","紫罗兰"},SelectedItem=_preferences.Theme,MinWidth=240,Margin=new Thickness(0,0,0,12)};
+        var theme=new ComboBox {ItemsSource=DesktopTheme.Names,SelectedItem=_preferences.Theme,MinWidth=240,Margin=new Thickness(0,0,0,12)};
         Card("关闭窗口时",close,Text("最小化到托盘后仍会读取游戏并写入记录；右下角托盘图标可重新打开窗口或退出。",true));
+        theme.SelectionChanged+=(_,_)=>{if(theme.SelectedItem is string selected){_preferences.Theme=selected;SavePreferences();ApplyTheme();}};
         Card("颜色主题",theme);
         var colors=new WrapPanel();
-        foreach(var (label,key) in new[]{("背景","BackgroundBrush"),("面板","SurfaceBrush"),("按钮","ButtonBrush"),("强调","AccentBrush"),("正文","TextBrush"),("次要文字","MutedBrush")})colors.Children.Add(ActionButton(label+"颜色",(_,_)=> {
+        foreach(var (label,key) in new[]{("背景","BackgroundBrush"),("面板","SurfaceBrush"),("按钮","ButtonBrush"),("强调","AccentBrush"),("正文","TextBrush"),("次要文字","MutedBrush"),("悬停","HoverBrush"),("选中","SelectionBrush"),("边框","BorderBrush"),("输入区","InputBrush")})colors.Children.Add(ActionButton(label+"颜色",(_,_)=> {
             var current=((SolidColorBrush)FindResource(key)).Color;using var dialog=new System.Windows.Forms.ColorDialog {FullOpen=true,Color=System.Drawing.Color.FromArgb(current.R,current.G,current.B)};
             if(dialog.ShowDialog()==System.Windows.Forms.DialogResult.OK) {_preferences.CustomColors[key]=$"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";SavePreferences();ApplyTheme();ShowPage(9);}
         }));
@@ -34,18 +36,7 @@ public partial class MainWindow {
         Card("数据目录",Text(_directory,true),ActionButton("打开数据目录",(_,_)=>{try {Process.Start(new ProcessStartInfo {FileName=_directory,UseShellExecute=true});}catch(Exception ex){StatusText.Text=ex.Message;}}));
     }
     private void ApplyTheme() {
-        var palette=_preferences.Theme switch {
-            "石墨灰"=>new[]{"#141619","#20242A","#343B46","#566D87"},
-            "森林绿"=>new[]{"#0E1917","#182E29","#244D42","#287A62"},
-            "紫罗兰"=>new[]{"#151020","#291D3C","#483263","#794FAD"},
-            _=>new[]{"#0D1220","#171F33","#29395D","#245F9F"}
-        };
-        var keys=new[]{"BackgroundBrush","SurfaceBrush","ButtonBrush","AccentBrush"};
-        for(int i=0;i<keys.Length;i++) {var color=(Color)ColorConverter.ConvertFromString(palette[i]);var brush=(SolidColorBrush)Application.Current.Resources[keys[i]];if(brush.IsFrozen)Application.Current.Resources[keys[i]]=new SolidColorBrush(color);else brush.Color=color;}
-        foreach(var pair in _preferences.CustomColors) {
-            if(pair.Key is not ("BackgroundBrush" or "SurfaceBrush" or "ButtonBrush" or "AccentBrush" or "TextBrush" or "MutedBrush"))continue;
-            try {Application.Current.Resources[pair.Key]=new SolidColorBrush((Color)ColorConverter.ConvertFromString(pair.Value));}catch(FormatException) { }
-        }
-        Background=(Brush)FindResource("BackgroundBrush");
+        DesktopTheme.Apply(_preferences.Theme,_preferences.CustomColors);
+        SetResourceReference(BackgroundProperty,"BackgroundBrush");
     }
 }

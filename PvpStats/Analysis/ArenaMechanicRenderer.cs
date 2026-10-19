@@ -127,8 +127,8 @@ public static class ArenaMechanicRenderer {
                 R(.5f+phase,1.3f,1-phase);break;
             case ArenaMechanicKind.TrickFloor:
                 // Tilt a symbolic tatami around one edge; this does not claim the floor's exact state/size.
-                float angle=(.5f+.5f*MathF.Sin(time*2))*.9f;
-                Vector3 Q(float x,float z)=>At(x,MathF.Sin(angle)*(z+2),MathF.Cos(angle)*z);
+                float angle=instance.Reference?MathF.Max(0,MathF.Sin(time*2))*2.65f:Math.Clamp(instance.FloorAngle,0,MathF.PI);
+                Vector3 Q(float x,float z)=>At(x,MathF.Sin(angle)*(z+2),MathF.Cos(angle)*(z+2)-2);
                 var floorA=Q(-2,-2);var floorB=Q(2,-2);var floorC=Q(2,2);var floorD=Q(-2,2);
                 var straw=ReplaySceneGeometry.Rgba(.62f,.59f,.36f);var binding=ReplaySceneGeometry.Rgba(.1f,.22f,.17f);
                 g.Triangle(floorA,floorB,floorC,straw);g.Triangle(floorA,floorC,floorD,straw);L(floorA,floorB,.2f,binding);L(floorB,floorC,.2f,binding);L(floorC,floorD,.2f,binding);L(floorD,floorA,.2f,binding);
@@ -149,20 +149,27 @@ public static class ArenaMechanicRenderer {
                 L(At(.7f,1.5f,0),At(2.3f,1.65f,1.4f),.14f,white);L(At(2.3f,1.65f,1.4f),At(2.8f,1.8f,1.7f),.1f,white);
                 Arrow(At(0,.05f,1.6f),f,1.7f,.15f);break;
             case ArenaMechanicKind.Onmyoji:
-                // A closed lid while travelling/waiting, opening only during a matching observed gaze.
+                // A shaded orb stays legible when its lids close; the face tilts upward for map cameras.
                 float openness=instance.Reference?ArenaMechanicScene.ReferenceEye(time):float.IsFinite(instance.EyeOpen)?Math.Clamp(instance.EyeOpen,0,1):0;
-                for(int i=0;i<24;i++) {
-                    float a=i*MathF.PI/24,b=(i+1)*MathF.PI/24;
-                    if(openness<.015f)L(At(MathF.Cos(a)*1.8f,4.5f,MathF.Sin(a)*.06f),At(MathF.Cos(b)*1.8f,4.5f,MathF.Sin(b)*.06f),.14f,white);
-                    else foreach(int sign in new[]{-1,1})L(At(MathF.Cos(a)*1.8f,4.5f,sign*MathF.Sin(a)*.8f*openness),At(MathF.Cos(b)*1.8f,4.5f,sign*MathF.Sin(b)*.8f*openness),.13f,white);
-                }
-                if(openness>.02f)for(int i=0;i<32;i++) {
+                var eyeCenter=At(0,5.1f,0);var eyeNormal=Vector3.Normalize(f+Vector3.UnitY);var eyeUp=Vector3.Normalize(Vector3.UnitY-f);
+                Sphere(eyeCenter,1.05f,ReplaySceneGeometry.Rgba(.4f,.36f,.58f));
+                Vector3 EyeSurface(float x,float y,float depth=0)=>eyeCenter+right*x+eyeUp*y+eyeNormal*(MathF.Sqrt(MathF.Max(0,1.05f*1.05f-x*x-y*y))+depth);
+                for(int i=0;i<32;i++) {
                     float a=i*MathF.Tau/32,b=(i+1)*MathF.Tau/32;
-                    Vector3 EyePoint(float angle,float radius,float y)=>At(MathF.Sin(angle)*radius,y,MathF.Cos(angle)*radius*openness);
-                    g.Triangle(At(0,4.55f,0),EyePoint(a,.48f,4.55f),EyePoint(b,.48f,4.55f),C());
-                    g.Triangle(At(0,4.6f,0),EyePoint(a,.22f,4.6f),EyePoint(b,.22f,4.6f),dark);
+                    if(openness>.01f) {
+                        Vector3 Edge(float angle,float radius,float extra)=>EyeSurface(MathF.Cos(angle)*radius,MathF.Sin(angle)*radius*openness,extra);
+                        g.Triangle(EyeSurface(0,0,.02f),Edge(a,.88f,.02f),Edge(b,.88f,.02f),white);
+                        g.Triangle(EyeSurface(0,0,.04f),Edge(a,.48f,.04f),Edge(b,.48f,.04f),C());
+                        g.Triangle(EyeSurface(0,0,.06f),Edge(a,.23f,.06f),Edge(b,.23f,.06f),dark);
+                        L(Edge(a,.9f,.03f),Edge(b,.9f,.03f),.07f,ReplaySceneGeometry.Rgba(.7f,.52f,.86f));
+                    }
                 }
-                if(openness>.3f)g.Cylinder(At(.1f,4.66f,.1f*openness),.07f,.025f,white);break;
+                if(openness<.02f)for(int i=0;i<24;i++) {
+                    float x=-.86f+i*1.72f/24,y=-.86f+(i+1)*1.72f/24;
+                    L(EyeSurface(x,.06f*(1-x*x),.03f),EyeSurface(y,.06f*(1-y*y),.03f),.11f,dark);
+                }
+                else Sphere(EyeSurface(-.15f,.2f*openness,.085f),.1f,white);
+                break;
             case ArenaMechanicKind.Gold:
                 for(int i=0;i<6;i++) {
                     float a=i*2.4f;var coin=At(MathF.Sin(a)*.65f,i*.1f,MathF.Cos(a)*.65f);

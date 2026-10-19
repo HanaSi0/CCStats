@@ -53,6 +53,23 @@ internal static class ArenaMechanicSceneChecks {
         data.MapMechanics.Add(new() { ActionId=32366,Timestamp=now,X=10,Y=2,Z=20,SourceEntityId=4 });
         check(!ArenaMechanicScene.Actions(data,1116,now).Any(),"one observed actor suppresses its duplicated action placeholder");
         data.ArenaObjects.Clear();check(ArenaMechanicScene.Actions(data,1116,now).Single().Kind==ArenaMechanicKind.Onmyoji,"older matches can show an eye from a recorded onmyoji action");
+        // Moving cast origins and impacts must not manufacture a second actor.
+        foreach(var (kind,action,name) in new[]{(ArenaMechanicKind.Yojimbo,32365u,12278u),(ArenaMechanicKind.Onmyoji,32366u,12279u)}) {
+            var duplicate=new DetailedTelemetry();duplicate.ArenaObjects.Add(new(){ObjectId=500,EntityId=42,NameId=name,Kind=kind,Timestamp=now,ObservedUntil=now.AddSeconds(1),X=20,Y=0,Z=0});
+            duplicate.MapMechanics.Add(new(){ActionId=action,SourceEntityId=42,Kind=ReplayMapEventKind.CastObserved,Timestamp=now,ObservedUntil=now.AddSeconds(1),X=0,Y=0,Z=0});
+            duplicate.MapMechanics.Add(new(){ActionId=action,SourceEntityId=42,Kind=ReplayMapEventKind.ActionResolved,Timestamp=now.AddSeconds(.1),X=15,Y=0,Z=0});
+            check(!ArenaMechanicScene.Actions(duplicate,1116,now.AddSeconds(.2)).Any(),"moving "+kind+" keeps one observed actor despite distinct cast and impact positions");
+            duplicate.ArenaObjects.Clear();check(ArenaMechanicScene.Actions(duplicate,1116,now.AddSeconds(.2)).Count()==1,"legacy "+kind+" cast and impact share one fallback actor");
+            duplicate.ArenaObjects.Add(new(){ObjectId=500,EntityId=42,Kind=kind,Timestamp=now,ObservedUntil=now.AddSeconds(1)});
+            duplicate.ArenaObjects.Add(new(){ObjectId=501,EntityId=43,Kind=kind,Timestamp=now,ObservedUntil=now.AddSeconds(1)});
+            check(ArenaMechanicScene.Objects(duplicate,1116,now.AddSeconds(.2)).Count()==2,"separate nearby "+kind+" actors are not incorrectly merged");
+        }
+        var floorEvents=new List<ReplayMapEvent>();
+        check(ArenaMechanicScene.FloorAngle(floorEvents,now,1,Vector3.Zero)==0,"untriggered tatami stays flat regardless of replay time");
+        floorEvents.Add(new(){ActionId=32364,SourceEntityId=1,Kind=ReplayMapEventKind.CastObserved,Timestamp=now,ObservedUntil=now.AddSeconds(1),X=0,Y=0,Z=0});
+        check(ArenaMechanicScene.FloorAngle(floorEvents,now.AddSeconds(.2),1,Vector3.Zero)>0&&ArenaMechanicScene.FloorAngle(floorEvents,now.AddSeconds(.2),2,new(20,0,0))==0,"tatami pre-animation requires that floor's observed trigger");
+        floorEvents.Add(new(){ActionId=32364,SourceEntityId=1,Kind=ReplayMapEventKind.ActionResolved,Timestamp=now.AddSeconds(1),X=0,Y=0,Z=0});
+        check(ArenaMechanicScene.FloorAngle(floorEvents,now.AddSeconds(1.4),1,Vector3.Zero)>2&&ArenaMechanicScene.FloorAngle(floorEvents,now.AddSeconds(2.2),1,Vector3.Zero)==0,"tatami flips on impact then restores instead of looping");
         data.MapMechanics.Clear();data.MapMechanics.Add(new() { Kind=ReplayMapEventKind.TimerTriggered,ActionId=28727,Timestamp=now,X=0,Y=0,Z=0 });
         check(!ArenaMechanicScene.Actions(data,1034,now).Any(),"a timer cannot manufacture a global turbulence event");
         check(ArenaMechanicScene.FromObjectName("sprint zone","cloud-nine")==ArenaMechanicKind.SprintZone&&ArenaMechanicScene.FromObjectName("sprint zone",null)==ArenaMechanicKind.Unknown,"an actually identified sprint zone is supported in any known CC map, without inventing its existence");

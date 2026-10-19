@@ -56,11 +56,11 @@ public static class MapMechanicVisuals {
         }
         // One footprint for a cast/impact at the same source and landing point; prefer actual resolution.
         return candidates.OrderByDescending(v=>v.Event.Kind==ReplayMapEventKind.ActionResolved).ThenByDescending(v=>v.Event.Timestamp)
-            .GroupBy(v=>(v.Event.SourceEntityId,v.Event.ActionId,X:(int)MathF.Round(v.Center.X*2),Z:(int)MathF.Round(v.Center.Z*2)))
+            .GroupBy(v=>(v.Event.SourceEntityId,v.Event.ActionId,X:v.Rule.Ground||v.Event.SourceEntityId is 0 or 0xE0000000?(int)MathF.Round(v.Center.X*2):0,Z:v.Rule.Ground||v.Event.SourceEntityId is 0 or 0xE0000000?(int)MathF.Round(v.Center.Z*2):0))
             .Select(g=>g.First()).Take(32);
     }
     public static void Draw(ReplaySceneGeometry geometry,MapMechanicVisual visual,DateTime now,Func<float,float,float> height) {
-        var e=visual.Event;var rule=visual.Rule;var center=visual.Center;var rgb=Color(rule.Effect);
+        var e=visual.Event;var rule=visual.Rule;var center=visual.Center;var rgb=rule.ActionId==32364?new Vector3(1,.16f,.12f):Color(rule.Effect);
         bool casting=e.Kind==ReplayMapEventKind.CastObserved;
         float age=Math.Max(0,(float)(now-e.Timestamp).TotalSeconds);
         float opacity=casting?1:Math.Clamp((1.1f-age)/.5f,0,1);

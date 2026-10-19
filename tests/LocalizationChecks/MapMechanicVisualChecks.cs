@@ -20,6 +20,7 @@ internal static class MapMechanicVisualChecks {
         shield.SourceEntityId=22;shield.Timestamp=now.AddSeconds(1);cast.ResolvedAt=shield.Timestamp;
         var combined=MapMechanicVisuals.Active(new[]{cast,shield},1138,shield.Timestamp).ToArray();
         check(combined.Length==1&&combined[0].Event==shield,"cast and action resolution produce one footprint at the transition");
+        shield.X=8;check(MapMechanicVisuals.Active(new[]{cast,shield},1138,shield.Timestamp).Count()==1,"a moving NPC's cast and impact cannot leave two overlapping footprints");shield.X=0;
         var geometry=new ReplaySceneGeometry();MapMechanicVisuals.Draw(geometry,barrier,now,(_,_)=>3);
         check(geometry.Vertices.Length>0&&geometry.Vertices.ToArray().All(v=>v.Position.Y>3&&new Vector2(v.Position.X,v.Position.Z).Length()<22.2f),"mechanic footprint follows surface elevation and native range");
         var unknown=new ReplayMapEvent { ActionId=99999,Timestamp=now,X=0,Z=0,ClientEffectRange=50 };

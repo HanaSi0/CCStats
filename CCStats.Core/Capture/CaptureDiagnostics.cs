@@ -20,16 +20,23 @@ public static class CaptureDiagnostics {
         try {File.WriteAllText(temp,JsonSerializer.Serialize(summary));File.Move(temp,path,true);foreach(var old in Directory.EnumerateFiles(directory,"Observation-*.json").OrderByDescending(File.GetLastWriteTimeUtc).Skip(12))File.Delete(old);}
         finally {if(File.Exists(temp))File.Delete(temp);}
     }
+    public static void SaveProbe(string recordingDirectory,uint territory,ObservationBatch batch) {
+        var directory=Path.Combine(recordingDirectory,"diagnostics");Directory.CreateDirectory(directory);
+        // One latest sample per arena survives returning to town, even if no player could be decoded.
+        var path=Path.Combine(directory,"Probe-"+territory+".json");var temp=path+".partial";
+        try {File.WriteAllText(temp,JsonSerializer.Serialize(new {At=DateTime.UtcNow,Territory=territory,ClientLayout.Profile,batch.GameVersion,batch.ChannelStatus,SceneObjects=batch.ArenaObjects.Take(96),SceneStates=batch.MapStates.Take(128)}));File.Move(temp,path,true);}
+        finally {if(File.Exists(temp))File.Delete(temp);}
+    }
     public static async Task ExportAsync(string dataDirectory,string destination,object status) {
         var directory=Path.Combine(dataDirectory,"observations","diagnostics");
         await using var file=new FileStream(destination,FileMode.CreateNew,FileAccess.Write,FileShare.None);
         using var zip=new ZipArchive(file,ZipArchiveMode.Create,true);
         await using(var entry=zip.CreateEntry("status.json").Open())await JsonSerializer.SerializeAsync(entry,status);
         long total=0;
-        foreach(var path in Directory.Exists(directory)?Directory.EnumerateFiles(directory,"*.json").Where(p=>Path.GetFileName(p).StartsWith("Settlement-",StringComparison.Ordinal)||Path.GetFileName(p).StartsWith("Observation-",StringComparison.Ordinal)).OrderByDescending(File.GetLastWriteTimeUtc).Take(76):Enumerable.Empty<string>()) {
+        foreach(var path in Directory.Exists(directory)?Directory.EnumerateFiles(directory,"*.json").Where(p=>Path.GetFileName(p).StartsWith("Settlement-",StringComparison.Ordinal)||Path.GetFileName(p).StartsWith("Observation-",StringComparison.Ordinal)||Path.GetFileName(p).StartsWith("Probe-",StringComparison.Ordinal)).OrderByDescending(File.GetLastWriteTimeUtc).Take(90):Enumerable.Empty<string>()) {
             try {
                 long size=new FileInfo(path).Length;if(size>2*1024*1024||total+size>32*1024*1024)continue;
-                await using var input=File.OpenRead(path);await using var output=zip.CreateEntry((Path.GetFileName(path).StartsWith("Observation-",StringComparison.Ordinal)?"observations/":"settlement/")+Path.GetFileName(path)).Open();await input.CopyToAsync(output);total+=size;
+                await using var input=File.OpenRead(path);await using var output=zip.CreateEntry((Path.GetFileName(path).StartsWith("Observation-",StringComparison.Ordinal)?"observations/":Path.GetFileName(path).StartsWith("Probe-",StringComparison.Ordinal)?"probes/":"settlement/")+Path.GetFileName(path)).Open();await input.CopyToAsync(output);total+=size;
             }catch(FileNotFoundException) { }catch(DirectoryNotFoundException) { }
         }
     }

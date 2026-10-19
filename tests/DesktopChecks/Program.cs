@@ -67,5 +67,6 @@ try {
     Check(!File.Exists(observation+".partial"),"finished observation is atomically renamed to the usable export");
     await PortChecks.Run(Check);
     await CaptureAdaptationChecks.Run(Check);
+    await NativeReaderChecks.Run(Check);
     Console.WriteLine($"Passed {passed} standalone core/import/capture fixture checks.");
 } finally {Directory.Delete(directory,true);}

@@ -9,6 +9,7 @@ namespace CCStats.Core.Capture;
 public static class ClientLayout {
     public const string Profile = "FFXIVClientStructs-d6397a7-experimental";
     public const string ObjectsSignature = "48 8D 35 ?? ?? ?? ?? 81 FA";
+    public const string LocalPlayerSignature = "48 8B 2D ?? ?? ?? ?? 75";
     public const string AtkStageSignature = "48 8B 05 ?? ?? ?? ?? 4C 8B 40 18 45 8B 40 18";
     public const string PvpProfileSignature = "48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 3C ?? 75 ?? B8 ?? ?? ?? ?? EB ?? B8";
     public const string EventFrameworkSignature = "48 8B 05 ?? ?? ?? ?? 48 85 C0 74 ?? 83 B8 ?? ?? ?? ?? ?? 7C";
@@ -34,15 +35,20 @@ public static class ClientLayout {
     }
     private static float Float(ReadOnlySpan<byte> data,int at)=>BitConverter.Int32BitsToSingle(BinaryPrimitives.ReadInt32LittleEndian(data[at..]));
     public static PlayerPosition? DecodePlayer(ReadOnlySpan<byte> header,ushort world,ReadOnlySpan<byte> status,DateTime now) {
+        return DecodePlayer(header,world,status,now,out _);
+    }
+    public static PlayerPosition? DecodePlayer(ReadOnlySpan<byte> header,ushort world,ReadOnlySpan<byte> status,DateTime now,out string reason) {
+        reason="header-or-kind";
         if(header.Length<HeaderBytes || header[0x90]!=1)return null; // PC only; never interpret NPC memory as BattleChara.
-        var id=BinaryPrimitives.ReadUInt32LittleEndian(header[0x78..]);if(id is 0 or 0xE0000000)return null;
-        var nameBytes=header.Slice(0x30,64);var end=nameBytes.IndexOf((byte)0);if(end<=0)return null;
+        reason="entity-id";var id=BinaryPrimitives.ReadUInt32LittleEndian(header[0x78..]);if(id is 0 or 0xE0000000)return null;
+        reason="name";var nameBytes=header.Slice(0x30,64);var end=nameBytes.IndexOf((byte)0);if(end<=0)return null;
         string name;
         try {name=new UTF8Encoding(false,true).GetString(nameBytes[..end]);}catch(DecoderFallbackException) {return null;}
         if(name.Any(char.IsControl))return null;
         var x=Float(header,0xB0);var y=Float(header,0xB4);var z=Float(header,0xB8);var heading=Float(header,0xC0);
         var hp=BinaryPrimitives.ReadUInt32LittleEndian(header[0x1AC..]);var max=BinaryPrimitives.ReadUInt32LittleEndian(header[0x1B0..]);
         var job=header[0x1CA];
+        reason="position-hp-job";
         if(!float.IsFinite(x)||!float.IsFinite(y)||!float.IsFinite(z)||!float.IsFinite(heading)||MathF.Abs(x)>100000||MathF.Abs(y)>100000||MathF.Abs(z)>100000||max==0||max>10000000||hp>max||job is 0 or >100)return null;
         var result=new PlayerPosition {Player=ClientCatalog.PlayerName(name,world),X=x,Y=y,Z=z,Heading=heading,HP=hp,MaxHP=max,ClassJobId=job,StatusTimestamp=now};
         // Team is deliberately unknown. Relative hostility is not an Astra/Umbra identity.
@@ -52,6 +58,6 @@ public static class ClientLayout {
             if(!float.IsFinite(remaining)||MathF.Abs(remaining)>1000000)continue;
             result.Statuses.Add(new ReplayBuff {Id=statusId,Param=BinaryPrimitives.ReadUInt16LittleEndian(row[2..]),Remaining=remaining});
         }
-        return result;
+        reason="";return result;
     }
 }

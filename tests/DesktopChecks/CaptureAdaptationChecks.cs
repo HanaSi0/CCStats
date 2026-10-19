@@ -88,7 +88,7 @@ internal static class CaptureAdaptationChecks {
             await capture.FlushAsync();check(capture.State.Connected,"diagnostic flush closes the current segment while keeping the game source connected");
             await capture.StopAsync();var automatic=await ReplayImport.ReadAsync(capture.State.SavedPath!);
             check(automatic.Data.Effects.Count==automatic.Data.Frames.Count&&automatic.Data.DirectorObserved&&automatic.Data.Frames[0].Players[0].Team==2,"automatic background capture consumes supplemental source channels in the same cycle as movement");
-            check(capture.State.LocalPlayer=="Own"&&capture.State.GameVersion=="test-build"&&capture.State.ChannelStatus?["director"]=="ok","diagnostics retain the client build and individual channel state after capture stops");
+            check(capture.State.LocalPlayer==""&&automatic.Match.LocalPlayer=="Own"&&capture.State.GameVersion=="test-build"&&capture.State.ChannelStatus?["director"]=="ok","stopping clears the active login while saved observations retain identity and diagnostics retain client/channel state");
             var zip=Path.Combine(directory,"diagnostics.zip");await CaptureDiagnostics.ExportAsync(directory,zip,new {State="fixture"});
             using(var archive=System.IO.Compression.ZipFile.OpenRead(zip))check(archive.Entries.Any(e=>e.FullName=="status.json")&&archive.Entries.Any(e=>e.FullName.StartsWith("observations/"))&&archive.Entries.Any(e=>e.FullName.StartsWith("settlement/")),"diagnostic export includes bounded settlement fields and status without recording arbitrary memory");
         } finally {Directory.Delete(directory,true);}

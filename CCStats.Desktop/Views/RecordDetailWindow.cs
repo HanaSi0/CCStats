@@ -13,8 +13,8 @@ internal sealed class RecordDetailWindow : Window {
     public RecordDetailWindow(ReplayBundle bundle,RecordLibrary library) {
         _bundle=bundle;Title=(bundle.Match.Observation?"观测详情 · ":"对局详情 · ")+bundle.Match.Map;Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(18)};var header=new StackPanel();
-        header.Children.Add(new TextBlock {Text=bundle.Match.Map+"　"+bundle.Match.StartLabel+"　"+bundle.Match.Result+"　"+bundle.Match.Duration,Foreground=Brushes.White,FontSize=21,Margin=new Thickness(0,0,0,14)});
-        var tools=new WrapPanel();var favorite=new CheckBox {Content="收藏",IsChecked=bundle.Match.Favorite,Foreground=Brushes.White,Margin=new Thickness(0,8,12,0)};var tags=new TextBox {Text=bundle.Match.Tags,MinWidth=220};tools.Children.Add(favorite);tools.Children.Add(tags);
+        header.Children.Add(new TextBlock {Text=bundle.Match.Map+"　"+bundle.Match.StartLabel+"　"+bundle.Match.Result+"　"+bundle.Match.Duration,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),FontSize=21,Margin=new Thickness(0,0,0,14)});
+        var tools=new WrapPanel();var favorite=new CheckBox {Content="收藏",IsChecked=bundle.Match.Favorite,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),Margin=new Thickness(0,8,12,0)};var tags=new TextBox {Text=bundle.Match.Tags,MinWidth=220};tools.Children.Add(favorite);tools.Children.Add(tags);
         Button Button(string title,RoutedEventHandler action) {var b=new Button {Content=title};b.Click+=action;return b;}
         tools.Children.Add(Button("保存标签",(_,_)=>{library.Annotate(bundle.Match.Id,favorite.IsChecked==true,tags.Text);bundle.Match.Tags=tags.Text;bundle.Match.Favorite=favorite.IsChecked==true;Changed?.Invoke();}));
         tools.Children.Add(Button("地图回放",(_,_)=>new ReplayWindow(bundle){Owner=this}.Show()));
@@ -30,13 +30,13 @@ internal sealed class RecordDetailWindow : Window {
         var teamGrid=TableFactory.Create(totals,("队伍合计","Team"),("伤害","Damage"),("承伤","Taken"),("治疗","Healing"),("推车秒数","Crystal"));teamGrid.Height=150;settle.Children.Add(teamGrid);Tab("结算数据",new ScrollViewer {Content=settle});
         if(bundle.Data.CaptureMethod.Length>0) {
             var capture=new StackPanel {Margin=new Thickness(12)};
-            capture.Children.Add(new TextBlock {Text=$"位置 {bundle.Data.Frames.Count:N0} 帧 · 动作效果 {bundle.Data.Effects.Count:N0} 条 · 场地事件 {bundle.Data.MapMechanics.Count:N0} 条 · 场景状态 {bundle.Data.ArenaStates.Count:N0} 条",Foreground=Brushes.White,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
-            foreach(var warning in bundle.Data.CaptureWarnings)capture.Children.Add(new TextBlock {Text=warning,Foreground=Brushes.LightSteelBlue,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
+            capture.Children.Add(new TextBlock {Text=$"位置 {bundle.Data.Frames.Count:N0} 帧 · 动作效果 {bundle.Data.Effects.Count:N0} 条 · 场地事件 {bundle.Data.MapMechanics.Count:N0} 条 · 场景状态 {bundle.Data.ArenaStates.Count:N0} 条",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
+            foreach(var warning in bundle.Data.CaptureWarnings)capture.Children.Add(new TextBlock {Text=warning,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
             capture.Children.Add(TableFactory.Create(bundle.Data.ArenaStates,("观察时间","Timestamp"),("场景资源","LayoutId"),("状态","State"),("标志","Flags")));
             Tab("采集状态",new ScrollViewer {Content=capture});
         }
 
-        var analysis=new StackPanel();var analysisStatus=new TextBlock {Text="点击后才计算防御推算、控制和恢复数据。",Foreground=Brushes.LightSteelBlue,Margin=new Thickness(10)};var analysisHost=new ContentControl();
+        var analysis=new StackPanel();var analysisStatus=new TextBlock {Text="点击后才计算防御推算、控制和恢复数据。",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),Margin=new Thickness(10)};var analysisHost=new ContentControl();
         var calculate=Button("计算高级数据",async (s,_)=> {
             var button=(Button)s;button.IsEnabled=false;analysisStatus.Text="正在计算…";
             try {
@@ -51,10 +51,10 @@ internal sealed class RecordDetailWindow : Window {
         analysis.Children.Add(calculate);analysis.Children.Add(analysisStatus);analysis.Children.Add(analysisHost);Tab("高级分析",analysis);
         var events=bundle.Timeline.Concat(bundle.Data.ReplaySkills.Select(e=>new TimelineRow(e.Timestamp,"技能",e.Actor,e.TargetPlayer,ChineseText.ActionName(e.ActionId,$"技能 {e.ActionId}")))).Concat(bundle.Data.MapMechanics.Select(e=>new TimelineRow(e.Timestamp,"地图事件","","",e.Label))).Distinct().OrderBy(e=>e.Timestamp).ToArray();
         var eventGrid=TableFactory.Create(events.Select(e=>new TimedEvent(TimeSpan.FromSeconds(Math.Max(0,(e.Timestamp-bundle.Match.StartUtc).TotalSeconds)).ToString(@"mm\:ss\.fff"),e.Timestamp,e.Kind,e.Actor,e.Target,e.Description)),("相对时间","Elapsed"),("类型","Kind"),("来源","Actor"),("目标","Target"),("事件","Description"));
-        eventGrid.MouseDoubleClick+=(_,_)=>{if(eventGrid.SelectedItem is TimedEvent row)new ReplayWindow(bundle,(row.Timestamp-bundle.Match.StartUtc).TotalSeconds){Owner=this}.Show();};Tab("事件时间线",eventGrid);
+        TableFactory.OnRowActivated(eventGrid,item=>{if(item is TimedEvent row)new ReplayWindow(bundle,(row.Timestamp-bundle.Match.StartUtc).TotalSeconds){Owner=this}.Show();});Tab("事件时间线",eventGrid);
         var curve=new StackPanel();var points=bundle.Progress.Where(p=>p.Series is "水晶位置" or "战术水晶位置").Select(p=>(p.Timestamp,(double)p.Points)).ToArray();
         if(points.Length==0&&!bundle.Match.Observation)points=bundle.Data.Frames.Select(f=>(f.Timestamp,(double)f.CrystalProgress)).Where((_,i)=>i%15==0).ToArray();
-        if(points.Length>0)curve.Children.Add(new TrendView(points){Height=300});else curve.Children.Add(new TextBlock {Text="此记录尚无推进数据。",Foreground=Brushes.LightSteelBlue,Margin=new Thickness(12)});
+        if(points.Length>0)curve.Children.Add(new TrendView(points){Height=300});else curve.Children.Add(new TextBlock {Text="此记录尚无推进数据。",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),Margin=new Thickness(12)});
         var progressRows=bundle.Progress.Count>0?bundle.Progress:points.Select(p=>new ProgressSample(p.Item1,"水晶位置",(int)p.Item2)).ToList();var progressTable=TableFactory.Create(progressRows,("时间","Timestamp"),("来源","Series"),("原始值","Points"));progressTable.Height=200;curve.Children.Add(progressTable);Tab("推进曲线",curve);
         var skills=bundle.Data.Effects.GroupBy(e=>new {e.Actor,e.ActionId}).Select(g=>new {Player=g.Key.Actor,Name=ChineseText.ActionName(g.Key.ActionId,$"技能 {g.Key.ActionId}"),Hits=g.Count(),Damage=g.Where(e=>DetailedAnalysis.IsDamage(e.Type)).Sum(e=>e.Amount),Healing=g.Where(e=>e.Type==4).Sum(e=>e.Amount)});
         var skillPanel=new StackPanel();

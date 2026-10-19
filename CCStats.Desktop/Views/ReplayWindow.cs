@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Numerics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -22,14 +23,15 @@ internal sealed class ReplayWindow : Window {
     private readonly ModelVisual3D _mapVisual=new(),_dynamic=new();
     private readonly Overlay _overlay;
     private readonly ReplayOrbitCamera _camera=new();
-    private readonly Slider _time=new() {Minimum=0,Margin=new Thickness(8)};
-    private readonly TextBlock _info=new() {Foreground=Brushes.LightSteelBlue};
-    private readonly TextBlock _progress=new() {Foreground=Brushes.White,HorizontalAlignment=HorizontalAlignment.Center,Margin=new Thickness(0,8,0,8)};
+    private readonly Slider _time=new() {Minimum=0,Margin=new Thickness(0,2,0,2),SmallChange=1d/30,LargeChange=5,IsMoveToPointEnabled=true,ToolTip="点击跳转；拖动定位；方向键逐帧，PageUp / PageDown 跳转 5 秒"};
+    private readonly TextBlock _info=new() {Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush")};
+    private readonly TextBlock _progress=new() {Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),HorizontalAlignment=HorizontalAlignment.Center,Margin=new Thickness(0,8,0,8)};
     private readonly StackPanel _left=new(),_right=new();
     private readonly Grid _canvas=new() {Background=new SolidColorBrush(Color.FromRgb(7,13,23)),ClipToBounds=true};
     private readonly DispatcherTimer _timer=new() {Interval=TimeSpan.FromMilliseconds(33)};
     private readonly Stopwatch _clock=Stopwatch.StartNew();
     private ReplayMapMesh? _mesh;
+    private bool _scrubbing,_resumeAfterScrub,_syncingTime;
     private bool _playing,_busy,_closed,_threeD=true,_effects=true,_trail=true,_clip=true;
     private double _seconds,_speed=1,_lastClock,_rendered=-1;
     private Point _lastMouse;
@@ -46,9 +48,14 @@ internal sealed class ReplayWindow : Window {
         var speed=new ComboBox {ItemsSource=new[]{"0.5×","1×","2×","4×"},SelectedIndex=1,Width=85,Margin=new Thickness(0,0,8,8)};speed.SelectionChanged+=(_,_)=>_speed=new[]{.5,1,2,4}[speed.SelectedIndex];actions.Children.Add(speed);
         actions.Children.Add(Button("2D / 3D",()=>{_threeD=!_threeD;_viewport.Visibility=_threeD?Visibility.Visible:Visibility.Hidden;_overlay?.InvalidateVisual();_rendered=-1;}));
         actions.Children.Add(Button("重置视角",ResetCamera));
-        void Toggle(string label,bool initial,Action<bool> set) {var check=new CheckBox {Content=label,IsChecked=initial,Foreground=Brushes.White,Margin=new Thickness(4,7,12,0)};check.Click+=(_,_)=>{set(check.IsChecked==true);_rendered=-1;};actions.Children.Add(check);}
+        void Toggle(string label,bool initial,Action<bool> set) {var check=new CheckBox {Content=label,IsChecked=initial,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),Margin=new Thickness(4,7,12,0)};check.Click+=(_,_)=>{set(check.IsChecked==true);_rendered=-1;};actions.Children.Add(check);}
         Toggle("水晶轨迹",true,v=>_trail=v);Toggle("技能与地图事件",true,v=>_effects=v);Toggle("范围裁剪",true,v=>_clip=v);
-        top.Children.Add(actions);_time.Maximum=_duration;_time.ValueChanged+=(_,_)=>{if(Math.Abs(_time.Value-_seconds)>.0001){_seconds=_time.Value;_playing=false;_rendered=-1;}};top.Children.Add(_time);top.Children.Add(_info);top.Children.Add(_progress);DockPanel.SetDock(top,Dock.Top);root.Children.Add(top);
+        top.Children.Add(actions);_time.Maximum=_duration;
+        _time.ValueChanged+=(_,_)=>{if(!_syncingTime){_seconds=_time.Value;if(!_scrubbing)_playing=false;_rendered=-1;}};
+        _time.PreviewMouseLeftButtonDown+=(_,e)=>{_resumeAfterScrub=_playing;_playing=false;_scrubbing=true;_time.CaptureMouse();Seek(e.GetPosition(_time));e.Handled=true;};
+        _time.PreviewMouseMove+=(_,e)=>{if(_scrubbing){Seek(e.GetPosition(_time));e.Handled=true;}};
+        _time.PreviewMouseLeftButtonUp+=(_,e)=>{if(_scrubbing){Seek(e.GetPosition(_time));EndScrub();_time.ReleaseMouseCapture();e.Handled=true;}};
+        _time.LostMouseCapture+=(_,_)=>EndScrub();top.Children.Add(_time);top.Children.Add(_info);top.Children.Add(_progress);DockPanel.SetDock(top,Dock.Top);root.Children.Add(top);
         var body=new Grid();body.ColumnDefinitions.Add(new(){Width=new GridLength(220)});body.ColumnDefinitions.Add(new(){Width=new GridLength(1,GridUnitType.Star)});body.ColumnDefinitions.Add(new(){Width=new GridLength(220)});
         body.Children.Add(new ScrollViewer {Content=_left,VerticalScrollBarVisibility=ScrollBarVisibility.Auto});Grid.SetColumn(_canvas,1);body.Children.Add(_canvas);var right=new ScrollViewer {Content=_right,VerticalScrollBarVisibility=ScrollBarVisibility.Auto};Grid.SetColumn(right,2);body.Children.Add(right);
         _viewport.Children.Add(new ModelVisual3D {Content=new AmbientLight(Colors.White)});
@@ -63,12 +70,22 @@ internal sealed class ReplayWindow : Window {
         await _ready.Task.WaitAsync(TimeSpan.FromSeconds(40));
         if(_bundle.Data.DirectorObserved&&_progress.Text.StartsWith("暂无",StringComparison.Ordinal))throw new InvalidOperationException("Observed director progress is incorrectly hidden");
         if(_mapVisual.Content==null||_viewport.Camera==null)throw new InvalidOperationException("3D map or camera missing");
+        _time.ApplyTemplate();UpdateLayout();var savedSeconds=_seconds;_playing=true;_resumeAfterScrub=true;_scrubbing=true;
+        Seek(new Point(_time.ActualWidth/2,_time.ActualHeight/2));
+        if(Math.Abs(_seconds-_duration/2)>.1||_time.Template.FindName("PART_Track",_time) is not Track)throw new InvalidOperationException("Timeline point seeking failed");
+        EndScrub();if(!_playing)throw new InvalidOperationException("Timeline playback did not resume after scrubbing");_playing=false;_seconds=savedSeconds;_rendered=-1;
         _threeD=false;_viewport.Visibility=Visibility.Hidden;_overlay.InvalidateVisual();await Task.Delay(100);
         if(_mapImage==null)throw new InvalidOperationException("Official 2D map missing");
         _threeD=true;_viewport.Visibility=Visibility.Visible;_overlay.InvalidateVisual();UpdateLayout();
         var bitmap=new RenderTargetBitmap((int)ActualWidth,(int)ActualHeight,96,96,PixelFormats.Pbgra32);bitmap.Render(this);
         var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));using var file=System.IO.File.Create(screenshot);encoder.Save(file);
     }
+    private void Seek(Point point) {
+        if(_time.Template.FindName("PART_Track",_time) is Track track) {
+            var at=_time.TranslatePoint(point,track);_time.Value=Math.Clamp(track.ValueFromPoint(at),0,_duration);
+        }
+    }
+    private void EndScrub() {if(!_scrubbing)return;_scrubbing=false;_playing=_resumeAfterScrub&&_seconds<_duration;_lastClock=_clock.Elapsed.TotalSeconds;}
     private Vector2 SizeVector()=>new((float)Math.Max(1,_canvas.ActualWidth),(float)Math.Max(1,_canvas.ActualHeight));
     private async Task LoadAsync() {
         try {
@@ -103,9 +120,9 @@ internal sealed class ReplayWindow : Window {
     private async Task TickAsync() {
         double clock=_clock.Elapsed.TotalSeconds;float delta=(float)Math.Min(.1,clock-_lastClock);_lastClock=clock;
         if(_playing)_seconds=Math.Min(_duration,_seconds+delta*_speed);if(_seconds>=_duration)_playing=false;
-        if(_camera.Update(delta,SizeVector()))ApplyCamera();_time.Value=_seconds;
+        if(_camera.Update(delta,SizeVector()))ApplyCamera();if(!_scrubbing){_syncingTime=true;try{_time.Value=_seconds;}finally{_syncingTime=false;}}
         _info.Text=$"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss}　{_bundle.Data.Frames.Count:N0} 帧　左键平移 · 右键旋转 · 滚轮缩放";
-        if(_busy||Math.Abs(_rendered-_seconds)<.06)return;_busy=true;var seconds=_seconds;_rendered=seconds;
+        if(_busy||Math.Abs(_rendered-_seconds)<.03)return;_busy=true;var seconds=_seconds;_rendered=seconds;
         try {
             var now=_origin.AddSeconds(seconds);var frame=ReplayInterpolation.Sample(_bundle.Data,now);
             _progress.Text=frame==null||frame.AstraProgress<0||frame.UmbraProgress<0||(_bundle.Match.Observation&&!_bundle.Data.DirectorObserved)?"暂无该时刻的完整观测":$"星极队 {frame.AstraProgress/10f:F1}%　　◆　　灵极队 {frame.UmbraProgress/10f:F1}%";
@@ -119,11 +136,11 @@ internal sealed class ReplayWindow : Window {
         var players=frame?.Players.Where(p=>p.Team==team||(team==1&&p.Team==0)).ToArray()??Array.Empty<PlayerPosition>();
         foreach(var p in players) {
             var card=new StackPanel {Margin=new Thickness(6,5,6,5)};
-            card.Children.Add(new TextBlock {Text=JobNames.Name(p.ClassJobId)+" · "+p.Player,Foreground=Brushes.White,TextWrapping=TextWrapping.Wrap});
+            card.Children.Add(new TextBlock {Text=JobNames.Name(p.ClassJobId)+" · "+p.Player,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),TextWrapping=TextWrapping.Wrap});
             card.Children.Add(new ProgressBar {Minimum=0,Maximum=Math.Max(1,p.MaxHP),Value=p.HP,Height=10,Margin=new Thickness(0,5,0,2)});
-            card.Children.Add(new TextBlock {Text=$"{p.HP:N0}/{p.MaxHP:N0}"+(p.Team==0?" · 队伍未知":""),Foreground=Brushes.LightSteelBlue,FontSize=11});
+            card.Children.Add(new TextBlock {Text=$"{p.HP:N0}/{p.MaxHP:N0}"+(p.Team==0?" · 队伍未知":""),Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),FontSize=11});
             var buffs=p.Statuses.Select(s=>(Status:s,Remaining:s.Remaining-(now-p.StatusTimestamp).TotalSeconds)).Where(x=>x.Status.Remaining<=0||x.Remaining>0).Select(x=>ChineseText.StatusName(x.Status.Id,$"状态 {x.Status.Id}")+(x.Status.Remaining>0?$" {Math.Ceiling(x.Remaining):0}":""));
-            card.Children.Add(new TextBlock {Text=string.Join(" · ",buffs),Foreground=Brushes.LightSteelBlue,FontSize=11,TextWrapping=TextWrapping.Wrap});panel.Children.Add(card);
+            card.Children.Add(new TextBlock {Text=string.Join(" · ",buffs),Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),FontSize=11,TextWrapping=TextWrapping.Wrap});panel.Children.Add(card);
         }
     }
     private sealed class Overlay(ReplayWindow owner):FrameworkElement {

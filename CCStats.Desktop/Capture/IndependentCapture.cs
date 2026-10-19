@@ -27,7 +27,7 @@ internal sealed class IndependentCapture {
         if(!automatic)_nextAttempt=DateTime.MinValue;
         _lifetime?.Dispose();_lifetime=new();var token=_lifetime.Token;
         _worker=Task.Run(async ()=> {
-            ObservationWriter? writer=null;string? saved=null;var lastPublished=DateTime.MinValue;uint lastTerritory=0;string? diagnosticError=null;
+            ObservationWriter? writer=null;string? saved=null;var lastPublished=DateTime.MinValue;var lastProbe=DateTime.MinValue;DateTime? loadingSince=null;uint lastTerritory=0;string? diagnosticError=null;
             try {
                 using var game=_factory();
                 if(game==null) {State=new(false,false,"等待游戏启动：会自动识别并连接，无需手动选择进程。");return;}
@@ -39,10 +39,16 @@ internal sealed class IndependentCapture {
                         try {CaptureDiagnostics.SavePanels(directory,territory,diagnostic);diagnosticError=null;}
                         catch(Exception error) when(error is IOException or UnauthorizedAccessException) {diagnosticError=error.Message;}
                     }
+                    if(game.Telemetry is {} probe&&ReplayMapMesh.MapKey(territory)!=null&&probe.ChannelStatus.ContainsKey("sceneIdentities")&&frame.Timestamp-lastProbe>=TimeSpan.FromSeconds(5)) {
+                        lastProbe=frame.Timestamp;
+                        try {CaptureDiagnostics.SaveProbe(directory,territory,probe);}catch(Exception error) when(error is IOException or UnauthorizedAccessException) {diagnosticError=error.Message;}
+                    }
                     if(territory!=lastTerritory&&territory!=0) {_manualPaused=false;lastTerritory=territory;}
-                    bool request=Volatile.Read(ref _record)!=0||(_autoRecord&&!_manualPaused&&ReplayMapMesh.MapKey(territory)!=null);
+                    if(territory==0)loadingSince??=frame.Timestamp;else loadingSince=null;
+                    bool loadingGrace=territory==0&&writer!=null&&frame.Timestamp-loadingSince<TimeSpan.FromSeconds(3);
+                    bool request=Volatile.Read(ref _record)!=0||(_autoRecord&&!_manualPaused&&(ReplayMapMesh.MapKey(territory)!=null||loadingGrace));
                     var flush=Volatile.Read(ref _flush);
-                    if(writer!=null&&(flush!=null||!request||territory!=writer.Territory||writer.ShouldRollOver)) {saved=Finish(writer);writer=null;}
+                    if(writer!=null&&(flush!=null||!request||(!loadingGrace&&territory!=writer.Territory)||writer.ShouldRollOver)) {saved=Finish(writer);writer=null;}
                     if(flush!=null) {Interlocked.CompareExchange(ref _flush,null,flush);flush.TrySetResult();}
                     if(request&&frame.Players.Count>0&&territory>0) {writer??=new ObservationWriter(directory,territory);writer.Append(territory,frame,game.Telemetry);}
                     if(frame.Timestamp-lastPublished>=TimeSpan.FromMilliseconds(200)) {
@@ -56,7 +62,7 @@ internal sealed class IndependentCapture {
                 try {if(writer!=null) {saved=Finish(writer);}}
                 catch(Exception error) {State=State with {Message="记录收尾失败，保留临时文件："+error.Message};}
                 Interlocked.Exchange(ref _flush,null)?.TrySetResult();
-                Interlocked.Exchange(ref _record,0);State=State with {Connected=false,Recording=false,SavedPath=saved};
+                Interlocked.Exchange(ref _record,0);State=State with {Connected=false,Recording=false,SavedPath=saved,LocalPlayer="",Profile=null};
             }
         });
     }

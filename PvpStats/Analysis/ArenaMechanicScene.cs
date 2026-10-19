@@ -33,7 +33,7 @@ public sealed class ReplayArenaObject {
     public Vector3 Position()=>new(X,Y,Z);
 }
 public sealed record ArenaMechanicInstance(ArenaMechanicKind Kind,Vector3 Position,float Heading=0,
-    float Radius=2,Vector3? Destination=null,float? Progress=null,bool Reference=false,ulong ObjectId=0,float EyeOpen=0);
+    float Radius=2,Vector3? Destination=null,float? Progress=null,bool Reference=false,ulong ObjectId=0,float EyeOpen=0,float FloorAngle=0);
 
 public static class ArenaMechanicScene {
     public static readonly ArenaMechanicKind[] GalleryKinds=Enum.GetValues<ArenaMechanicKind>().Where(k=>k!=ArenaMechanicKind.Unknown).ToArray();
@@ -82,10 +82,10 @@ public static class ArenaMechanicScene {
     public static IEnumerable<ArenaMechanicInstance> Objects(DetailedTelemetry data,uint territory,DateTime now) {
         var map=ReplayMapMesh.MapKey(territory);
         return data.ArenaObjects.Where(o=>o.ObjectId!=0&&o.ObservedUntil>=o.Timestamp&&o.Timestamp<=now&&now<=o.ObservedUntil.AddSeconds(.25)&&InMap(o.Kind,map)&&LimitBreakVisuals.Finite(o.Position())&&float.IsFinite(o.Heading))
-            .GroupBy(o=>o.ObjectId).Select(g=>g.OrderByDescending(o=>o.Timestamp).First())
+            .GroupBy(o=>o.EntityId is not (0 or 0xE0000000)?(ulong)o.EntityId:o.ObjectId).Select(g=>g.OrderByDescending(o=>o.Timestamp).First())
             .OrderBy(o=>o.ObjectId).Take(64).Select(o=>new ArenaMechanicInstance(o.Kind,o.Position(),o.Heading,
                 Destination:o.TargetX.HasValue&&o.TargetY.HasValue&&o.TargetZ.HasValue&&LimitBreakVisuals.Finite(new(o.TargetX.Value,o.TargetY.Value,o.TargetZ.Value))?new(o.TargetX.Value,o.TargetY.Value,o.TargetZ.Value):null,
-                Progress:o.Progress,ObjectId:o.ObjectId,EyeOpen:o.Kind==ArenaMechanicKind.Onmyoji&&!Moving(data.ArenaObjects,o,now)?EyeOpenness(data.MapMechanics,now,o.EntityId):0));
+                Progress:o.Progress,ObjectId:o.ObjectId,EyeOpen:o.Kind==ArenaMechanicKind.Onmyoji&&!Moving(data.ArenaObjects,o,now)?EyeOpenness(data.MapMechanics,now,o.EntityId):0,FloorAngle:o.Kind==ArenaMechanicKind.TrickFloor?FloorAngle(data.MapMechanics,now,o.EntityId,o.Position()):0));
     }
     public static ArenaMechanicKind FromAction(uint action)=>action switch {
         28725 or 28726=>ArenaMechanicKind.Bomb,28727 or 28728=>ArenaMechanicKind.Turbulence,28731=>ArenaMechanicKind.Twister,
@@ -95,7 +95,8 @@ public static class ArenaMechanicScene {
     };
     public static IEnumerable<ArenaMechanicInstance> Actions(DetailedTelemetry data,uint territory,DateTime now) {
         var map=ReplayMapMesh.MapKey(territory);
-        foreach(var e in data.MapMechanics.Where(e=>e.Kind is ReplayMapEventKind.CastObserved or ReplayMapEventKind.ActionResolved)) {
+        var emitted=new HashSet<(ArenaMechanicKind Kind,uint Entity)>();
+        foreach(var e in data.MapMechanics.Where(e=>e.Kind is ReplayMapEventKind.CastObserved or ReplayMapEventKind.ActionResolved).OrderByDescending(e=>e.Timestamp)) {
             var kind=FromAction(e.ActionId);
             if(!InMap(kind,map)||(!ReplayMechanicObservation.Visible(e,now)&&!(kind==ArenaMechanicKind.Onmyoji&&EyeForEvent(e,now)>0)))continue;
             if(e.Kind==ReplayMapEventKind.ActionResolved&&(now-e.Timestamp).TotalSeconds>1.1)continue;
@@ -104,9 +105,22 @@ public static class ArenaMechanicScene {
             if(!x.HasValue||!z.HasValue||!y.HasValue)continue;
             var p=new Vector3(x.Value,y.Value,z.Value);if(!LimitBreakVisuals.Finite(p))continue;
             // Prefer observed object pose to duplicate action decorations. Existing AoE footprints stay separate.
-            if(data.ArenaObjects.Any(o=>o.Timestamp<=now&&o.ObservedUntil.AddSeconds(.25)>=now&&o.Kind==kind&&Vector3.DistanceSquared(o.Position(),p)<9))continue;
-            yield return new(kind,p,float.IsFinite(e.Heading??0)?e.Heading??0:0,ObjectId:e.SourceEntityId,EyeOpen:kind==ArenaMechanicKind.Onmyoji?EyeForEvent(e,now):0);
+            if(data.ArenaObjects.Any(o=>o.Timestamp<=now&&o.ObservedUntil.AddSeconds(.25)>=now&&o.Kind==kind&&
+                ((e.SourceEntityId is not (0 or 0xE0000000)&&o.EntityId==e.SourceEntityId)||Vector3.DistanceSquared(o.Position(),p)<9)))continue;
+            // Cast-start and resolve snapshots can have different positions as the NPC moves.
+            // Prefer its latest active event, rather than drawing another actor at the old position.
+            if(e.SourceEntityId is not (0 or 0xE0000000)&&!emitted.Add((kind,e.SourceEntityId)))continue;
+            yield return new(kind,p,float.IsFinite(e.Heading??0)?e.Heading??0:0,ObjectId:e.SourceEntityId,EyeOpen:kind==ArenaMechanicKind.Onmyoji?EyeForEvent(e,now):0,FloorAngle:kind==ArenaMechanicKind.TrickFloor?FloorAngle(data.MapMechanics,now,e.SourceEntityId,p):0);
         }
+    }
+    public static float FloorAngle(IEnumerable<ReplayMapEvent> events,DateTime now,uint entity,Vector3 position) {
+        var matching=events.Where(e=>e.ActionId==32364&&e.Timestamp<=now&&
+            ((entity is not (0 or 0xE0000000)&&e.SourceEntityId==entity)||
+             (e.X.HasValue&&e.Z.HasValue&&Vector2.DistanceSquared(new(e.X.Value,e.Z.Value),new(position.X,position.Z))<=4)));
+        var impact=matching.Where(e=>e.Kind==ReplayMapEventKind.ActionResolved).OrderByDescending(e=>e.Timestamp).FirstOrDefault();
+        if(impact!=null) {float age=(float)(now-impact.Timestamp).TotalSeconds;if(age<=.95f)return 2.65f*MathF.Sin(MathF.PI*age/.95f);}
+        var cast=matching.Where(e=>e.Kind==ReplayMapEventKind.CastObserved&&ReplayMechanicObservation.Visible(e,now)).OrderByDescending(e=>e.Timestamp).FirstOrDefault();
+        return cast==null||(impact!=null&&impact.Timestamp>=cast.Timestamp)?0:.035f*MathF.Abs(MathF.Sin((float)(now-cast.Timestamp).TotalSeconds*18));
     }
     public static bool Moving(IEnumerable<ReplayArenaObject> tracks,ReplayArenaObject current,DateTime now) {
         if(current.Timestamp>now||(now-current.Timestamp).TotalSeconds>.25)return false;
