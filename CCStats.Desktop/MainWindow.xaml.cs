@@ -95,7 +95,7 @@ public partial class MainWindow : Window {
         finally {_busy=false;}
     }
     private void ShowPage(int page) {
-        _page=page;PageContent.Children.Clear();
+        _page=page;PageContent.Children.Clear();PageScroll.ScrollToTop();
         for(int i=0;i<_navigation.Count;i++){_navigation[i].SetResourceReference(Control.BackgroundProperty,i==page?"AccentBrush":"ButtonBrush");_navigation[i].SetResourceReference(Control.ForegroundProperty,i==page?"OnAccentBrush":"TextBrush");}
         PageTitle.Text=Pages[page];PageSubtitle.Text=page==8?"时间轴、战术水晶与已记录事件":"水晶冲突 · 本机数据中心";
         switch(page) {
@@ -175,7 +175,7 @@ public partial class MainWindow : Window {
         if(((SolidColorBrush)DesktopTheme.Brush("TextBrush")).Color!=Color.FromRgb(236,242,255))throw new InvalidOperationException("Theme reset leaves stale text colours");
         DesktopTheme.Apply(originalTheme,_preferences.CustomColors);
         _observationsView=true;ShowPage(0);PageContent.Children.OfType<DateRangeFilter>().Single().Verify();
-        UpdateLayout();TableFactory.VerifySelection(PageContent.Children.OfType<DataGrid>().Single());
+        UpdateLayout();await TableFactory.VerifySelectionAsync(PageContent.Children.OfType<DataGrid>().Single());
         await MeshVisuals.VerifyPaletteAsync(this);
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();
         var detail=new RecordDetailWindow(_bundle,_library){Owner=this};detail.Show();detail.Close();

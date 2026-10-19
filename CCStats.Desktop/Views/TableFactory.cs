@@ -13,9 +13,12 @@ namespace CCStats.Desktop.Views;
 internal static class TableFactory {
     public static DataGrid Create(IEnumerable rows,params (string Header,string Path)[] columns) {
         var grid=new DataGrid {ItemsSource=rows.Cast<object>().ToList(),AutoGenerateColumns=false,IsReadOnly=true,Height=430,EnableRowVirtualization=true,EnableColumnVirtualization=true,CanUserReorderColumns=true,CanUserResizeColumns=true,CanUserSortColumns=true,SelectionMode=DataGridSelectionMode.Single,SelectionUnit=DataGridSelectionUnit.FullRow,HeadersVisibility=DataGridHeadersVisibility.Column,RowHeight=40,GridLinesVisibility=DataGridGridLinesVisibility.None,BorderThickness=new Thickness(0),FocusVisualStyle=null};
-        grid.SetResourceReference(Control.BackgroundProperty,"InputBrush");grid.SetResourceReference(Control.ForegroundProperty,"TextBrush");grid.SetResourceReference(DataGrid.RowBackgroundProperty,"SurfaceBrush");grid.SetResourceReference(DataGrid.AlternatingRowBackgroundProperty,"AlternateBrush");
+        grid.SetResourceReference(Control.BackgroundProperty,"InputBrush");grid.SetResourceReference(Control.ForegroundProperty,"TextBrush");grid.AlternationCount=2;
         var header=new Style(typeof(DataGridColumnHeader));header.Setters.Add(new Setter(Control.BackgroundProperty,new DynamicResourceExtension("ButtonBrush")));header.Setters.Add(new Setter(Control.ForegroundProperty,new DynamicResourceExtension("TextBrush")));header.Setters.Add(new Setter(Control.PaddingProperty,new Thickness(12,10,12,10)));header.Setters.Add(new Setter(Control.BorderThicknessProperty,new Thickness(0)));header.Setters.Add(new Setter(Control.FocusVisualStyleProperty,null));grid.ColumnHeaderStyle=header;
-        var rowStyle=new Style(typeof(DataGridRow));rowStyle.Setters.Add(new Setter(Control.ForegroundProperty,new DynamicResourceExtension("TextBrush")));rowStyle.Setters.Add(new Setter(Control.FocusVisualStyleProperty,null));
+        var rowStyle=new Style(typeof(DataGridRow));rowStyle.Setters.Add(new Setter(Control.BackgroundProperty,new DynamicResourceExtension("SurfaceBrush")));
+        var alternate=new Trigger {Property=ItemsControl.AlternationIndexProperty,Value=1};alternate.Setters.Add(new Setter(Control.BackgroundProperty,new DynamicResourceExtension("AlternateBrush")));rowStyle.Triggers.Add(alternate);
+        var rowFrame=new FrameworkElementFactory(typeof(Border));rowFrame.SetBinding(Border.BackgroundProperty,new Binding("Background"){RelativeSource=RelativeSource.TemplatedParent});rowFrame.SetBinding(Border.BorderBrushProperty,new Binding("BorderBrush"){RelativeSource=RelativeSource.TemplatedParent});rowFrame.SetBinding(Border.BorderThicknessProperty,new Binding("BorderThickness"){RelativeSource=RelativeSource.TemplatedParent});
+        var cells=new FrameworkElementFactory(typeof(DataGridCellsPresenter));rowFrame.AppendChild(cells);rowStyle.Setters.Add(new Setter(Control.TemplateProperty,new ControlTemplate(typeof(DataGridRow)){VisualTree=rowFrame}));rowStyle.Setters.Add(new Setter(Control.ForegroundProperty,new DynamicResourceExtension("TextBrush")));rowStyle.Setters.Add(new Setter(Control.FocusVisualStyleProperty,null));
         var hover=new Trigger {Property=UIElement.IsMouseOverProperty,Value=true};hover.Setters.Add(new Setter(Control.BackgroundProperty,new DynamicResourceExtension("HoverBrush")));rowStyle.Triggers.Add(hover);
         var selected=new Trigger {Property=DataGridRow.IsSelectedProperty,Value=true};selected.Setters.Add(new Setter(Control.BackgroundProperty,new DynamicResourceExtension("SelectionBrush")));selected.Setters.Add(new Setter(Control.ForegroundProperty,new DynamicResourceExtension("OnAccentBrush")));rowStyle.Triggers.Add(selected);grid.RowStyle=rowStyle;
         var cell=new Style(typeof(DataGridCell));cell.Setters.Add(new Setter(Control.BackgroundProperty,Brushes.Transparent));cell.Setters.Add(new Setter(Control.BorderThicknessProperty,new Thickness(0)));cell.Setters.Add(new Setter(Control.PaddingProperty,new Thickness(12,6,12,6)));cell.Setters.Add(new Setter(Control.FocusVisualStyleProperty,null));cell.Setters.Add(new Setter(Control.ForegroundProperty,new Binding("Foreground"){RelativeSource=new RelativeSource(RelativeSourceMode.FindAncestor,typeof(DataGridRow),1)}));
@@ -36,11 +39,13 @@ internal static class TableFactory {
         };
         grid.PreviewKeyDown+=(_,e)=>{if(e.Key==Key.Enter&&grid.SelectedItem is {} row) {e.Handled=true;open(row);}};
     }
-    internal static void VerifySelection(DataGrid grid) {
+    internal static async Task VerifySelectionAsync(DataGrid grid) {
         if(grid.SelectionUnit!=DataGridSelectionUnit.FullRow)throw new InvalidOperationException("Table selection must cover the full row");
         if(grid.Items.Count==0)return;
-        grid.SelectedIndex=0;grid.ScrollIntoView(grid.Items[0]);grid.UpdateLayout();
-        if(grid.ItemContainerGenerator.ContainerFromIndex(0) is not DataGridRow row||!row.IsSelected||row.Background!=DesktopTheme.Brush("SelectionBrush"))throw new InvalidOperationException("Selected row styling failed");
+        grid.SelectedIndex=0;grid.BringIntoView();grid.ScrollIntoView(grid.Items[0]);await System.Windows.Threading.Dispatcher.Yield(System.Windows.Threading.DispatcherPriority.Loaded);grid.UpdateLayout();
+        var row=grid.ItemContainerGenerator.ContainerFromIndex(0) as DataGridRow;
+        var expected=(SolidColorBrush)DesktopTheme.Brush("SelectionBrush");
+        if(row==null||!row.IsSelected||row.Background is not SolidColorBrush background||background.Color!=expected.Color)throw new InvalidOperationException($"Selected row styling failed: row={row!=null}, selected={row?.IsSelected}, background={row?.Background}, expected={expected.Color}");
         if(grid.CellStyle==null)throw new InvalidOperationException("Cell selection styling missing");
     }
     internal static void CheckSorting() {

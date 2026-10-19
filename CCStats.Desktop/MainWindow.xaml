@@ -21,7 +21,7 @@
         <TextBlock x:Name="PageTitle" FontSize="27" FontWeight="SemiBold"/>
         <TextBlock x:Name="PageSubtitle" Foreground="{DynamicResource MutedBrush}" Margin="0,7,0,0"/>
       </StackPanel>
-      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <ScrollViewer x:Name="PageScroll" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel x:Name="PageContent" Margin="6,0,8,0"/>
       </ScrollViewer>
       <TextBlock x:Name="StatusText" Grid.Row="2" Foreground="{DynamicResource MutedBrush}" Margin="6,16,0,0" Text="就绪"/>
