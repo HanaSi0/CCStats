@@ -86,12 +86,12 @@ jobs:
             artifacts/desktop-validation.技能分析.png
 
       - name: Package manually requested test build
-        if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
+        if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && (contains(github.event.head_commit.message, '[internal-test-package]') || (matrix.edition == 'Global' && contains(github.event.head_commit.message, '[global-test-package]')))))
         shell: pwsh
         run: |
           @{ Commit = '${{ github.sha }}'; BuiltAtUtc = [DateTime]::UtcNow.ToString('O'); Kind = 'Internal sampling build'; Edition = '${{ matrix.edition }}'; WindowsChecks = (Get-Content artifacts/desktop-validation.json | ConvertFrom-Json) } | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 artifacts/internal-desktop/build-info.json
       - uses: actions/upload-artifact@v4
-        if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[internal-test-package]')))
+        if: success() && ((github.event_name == 'workflow_dispatch' && inputs.include_test_package) || (github.event_name == 'push' && (contains(github.event.head_commit.message, '[internal-test-package]') || (matrix.edition == 'Global' && contains(github.event.head_commit.message, '[global-test-package]')))))
         with:
           name: ${{ matrix.edition == 'China' && 'CCStats-Desktop-CN-internal-test' || 'CCStats-Desktop-internal-test' }}
           path: artifacts/internal-desktop/
