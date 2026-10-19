@@ -12,13 +12,13 @@ internal static class WindowCaption {
     private static readonly ConditionalWeakTable<Window,CustomCaption> Custom=new();
     public static void Attach(Window window) {window.SourceInitialized+=(_,_)=>Apply(window);Apply(window);}
     public static void Apply(Window window) {
-        if(!OperatingSystem.IsWindows()||Custom.TryGetValue(window,out _))return;
+        if(!OperatingSystem.IsWindows()||window.AllowsTransparency||Custom.TryGetValue(window,out _))return;
         var handle=new WindowInteropHelper(window).Handle;if(handle==0)return;
         var background=(window.Background as SolidColorBrush)?.Color??((SolidColorBrush)DesktopTheme.Brush("BackgroundBrush")).Color;
         uint dark=background.R*.2126+background.G*.7152+background.B*.0722<128?1u:0u;
         if(DwmSetWindowAttribute(handle,20,ref dark,4)<0)DwmSetWindowAttribute(handle,19,ref dark,4);
         uint caption=ColorRef(background),text=ColorRef(((SolidColorBrush)DesktopTheme.Brush("TextBrush")).Color),border=caption;
-        if(DwmSetWindowAttribute(handle,35,ref caption,4)<0) {UseCustomCaption(window);return;}
+        if(DwmSetWindowAttribute(handle,35,ref caption,4)<0||DwmGetWindowAttribute(handle,35,out var actual,4)<0||actual!=caption) {UseCustomCaption(window);return;}
         DwmSetWindowAttribute(handle,36,ref text,4);DwmSetWindowAttribute(handle,34,ref border,4);
     }
     private static void UseCustomCaption(Window window) {
@@ -46,7 +46,7 @@ internal static class WindowCaption {
         var expected=((SolidColorBrush)window.Background).Color;
         if(Custom.TryGetValue(window,out var custom)) {
             window.UpdateLayout();
-            if(custom.Header.Background is not SolidColorBrush brush||brush.Color!=expected||WindowChrome.GetWindowChrome(window)?.CaptionHeight!=36||!WindowChrome.GetIsHitTestVisibleInChrome(custom.Close))throw new InvalidOperationException("Custom title-bar theme or window controls are incomplete");
+            if(custom.Header.Background is not SolidColorBrush brush||brush.Color!=expected||WindowChrome.GetWindowChrome(window)?.CaptionHeight!=36||!WindowChrome.GetIsHitTestVisibleInChrome(custom.Close))throw new InvalidOperationException($"Custom title-bar incomplete: background={custom.Header.Background}, expected={expected}, chrome={WindowChrome.GetWindowChrome(window)?.CaptionHeight}, close={WindowChrome.GetIsHitTestVisibleInChrome(custom.Close)}");
             return;
         }
         var handle=new WindowInteropHelper(window).Handle;var result=DwmGetWindowAttribute(handle,35,out var actual,4);

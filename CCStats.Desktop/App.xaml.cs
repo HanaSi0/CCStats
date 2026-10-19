@@ -2,22 +2,37 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;
+using CCStats.Desktop.Views;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace CCStats.Desktop;
 
 public partial class App : Application {
-    protected override void OnStartup(StartupEventArgs e) {
+    protected override async void OnStartup(StartupEventArgs e) {
         base.OnStartup(e);
         var smoke=Array.IndexOf(e.Args,"--smoke-test");
         var output=smoke>=0 && e.Args.Length>smoke+1?Path.GetFullPath(e.Args[smoke+1]):null;
         if(smoke>=0 && output==null) {Shutdown(2);return;}
         var temp=output!=null?Path.Combine(Path.GetTempPath(),"CCStats-Desktop-Smoke-"+Guid.NewGuid().ToString("N")):null;
-        var window=new MainWindow(temp==null?null:Path.Combine(temp,"settings.json"));MainWindow=window;window.Show();
+        UiMotion.Enabled=output==null;
+        EventManager.RegisterClassHandler(typeof(TabControl),Selector.SelectionChangedEvent,new SelectionChangedEventHandler((sender,args)=>{if(sender is TabControl tabs&&args.Source==tabs&&tabs.SelectedContent is FrameworkElement content)UiMotion.Enter(content);}));
+        StartupSplash? splash=null;MainWindow window;
+        try {
+            if(output==null){splash=new StartupSplash();splash.Show();await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);}
+            window=new MainWindow(temp==null?null:Path.Combine(temp,"settings.json"));MainWindow=window;window.Show();
+            await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);if(splash!=null)await splash.DismissAsync();
+        } catch(Exception error) {
+            splash?.Hide();
+            if(output!=null){Directory.CreateDirectory(Path.GetDirectoryName(output)!);await File.WriteAllTextAsync(output,JsonSerializer.Serialize(new {success=false,error=error.ToString()}));}
+            else MessageBox.Show(error.Message,"CCStats 无法打开",MessageBoxButton.OK,MessageBoxImage.Error);
+            splash?.Close();Shutdown(1);return;
+        }
         if(output==null) {
             if(e.Args.Length==1 && !e.Args[0].StartsWith("--"))_ = window.ImportAsync(e.Args[0]);
             return;
         }
-        window.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle,new Action(async ()=> {
+        _ = window.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle,new Action(async ()=> {
             try {
                 Directory.CreateDirectory(Path.GetDirectoryName(output)!);Directory.CreateDirectory(temp!);
                 var fixture=Path.Combine(temp!,"smoke-replay.json");

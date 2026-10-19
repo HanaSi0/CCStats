@@ -116,6 +116,7 @@ public partial class MainWindow : Window {
                 Card("数据与隐私",Text("游戏数据以只读方式访问，记录保存在本机。软件不会修改游戏文件或游戏内状态。",true),Text("部分数据仍在验证中；缺少结算的记录不计入比赛场次和胜率。",true));
                 Card("开源许可",Text("基于 SaMo / wrath16 的 PvPStats 开源项目开发，遵循 MIT 许可。完整许可与第三方声明随软件提供。",true));break;
         }
+        if(!_smoke)UiMotion.Enter(PageContent);
     }
     private void Window_DragOver(object sender,DragEventArgs e) {e.Effects=e.Data.GetDataPresent(DataFormats.FileDrop)?DragDropEffects.Copy:DragDropEffects.None;e.Handled=true;}
     private async void Window_Drop(object sender,DragEventArgs e) {if(e.Data.GetData(DataFormats.FileDrop) is string[] {Length:1} paths)await ImportAsync(paths[0]);else StatusText.Text="请一次拖入一个数据文件。";}
@@ -153,6 +154,7 @@ public partial class MainWindow : Window {
         _=Dispatcher.BeginInvoke(new Action(Close));
     }
     internal async Task RunSmokeChecksAsync(string fixture,string screenshot) {
+        await StartupSplash.VerifyAsync();
         if(_navigation.Count!=9||VersionLabel.Text!="v"+ProductVersion||Pages.Contains("自动记录"))throw new InvalidOperationException("Simplified navigation or product version failed");
         ShowPage(7);
         if(PageContent.Children.OfType<Border>().Select(b=>b.Child).OfType<StackPanel>().SelectMany(p=>p.Children.OfType<TextBox>()).Any(t=>t.ToolTip?.ToString()?.Contains("统计默认本人")==true))throw new InvalidOperationException("Manual default character setting remains");

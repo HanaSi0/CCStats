@@ -17,11 +17,23 @@
       <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/><Setter Property="Background" Value="{DynamicResource ButtonBrush}"/>
       <Setter Property="Padding" Value="16,10"/><Setter Property="Margin" Value="0,0,8,8"/><Setter Property="Cursor" Value="Hand"/>
       <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
-        <Border x:Name="Frame" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+        <Border x:Name="Frame" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}" RenderTransformOrigin="0.5,0.5">
+          <Border.RenderTransform><ScaleTransform/></Border.RenderTransform>
           <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
         </Border>
         <ControlTemplate.Triggers>
           <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Frame" Property="Background" Value="{DynamicResource HoverBrush}"/></Trigger>
+          <MultiDataTrigger>
+            <MultiDataTrigger.Conditions><Condition Binding="{Binding IsMouseOver,RelativeSource={RelativeSource Self}}" Value="True"/><Condition Binding="{Binding Source={x:Static SystemParameters.ClientAreaAnimation}}" Value="True"/></MultiDataTrigger.Conditions>
+            <MultiDataTrigger.EnterActions><BeginStoryboard><Storyboard>
+              <DoubleAnimation Storyboard.TargetName="Frame" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.015" Duration="0:0:0.12"/>
+              <DoubleAnimation Storyboard.TargetName="Frame" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.015" Duration="0:0:0.12"/>
+            </Storyboard></BeginStoryboard></MultiDataTrigger.EnterActions>
+            <MultiDataTrigger.ExitActions><BeginStoryboard><Storyboard>
+              <DoubleAnimation Storyboard.TargetName="Frame" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.1"/>
+              <DoubleAnimation Storyboard.TargetName="Frame" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.1"/>
+            </Storyboard></BeginStoryboard></MultiDataTrigger.ExitActions>
+          </MultiDataTrigger>
           <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Frame" Property="BorderBrush" Value="{DynamicResource BorderBrush}"/><Setter TargetName="Frame" Property="BorderThickness" Value="2"/></Trigger>
           <Trigger Property="IsPressed" Value="True"><Setter TargetName="Frame" Property="Background" Value="{DynamicResource AccentBrush}"/></Trigger>
           <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
@@ -84,7 +96,12 @@
             <ContentPresenter x:Name="ExpandedContent" ContentSource="Content" Margin="8,12,0,0" Visibility="Collapsed"/>
           </StackPanel>
         </Border>
-        <ControlTemplate.Triggers><Trigger Property="IsExpanded" Value="True"><Setter TargetName="ExpandedContent" Property="Visibility" Value="Visible"/></Trigger></ControlTemplate.Triggers>
+        <ControlTemplate.Triggers><Trigger Property="IsExpanded" Value="True"><Setter TargetName="ExpandedContent" Property="Visibility" Value="Visible"/></Trigger>
+          <MultiDataTrigger>
+            <MultiDataTrigger.Conditions><Condition Binding="{Binding IsExpanded,RelativeSource={RelativeSource Self}}" Value="True"/><Condition Binding="{Binding Source={x:Static SystemParameters.ClientAreaAnimation}}" Value="True"/></MultiDataTrigger.Conditions>
+            <MultiDataTrigger.EnterActions><BeginStoryboard><Storyboard><DoubleAnimation Storyboard.TargetName="ExpandedContent" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.17"/></Storyboard></BeginStoryboard></MultiDataTrigger.EnterActions>
+          </MultiDataTrigger>
+        </ControlTemplate.Triggers>
       </ControlTemplate></Setter.Value></Setter>
     </Style>
     <Style TargetType="ScrollBar">
