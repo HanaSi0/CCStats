@@ -22,10 +22,12 @@ public partial class MainWindow {
         if(message.Length>0&&!_smoke)UiMotion.Enter(panel);
     }
     private async Task VerifyFeatureFeedbackAsync() {
+        if(!CCStats.Core.Distribution.IsChina) {
         ShowPage(3);
         var tools=PageContent.Children.OfType<WrapPanel>().Single();
         tools.Children.OfType<Button>().Single(b=>Equals(b.Content,"定位本人")).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         if(_noticeViews["rankings"].Visibility!=Visibility.Visible||!((TextBlock)_noticeViews["rankings"].Child).Text.Contains("登录"))throw new InvalidOperationException("Ranking action feedback is missing");
+        } else {ShowPage(3);if(_page!=0)throw new InvalidOperationException("Disabled leaderboard route did not return to records");}
         ShowPage(1);
         if(_noticeViews.Count!=0||FindName("StatusText")!=null)throw new InvalidOperationException("Feature feedback leaked into overview");
         ShowPage(0);UpdateLayout();
