@@ -33,6 +33,7 @@ internal sealed class ReplayWindow : Window {
     private ReplayMapMesh? _mesh;
     private bool _scrubbing,_resumeAfterScrub,_syncingTime;
     private bool _playing,_busy,_closed,_threeD=true,_effects=true,_trail=true,_clip=true;
+    private int _iconGeneration=-1;
     private double _seconds,_speed=1,_lastClock,_rendered=-1;
     private Point _lastMouse;
     private BitmapImage? _mapImage;
@@ -130,6 +131,7 @@ internal sealed class ReplayWindow : Window {
         if(_playing)_seconds=Math.Min(_duration,_seconds+delta*_speed);if(_seconds>=_duration)_playing=false;
         if(_camera.Update(delta,SizeVector()))ApplyCamera();if(!_scrubbing){_syncingTime=true;try{_time.Value=_seconds;}finally{_syncingTime=false;}}
         _info.Text=$"{TimeSpan.FromSeconds(_seconds):mm\\:ss} / {TimeSpan.FromSeconds(_duration):mm\\:ss}　{_bundle.Data.Frames.Count:N0} 帧　左键平移 · 右键旋转 · 滚轮缩放"+_mapWarning+_renderWarning;
+        if(_iconGeneration!=StatusIcons.Generation){_iconGeneration=StatusIcons.Generation;_lastPanels=double.NegativeInfinity;_rendered=-1;}
         if(_busy||Math.Abs(_rendered-_seconds)<.03)return;_busy=true;var seconds=_seconds;_rendered=seconds;
         try {
             var now=_origin.AddSeconds(seconds);var frame=ReplayInterpolation.Sample(_bundle.Data,now);

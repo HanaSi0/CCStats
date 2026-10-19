@@ -10,7 +10,7 @@ public partial class MainWindow {
         return ActionButton("导出诊断",async (_,_)=> {
             var save=new Microsoft.Win32.SaveFileDialog {Filter="ZIP (*.zip)|*.zip",FileName="CCStats-诊断.zip"};if(save.ShowDialog(this)!=true)return;
             var temp=save.FileName+"."+Guid.NewGuid().ToString("N")+".partial";
-            try {await _capture.FlushAsync().WaitAsync(TimeSpan.FromSeconds(5));await CCStats.Core.Capture.CaptureDiagnostics.ExportAsync(_directory,temp,new {CapturedAt=DateTime.UtcNow,SoftwareVersion=typeof(MainWindow).Assembly.GetName().Version?.ToString(),SoftwareBuild=typeof(MainWindow).Module.ModuleVersionId,State=_capture.State,Layout=CCStats.Core.Capture.ClientLayout.Profile,Notes="包含记录状态、结算界面字段和记录汇总，不包含完整回放或任意内存转储。"});File.Move(temp,save.FileName,true);Notify("diagnostics","诊断已导出。");}catch(Exception error) {Notify("diagnostics","导出失败："+error.Message);}finally {if(File.Exists(temp))File.Delete(temp);}
+            try {await _capture.FlushAsync().WaitAsync(TimeSpan.FromSeconds(5));await CCStats.Core.Capture.CaptureDiagnostics.ExportAsync(_directory,temp,new {CapturedAt=DateTime.UtcNow,SoftwareVersion=typeof(MainWindow).Assembly.GetName().Version?.ToString(),SoftwareBuild=typeof(MainWindow).Module.ModuleVersionId,State=_capture.State,Layout=CCStats.Core.Capture.ClientLayout.Profile,IconResources=new {StatusIcons.Generation,StatusIcons.Error,GameDataPath=_preferences.GameDataPath},Notes="包含记录状态、结算界面字段和记录汇总，不包含完整回放或任意内存转储。"});File.Move(temp,save.FileName,true);Notify("diagnostics","诊断已导出。");}catch(Exception error) {Notify("diagnostics","导出失败："+error.Message);}finally {if(File.Exists(temp))File.Delete(temp);}
         });
     }
     private void UpdateCaptureStatus() {
