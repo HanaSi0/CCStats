@@ -8,9 +8,11 @@ public sealed class ObservationBatch {
     public string LocalPlayer {get;set;}="";
     public PlayerPvpProfile? Profile {get;set;}
     public bool UnconfirmedRosterLimited {get;set;}
+    public ushort DutyId {get;set;}
     public bool CombatActive {get;set;}
     public bool DirectorAvailable {get;set;}
     public bool EffectsPolled {get;set;}
+    public List<DirectorPlayer> Roster {get;set;}=new();
     public List<ObservedEffect> Effects {get;}=new();
     public List<ReplaySkillEvent> Skills {get;}=new();
     public List<ReplayMapEvent> MapEvents {get;}=new();

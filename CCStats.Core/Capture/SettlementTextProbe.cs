@@ -23,10 +23,15 @@ public static class SettlementTextProbe {
                 float x=F(node,0x70),y=F(node,0x74);if(!float.IsFinite(x)||!float.IsFinite(y))continue;
                 long text=BinaryPrimitives.ReadInt64LittleEndian(node.AsSpan(0xD0));if(text<0x10000)continue;var bytes=read(text,512);if(bytes==null)continue;
                 int end=Array.IndexOf(bytes,(byte)0);if(end<0)end=Math.Min(512,bytes.Length);if(end==0)continue;
-                var encoded=bytes.AsSpan(0,end).ToArray();texts.Add(new(path,id,x,y,BinaryPrimitives.ReadUInt16LittleEndian(node.AsSpan(0xAE)),Encoding.UTF8.GetString(encoded),encoded));
+                var encoded=bytes.AsSpan(0,end).ToArray();texts.Add(new(path,id,x,y,BinaryPrimitives.ReadUInt16LittleEndian(node.AsSpan(0xAE)),PlainText(encoded),encoded));
             }
         }
         return texts;
+    }
+    public static string PlainText(ReadOnlySpan<byte> bytes) {
+        using var text=new MemoryStream();int i=0;
+        while(i<bytes.Length){if(bytes[i]!=2){text.WriteByte(bytes[i++]);continue;}if(i+2>=bytes.Length)return "";i+=2;byte marker=bytes[i++];int length;if(marker<0xD0){if(marker==0)return "";length=marker-1;}else{if(marker<0xF0)return "";int mask=(marker+1)&15;if(mask==0)return "";length=0;for(int bit=3;bit>=0;bit--)if((mask&(1<<bit))!=0){if(i>=bytes.Length)return "";length|=bytes[i++]<<(bit*8);}}if(length<0||length>bytes.Length-i-1||bytes[i+length]!=3)return "";i+=length+1;}
+        return Encoding.UTF8.GetString(text.ToArray());
     }
     private static float F(ReadOnlySpan<byte> bytes,int at)=>BitConverter.Int32BitsToSingle(BinaryPrimitives.ReadInt32LittleEndian(bytes[at..]));
 }

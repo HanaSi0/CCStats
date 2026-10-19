@@ -10,7 +10,7 @@ public sealed class ObservationWriter : IDisposable {
     private readonly Dictionary<(uint,uint,uint,bool),ReplaySkillEvent> _skills=new();
     private readonly Dictionary<ulong,ReplayArenaObject> _objects=new();
     private long _supplementBytes;private bool _finished;private string _localPlayer="";
-    private PlayerPvpProfile? _profile;
+    private PlayerPvpProfile? _profile;private ushort _dutyId;private List<DirectorPlayer> _roster=new();
     private readonly List<SettlementUiSnapshot> _resultPanels=new();
     public void ObserveSettlement(ObservationBatch? batch) {if(batch!=null)foreach(var panel in batch.SettlementPanels)if(_resultPanels.Count<8&&!_resultPanels.Any(p=>p.ObservedAt==panel.ObservedAt&&p.Panel==panel.Panel))_resultPanels.Add(panel);}
     private readonly string _matchId=Guid.NewGuid().ToString("N")[..24];
@@ -41,7 +41,7 @@ public sealed class ObservationWriter : IDisposable {
         if(Frames%30==0)_json.Flush();
     }
     private void AppendBatch(ObservationBatch batch) {
-        ObserveSettlement(batch);
+        ObserveSettlement(batch);if(batch.Roster.Count==10&&batch.Roster.Select(p=>p.EntityId).Distinct().Count()==10)_roster=batch.Roster.ToList();if(batch.DutyId!=0)_dutyId=batch.DutyId;
         _details.GameVersion=batch.GameVersion;if(batch.Profile!=null)_profile=batch.Profile;if(batch.LocalPlayer.Length>0)_localPlayer=batch.LocalPlayer;
         _rosterLimited|=batch.UnconfirmedRosterLimited;_directorObserved|=batch.DirectorAvailable;_effectsPolled|=batch.EffectsPolled;
         // Budget each channel independently. Keep recording movement when any event channel fills.
@@ -93,7 +93,7 @@ public sealed class ObservationWriter : IDisposable {
             Write("Effects",_details.Effects);Write("EffectsTruncated",_details.EffectsTruncated);Write("ReplaySkills",_details.ReplaySkills);Write("ReplaySkillsTruncated",_details.ReplaySkillsTruncated);
             Write("MapMechanics",_details.MapMechanics);Write("MapMechanicsTruncated",_details.MapMechanicsTruncated);Write("ArenaObjects",_details.ArenaObjects);Write("ArenaObjectsTruncated",_details.ArenaObjectsTruncated);
             Write("SummonFrames",_details.SummonFrames);Write("SummonsTruncated",_details.SummonsTruncated);Write("ArenaStates",_details.ArenaStates);
-            _json.WriteEndObject();Write("ResultPanels",_resultPanels);Write("ClientProfile",_profile);_json.WriteString("LocalPlayer",_localPlayer);_json.WriteString("MatchEndTime",_lastFrame.HasValue&&_lastFrame>_start?_lastFrame.Value:_start);_json.WriteEndObject();_json.Flush();
+            _json.WriteEndObject();Write("Roster",_roster);Write("DutyId",_dutyId);Write("ResultPanels",_resultPanels);Write("ClientProfile",_profile);_json.WriteString("LocalPlayer",_localPlayer);_json.WriteString("MatchEndTime",_lastFrame.HasValue&&_lastFrame>_start?_lastFrame.Value:_start);_json.WriteEndObject();_json.Flush();
         } finally {_json.Dispose();_file.Dispose();}
         File.Move(Destination+".partial",Destination);
         try {

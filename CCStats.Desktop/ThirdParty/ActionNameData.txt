@@ -1,0 +1,7 @@
+Action display names: xivapi/ffxiv-datamining, Action sheet (English).
+Pinned commit: 76d22160d687b0e0318071a098ab9eb9d531605f
+Source: https://github.com/xivapi/ffxiv-datamining/blob/76d22160d687b0e0318071a098ab9eb9d531605f/csv/en/Action.csv
+The embedded catalog retains the source URL, commit and SHA-256 for reproducibility.
+FINAL FANTASY XIV game data and names belong to SQUARE ENIX.
+
+Localized result column labels: the same commit, csv/{en,ja,de,fr}/Addon.csv.

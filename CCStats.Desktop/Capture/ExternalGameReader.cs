@@ -91,11 +91,11 @@ internal sealed class ExternalGameReader : IObservedGameSource {
         uint territory=BinaryPrimitives.ReadUInt32LittleEndian(_territory);if(territory>100000)throw new InvalidDataException("区域编号异常，已停止记录。");
         if(territory!=0&&territory!=_lastTerritory) {Reset();_lastTerritory=territory;}
         bool objectsReadable=Read(_objects+ClientLayout.ObjectArrayOffset,_table);if(!objectsReadable)Array.Clear(_table);
-        var now=DateTime.UtcNow;var frame=new MovementFrame {Timestamp=now,AstraProgress=-1,UmbraProgress=-1};var batch=new ObservationBatch {GameVersion=_version};Telemetry=batch;batch.ChannelStatus["objectTable"]=objectsReadable?"已读取":"对象列表暂不可读，保留登录身份通道";
+        var now=DateTime.UtcNow;var frame=new MovementFrame {Timestamp=now,AstraProgress=-1,UmbraProgress=-1};var batch=new ObservationBatch {GameVersion=_version};Telemetry=batch;var dutyBytes=new byte[2];if(Read(_gameMain+0x4114,dutyBytes))batch.DutyId=BinaryPrimitives.ReadUInt16LittleEndian(dutyBytes);batch.ChannelStatus["objectTable"]=objectsReadable?"已读取":"对象列表暂不可读，保留登录身份通道";
         bool arena=ReplayMapMesh.MapKey(territory)!=null,detail=arena&&(now-_lastDetail).TotalSeconds>=.2;
         if(detail) {ReadDirector(batch);_lastDetail=now;}
         bool effectPoll=arena&&(now-_lastEffects).TotalSeconds>=.1;if(effectPoll)_lastEffects=now;
-        batch.DirectorAvailable=_lastProgress!=null;
+        batch.Roster=_teams.Values.ToList();batch.DirectorAvailable=_lastProgress!=null;
         if(_lastProgress is {} progress) {frame.CrystalProgress=progress.CrystalProgress;frame.AstraProgress=progress.AstraProgress;frame.UmbraProgress=progress.UmbraProgress;}
         long localAddress=_localPlayerAddress!=0?Pointer(_localPlayerAddress):0;
         if(localAddress==0&&_control!=0) {
@@ -187,7 +187,7 @@ internal sealed class ExternalGameReader : IObservedGameSource {
         }
         batch.Profile=_profile;
         if(arena)_lastArenaSeen=now;
-        if(now-_lastArenaSeen<TimeSpan.FromSeconds(60)&&now-_lastUiRead>=TimeSpan.FromSeconds(2)) {_lastUiRead=now;ReadResultPanels(now,batch);}
+        if(now-_lastArenaSeen<TimeSpan.FromSeconds(60)&&now-_lastUiRead>=TimeSpan.FromSeconds(.5)) {_lastUiRead=now;ReadResultPanels(now,batch);}
         batch.ChannelStatus["director"]=_directorStatus;batch.ChannelStatus["profile"]=_profileStatus;batch.ChannelStatus["resultPanel"]=_uiStatus;
         batch.ChannelStatus["objectHeaders"]=headerReads.ToString();batch.ChannelStatus["playerObjects"]=pcSeen.ToString();batch.ChannelStatus["worldReadFailures"]=worldFailures.ToString();batch.ChannelStatus["statusReadFailures"]=statusFailures.ToString();batch.ChannelStatus["rejectedPlayers"]=rejected.ToString();batch.ChannelStatus["playerRejections"]=string.Join(",",rejections.Select(p=>$"{p.Key}:{p.Value}"));batch.ChannelStatus["rosterMatches"]=rosterMatches.ToString();
         if(detail)batch.ChannelStatus["sceneIdentities"]=string.Join(";",sceneIds.OrderBy(p=>p.Key).Take(96).Select(p=>$"{p.Key}={p.Value}"));

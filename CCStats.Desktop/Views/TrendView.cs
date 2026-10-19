@@ -1,18 +1,20 @@
-using System.Windows;
-using System.Windows.Media;
 using System.Globalization;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 namespace CCStats.Desktop.Views;
-internal sealed class TrendView : FrameworkElement {
-    private readonly (DateTime Time,double Value)[] _points;
-    public TrendView((DateTime,double)[] points)=>_points=points;
-    protected override void OnRender(DrawingContext dc) {
-        base.OnRender(dc);dc.DrawRectangle(DesktopTheme.Brush("SurfaceBrush"),null,new Rect(0,0,ActualWidth,ActualHeight));if(_points.Length==0)return;
-        var min=_points.Min(p=>p.Value);var max=_points.Max(p=>p.Value);var span=Math.Max(1,max-min);
-        var pen=new Pen(DesktopTheme.Brush("AccentBrush"),2);Point? last=null;
-        for(int i=0;i<_points.Length;i++) {
-            var p=new Point(35+Math.Max(1,ActualWidth-70)*i/Math.Max(1,_points.Length-1),30+Math.Max(1,ActualHeight-60)*(1-(_points[i].Value-min)/span));
-            if(last.HasValue)dc.DrawLine(pen,last.Value,p);dc.DrawEllipse(DesktopTheme.Brush("MutedBrush"),null,p,3,3);last=p;
-            if(i==0||i==_points.Length-1||_points.Length<8)dc.DrawText(new FormattedText(_points[i].Value.ToString("N0"),CultureInfo.CurrentCulture,FlowDirection.LeftToRight,new Typeface("Microsoft YaHei UI"),12,DesktopTheme.Brush("TextBrush"),1),p+new Vector(4,-17));
-        }
+internal sealed record ChartSeries(string Name,Color Color,(DateTime Time,double Value)[] Points,bool Stairs=false);
+internal sealed class TrendView:FrameworkElement {
+    private readonly ChartSeries[] _series;private readonly DateTime? _origin;private readonly string _unit;private readonly double? _minimum,_maximum;private Point? _hover;private ((DateTime Time,double Value)[] All,DateTime Start,DateTime End,double Min,double Max)? _bounds;
+    public event Action<DateTime>? SeekRequested;
+    public TrendView((DateTime,double)[] points):this(new[]{new ChartSeries("趋势",Colors.DeepSkyBlue,points)}){}
+    public TrendView(ChartSeries[] series,DateTime? origin=null,string unit="",double? minimum=null,double? maximum=null){_series=series;_origin=origin;_unit=unit;_minimum=minimum;_maximum=maximum;MinHeight=260;MouseMove+=(_,e)=>{_hover=e.GetPosition(this);InvalidateVisual();};MouseLeave+=(_,_)=>{_hover=null;ToolTip=null;InvalidateVisual();};MouseLeftButtonDown+=(_,e)=>{if(e.ClickCount==2&&Bounds().All.Length>0)SeekRequested?.Invoke(TimeAt(e.GetPosition(this).X));};}
+    private ( (DateTime Time,double Value)[] All,DateTime Start,DateTime End,double Min,double Max) Bounds(){if(_bounds.HasValue)return _bounds.Value;var all=_series.SelectMany(s=>s.Points).Where(p=>double.IsFinite(p.Value)).ToArray();var start=all.Length==0?DateTime.UtcNow:all.Min(p=>p.Time);var end=all.Length==0?start.AddSeconds(1):all.Max(p=>p.Time);if(end<=start)end=start.AddSeconds(1);double min=_minimum??(all.Length==0?0:all.Min(p=>p.Value)),max=_maximum??(all.Length==0?1:all.Max(p=>p.Value));if(max<=min)max=min+1;return (_bounds=(all,start,end,min,max)).Value;}
+    private DateTime TimeAt(double x){var b=Bounds();return b.Start.AddTicks((long)((b.End-b.Start).Ticks*Math.Clamp((x-64)/Math.Max(1,ActualWidth-90),0,1)));}
+    private void Label(DrawingContext dc,string text,Point at,Brush? brush=null){var f=new FormattedText(text,CultureInfo.CurrentCulture,FlowDirection.LeftToRight,new Typeface("Microsoft YaHei UI"),12,brush??DesktopTheme.Brush("MutedBrush"),VisualTreeHelper.GetDpi(this).PixelsPerDip);dc.DrawText(f,at);}
+    protected override void OnRender(DrawingContext dc){base.OnRender(dc);dc.DrawRoundedRectangle(DesktopTheme.Brush("SurfaceBrush"),null,new Rect(RenderSize),10,10);var b=Bounds();if(b.All.Length==0){Label(dc,"暂无可用数据",new(24,30));return;}double w=Math.Max(1,ActualWidth-90),h=Math.Max(1,ActualHeight-90);Point At(DateTime t,double v)=>new(64+(t-b.Start).TotalSeconds/(b.End-b.Start).TotalSeconds*w,44+(b.Max-v)/(b.Max-b.Min)*h);var grid=new Pen(DesktopTheme.Brush("BorderBrush"),.5);
+        for(int i=0;i<=5;i++){double y=44+h*i/5;dc.DrawLine(grid,new(64,y),new(64+w,y));Label(dc,(b.Max-(b.Max-b.Min)*i/5).ToString("0.#")+_unit,new(6,y-8));double x=64+w*i/5;var time=b.Start.AddTicks((b.End-b.Start).Ticks*i/5);Label(dc,_origin.HasValue?(time-_origin.Value).ToString(@"mm\:ss"):time.ToLocalTime().ToString("MM-dd HH:mm"),new(Math.Clamp(x-18,4,Math.Max(4,ActualWidth-90)),44+h+12));}
+        double legend=64;foreach(var s in _series){var brush=new SolidColorBrush(s.Color);dc.DrawLine(new Pen(brush,3),new(legend,20),new(legend+16,20));Label(dc,s.Name,new(legend+22,11),brush);legend+=Math.Max(110,s.Name.Length*14+44);var geometry=new StreamGeometry();using(var context=geometry.Open()){bool began=false;Point? previous=null;for(int i=0;i<s.Points.Length;i++){var p=s.Points[i];if(!double.IsFinite(p.Value))continue;var point=At(p.Time,p.Value);if(!began){context.BeginFigure(point,false,false);began=true;}else{if(s.Stairs&&previous.HasValue)context.LineTo(new Point(point.X,previous.Value.Y),true,false);context.LineTo(point,true,false);}previous=point;}}geometry.Freeze();dc.DrawGeometry(null,new Pen(brush,2),geometry);}
+        if(_hover is {} hover&&hover.X>=64&&hover.X<=64+w){var time=TimeAt(hover.X);dc.DrawLine(new Pen(DesktopTheme.Brush("TextBrush"),1){DashStyle=DashStyles.Dash},new(hover.X,44),new(hover.X,44+h));var lines=new List<string>{_origin.HasValue?(time-_origin.Value).ToString(@"mm\:ss\.fff"):time.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")};foreach(var s in _series){if(s.Points.Length==0)continue;var point=s.Points.MinBy(p=>Math.Abs((p.Time-time).Ticks));if(s.Points.Length>0){var brush=new SolidColorBrush(s.Color);dc.DrawEllipse(brush,null,At(point.Time,point.Value),4,4);lines.Add(s.Name+"："+point.Value.ToString("0.##")+_unit);}}ToolTip=string.Join('\n',lines)+"\n双击跳转回放";}
     }
 }

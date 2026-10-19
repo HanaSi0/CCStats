@@ -12,7 +12,7 @@ internal static class SmoothScroll {
     public static void Attach(ScrollViewer viewer) {
         if(States.TryGetValue(viewer,out _))return;States.Add(viewer,new());
         viewer.PreviewMouseWheel+=(_,e)=> {
-            if(viewer.CanContentScroll||e.Handled)return;
+            if(viewer.CanContentScroll||e.Handled||Keyboard.Modifiers.HasFlag(ModifierKeys.Control))return;
             DependencyObject? child=e.OriginalSource as DependencyObject;
             while(child!=null&&child is not ScrollViewer)child=child is Visual or System.Windows.Media.Media3D.Visual3D?VisualTreeHelper.GetParent(child):LogicalTreeHelper.GetParent(child);
             if(child!=viewer)return; // Leave nested lists, menus and replay camera zoom with their owner.

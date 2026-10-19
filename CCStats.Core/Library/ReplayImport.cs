@@ -17,6 +17,7 @@ public static class ReplayImport {
         if(root.TryGetProperty("Actions",out var actions)&&actions.ValueKind==JsonValueKind.Array)bundle.Actions=actions.Deserialize<List<ActionSummary>>(RecordTime.Json)??new();
         if(root.TryGetProperty("Progress",out var progress)&&progress.ValueKind==JsonValueKind.Array)bundle.Progress=progress.Deserialize<List<ProgressSample>>(RecordTime.Json)??new();
         if(root.TryGetProperty("LocalPlayer",out var local)&&local.ValueKind==JsonValueKind.String&&bundle.Match.LocalPlayer.Length==0)bundle.Match.LocalPlayer=local.GetString()??"";
+        if(bundle.Match.Players.Count==0&&root.TryGetProperty("Roster",out var rosterElement)&&rosterElement.ValueKind==JsonValueKind.Array){var roster=rosterElement.Deserialize<List<Capture.DirectorPlayer>>(RecordTime.Json);if(roster is {Count:10}&&roster.Select(p=>p.EntityId).Distinct().Count()==10&&roster.All(p=>p.Team is 1 or 2&&p.World>0&&p.Job is >=19 and <=42&&!string.IsNullOrWhiteSpace(p.Name)&&!p.Name.Any(char.IsControl)))bundle.Match.Players=roster.Select(p=>new PlayerScore {Name=Capture.ClientCatalog.PlayerName(p.Name,p.World),Job=JobNames.Name(p.Job),Team=p.Team}).ToList();}
         if(bundle.Match.Players.Count==0)bundle.Match.Players=data.Frames.SelectMany(f=>f.Players).GroupBy(p=>p.Player,StringComparer.Ordinal).Select(g=>new PlayerScore {Name=g.Key,Job=JobNames.Name(g.First().ClassJobId),Team=g.First().Team}).ToList();
         if(root.TryGetProperty("Knockouts",out var kills)&&kills.ValueKind==JsonValueKind.Array)foreach(var row in kills.EnumerateArray()) {
             if(row.TryGetProperty("Timestamp",out var stamp)&&stamp.TryGetDateTime(out var time))bundle.Timeline.Add(new(stamp.Deserialize<DateTime>(RecordTime.Json),"减员",row.TryGetProperty("Killer",out var killer)?killer.ToString():"",row.TryGetProperty("Victim",out var victim)?victim.ToString():"",""));
@@ -34,6 +35,9 @@ public static class ReplayImport {
         }
         bundle.Match.StartUtc=RecordTime.Utc(bundle.Match.StartUtc);
         if(bundle.Match.EndUtc is {} end)bundle.Match.EndUtc=RecordTime.Utc(end);
+        if(bundle.Match.Mode=="未知"&&root.TryGetProperty("DutyId",out var duty)&&duty.TryGetUInt16(out var dutyId))bundle.Match.Mode=Capture.MatchModeRules.Name(dutyId);
+        ReplayRoster.Reconcile(bundle);
+        Capture.SettlementDecoder.Apply(bundle);
         ReplaySummons.RecoverEffects(bundle.Data,bundle.Data.ReplaySkills);
         return bundle;
     }

@@ -10,6 +10,8 @@
     <Compile Include="../PvpStats/Localization/*.cs" Link="Localization/%(Filename)%(Extension)" />
     <Compile Include="../PvpStats/Analysis/*.cs" Link="Analysis/%(Filename)%(Extension)" />
     <Compile Include="../PvpStats/Leaderboards/*.cs" Link="Leaderboards/%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Resources/result-column-labels.json" LogicalName="CCStats.ResultColumnLabels.json" />
+    <EmbeddedResource Include="Resources/action-names.json" LogicalName="CCStats.ActionNames.json" />
     <EmbeddedResource Include="Resources/client-identities.json" LogicalName="CCStats.ClientIdentities.json" />
     <EmbeddedResource Include="../docs/exports/official-maps-2d/assets.json" LogicalName="CCStats.MapMetadata.json" />
     <EmbeddedResource Include="../PvpStats/Resources/ReplayMaps/*.gz" LogicalName="PvpStats.Resources.ReplayMaps.%(Filename)%(Extension)" />

@@ -14,7 +14,7 @@ public static partial class ChineseText {
         value.HasValue ? EnumName(value.Value) : "";
 
     public static string ActionName(uint id, string fallback) =>
-        Actions.TryGetValue(id, out var translated) ? translated : fallback;
+        Actions.TryGetValue(id, out var translated) ? translated : id switch {29676=>"真龙波",29681=>"赤热之炎",_=>fallback};
 
     public static string StatusName(uint id, string fallback) =>
         Statuses.TryGetValue(id, out var translated) ? translated : fallback;

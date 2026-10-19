@@ -56,7 +56,7 @@ public static class DatabaseImport {
                             bundle.Actions.Add(new(actor.Key,actionId,kind,(int)(Number(detail["Casts"])??0),(int)(Number(detail["Targets"])??0),values.Sum(v=>Number(v["Damage"])??0),values.Sum(v=>Number(v["Heal"])??0),(int)values.Sum(v=>Number(v["StatusHits"])??0),(int)values.Sum(v=>Number(v["StatusMisses"])??0)));
                         }
                         foreach(var value in Items(timeline["CrystalPosition"])) {var point=Doc(value);if(Date(point["Timestamp"]) is {} at)bundle.Progress.Add(new(at,"水晶位置",(int)(Number(point["Points"])??0)));}
-                        foreach(var series in Doc(timeline["TeamProgress"]))foreach(var value in Items(series.Value)) {var point=Doc(value);if(Date(point["Timestamp"]) is {} at)bundle.Progress.Add(new(at,Team(series.Key)==1?"星极队":"灵极队",(int)(Number(point["Points"])??0)));}
+                        foreach(var series in Doc(timeline["TeamProgress"]))foreach(var value in Items(series.Value)) {var point=Doc(value);if(Date(point["Timestamp"]) is {} at)bundle.Progress.Add(new(at,(Team(series.Key)==1?"星极队":"灵极队")+(Number(point["Type"])==1?"检查点进度":"推进进度"),(int)(Number(point["Points"])??0)));}
                         foreach(var value in Items(timeline["LimitBreakCasts"]).Concat(Items(timeline["LimitBreakEffects"]))) {
                             var action=Doc(value);if(Date(action["Timestamp"]) is not {} at)continue;uint actionId=(uint)(Number(action["ActionId"])??0);var actor=Alias(action["Actor"]);
                             bundle.Timeline.Add(new(at,"极限技",actor,"",PvpStats.Localization.ChineseText.ActionName(actionId,$"技能 {actionId}")));

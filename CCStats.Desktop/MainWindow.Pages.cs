@@ -46,7 +46,7 @@ public partial class MainWindow {
         if(rows.Count==0)Card("暂无记录",Text("软件会自动识别正在运行的游戏，也可以读取已有 JSON 或历史数据文件。",true));
     }
     private async Task OpenRecordAsync(MatchRecord record) {
-        try {_bundle=await Task.Run(()=>_library.Load(record.Id));var window=new RecordDetailWindow(_bundle,_library);window.Owner=this;window.Changed+=async ()=>{_records=await Task.Run(_library.All);if(_page==0)ShowPage(0);};window.Show();}
+        try {_bundle=await Task.Run(()=>_library.Load(record.Id));_records=await Task.Run(_library.All);if(_page==0)ShowPage(0);var window=new RecordDetailWindow(_bundle,_library);window.Owner=this;window.Changed+=async ()=>{_records=await Task.Run(_library.All);if(_page==0)ShowPage(0);};window.Show();}
         catch(Exception ex) {Notify("records","无法打开记录："+ex.Message);}
     }
     private void ShowOverview() {

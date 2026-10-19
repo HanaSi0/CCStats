@@ -27,7 +27,7 @@ internal sealed class IndependentCapture {
         if(!automatic)_nextAttempt=DateTime.MinValue;
         _lifetime?.Dispose();_lifetime=new();var token=_lifetime.Token;
         _worker=Task.Run(async ()=> {
-            ObservationWriter? writer=null;string? saved=null;var lastPublished=DateTime.MinValue;var lastProbe=DateTime.MinValue;uint lastTerritory=0;string? diagnosticError=null;var activity=new MatchActivityGate();var preroll=new Queue<(uint Territory,MovementFrame Frame,ObservationBatch? Batch)>();
+            ObservationWriter? writer=null;string? saved=null;var lastPublished=DateTime.MinValue;var lastProbe=DateTime.MinValue;uint lastTerritory=0;string? diagnosticError=null;DateTime? settlementSince=null;var activity=new MatchActivityGate();var preroll=new Queue<(uint Territory,MovementFrame Frame,ObservationBatch? Batch)>();
             try {
                 using var game=_factory();
                 if(game==null) {State=new(false,false,"等待游戏启动：会自动识别并连接，无需手动选择进程。");return;}
@@ -46,13 +46,14 @@ internal sealed class IndependentCapture {
                     if(territory!=lastTerritory&&territory!=0) {_manualPaused=false;lastTerritory=territory;}
                     // A loading screen has no frames to append; wait for a nonzero territory or process exit, rather than splitting on an arbitrary timeout.
                     bool loadingGrace=territory==0&&writer!=null;
-                    writer?.ObserveSettlement(game.Telemetry);
+                    writer?.ObserveSettlement(game.Telemetry);if(writer!=null&&game.Telemetry?.SettlementPanels.Count>0)settlementSince??=frame.Timestamp;
                     bool active=activity.Update(territory,frame,game.Telemetry);
                     if(territory>0&&ReplayMapMesh.MapKey(territory)!=null&&frame.Players.Count>0){preroll.Enqueue((territory,frame,game.Telemetry));while(preroll.Count>60||preroll.TryPeek(out var oldest)&&(oldest.Territory!=territory||frame.Timestamp-oldest.Frame.Timestamp>TimeSpan.FromSeconds(2)))preroll.Dequeue();}
                     else if(!loadingGrace)preroll.Clear();
                     bool request=Volatile.Read(ref _record)!=0||(_autoRecord&&!_manualPaused&&(active||loadingGrace));
                     var flush=Volatile.Read(ref _flush);
-                    if(writer!=null&&(!request||(!loadingGrace&&territory!=writer.Territory)||writer.ShouldRollOver)) {saved=Finish(writer);writer=null;}
+                    bool settling=!request&&settlementSince.HasValue&&frame.Timestamp-settlementSince.Value<TimeSpan.FromSeconds(4);
+                    if(writer!=null&&(!request&&!settling||(!loadingGrace&&!settling&&territory!=writer.Territory)||writer.ShouldRollOver)) {saved=Finish(writer);writer=null;settlementSince=null;}
                     if(flush!=null) {writer?.Flush();Interlocked.CompareExchange(ref _flush,null,flush);flush.TrySetResult();}
                     if(request&&frame.Players.Count>0&&territory>0) {
                         if(writer==null) {
