@@ -154,10 +154,11 @@ internal sealed class ExternalGameReader : IObservedGameSource {
         long roster=Pointer(director+ClientLayout.DirectorPlayerPointerOffset);
         if(!Read(roster,_roster)) {_directorStatus="参赛名单不可读";return;}
         if(DirectorDecoder.Roster(_roster) is not {} players) {_directorStatus="参赛名单校验失败";return;}
+        _teams=players.ToDictionary(p=>p.EntityId);
         if(!Read(director+ClientLayout.DirectorProgressOffset,_progress)) {_directorStatus="推进状态不可读";return;}
-        if(DirectorDecoder.Progress(_progress) is not {} progress) {_directorStatus="推进状态范围校验失败";return;}
+        if(DirectorDecoder.Progress(_progress) is not {} progress) {_directorStatus="名单已校验，推进状态范围校验失败："+string.Join(",",Enumerable.Range(0,7).Select(i=>BinaryPrimitives.ReadInt32LittleEndian(_progress.AsSpan(i*4))));return;}
         _directorStatus=$"已校验 {players.Count} 名参赛者和推进状态";
-        _teams=players.ToDictionary(p=>p.EntityId);_lastProgress=progress;batch.DirectorAvailable=true;
+        _lastProgress=progress;batch.DirectorAvailable=true;
         // Native managed map-effect state persists after the activating event, including bridge timelines.
         if(Read(director+0xDE0,_mapStates)) {
             int count=BinaryPrimitives.ReadUInt16LittleEndian(_mapStates.AsSpan(0x602));if(count>128)return;

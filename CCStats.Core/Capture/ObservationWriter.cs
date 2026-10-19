@@ -11,7 +11,10 @@ public sealed class ObservationWriter : IDisposable {
     private readonly Dictionary<ulong,ReplayArenaObject> _objects=new();
     private long _supplementBytes;private bool _finished;private string _localPlayer="";
     private PlayerPvpProfile? _profile;
-    private bool _rosterLimited,_directorObserved,_crystalObserved,_effectsPolled;
+    private readonly string _matchId=Guid.NewGuid().ToString("N")[..24];
+    private DateTime? _lastFrame;
+    public string? SummaryError {get;private set;}
+    private bool _teamsObserved,_rosterLimited,_directorObserved,_crystalObserved,_effectsPolled;
     public long BytesWritten=>_file.Position+_json.BytesPending+_supplementBytes;
     public bool ShouldRollOver=>BytesWritten>=60L*1024*1024;
     public uint Territory=>_territory;
@@ -21,7 +24,7 @@ public sealed class ObservationWriter : IDisposable {
         Directory.CreateDirectory(directory);_territory=territory;
         Destination=Path.Combine(directory,"Observation-"+DateTime.UtcNow.ToString("yyyyMMdd-HHmmss")+"-"+Guid.NewGuid().ToString("N")[..8]+".json");
         _file=new FileStream(Destination+".partial",FileMode.CreateNew,FileAccess.Write,FileShare.Read,65536);_json=new Utf8JsonWriter(_file);
-        _json.WriteStartObject();_json.WriteString("RecordKind","IndependentObservation");_json.WriteString("MatchId",Guid.NewGuid().ToString("N")[..24]);
+        _json.WriteStartObject();_json.WriteString("RecordKind","IndependentObservation");_json.WriteString("MatchId",_matchId);
         _json.WriteNumber("TerritoryId",territory);_json.WriteString("StartUtc",_start);_json.WriteString("CaptureProfile",ClientLayout.Profile);
         _json.WriteStartObject("Telemetry");_json.WriteNumber("Version",2);_json.WriteNumber("SampleIntervalSeconds",1.0/30);_json.WriteStartArray("Frames");
     }
@@ -29,7 +32,7 @@ public sealed class ObservationWriter : IDisposable {
         if(_finished)throw new InvalidOperationException("记录已经结束。");
         if(territory!=_territory)throw new InvalidOperationException("地图已切换，本段观测已结束。");
         if(BytesWritten>64L*1024*1024)throw new InvalidOperationException("本段记录已达到 64 MiB，已停止以限制资源占用。");
-        JsonSerializer.Serialize(_json,frame);Frames++;_crystalObserved|=frame.Crystal!=null;
+        JsonSerializer.Serialize(_json,frame);Frames++;_lastFrame=frame.Timestamp;_teamsObserved|=frame.Players.Any(p=>p.Team is 1 or 2);_crystalObserved|=frame.Crystal!=null;
         if(batch!=null)AppendBatch(batch);
         if(Frames%30==0)_json.Flush();
     }
@@ -77,7 +80,8 @@ public sealed class ObservationWriter : IDisposable {
             _details.CaptureWarnings.Add("状态在观察时采集，不能替代命中瞬间快照；防御减伤与免控精确推算不可用。");
             if(_details.EffectsTruncated||_details.ReplaySkillsTruncated||_details.MapMechanicsTruncated||_details.ArenaObjectsTruncated||_details.SummonsTruncated)_details.CaptureWarnings.Add("部分事件通道达到容量限制，相关统计只代表已保留的观测。");
             if(_rosterLimited)_details.CaptureWarnings.Add("参赛名单未确认时有超过十名角色，位置记录仅保留前十名已加载角色。");
-            if(!_directorObserved)_details.CaptureWarnings.Add("未确认队伍和推进状态。");
+            if(!_teamsObserved)_details.CaptureWarnings.Add("未确认队伍归属。");
+            if(!_directorObserved)_details.CaptureWarnings.Add("未确认推进状态。");
             if(!_crystalObserved)_details.CaptureWarnings.Add("未观察到唯一水晶对象。");
             if(!_effectsPolled)_details.CaptureWarnings.Add("未读取到动作效果槽。");
             Write("DirectorObserved",_directorObserved);Write("EffectsPolled",_effectsPolled);Write("GameVersion",_details.GameVersion);Write("CaptureMethod",_details.CaptureMethod);Write("CaptureWarnings",_details.CaptureWarnings);
@@ -87,6 +91,13 @@ public sealed class ObservationWriter : IDisposable {
             _json.WriteEndObject();Write("ClientProfile",_profile);_json.WriteString("LocalPlayer",_localPlayer);_json.WriteString("MatchEndTime",DateTime.UtcNow);_json.WriteEndObject();_json.Flush();
         } finally {_json.Dispose();_file.Dispose();}
         File.Move(Destination+".partial",Destination);
+        try {
+            var effects=_details.Effects;
+            var actions=effects.GroupBy(e=>new {e.Actor,e.ActionId}).Select(g=>new {g.Key.Actor,g.Key.ActionId,Effects=g.Count(),Damage=g.Where(e=>DetailedAnalysis.IsDamage(e.Type)).Sum(e=>(long)e.Amount),Healing=g.Where(e=>e.Type==4).Sum(e=>(long)e.Amount),SelfReturnHealing=g.Where(e=>e.Type==4&&e.SelfReturn).Sum(e=>(long)e.Amount),StatusHits=g.Count(e=>e.Type is 14 or 15),StatusResists=g.Count(e=>e.Type is 20 or 55)}).ToArray();
+            var received=effects.GroupBy(e=>e.Target).Select(g=>new {Player=g.Key,Damage=g.Where(e=>DetailedAnalysis.IsDamage(e.Type)).Sum(e=>(long)e.Amount),Healing=g.Where(e=>e.Type==4).Sum(e=>(long)e.Amount)}).ToArray();
+            CaptureDiagnostics.SaveObservationSummary(Path.GetDirectoryName(Destination)!,_matchId,new {MatchId=_matchId,File=Path.GetFileName(Destination),Territory=_territory,LocalPlayer=_localPlayer,StartUtc=_start,LastFrameUtc=_lastFrame,Frames,GameVersion=_details.GameVersion,CaptureMethod=_details.CaptureMethod,Effects=effects.Count,_details.EffectsTruncated,EventTimeSnapshots=effects.Count(e=>e.SnapshotsCaptured),Actions=actions,Received=received,Note="动作槽观测汇总，不代表完整结算；持续伤害/治疗、过量治疗和漏事件等可能造成差异。"});
+        } catch(Exception error) when(error is IOException or UnauthorizedAccessException) {SummaryError=error.Message;}
+
     }
     private void Write<T>(string name,T value) {_json.WritePropertyName(name);JsonSerializer.Serialize(_json,value);}
 }

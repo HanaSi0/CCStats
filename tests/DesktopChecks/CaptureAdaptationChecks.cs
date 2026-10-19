@@ -59,7 +59,7 @@ internal static class CaptureAdaptationChecks {
         var directory=Path.Combine(Path.GetTempPath(),"ccstats-adaptation-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
         try {
             string path;
-            using(var writer=new ObservationWriter(directory,1034)) {
+            using(var writer=new ObservationWriter(Path.Combine(directory,"observations"),1034)) {
                 path=writer.Destination;batch.Profile=profile;batch.GameVersion="2026.10.13";batch.LocalPlayer=own.Player;batch.DirectorAvailable=true;batch.Summons=new(){Timestamp=now,Summons=new(){new(){EntityId=300,Owner=own.Player,X=7,Y=8,Z=9}}};
                 batch.MapStates.Add(new(now,77,1,2));batch.MapEvents.Add(new(){Timestamp=now,ActionId=28731,SourceEntityId=500,Kind=ReplayMapEventKind.CastObserved,ObservedUntil=now,ExpectedEndTime=now.AddSeconds(2)});
                 batch.ArenaObjects.Add(new(){Timestamp=now,ObservedUntil=now,ObjectId=500,EntityId=500,Kind=ArenaMechanicKind.Twister,X=1,Y=2,Z=3});
@@ -69,6 +69,9 @@ internal static class CaptureAdaptationChecks {
                 next.MapEvents.Add(new(){Timestamp=now.AddSeconds(.2),ActionId=28731,SourceEntityId=500,Kind=ReplayMapEventKind.ActionResolved});
                 frame.Timestamp=now.AddSeconds(.2);writer.Append(1034,frame,next);
                 frame.Timestamp=now.AddSeconds(.4);frame.AstraProgress=-1;frame.UmbraProgress=-1;writer.Append(1034,frame);
+            }
+            using(var summary=System.Text.Json.JsonDocument.Parse(await File.ReadAllTextAsync(Directory.EnumerateFiles(Path.Combine(directory,"observations","diagnostics"),"Observation-*.json").Single()))) {
+                check(summary.RootElement.GetProperty("Effects").GetInt32()==3&&summary.RootElement.GetProperty("Actions").EnumerateArray().Sum(a=>a.GetProperty("Damage").GetInt64())==66635&&summary.RootElement.GetProperty("EventTimeSnapshots").GetInt32()==0,"diagnostic summaries preserve observed damage totals without inventing event-time snapshots");
             }
             var bundle=await ReplayImport.ReadAsync(path);
             check(bundle.ClientProfile?.CasualMatches==10,"client profile snapshot survives recording finalization");
@@ -82,11 +85,12 @@ internal static class CaptureAdaptationChecks {
             batch.SettlementPanels.Add(new(now,"PvPResult",values));CaptureDiagnostics.SavePanels(Path.Combine(directory,"observations"),1034,batch);
             var capture=new CCStats.Desktop.Capture.IndependentCapture(()=>new EnrichedSource());capture.Connect(Path.Combine(directory,"automatic"));
             for(int i=0;i<80&&capture.State.Frames<3;i++)await Task.Delay(25);
+            await capture.FlushAsync();check(capture.State.Connected,"diagnostic flush closes the current segment while keeping the game source connected");
             await capture.StopAsync();var automatic=await ReplayImport.ReadAsync(capture.State.SavedPath!);
             check(automatic.Data.Effects.Count==automatic.Data.Frames.Count&&automatic.Data.DirectorObserved&&automatic.Data.Frames[0].Players[0].Team==2,"automatic background capture consumes supplemental source channels in the same cycle as movement");
             check(capture.State.LocalPlayer=="Own"&&capture.State.GameVersion=="test-build"&&capture.State.ChannelStatus?["director"]=="ok","diagnostics retain the client build and individual channel state after capture stops");
             var zip=Path.Combine(directory,"diagnostics.zip");await CaptureDiagnostics.ExportAsync(directory,zip,new {State="fixture"});
-            using(var archive=System.IO.Compression.ZipFile.OpenRead(zip))check(archive.Entries.Count==2&&archive.Entries.Any(e=>e.FullName=="status.json"),"diagnostic export includes bounded settlement fields and status without recording arbitrary memory");
+            using(var archive=System.IO.Compression.ZipFile.OpenRead(zip))check(archive.Entries.Any(e=>e.FullName=="status.json")&&archive.Entries.Any(e=>e.FullName.StartsWith("observations/"))&&archive.Entries.Any(e=>e.FullName.StartsWith("settlement/")),"diagnostic export includes bounded settlement fields and status without recording arbitrary memory");
         } finally {Directory.Delete(directory,true);}
     }
     private sealed class EnrichedSource : IObservedGameSource {
