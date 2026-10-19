@@ -7,7 +7,7 @@ public sealed class ObservationWriter : IDisposable {
     private readonly FileStream _file;private readonly Utf8JsonWriter _json;
     private readonly uint _territory;private readonly DateTime _start=DateTime.UtcNow;
     private readonly DetailedTelemetry _details=new(){CaptureMethod="ReadOnlyMemoryPolling",SampleIntervalSeconds=1.0/30};
-    private readonly Dictionary<(uint,uint,uint),ReplaySkillEvent> _skills=new();
+    private readonly Dictionary<(uint,uint,uint,bool),ReplaySkillEvent> _skills=new();
     private readonly Dictionary<ulong,ReplayArenaObject> _objects=new();
     private long _supplementBytes;private bool _finished;private string _localPlayer="";
     private PlayerPvpProfile? _profile;
@@ -42,8 +42,8 @@ public sealed class ObservationWriter : IDisposable {
             _details.Effects.Add(effect);_supplementBytes+=512;
         }
         foreach(var skill in batch.Skills) {
-            var key=(skill.Sequence,skill.SourceEntityId,skill.ActionId);
-            if(_skills.TryGetValue(key,out var old)) {foreach(var target in skill.SummonTargets)if(!old.SummonTargets.Any(t=>t.Player==target.Player&&t.Benefit==target.Benefit))old.SummonTargets.Add(target);continue;}
+            var key=(skill.Sequence,skill.SourceEntityId,skill.ActionId,skill.Resolved);
+            if(_skills.TryGetValue(key,out var old)) {foreach(var id in skill.SelfStatusIds)if(!old.SelfStatusIds.Contains(id))old.SelfStatusIds.Add(id);foreach(var target in skill.SummonTargets)if(!old.SummonTargets.Any(t=>t.Player==target.Player&&t.Benefit==target.Benefit))old.SummonTargets.Add(target);continue;}
             if(_details.ReplaySkills.Count>=8192||_supplementBytes>=10L*1024*1024) {_details.ReplaySkillsTruncated=true;break;}
             _skills[key]=skill;_details.ReplaySkills.Add(skill);_supplementBytes+=768;
         }

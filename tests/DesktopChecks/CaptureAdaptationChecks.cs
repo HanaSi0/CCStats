@@ -31,6 +31,11 @@ internal static class CaptureAdaptationChecks {
         check(batch.Effects.Last().PetSource&&batch.Effects.Last().Actor==own.Player&&batch.Skills.Last().SummonTargets.Single().Player==enemy.Player,"summon attacks credit their real owner and retain the physical source and hit target");
         Fill(bytes,3,29230,100,200,4,500,0x80,0);journal.Observe(200,bytes,actors,now,batch);
         check(batch.Effects.Last().SelfReturn&&batch.Effects.Last().Target==own.Player,"returned healing targets the caster rather than the original victim");
+        var phases=new ActionEffectJournal();var phaseBatch=new ObservationBatch();var phaseBytes=new byte[ClientLayout.EffectBytes];phases.Observe(200,phaseBytes,actors,now,phaseBatch);
+        Fill(phaseBytes,50,29230,100,200,0,0,0,0);phases.Observe(200,phaseBytes,actors,now,phaseBatch);
+        Fill(phaseBytes,50,29230,100,200,3,222,0,0);phases.Observe(200,phaseBytes,actors,now.AddSeconds(.2),phaseBatch);
+        check(phaseBatch.Effects.Single().Amount==222&&phaseBatch.Skills.Any(s=>!s.Resolved)&&phaseBatch.Skills.Any(s=>s.Resolved),"an empty use event cannot suppress the later damage impact with the same action sequence");
+        phases.Observe(200,phaseBytes,actors,now.AddSeconds(.3),phaseBatch);check(phaseBatch.Effects.Count==1&&phaseBatch.Skills.Count==2,"re-reading a completed impact cannot double-count damage");
         var fresh=new ActionEffectJournal();var stale=new ObservationBatch();fresh.Observe(200,bytes,actors,now,stale);check(stale.Effects.Count==0,"attachment does not replay stale effect slots as a new action");
         journal.Reset();var afterReset=new ObservationBatch();journal.Observe(200,bytes,actors,now,afterReset);check(afterReset.Effects.Count==0,"map transitions re-prime the retained effect baseline");
         check(ClientCatalog.PlayerName("Test",48)=="Test Ixion"&&ClientCatalog.PlayerName("Test",65535)=="Test [世界 65535]","official world identities match historical names while unmapped IDs remain explicit");
