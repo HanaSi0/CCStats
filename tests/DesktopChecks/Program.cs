@@ -68,5 +68,6 @@ try {
     await PortChecks.Run(Check);
     await CaptureAdaptationChecks.Run(Check);
     await NativeReaderChecks.Run(Check);
+    await TimeZoneChecks.Run(Check);
     Console.WriteLine($"Passed {passed} standalone core/import/capture fixture checks.");
 } finally {Directory.Delete(directory,true);}

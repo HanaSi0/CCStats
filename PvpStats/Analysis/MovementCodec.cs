@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 namespace PvpStats.Analysis;
 public static class MovementCodec {
+    private static DateTime Utc(DateTime time)=>time.Kind==DateTimeKind.Local?time.ToUniversalTime():DateTime.SpecifyKind(time,DateTimeKind.Utc);
     public const int MaxFrames=36000;
     public const int RawBudget=24*1024*1024;
     public static byte[] Encode(IReadOnlyList<MovementFrame> frames) {
@@ -17,11 +18,11 @@ public static class MovementCodec {
             if(names.Length>512)throw new InvalidDataException("Too many identities.");
             var indices=names.Select((s,i)=>(s,i)).ToDictionary(p=>p.s,p=>(ushort)p.i);
             w.Write((ushort)names.Length); foreach(var name in names) { if(name.Length>256)throw new InvalidDataException("Identity too long."); w.Write(name); }
-            var origin=frames.FirstOrDefault()?.Timestamp??DateTime.UnixEpoch; w.Write(origin.ToBinary());
+            var origin=Utc(frames.FirstOrDefault()?.Timestamp??DateTime.UnixEpoch); w.Write(origin.ToBinary());
             var snapshots=new Dictionary<string,PlayerPosition>();
             foreach(var f in frames) {
                 if(f.Players.Count>10)throw new InvalidDataException("Invalid player count.");
-                w.Write(f.Timestamp.Ticks-origin.Ticks); w.Write(f.CrystalProgress); w.Write(f.AstraProgress); w.Write(f.UmbraProgress);
+                w.Write(Utc(f.Timestamp).Ticks-origin.Ticks); w.Write(f.CrystalProgress); w.Write(f.AstraProgress); w.Write(f.UmbraProgress);
                 w.Write(f.Crystal!=null); if(f.Crystal is {} crystal) { w.Write(crystal.X); w.Write(crystal.Z); w.Write(crystal.Y.HasValue); if(crystal.Y.HasValue)w.Write(crystal.Y.Value); }
                 w.Write((byte)f.Players.Count);
                 foreach(var p in f.Players) {
@@ -34,7 +35,7 @@ public static class MovementCodec {
                     w.Write(changed);
                     if(changed) {
                         if(p.Statuses.Count>60)throw new InvalidDataException("Too many replay statuses.");
-                        w.Write(p.StatusTimestamp.ToBinary()); w.Write((byte)p.Statuses.Count);
+                        w.Write(Utc(p.StatusTimestamp).ToBinary()); w.Write((byte)p.Statuses.Count);
                         foreach(var status in p.Statuses) { w.Write(status.Id); w.Write(status.Param); w.Write(status.Remaining); }
                         snapshots[p.Player]=p;
                     }
@@ -59,7 +60,7 @@ public static class MovementCodec {
         var namesCount=r.ReadUInt16(); if(namesCount>512)throw new InvalidDataException("Invalid roster count.");
         var names=new string[namesCount]; for(int i=0;i<names.Length;i++) { names[i]=r.ReadString(); if(names[i].Length>256)throw new InvalidDataException("Identity too long."); }
         string Name(ushort index)=>index<names.Length?names[index]:index==ushort.MaxValue?"":throw new InvalidDataException("Invalid roster index.");
-        var origin=DateTime.FromBinary(r.ReadInt64()); var frames=new List<MovementFrame>(count);
+        var origin=Utc(DateTime.FromBinary(r.ReadInt64())); var frames=new List<MovementFrame>(count);
         for(int i=0;i<count;i++) {
             var f=new MovementFrame { Timestamp=origin.AddTicks(r.ReadInt64()),CrystalProgress=r.ReadInt32(),AstraProgress=r.ReadInt32(),UmbraProgress=r.ReadInt32() };
             if(r.ReadBoolean()) { f.Crystal=new() { X=r.ReadSingle(),Z=r.ReadSingle() };if(height&&r.ReadBoolean())f.Crystal.Y=r.ReadSingle(); }
@@ -72,7 +73,7 @@ public static class MovementCodec {
                     if(height&&r.ReadBoolean())p.Y=r.ReadSingle();
                     p.ClassJobId=r.ReadUInt32();
                     if(r.ReadBoolean()) {
-                        p.StatusTimestamp=DateTime.FromBinary(r.ReadInt64()); var statuses=r.ReadByte();
+                        p.StatusTimestamp=Utc(DateTime.FromBinary(r.ReadInt64())); var statuses=r.ReadByte();
                         if(statuses>60)throw new InvalidDataException("Invalid replay status count.");
                         for(int k=0;k<statuses;k++)p.Statuses.Add(new() { Id=r.ReadUInt32(),Param=r.ReadUInt16(),Remaining=r.ReadSingle() });
                         snapshots[p.Player]=p;

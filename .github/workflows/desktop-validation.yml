@@ -31,8 +31,20 @@ jobs:
         run: |
           dotnet restore CCStats.Desktop.slnx --locked-mode
           if ($LASTEXITCODE -ne 0) { throw 'Restore failed' }
-          dotnet run --project tests/DesktopChecks -c Release --no-restore
-          if ($LASTEXITCODE -ne 0) { throw 'Core checks failed' }
+          $zones = @('UTC', 'China Standard Time', 'Tokyo Standard Time', 'Eastern Standard Time', 'Nepal Standard Time')
+          $previousZone = (Get-TimeZone).Id
+          try {
+            foreach ($zone in $zones) {
+              Set-TimeZone -Id $zone
+              Write-Host "Validating record time in $zone"
+              dotnet run --project tests/DesktopChecks -c Release --no-restore
+              if ($LASTEXITCODE -ne 0) { throw "Core checks failed in $zone" }
+            }
+          } finally {
+            Set-TimeZone -Id $previousZone
+          }
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          @{ Success = $true; Zones = $zones } | ConvertTo-Json | Set-Content -Encoding utf8 artifacts/time-zone-validation.json
           dotnet publish CCStats.Desktop/CCStats.Desktop.csproj -c Release --no-restore -o artifacts/internal-desktop
           if ($LASTEXITCODE -ne 0) { throw 'Build failed' }
       - name: Window, tray, close dialog and replay checks
@@ -59,6 +71,7 @@ jobs:
           name: desktop-validation-report
           path: |
             artifacts/desktop-validation.json
+            artifacts/time-zone-validation.json
             artifacts/desktop-validation.png
             artifacts/desktop-validation.replay.png
             artifacts/desktop-validation.detail.png

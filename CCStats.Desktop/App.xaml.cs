@@ -9,6 +9,13 @@ using System.Windows.Controls.Primitives;
 namespace CCStats.Desktop;
 
 public partial class App : Application {
+    private void RefreshTimeZone(object? sender,EventArgs args) {
+        if(Dispatcher.HasShutdownStarted)return;
+        _=Dispatcher.BeginInvoke(new Action(()=>{TimeZoneInfo.ClearCachedData();if(MainWindow is MainWindow main)main.RefreshTimeZone();}));
+    }
+    private void RefreshTimeZonePreference(object sender,Microsoft.Win32.UserPreferenceChangedEventArgs args) {if(args.Category is Microsoft.Win32.UserPreferenceCategory.Locale or Microsoft.Win32.UserPreferenceCategory.General)RefreshTimeZone(sender,args);}
+    protected override void OnExit(ExitEventArgs e) {Microsoft.Win32.SystemEvents.TimeChanged-=RefreshTimeZone;Microsoft.Win32.SystemEvents.UserPreferenceChanged-=RefreshTimeZonePreference;base.OnExit(e);}
+
     protected override async void OnStartup(StartupEventArgs e) {
         base.OnStartup(e);
         var smoke=Array.IndexOf(e.Args,"--smoke-test");
@@ -30,6 +37,7 @@ public partial class App : Application {
             splash?.Close();Shutdown(1);return;
         }
         if(output==null) {
+            Microsoft.Win32.SystemEvents.TimeChanged+=RefreshTimeZone;Microsoft.Win32.SystemEvents.UserPreferenceChanged+=RefreshTimeZonePreference;
             if(e.Args.Length==1 && !e.Args[0].StartsWith("--"))_ = window.ImportAsync(e.Args[0]);
             return;
         }

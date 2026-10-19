@@ -9,12 +9,15 @@ namespace CCStats.Desktop.Views;
 internal sealed class RecordDetailWindow : Window {
     private sealed record TimedEvent(string Elapsed,DateTime Timestamp,string Kind,string Actor,string Target,string Description);
     private readonly ReplayBundle _bundle;
+    private readonly TextBlock _matchHeading=new();
+    public void RefreshTimeZone() {_matchHeading.Text=_bundle.Match.Map+"　"+_bundle.Match.StartLabel+"　"+_bundle.Match.Result+"　"+_bundle.Match.Duration;RefreshGrids(Content as DependencyObject);}
+    private static void RefreshGrids(DependencyObject? root){if(root==null)return;if(root is DataGrid grid)grid.Items.Refresh();foreach(var child in LogicalTreeHelper.GetChildren(root).OfType<DependencyObject>())RefreshGrids(child);}
     public event Action? Changed;
     public RecordDetailWindow(ReplayBundle bundle,RecordLibrary library) {
         WindowCaption.Attach(this);
         _bundle=bundle;Title="CCstats";Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(18)};var header=new StackPanel();
-        header.Children.Add(new TextBlock {Text=bundle.Match.Map+"　"+bundle.Match.StartLabel+"　"+bundle.Match.Result+"　"+bundle.Match.Duration,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),FontSize=21,Margin=new Thickness(0,0,0,14)});
+        _matchHeading.Foreground=DesktopTheme.Brush("TextBrush");_matchHeading.FontSize=21;_matchHeading.Margin=new Thickness(0,0,0,14);RefreshTimeZone();header.Children.Add(_matchHeading);
         var tools=new WrapPanel();var favorite=new CheckBox {Content="收藏",IsChecked=bundle.Match.Favorite,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),Margin=new Thickness(0,8,12,0)};var tags=new TextBox {Text=bundle.Match.Tags,MinWidth=220};tools.Children.Add(favorite);tools.Children.Add(tags);
         Button Button(string title,RoutedEventHandler action) {var b=new Button {Content=title};b.Click+=action;return b;}
         tools.Children.Add(Button("保存标签",(_,_)=>{library.Annotate(bundle.Match.Id,favorite.IsChecked==true,tags.Text);bundle.Match.Tags=tags.Text;bundle.Match.Favorite=favorite.IsChecked==true;Changed?.Invoke();}));

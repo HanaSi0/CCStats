@@ -21,11 +21,11 @@ public static class ReplayFileReader {
         if(id.Length != 24 || !id.All(Uri.IsHexDigit)) throw new InvalidDataException("回放比赛编号无效。");
         if(!root.TryGetProperty("TerritoryId",out var territoryElement) || territoryElement.ValueKind != JsonValueKind.Number || !territoryElement.TryGetUInt32(out var territory))
             throw new InvalidDataException("回放缺少有效区域编号。");
-        if(!root.TryGetProperty("StartUtc",out var startElement) || startElement.ValueKind != JsonValueKind.String || !startElement.TryGetDateTimeOffset(out var start))
+        if(!root.TryGetProperty("StartUtc",out var startElement) || startElement.ValueKind != JsonValueKind.String || !UtcStamp(startElement,out var start))
             throw new InvalidDataException("回放缺少有效开始时间。");
         DateTimeOffset? end = null;
         if(root.TryGetProperty("MatchEndTime",out var endElement) && endElement.ValueKind != JsonValueKind.Null) {
-            if(endElement.ValueKind != JsonValueKind.String || !endElement.TryGetDateTimeOffset(out var parsed) || parsed < start) throw new InvalidDataException("回放结束时间无效。");
+            if(endElement.ValueKind != JsonValueKind.String || !UtcStamp(endElement,out var parsed) || parsed < start) throw new InvalidDataException("回放结束时间无效。");
             end = parsed;
         }
         var frames = Array(data,"Frames");
@@ -44,6 +44,11 @@ public static class ReplayFileReader {
         }
         return new(id,territory,MapName(territory),start,end,frames.GetArrayLength(),Array(data,"Effects").GetArrayLength(),
             Array(data,"ReplaySkills").GetArrayLength(),Array(data,"MapMechanics").GetArrayLength(),names.Order(StringComparer.Ordinal).ToArray(),path,root.TryGetProperty("RecordKind",out var kind) && kind.ValueKind==JsonValueKind.String && kind.GetString()=="IndependentObservation");
+    }
+    private static bool UtcStamp(JsonElement element,out DateTimeOffset value) {
+        value=default;if(!element.TryGetDateTime(out var parsed))return false;
+        if(parsed.Kind==DateTimeKind.Unspecified){value=new DateTimeOffset(Library.RecordTime.Utc(parsed));return true;}
+        if(!element.TryGetDateTimeOffset(out value))return false;value=value.ToUniversalTime();return true;
     }
     private static readonly JsonElement EmptyArray = JsonSerializer.SerializeToElement(System.Array.Empty<object>());
     private static JsonElement Array(JsonElement parent, string key) {

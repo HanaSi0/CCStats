@@ -118,6 +118,11 @@ public partial class MainWindow : Window {
         }
         if(!_smoke)UiMotion.Enter(PageContent);
     }
+    internal void RefreshTimeZone() {
+        if(_closed||_exiting)return;
+        ShowPage(_page);
+        foreach(var detail in Application.Current.Windows.OfType<RecordDetailWindow>())detail.RefreshTimeZone();
+    }
     private void Window_DragOver(object sender,DragEventArgs e) {e.Effects=e.Data.GetDataPresent(DataFormats.FileDrop)?DragDropEffects.Copy:DragDropEffects.None;e.Handled=true;}
     private async void Window_Drop(object sender,DragEventArgs e) {if(e.Data.GetData(DataFormats.FileDrop) is string[] {Length:1} paths)await ImportAsync(paths[0]);else {ShowPage(6);Notify("files","请一次拖入一个数据文件。");}}
     private void SetupTray() {
@@ -196,7 +201,7 @@ public partial class MainWindow : Window {
         _bundle=_library.Load(_bundle!.Match.Id);
         if(_bundle.Match.StartUtc.Kind!=DateTimeKind.Utc||PvpStats.Analysis.ReplayInterpolation.Sample(_bundle.Data,_bundle.Match.StartUtc.AddMilliseconds(50))?.Players.Count!=2)throw new InvalidOperationException("Database replay time origin is not aligned with stored players");
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();
-        var detail=new RecordDetailWindow(_bundle,_library){Owner=this};detail.Show();await Dispatcher.Yield(DispatcherPriority.Loaded);detail.UpdateLayout();
+        var detail=new RecordDetailWindow(_bundle,_library){Owner=this};detail.Show();RefreshTimeZone();await Dispatcher.Yield(DispatcherPriority.Loaded);detail.UpdateLayout();
         var detailBitmap=new RenderTargetBitmap((int)detail.ActualWidth,(int)detail.ActualHeight,96,96,PixelFormats.Pbgra32);detailBitmap.Render(detail);var detailEncoder=new PngBitmapEncoder();detailEncoder.Frames.Add(BitmapFrame.Create(detailBitmap));using(var file=File.Create(Path.ChangeExtension(screenshot,"detail.png")))detailEncoder.Save(file);detail.Close();
         ShowPage(0);UpdateLayout();var bitmap=new RenderTargetBitmap((int)ActualWidth,(int)ActualHeight,96,96,PixelFormats.Pbgra32);bitmap.Render(this);
         var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));using(var file=File.Create(screenshot))encoder.Save(file);
