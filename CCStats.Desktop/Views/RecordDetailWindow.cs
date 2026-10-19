@@ -12,7 +12,7 @@ internal sealed class RecordDetailWindow : Window {
     public event Action? Changed;
     public RecordDetailWindow(ReplayBundle bundle,RecordLibrary library) {
         WindowCaption.Attach(this);
-        _bundle=bundle;Title=(bundle.Match.Observation?"回放详情 · ":"对局详情 · ")+bundle.Match.Map;Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
+        _bundle=bundle;Title="CCstats";Width=1180;Height=800;MinWidth=850;MinHeight=600;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(18)};var header=new StackPanel();
         header.Children.Add(new TextBlock {Text=bundle.Match.Map+"　"+bundle.Match.StartLabel+"　"+bundle.Match.Result+"　"+bundle.Match.Duration,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),FontSize=21,Margin=new Thickness(0,0,0,14)});
         var tools=new WrapPanel();var favorite=new CheckBox {Content="收藏",IsChecked=bundle.Match.Favorite,Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),Margin=new Thickness(0,8,12,0)};var tags=new TextBox {Text=bundle.Match.Tags,MinWidth=220};tools.Children.Add(favorite);tools.Children.Add(tags);
@@ -26,12 +26,18 @@ internal sealed class RecordDetailWindow : Window {
         tools.Children.Add(Button("删除记录",(_,_)=>{if(MessageBox.Show(this,"仅删除资料库中的此记录，原始文件保留。是否继续？","删除记录",MessageBoxButton.YesNo)==MessageBoxResult.Yes){library.Delete(bundle.Match.Id);Changed?.Invoke();Close();}}));
         header.Children.Add(tools);DockPanel.SetDock(header,Dock.Top);root.Children.Add(header);
         var tabs=new TabControl();void Tab(string title,UIElement content)=>tabs.Items.Add(new TabItem {Header=title,Content=content});
-        var settle=new StackPanel();settle.Children.Add(TableFactory.Create(bundle.Match.Players,("完整玩家名","Name"),("职业","Job"),("队伍","Team"),("击杀","Kills"),("死亡","Deaths"),("助攻","Assists"),("造成伤害","Damage"),("受到伤害","Taken"),("治疗量","Healing"),("推车秒数","CrystalSeconds")));
+        var playerRows=ReplayPlayerData.Build(bundle);var playerPanel=new StackPanel();
+        playerPanel.Children.Add(new TextBlock {Text=$"已保存 {playerRows.Sum(p=>p.PositionSamples):N0} 条角色位置 · {playerRows.Count(p=>p.PositionSamples>0)} 名角色。以下为最后一次有效记录，不是结算成绩。",Foreground=DesktopTheme.Brush("MutedBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(10)});
+        playerPanel.Children.Add(TableFactory.Create(playerRows,("完整玩家名","Name"),("职业","Job"),("队伍","Team"),("位置条数","PositionSamples"),("最后 HP","HP"),("最大 HP","MaxHP"),("X","X"),("高度","Y"),("Z","Z"),("最后记录时间","LastSeen")));
+        Tab("玩家数据",new ScrollViewer {Content=playerPanel});
+        var settle=new StackPanel();
+        if(!bundle.Match.ScoreboardComplete)settle.Children.Add(new TextBlock {Text="尚未取得完整官方结算。参赛名单和位置记录不能还原击杀、总伤害、总治疗或推车时间，因此这些数值显示为 —。可在“玩家数据”查看已保存的坐标与体力。",Foreground=DesktopTheme.Brush("MutedBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(10)});settle.Children.Add(TableFactory.Create(bundle.Match.Players,("完整玩家名","Name"),("职业","Job"),("队伍","Team"),("击杀","Kills"),("死亡","Deaths"),("助攻","Assists"),("造成伤害","Damage"),("受到伤害","Taken"),("治疗量","Healing"),("推车秒数","CrystalSeconds")));
         var totals=bundle.Match.Players.GroupBy(p=>p.Team).Select(g=>new {Team=g.Key,Damage=g.Any(p=>p.Damage.HasValue)?g.Sum(p=>p.Damage??0):(long?)null,Taken=g.Any(p=>p.Taken.HasValue)?g.Sum(p=>p.Taken??0):(long?)null,Healing=g.Any(p=>p.Healing.HasValue)?g.Sum(p=>p.Healing??0):(long?)null,Crystal=g.Any(p=>p.CrystalSeconds.HasValue)?g.Sum(p=>p.CrystalSeconds??0):(double?)null});
         var teamGrid=TableFactory.Create(totals,("队伍合计","Team"),("伤害","Damage"),("承伤","Taken"),("治疗","Healing"),("推车秒数","Crystal"));teamGrid.Height=150;settle.Children.Add(teamGrid);Tab("结算数据",new ScrollViewer {Content=settle});
         if(bundle.Data.CaptureMethod.Length>0) {
             var capture=new StackPanel {Margin=new Thickness(12)};
-            capture.Children.Add(new TextBlock {Text=$"位置 {bundle.Data.Frames.Count:N0} 帧 · 动作效果 {bundle.Data.Effects.Count:N0} 条 · 场地事件 {bundle.Data.MapMechanics.Count:N0} 条 · 场景状态 {bundle.Data.ArenaStates.Count:N0} 条",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
+            capture.Children.Add(new TextBlock {Text=$"时间帧 {bundle.Data.Frames.Count:N0} · 角色位置 {playerRows.Sum(p=>p.PositionSamples):N0} 条 · 动作效果 {bundle.Data.Effects.Count:N0} 条 · 场地事件 {bundle.Data.MapMechanics.Count:N0} 条 · 场景状态 {bundle.Data.ArenaStates.Count:N0} 条",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
+            capture.Children.Add(new TextBlock {Text=$"结算窗口快照 {bundle.ResultPanels.Count} 份 · 比赛起点 {bundle.Match.StartUtc.ToUniversalTime():yyyy-MM-dd HH:mm:ss.fff} UTC · 首个位置帧 {(bundle.Data.Frames.FirstOrDefault(f=>f.Players.Count>0)?.Timestamp.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss.fff")??"无")} UTC",Foreground=DesktopTheme.Brush("MutedBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
             foreach(var warning in bundle.Data.CaptureWarnings)capture.Children.Add(new TextBlock {Text=warning.Replace("观"+"测","记录").Replace("采"+"集","记录").Replace("观察","读取"),Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("MutedBrush"),TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
             capture.Children.Add(TableFactory.Create(bundle.Data.ArenaStates,("记录时间","Timestamp"),("场景资源","LayoutId"),("状态","State"),("标志","Flags")));
             Tab("记录状态",new ScrollViewer {Content=capture});

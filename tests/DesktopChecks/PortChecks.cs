@@ -9,6 +9,18 @@ internal static class PortChecks {
     public static async Task Run(Action<bool,string> check) {
         var directory=Path.Combine(Path.GetTempPath(),"ccstats-port-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
         try {
+            var legacyDirectory=Path.Combine(directory,"legacy-owned");Directory.CreateDirectory(legacyDirectory);
+            var stamp=new DateTime(2026,10,19,10,53,0,DateTimeKind.Utc);
+            var legacyData=new DetailedTelemetry {Version=3,Frames=new(){new(){Timestamp=stamp,Players=new(){new(){Player="Saved Player Ixion",ClassJobId=19,Team=1,X=123,Y=7,Z=-42,HP=9000,MaxHP=10000}}}}};legacyData.PrepareForStorage();
+            using(var legacy=new LiteDatabase(Path.Combine(legacyDirectory,"library.db"))) {
+                legacy.GetCollection<MatchRecord>("records").Insert(new MatchRecord {Id="507f1f77bcf86cd799439099",StartUtc=stamp,EndUtc=stamp.AddSeconds(1),Observation=true,FrameCount=1});
+                legacy.GetCollection<BsonDocument>("replays").Insert(new BsonDocument {["_id"]="507f1f77bcf86cd799439099",["Data"]=BsonMapper.Global.ToDocument(legacyData),["Timeline"]="[]"});
+            }
+            using(var restored=new RecordLibrary(legacyDirectory)) {
+                var saved=restored.Load("507f1f77bcf86cd799439099");
+                check(saved.Match.StartUtc.Kind==DateTimeKind.Utc&&saved.Match.StartUtc==stamp&&ReplaySceneBuilder.Build(saved,null,saved.Match.StartUtc.AddMilliseconds(50),false,false).Length>0,"existing databases created with local-date defaults regain coordinates without re-recording");
+                var playerData=ReplayPlayerData.Build(saved).Single();check(playerData is {PositionSamples:1,X:123,Y:7,Z:-42,HP:9000},"player details use stored coordinates and HP independently of an absent scoreboard");
+            }
             var source=Path.Combine(directory,"history.db");var id=new ObjectId("507f1f77bcf86cd799439012");var timelineId=ObjectId.NewObjectId();var now=DateTime.UtcNow;
             BsonDocument Alias(string name)=>new(){["Name"]=name,["HomeWorld"]="Ixion"};
             var player=new BsonDocument {["Player"]=Alias("Own Player"),["Team"]="Astra",["Job"]="PLD",["Kills"]=2,["Deaths"]=1,["Assists"]=5,["DamageDealt"]=123456,["DamageTaken"]=234567,["HPRestored"]=34567,["TimeOnCrystal"]="00:00:32"};
@@ -24,6 +36,8 @@ internal static class PortChecks {
                 var row=library.All().Single();check(row.Map=="九霄云上"&&row.Result=="胜利"&&row.Mode=="段位赛"&&row.Credit==500,"history match metadata and local result retain their meaning");
                 check(row.Players.Single().Damage==123456&&row.Players.Single().CrystalSeconds==32,"settlement retains all damage and push-time values");
                 var bundle=library.Load(row.Id);check(bundle.Data.Frames.Single().Players.Single().ClassJobId==19,"compressed historic movement remains available after import");
+                check(bundle.Match.StartUtc.Kind==DateTimeKind.Utc&&Math.Abs((bundle.Match.StartUtc-bundle.Data.Frames[0].Timestamp).TotalSeconds)<.01,"database match origin stays UTC and aligned with compressed position timestamps");
+                check(ReplaySceneBuilder.Build(bundle,null,bundle.Match.StartUtc.AddMilliseconds(50),false,false).Length>0,"database replay origin resolves real pawn geometry in non-UTC timezones");
                 check(bundle.Actions.Single().Damage==555&&bundle.Actions.Single().Casts==1&&bundle.Progress.Single().Points==25,"legacy skill summaries and director timeline retain their numeric data");
                 library.Annotate(row.Id,true,"my note");DatabaseImport.Read(source,library);row=library.All().Single();check(row.Favorite&&row.Tags=="my note"&&library.All().Count==1,"repeat import deduplicates and preserves user annotations");
                 var export=Path.Combine(directory,"export.json");await ReplayImport.ExportAsync(library.Load(row.Id),export);var reimport=await ReplayImport.ReadAsync(export);

@@ -112,7 +112,7 @@ public partial class MainWindow : Window {
             case 6:ShowReplay();break;
             case 7:ShowSettings();break;
             case 8:
-                Card("CCStats Desktop",Text("水晶冲突战绩记录与复盘工具",false,20),Text("版本 "+ProductVersion,true),Text("作者：HanaSi0"),Text("自动识别游戏进程，在后台记录对局数据，提供战绩管理、统计分析与二维、三维回放。",true));
+                Card("CCstats",Text("水晶冲突战绩记录与复盘工具",false,20),Text("版本 "+ProductVersion,true),Text("作者：HanaSi0"),Text("自动识别游戏进程，在后台记录对局数据，提供战绩管理、统计分析与二维、三维回放。",true));
                 Card("数据与隐私",Text("游戏数据以只读方式访问，记录保存在本机。软件不会修改游戏文件或游戏内状态。",true),Text("部分数据仍在验证中；缺少结算的记录不计入比赛场次和胜率。",true));
                 Card("开源许可",Text("基于 SaMo / wrath16 的 PvPStats 开源项目开发，遵循 MIT 许可。完整许可与第三方声明随软件提供。",true));break;
         }
@@ -166,6 +166,7 @@ public partial class MainWindow : Window {
         if(analysisTabs.Items.Count!=2)throw new InvalidOperationException("Combined analysis tabs missing");analysisTabs.SelectedIndex=1;
         ShowPage(7);if(PageContent.Children.OfType<Expander>().Single().IsExpanded)throw new InvalidOperationException("Custom colours must start collapsed");
         await ImportAsync(fixture);if(_bundle?.Match.Players.Count!=2||_bundle.Data.Frames.Count!=2)throw new InvalidOperationException("Record import failed: "+_notices.GetValueOrDefault("files"));
+        ShowPage(0);if(PageContent.Children.OfType<DataGrid>().Single().Items.Count!=1)throw new InvalidOperationException("Pending replay is missing from the match list");
         if(_library.All().Count!=1||DesktopPreferences.Load(_settingsPath).RecentFiles.Count!=1)throw new InvalidOperationException("Persistence failed");
         for(int i=0;i<_navigation.Count;i++)ShowPage(i);
         SetupTray();
@@ -192,8 +193,11 @@ public partial class MainWindow : Window {
         PageScroll.ScrollToTop();
         UpdateLayout();await TableFactory.VerifySelectionAsync(PageContent.Children.OfType<DataGrid>().Single());
         await MeshVisuals.VerifyPaletteAsync(this);
+        _bundle=_library.Load(_bundle!.Match.Id);
+        if(_bundle.Match.StartUtc.Kind!=DateTimeKind.Utc||PvpStats.Analysis.ReplayInterpolation.Sample(_bundle.Data,_bundle.Match.StartUtc.AddMilliseconds(50))?.Players.Count!=2)throw new InvalidOperationException("Database replay time origin is not aligned with stored players");
         var replay=new ReplayWindow(_bundle){Owner=this};replay.Show();await replay.VerifyAsync(Path.ChangeExtension(screenshot,"replay.png"));replay.Close();
-        var detail=new RecordDetailWindow(_bundle,_library){Owner=this};detail.Show();detail.Close();
+        var detail=new RecordDetailWindow(_bundle,_library){Owner=this};detail.Show();await Dispatcher.Yield(DispatcherPriority.Loaded);detail.UpdateLayout();
+        var detailBitmap=new RenderTargetBitmap((int)detail.ActualWidth,(int)detail.ActualHeight,96,96,PixelFormats.Pbgra32);detailBitmap.Render(detail);var detailEncoder=new PngBitmapEncoder();detailEncoder.Frames.Add(BitmapFrame.Create(detailBitmap));using(var file=File.Create(Path.ChangeExtension(screenshot,"detail.png")))detailEncoder.Save(file);detail.Close();
         ShowPage(0);UpdateLayout();var bitmap=new RenderTargetBitmap((int)ActualWidth,(int)ActualHeight,96,96,PixelFormats.Pbgra32);bitmap.Render(this);
         var encoder=new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));using(var file=File.Create(screenshot))encoder.Save(file);
         _preferences.CloseBehavior="Exit";_closed=true;_processTimer.Stop();_captureTimer.Stop();_tray?.Dispose();_library.Dispose();

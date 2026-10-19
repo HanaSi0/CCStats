@@ -57,6 +57,8 @@ internal static class NativeReaderChecks {
             check(paths.Count==1,"waiting, combat, visible result and postmatch waiting create exactly one recording");
             var recorded=await CCStats.Core.Library.ReplayImport.ReadAsync(paths.Single());
             check(recorded.Data.Frames.Count>0&&recorded.Data.Frames.Last().Timestamp<session.SettlementTime&&recorded.Match.EndUtc==recorded.Data.Frames.Last().Timestamp,"postmatch waiting is excluded and replay end follows the last actual frame");
+            check(recorded.ResultPanels.Count==1&&recorded.ResultPanels[0].Panel=="PvPResult","the result panel that stops recording is retained in the replay instead of discarded before finalization");
+            using(var library=new CCStats.Core.Library.RecordLibrary(Path.Combine(directory,"settled-library"))){library.Save(recorded);check(library.Load(recorded.Match.Id).ResultPanels.Count==1,"result evidence survives database persistence for later schema verification");}
             check(recorded.Match.StartUtc==recorded.Data.Frames.First().Timestamp,"bounded preroll timestamps agree with the replay origin");
             var probe=new ObservationBatch();probe.ChannelStatus["rejectedPlayers"]="10";CaptureDiagnostics.SaveProbe(directory,1116,probe);
             check(File.Exists(Path.Combine(directory,"diagnostics","Probe-1116.json")),"zero-player arena failures retain a diagnostic snapshot independent of whether a recording could start");

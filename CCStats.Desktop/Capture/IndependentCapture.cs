@@ -46,6 +46,7 @@ internal sealed class IndependentCapture {
                     if(territory!=lastTerritory&&territory!=0) {_manualPaused=false;lastTerritory=territory;}
                     // A loading screen has no frames to append; wait for a nonzero territory or process exit, rather than splitting on an arbitrary timeout.
                     bool loadingGrace=territory==0&&writer!=null;
+                    writer?.ObserveSettlement(game.Telemetry);
                     bool active=activity.Update(territory,frame,game.Telemetry);
                     if(territory>0&&ReplayMapMesh.MapKey(territory)!=null&&frame.Players.Count>0){preroll.Enqueue((territory,frame,game.Telemetry));while(preroll.Count>60||preroll.TryPeek(out var oldest)&&(oldest.Territory!=territory||frame.Timestamp-oldest.Frame.Timestamp>TimeSpan.FromSeconds(2)))preroll.Dequeue();}
                     else if(!loadingGrace)preroll.Clear();

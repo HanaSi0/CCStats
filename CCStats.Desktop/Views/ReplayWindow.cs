@@ -39,12 +39,12 @@ internal sealed class ReplayWindow : Window {
     private double _lastPanels=double.NegativeInfinity;private string _renderWarning="",_mapWarning="";
     public ReplayWindow(ReplayBundle bundle,double startSeconds=0) {
         WindowCaption.Attach(this);
-        _bundle=bundle;_origin=bundle.Match.StartUtc;
+        _bundle=bundle;_origin=bundle.Match.StartUtc.Kind==DateTimeKind.Local?bundle.Match.StartUtc.ToUniversalTime():DateTime.SpecifyKind(bundle.Match.StartUtc,DateTimeKind.Utc);
         _duration=Math.Max(1,bundle.Match.DurationSeconds>0?bundle.Match.DurationSeconds:bundle.Data.Frames.LastOrDefault() is {} last?(last.Timestamp-_origin).TotalSeconds:1);
         _seconds=Math.Clamp(startSeconds,0,_duration);
         // Older files can start well before their first valid position sample.
         if(startSeconds==0&&bundle.Data.Frames.FirstOrDefault(f=>f.Players.Count>0) is {} first)_seconds=Math.Clamp((first.Timestamp-_origin).TotalSeconds,0,_duration);
-        Title="地图回放 · "+bundle.Match.Map;Width=1450;Height=920;MinWidth=1000;MinHeight=680;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
+        Title="CCstats";Width=1450;Height=920;MinWidth=1000;MinHeight=680;Background=(Brush)Application.Current.Resources["BackgroundBrush"];
         var root=new DockPanel {Margin=new Thickness(12)};var top=new StackPanel();var actions=new WrapPanel();
         Button Button(string text,Action click) {var b=new Button {Content=text};b.Click+=(_,_)=>click();return b;}
         actions.Children.Add(Button("播放 / 暂停",()=>_playing=!_playing));actions.Children.Add(Button("回到开始",()=>{_seconds=0;_playing=false;_rendered=-1;}));

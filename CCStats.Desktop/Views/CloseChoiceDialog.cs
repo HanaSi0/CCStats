@@ -10,7 +10,7 @@ internal sealed class CloseChoiceDialog : Window {
     private readonly CheckBox _remember=new() {Content="记住我的选择",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),Margin=new Thickness(0,14,0,0)};
     public CloseChoiceDialog(Window owner) {
         WindowCaption.Attach(this);
-        Owner=owner;Title="关闭 CCStats";Width=450;SizeToContent=SizeToContent.Height;ResizeMode=ResizeMode.NoResize;WindowStartupLocation=WindowStartupLocation.CenterOwner;Background=DesktopTheme.Brush("SurfaceBrush");ShowInTaskbar=false;
+        Owner=owner;Title="CCstats";Width=450;SizeToContent=SizeToContent.Height;ResizeMode=ResizeMode.NoResize;WindowStartupLocation=WindowStartupLocation.CenterOwner;Background=DesktopTheme.Brush("SurfaceBrush");ShowInTaskbar=false;
         var panel=new StackPanel {Margin=new Thickness(24)};
         panel.Children.Add(new TextBlock {Text="退出软件，还是继续在后台记录？",Foreground=CCStats.Desktop.Views.DesktopTheme.Brush("TextBrush"),FontSize=18,Margin=new Thickness(0,0,0,18)});
         var buttons=new WrapPanel();

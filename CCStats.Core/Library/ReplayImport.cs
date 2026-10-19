@@ -8,9 +8,11 @@ public static class ReplayImport {
         await using var stream=File.OpenRead(path);using var json=await JsonDocument.ParseAsync(stream,cancellationToken:token);
         var root=json.RootElement;var summary=Import.ReplayFileReader.Read(root,Path.GetFullPath(path));var data=root.GetProperty("Telemetry").Deserialize<DetailedTelemetry>()??new();
         if(data.Frames.Count>180000||data.Effects.Count>1000000)throw new InvalidDataException("记录超出容量限制。");
+        foreach(var frame in data.Frames){frame.Timestamp=frame.Timestamp.Kind==DateTimeKind.Local?frame.Timestamp.ToUniversalTime():DateTime.SpecifyKind(frame.Timestamp,DateTimeKind.Utc);foreach(var player in frame.Players)if(player.StatusTimestamp.Kind==DateTimeKind.Local)player.StatusTimestamp=player.StatusTimestamp.ToUniversalTime();}
         data.Frames.Sort((a,b)=>a.Timestamp.CompareTo(b.Timestamp));
         var bundle=new ReplayBundle {Match=new() {Id=summary.MatchId,StartUtc=summary.StartUtc.UtcDateTime,EndUtc=summary.EndUtc?.UtcDateTime,Territory=summary.TerritoryId,Observation=summary.IsObservation,SourcePath=Path.GetFullPath(path)},Data=data};
         if(root.TryGetProperty("Record",out var metadata)&&metadata.ValueKind==JsonValueKind.Object) {var record=metadata.Deserialize<MatchRecord>();if(record!=null&&record.Id==summary.MatchId) {record.Observation|=summary.IsObservation;bundle.Match=record;bundle.Match.SourcePath=Path.GetFullPath(path);}}
+        if(root.TryGetProperty("ResultPanels",out var panels)&&panels.ValueKind==JsonValueKind.Array)bundle.ResultPanels=panels.Deserialize<List<Capture.SettlementUiSnapshot>>()??new();
         if(root.TryGetProperty("ClientProfile",out var profile)&&profile.ValueKind==JsonValueKind.Object)bundle.ClientProfile=profile.Deserialize<Capture.PlayerPvpProfile>();
         if(root.TryGetProperty("Timeline",out var timeline)&&timeline.ValueKind==JsonValueKind.Array)bundle.Timeline=timeline.Deserialize<List<TimelineRow>>()??new();
         if(root.TryGetProperty("Actions",out var actions)&&actions.ValueKind==JsonValueKind.Array)bundle.Actions=actions.Deserialize<List<ActionSummary>>()??new();
@@ -31,12 +33,14 @@ public static class ReplayImport {
                 bundle.Progress.Add(new(frame.Timestamp,"灵极队推进进度",frame.UmbraProgress));last=current;
             }
         }
+        bundle.Match.StartUtc=bundle.Match.StartUtc.Kind==DateTimeKind.Local?bundle.Match.StartUtc.ToUniversalTime():DateTime.SpecifyKind(bundle.Match.StartUtc,DateTimeKind.Utc);
+        if(bundle.Match.EndUtc is {} end)bundle.Match.EndUtc=end.Kind==DateTimeKind.Local?end.ToUniversalTime():DateTime.SpecifyKind(end,DateTimeKind.Utc);
         ReplaySummons.RecoverEffects(bundle.Data,bundle.Data.ReplaySkills);
         return bundle;
     }
     public static async Task ExportAsync(ReplayBundle bundle,string path) {
         // Expand movement only in the external interchange document; keep the owned database compressed.
         await using var file=File.Create(path);
-        await JsonSerializer.SerializeAsync(file,new {RecordKind=bundle.Match.Observation?"IndependentObservation":"Match",MatchId=bundle.Match.Id,TerritoryId=bundle.Match.Territory,StartUtc=bundle.Match.StartUtc,MatchEndTime=bundle.Match.EndUtc,Record=bundle.Match,ClientProfile=bundle.ClientProfile,Timeline=bundle.Timeline,Actions=bundle.Actions,Progress=bundle.Progress,Telemetry=bundle.Data},new JsonSerializerOptions {WriteIndented=false});
+        await JsonSerializer.SerializeAsync(file,new {RecordKind=bundle.Match.Observation?"IndependentObservation":"Match",MatchId=bundle.Match.Id,TerritoryId=bundle.Match.Territory,StartUtc=bundle.Match.StartUtc,MatchEndTime=bundle.Match.EndUtc,Record=bundle.Match,ClientProfile=bundle.ClientProfile,ResultPanels=bundle.ResultPanels,Timeline=bundle.Timeline,Actions=bundle.Actions,Progress=bundle.Progress,Telemetry=bundle.Data},new JsonSerializerOptions {WriteIndented=false});
     }
 }
